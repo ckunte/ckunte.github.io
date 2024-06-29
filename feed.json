@@ -1,0 +1,37 @@
+{
+  "version" : "https://jsonfeed.org/version/1.1",
+  "user_comment" : "This feed lets you know whenever a new note is published on this site. Copy the following URL -- https://ckunte.net/feed.json -- and add it to your feed reader.",
+  "title" : "C Kunte: weeknotes",
+  "home_page_url" : "https://ckunte.net",
+  "feed_url" : "https://ckunte.net/feed.json",
+  "description" : "Weeknotes",
+  "authors" : [
+    {
+      "name" : "C Kunte",
+      "url" : "https://ckunte.net"
+    }
+  ],
+  "items": [
+    {
+      "id" : "24w25",
+      "title" : "Shoebox",
+      "url" : "https://ckunte.net/#24w25",
+      "content_html" : "\u003cp\u003eAllied\u0026rsquo;s service was good. Their promise was 7-9 weeks; crating some part of their service. The container arrived at my doorstep in 8. Stuff intact, bar one. They reminded us to get transit bolts to protect the washer, which we did just in time.\u003c/p\u003e\n\u003cp\u003eWe fixed (a) the dining table, (b) dining sideboard and bookcase shutters, and (c) the shared work desk and vesa mount. We finally found the shoebox \u0026mdash; containing useful bits and bobs, including my portable speaker. \u003c/p\u003e\n\u003cp\u003eYears in the making, \u003ca href=\"https://numpy.org/devdocs/release/2.0.0-notes.html\"\u003enumpy 2.0\u003c/a\u003e landed this week. I got to test my scripts written over the years with the following; they\u0026rsquo;re still usable.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-sh\"\u003egrep \u0026quot;numpy\u0026quot; *.py | ruff check --select NPY201\n\u003c/code\u003e\u003c/pre\u003e",
+      "date_published" : "2024-06-23T18:50:00+08:00"
+    },
+    {
+      "id" : "24w24",
+      "title" : "Unpacking",
+      "url" : "https://ckunte.net/#24w24",
+      "content_html" : "\u003cp\u003eWe got back the container mid-week. Unloading done by mid-day, but unpacking is still underway. Furniture to re-assemble and stuff to re-arrange. Except for an old speaker that refuses to power-up, nothing else seems broken, but we are missing little things. \u003c/p\u003e\n\u003cp\u003eEvery time I look at our stuff, I want to throw-up. I think we have got too much that\u0026rsquo;s just not visible until it comes out of a container. We end up carrying it all is because we disagree on how much we have, and I am not in control.\u003c/p\u003e",
+      "date_published" : "2024-06-16T21:55:00+08:00"
+    },
+    {
+      "id" : "24w22",
+      "title" : "Two Typst packages",
+      "url" : "https://ckunte.net/#24w22",
+      "content_html" : "\u003cp\u003eTired of repeating blocks while writing documents in \u003ca href=\"https://typst.app\"\u003eTypst\u003c/a\u003e, I developed two packages: \u003ca href=\"https://github.com/ckunte/typst-snippets-st\"\u003etypst-snippets-st\u003c/a\u003e for Sublime Text, and \u003ca href=\"https://github.com/ckunte/typst-snippets-vim\"\u003etypst-snippets-vim\u003c/a\u003e for Vim. They are a work-in-progress. I am using the first as I have no access to linux environment at work. \u003c/p\u003e\n\u003cp\u003eMy request for WSL on work laptop was denied on security grounds. Classic gate-keeping. OS makers are the worst. What\u0026rsquo;s in user space should never be behind Admin; yet here we are.\u003c/p\u003e\n\u003cp\u003eWe moved into the house a couple of weeks ago. The cargo arrived into Fremantle last week but yet to arrive at our doorstep; hopefully next week.\u003c/p\u003e",
+      "date_published" : "2024-06-02T22:20:00+08:00"
+    }    
+  ]
+}
