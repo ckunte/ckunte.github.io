@@ -1,0 +1,44 @@
+{
+  "version" : "https://jsonfeed.org/version/1.1",
+  "user_comment" : "This feed lets you know whenever a new note is published on this site. Copy the following URL -- https://ckunte.net/feed.json -- and add it to your feed reader.",
+  "title" : "C Kunte: weeknotes",
+  "home_page_url" : "https://ckunte.net",
+  "feed_url" : "https://ckunte.net/feed.json",
+  "description" : "Weeknotes",
+  "authors" : [
+    {
+      "name" : "C Kunte",
+      "url" : "https://ckunte.net"
+    }
+  ],
+  "items": [
+    {
+      "id" : "24w30",
+      "title" : "In plain sight",
+      "url" : "https://ckunte.net/#24w30",
+      "content_html" : "\u003cp\u003eThe sound of nostalgia has quietened on the group; to almost a lull. To ensure it holds and to avoid any stimulation, I have it on mute now.\u003c/p\u003e\n\u003cp\u003eI\u0026rsquo;ve begun to have fun writing and producing stuff with \u003ca href=\"https://typst.app\"\u003eTypst\u003c/a\u003e (e.g. minutes, notes, progress logs, reports, and presentations). Just this week, I finished a nice, presentable slide pack for a lunch + learn session, all in plain text. And yes, I can now track changes with git.\u003c/p\u003e\n\u003cp\u003eAnother example: conditional formatting. I like highlighting terms like \u003cem\u003etbc\u003c/em\u003e or \u003cem\u003etbd\u003c/em\u003e, so I can return to them later. This code below highlights and italicises any of these words: tba, tbc, tbd. I can add it to a template without modifying the report\u0026rsquo;s main content, which keeps formatting separate from content; neat!\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-rust\"\u003eshow regex(\u0026quot;tb[a,c,d]\u0026quot;): set text(fill:red, style:\u0026quot;italic\u0026quot;)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eNot long ago, I stopped maintaining a public archive of my thoughts. After a threshold, weeknotes drop-off the only page they appear on (i.e. homepage), like the json feed I offer on this site. It\u0026rsquo;s not obvious, but appending \u003ca href=\"/#w\"\u003e#w\u003c/a\u003e to the URL will reveal the current.\u003c/p\u003e",
+      "date_published" : "2024-07-26T23:08:00+08:00"
+    },
+    {
+      "id" : "24w29",
+      "title" : "Middle school nostalgia",
+      "url" : "https://ckunte.net/#24w29",
+      "content_html" : "\u003cp\u003eA week or so ago, someone from school whom I didn\u0026rsquo;t know asked sis for my number. Knowing me, she called first. I said yes. Another called to confirm, and after small talk, added me to a group with a hundred already on.\u003c/p\u003e\n\u003cp\u003eDespite my resistance to social media messaging, I was surprised to let myself be swept-off \u0026mdash; sharing stuff, more than I thought I was capable of, with a bunch I barely knew back in the eighties and hardly recognise now.\u003c/p\u003e\n\u003cp\u003eThirty-seven ignoramus years gone, and this group wants to have a \u0026ldquo;now or never\u0026rdquo; Class of 87 reunion in November. What\u0026rsquo;s more? A part of me wants to go. \u003c/p\u003e",
+      "date_published" : "2024-07-21T18:09:00+08:00"
+    },
+    {
+      "id" : "24w26",
+      "title" : "Making room",
+      "url" : "https://ckunte.net/#24w26",
+      "content_html" : "\u003cp\u003eOut of options to get \u003ca href=\"https://typst.app\"\u003eTypst\u003c/a\u003e on my die-hard MacBook Air (2011) via either  Homebrew or MacPorts, I found this fantastic package called \u003ca href=\"https://pypi.org/project/typst/\"\u003etypst-py\u003c/a\u003e. To simplify further, I wrote an alias to complement my \u003ca href=\"https://gist.github.com/ckunte/6c47b20dd2d77364dc652fdf091e9f24\" title=\"Compile Typst document\"\u003ectd.py\u003c/a\u003e script:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-bash\"\u003ealias tc=\u0027_tc() { python3 /path-to/ctd.py -f $1 ;}; _tc\u0027\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eWith this, I typeset like so, and save a few key strokes:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-shell\"\u003e$ tc note.typ\nCompiling note.typ to note.pdf...done.\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eMy younger one moves back to live with us from next week, and will commute to university from home. We\u0026rsquo;re looking forward to it very much. She seems to have misplaced her bike keys; will soon know if we need a hacksaw to bring it home.\u003c/p\u003e\n\u003cp\u003eInspection is next week, and so this weekend is about housekeeping. Allied came back to collect empty boxes. The garage is neat again.\u003c/p\u003e",
+      "date_published" : "2024-06-29T20:55:00+08:00"
+    },
+    {
+      "id" : "24w25",
+      "title" : "Shoebox",
+      "url" : "https://ckunte.net/#24w25",
+      "content_html" : "\u003cp\u003eAllied\u0026rsquo;s service was good. Their promise was 7-9 weeks; crating some part of their service. The container arrived at my doorstep in 8. Stuff intact, bar one. They reminded us to get transit bolts to protect the washer, which we did just in time.\u003c/p\u003e\n\u003cp\u003eWe fixed the (a) dining table, (b) sideboard and bookcase shutters, and (c) shared work desk. We found the shoebox with useful bits and bobs, including my portable speaker. \u003c/p\u003e\n\u003cp\u003eYears in the making, \u003ca href=\"https://numpy.org/devdocs/release/2.0.0-notes.html\"\u003enumpy 2.0\u003c/a\u003e landed this week. I got to test my scripts written over the years with the following; they\u0026rsquo;re still usable.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-sh\"\u003egrep \u0026quot;numpy\u0026quot; *.py | ruff check --select NPY201\n\u003c/code\u003e\u003c/pre\u003e",
+      "date_published" : "2024-06-23T18:50:00+08:00"
+    }    
+  ]
+}
