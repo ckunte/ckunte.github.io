@@ -60,12 +60,40 @@
 <li><a href="https://gist.github.com/ckunte/2beaab5944d57b4cc3ed6bfe6817575c" title="Email search (to add rule) in Fastmail">search-email</a>: Email search (to add rule) in Fastmail</li>
 <li><a href="https://gist.github.com/ckunte/c7f54d485b79730ddfe4c4dce1c451aa" title="SimpleHTTPServer script with clean URLs">srv</a>: http.server script with clean URLs in Python</li>
 </ul>
+<h3>Sublime Text + Typst</h3>
+<ul>
+<li><a href="https://github.com/ckunte/latex-snippets-st" title="LaTeX UltiSnips snippets for Sublime Text.">latex-snippets-st</a>: LaTeX snippets for Sublime Text</li>
+<li><a href="https://github.com/ckunte/typst-snippets-st" title="Typst snippets for Sublime Text.">typst-snippets-st</a>: Typst snippets for Sublime Text</li>
+</ul>
+<p>Custom <code>Typst-py.sublime-build</code> with <a href="https://pypi.org/project/typst/">typst-py</a> and <a href="https://gist.github.com/ckunte/6c47b20dd2d77364dc652fdf091e9f24" title="Compile Typst document to pdf using Python">ctd.py</a>:</p>
+<pre><code>{   
+  &quot;shell_cmd&quot; : &quot;python3 \\${HOME}/ctd.py -f \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.typ&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<p>Custom <code>Typst-Cyg.sublime-build</code> via Cygwin:</p>
+<pre><code>{   
+  &quot;shell_cmd&quot; : &quot;typst compile \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.typ&quot;,
+  &quot;path&quot; : &quot;C:\\Cygwin\\bin;$path&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<p>Turn uppercase words into small caps in Typst:</p>
+<pre><code class="language-rust">#let sc(content) = text(features: (&quot;c2sc&quot;,))[#content]
+#show regex(&quot;[A-Z]{2,}&quot;): match =&gt; {
+  sc(match)
+}
+</code></pre>
 <h3>Text editor</h3>
 <ul>
 <li><a href="https://gist.github.com/ckunte/4700941" title="Autopair underscores and backticks in Sublime Text">autopair-underscrores-backticks</a> for Sublime Text</li>
 <li><a href="https://gist.github.com/ckunte/31500c17452b0fd8c55bc9460bd9cc92" title="Get date stamp (in Y-m-d H:M format) in Sublime Text from a shortcut (ctrl+shift+d)">datestamp-in-sublimetext</a> with a shortcut (ctrl+shift+d)</li>
-<li><a href="https://gist.github.com/ckunte/2d7a750e6cf8b96f98f028e90c8ab712" title="Get date stamp (in Y-m-d H:M format) in Vim from an abbreviation (ds)">datestamp-in-vim</a> from an abbreviation (ds)</li>
 <li><a href="https://gist.github.com/ckunte/80a9ba208b58a5b1aa8f122d602a55f4" title="Compiling Vim from source with Python3 interpreter enabled">mkvim</a>: Compiling Vim from source with python3 enabled</li>
+<li>datestamp in vim from an abbreviation (ds):<pre><code>abbr &lt;expr&gt; ds strftime('%Y-%m-%d %H:%M')
+</code></pre>
+</li>
 </ul>
 <h3>Terminal utilities</h3>
 <ul>
@@ -75,12 +103,20 @@
 <h3>Typesetting</h3>
 <ul>
 <li><a href="https://gist.github.com/ckunte/6c47b20dd2d77364dc652fdf091e9f24" title="Compile Typst document to pdf using Python">ctd</a>: Compile Typst document to pdf via Python</li>
-<li><a href="https://github.com/ckunte/latex-snippets-st" title="LaTeX UltiSnips snippets for Sublime Text.">latex-snippets-st</a>: LaTeX snippets for Sublime Text</li>
 <li><a href="https://github.com/ckunte/latex-snippets-vim" title="LaTeX UltiSnips snippets for Vim and Neovim.">latex-snippets-vim</a>: LaTeX snippets for Vim and Neovim</li>
-<li><a href="https://gist.github.com/ckunte/ab1993fbba0a2c31e240c64382558dca" title="Turn uppercase words into smallcaps in Typst">smallcaps</a>: Turn uppercase words into small caps in Typst</li>
 <li><a href="https://github.com/ckunte/templates" title="LaTeX templates (with styles) for notes, letters, forms.">templates</a>: For notes, letters, etc. (see also <a href="https://github.com/ckunte/templates/wiki" title="Templates wiki">wiki</a>)</li>
-<li><a href="https://github.com/ckunte/typst-snippets-st" title="Typst snippets for Sublime Text.">typst-snippets-st</a>: Typst snippets for Sublime Text</li>
 <li><a href="https://github.com/ckunte/typst-snippets-vim" title="Typst snippets for Vim and Neovim">typst-snippets-vim</a>: Typst snippets for Vim and Neovim</li>
+</ul>
+<h3>Version-control</h3>
+<ul>
+<li><a href="https://github.com/ckunte/git-talk/" title="Version control for engineers">git-talk</a>: version control for engineers (viewgraphs)</li>
+<li><a href="https://gist.github.com/ckunte/06f43f388f1c822b7074de2dcfa493e8" title="Git Work-flow">git-workflow</a>: git version-control work-flow</li>
+</ul>
+<h3>Work related</h3>
+<ul>
+<li><a href="https://gist.github.com/ckunte/b0a204548a2ca72a0771bcc834a947dd" title="Tension leg platforms">tlp</a>: List of tension leg platforms</li>
+<li><a href="https://gist.github.com/ckunte/4829ba8180afb9413861dc5a2e3092c0" title="Getting USFOS to run on Linux">usfos-on-linux</a>: Get USFOS to run on linux (<a href="https://gist.github.com/ckunte/cb829338ae7fc24cc2ca" title="Install USFOS on Debian script">script</a>)</li>
+<li><a href="https://gist.github.com/ckunte/26ccccf02a747babde354e9a0e913a7d" title="Walk-to-work elevation on platforms">w2w</a>: Walk-to-work elevation on platforms</li>
 </ul>
 </section>
 <section id="w">
