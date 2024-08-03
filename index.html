@@ -91,10 +91,10 @@
 <li><a href="https://gist.github.com/ckunte/4700941" title="Autopair underscores and backticks in Sublime Text">autopair-underscrores-backticks</a> for Sublime Text</li>
 <li><a href="https://gist.github.com/ckunte/31500c17452b0fd8c55bc9460bd9cc92" title="Get date stamp (in Y-m-d H:M format) in Sublime Text from a shortcut (ctrl+shift+d)">datestamp-in-sublimetext</a> with a shortcut (ctrl+shift+d)</li>
 <li><a href="https://gist.github.com/ckunte/80a9ba208b58a5b1aa8f122d602a55f4" title="Compiling Vim from source with Python3 interpreter enabled">mkvim</a>: Compiling Vim from source with python3 enabled</li>
-<li>datestamp in vim from an abbreviation (ds):<pre><code>abbr &lt;expr&gt; ds strftime('%Y-%m-%d %H:%M')
-</code></pre>
-</li>
 </ul>
+<p>datestamp in vim from an abbreviation (ds):</p>
+<pre><code>abbr &lt;expr&gt; ds strftime('%Y-%m-%d %H:%M')
+</code></pre>
 <h3>Terminal utilities</h3>
 <ul>
 <li><a href="https://github.com/ckunte/hkp" title="A collection of scripts to manage files, folders, set permissions, prune empty folders, combine/compress pdf files, etc.">hkp</a>: Scripts to manage files, folders, etc.</li>
@@ -107,6 +107,9 @@
 <li><a href="https://github.com/ckunte/templates" title="LaTeX templates (with styles) for notes, letters, forms.">templates</a>: For notes, letters, etc. (see also <a href="https://github.com/ckunte/templates/wiki" title="Templates wiki">wiki</a>)</li>
 <li><a href="https://github.com/ckunte/typst-snippets-vim" title="Typst snippets for Vim and Neovim">typst-snippets-vim</a>: Typst snippets for Vim and Neovim</li>
 </ul>
+<p>Alias <code>ctd.py</code> for running as <code>tc &lt;filename&gt;.typ</code>:</p>
+<pre><code class="language-bash">alias tc='_tc() { python3 /path-to/ctd.py -f $1 ;}; _tc'
+</code></pre>
 <h3>Version-control</h3>
 <ul>
 <li><a href="https://github.com/ckunte/git-talk/" title="Version control for engineers">git-talk</a>: version control for engineers (viewgraphs)</li>
@@ -122,7 +125,7 @@
 <section id="w">
 <article id="24w31">
 <h2>24W31: git talk</h2>
-<p>The weather turned cold this week. Despite this, a productive week at work; happy and exhausted. I also gave a talk, &lsquo;<a href="https://github.com/ckunte/git-talk" title="version control for engineers (using git)">version control for engineers</a>&rsquo; to help with model management and quality control processes. Using <a href="https://typst.app">Typst</a> and git for <a href="https://github.com/ckunte/git-talk/commits/master/" title="git-talk commits">commits</a>, it was (for once) fun generating the <a href="https://github.com/ckunte/git-talk/releases/">viewgraphs</a>, and practising the preach. My audience seemed heady, absorbing it all.</p>
+<p>Despite the weather turning cold, it was a productive week; happy and exhausted. I also gave a talk, &lsquo;<a href="https://github.com/ckunte/git-talk" title="version control for engineers (using git)">version control for engineers</a>&rsquo; to help with model management and quality control processes. Using <a href="https://typst.app">Typst</a> and git for <a href="https://github.com/ckunte/git-talk/commits/master/" title="git-talk commits">commits</a>, it was (for once) fun generating the <a href="https://github.com/ckunte/git-talk/releases/">viewgraphs</a>, and practising the preach. My audience seemed heady, absorbing it all.</p>
 <p>I wrote another snippet to build Typst document, <code>Typst-py.sublime-build</code>, right-off Sublime Text, this one particularly for my die-hard old MacBook Air (2011).</p>
 <pre><code>{
     &quot;shell_cmd&quot; : &quot;python3 \\${HOME}/ctd.py -f \&quot;$file_name\&quot;&quot;,
