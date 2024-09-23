@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte: Search using REGEX in MS Word</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<main>
+<h1>C Kunte&rsquo;s <a href="/" accesskey="/">homepage</a></h1>
+  
+  	
+<div id="a">
+<article>
+<h2>Search using REGEX in MS Word</h2>
+<p>There are times when I resort to converting all instances of capitalised words into small caps in a document, because they look best in certain classic serif fonts like Garamond. To do this manually would be insane, and therefore I resort to using regular expressions instead, which Microsoft Word thankfully has support for.</p>
+<p>Under <em>Advanced Find</em>, enter <code>[A-Z]{2,}</code>, select <em>Use wildcards</em>, click on <em>Find In</em>, and choose <em>Main Document</em> as shown below.</p>
+<p>The above would select all instances of caps with 2 or more characters. From the <em>Aa</em> menu bar in the Home tab, select <code>lowercase</code> to format all selected capital words to lower case. Then with the words still selected, press <code>Ctrl</code>+<code>Shift</code>+<code>K</code> to convert them all into small caps.</p>
+</article>
+</div>
+
+  <footer>
+    <span>&lsaquo;<a accesskey="j" title="dwm notes" href="/notes/dwm">Prev</a></span>
+    <span><a accesskey="k" title="Self-documenting scripts" href="/notes/scridoc">Next</a>&rsaquo;</span>
+  </footer>
+
+</main>
+</body>
+</html>

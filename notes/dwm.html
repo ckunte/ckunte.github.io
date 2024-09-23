@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte: dwm notes</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<main>
+<h1>C Kunte&rsquo;s <a href="/" accesskey="/">homepage</a></h1>
+  
+  	
+<div id="a">
+<article>
+<h2>dwm notes</h2>
+<p>It&rsquo;s funny how the dislike one develops as a novice user towards severe minimalism and its intimidating terminal interface turns a corner. It has certainly been the case with me. I mean, as an end user of <a href="https://en.wikipedia.org/wiki/Domain/OS">Domain/OS</a> back in 1996, I&rsquo;m no stranger to window managers. I had a job to do, and I was given these <a href="https://en.wikipedia.org/wiki/Apollo_Computer">Apollo systems</a> to build models and carry out structural analyses on and I did. It&rsquo;s only when <a href="https://www.ubuntu.com/">ubuntu</a> began shipping a user-friendly system around 2004-5 was when I began warming up. If I was offered a window manager as a UI instead of Gnome 2.x, then I&rsquo;d have flinched and said no.</p>
+<p>2007 was the year of linux on desktop, but since then the interfaces have been going downhill. My Atom-powered, and generally fine, tiny desktop started feeling out of breath with the new xubuntu, forcing me to look for a simpler interface without swapping its guts. So I switched to ubuntu 16.x and chose <a href="http://dwm.suckless.org/">dwm</a> &mdash; window manager with a pedigree, as my primary interface. </p>
+<p>A couple of weekends ago I&rsquo;d edit header files and compile <code>C</code> code just to get my customised version of <code>dwm</code> and other <a href="http://suckless.org/">suckless tools</a> running. Here&rsquo;s that routine.</p>
+<h2>Installation</h2>
+<ol>
+<li>Install ubuntu (16.04.1 as of this post) as usual ([a] download the iso, [b] make a bootable usb stick, [c] boot from the usb, and install it on hard drive).</li>
+<li>
+<p>Install a few libraries to help compile suckless-tools:</p>
+<pre><code>sudo apt-get install suckless-tools libx11-dev libxft-dev libxinerama-dev
+</code></pre>
+</li>
+<li>
+<p>To download suckless tools, get <code>git</code> first:</p>
+<pre><code>sudo apt-get install git-core
+</code></pre>
+</li>
+<li>
+<p>Download suckless tools (dwm &ndash; dynamic window manager, <a href="http://tools.suckless.org/dmenu">dmenu</a>, <a href="http://st.suckless.org/">st</a> &ndash; simple terminal, <a href="http://surf.suckless.org/">surf</a> &ndash; web browser):</p>
+<pre><code>cd Downloads
+git clone http://git.suckless.org/dwm
+git clone http://git.suckless.org/dmenu
+git clone http://git.suckless.org/st
+git clone http://git.suckless.org/surf
+</code></pre>
+</li>
+<li>
+<p>Compile each tool within its downloaded folder:</p>
+<pre><code>cd ~/Downloads/dwm
+make &amp;&amp; sudo make install
+cd ~/Downloads/dmenu
+make &amp;&amp; sudo make install
+cd ~/Downloads/st
+make &amp;&amp; sudo make install
+cd ~/Downloads/surf
+make &amp;&amp; sudo make install
+</code></pre>
+</li>
+<li>
+<p>Logout, and at the login drop down window (click on ubuntu icon to reveal the dropdown), select dwm.</p>
+</li>
+<li>
+<p>Optional: Custom font setting for <code>dwm</code> (edit <code>config.h</code> and recompile with <code>make &amp;&amp; sudo make install</code>):</p>
+<pre><code>static const char *fonts[] = { "Ubuntu Mono:size=13" };
+static const char dmenufont[] = "Ubuntu Mono:size=13";
+</code></pre>
+</li>
+<li>
+<p>Optional: Custom font setting for <code>st</code> (edit <code>config.h</code> and recompile with <code>make &amp;&amp; sudo make install</code>):</p>
+<pre><code>static char font[] = "Ubuntu Mono:pixelsize=16:antialias=true:autohint=true";
+</code></pre>
+</li>
+<li>
+<p>Optional: Set (auto-updating) clock in the status bar by saving this following in <code>.xprofile</code>:</p>
+<pre><code># Statusbar loop
+while true; do
+   xsetroot -name "$( date +"%F %R" )"
+   sleep 1m    # Update time every minute
+done &amp;
+</code></pre>
+</li>
+<li>
+<p>Optional: <code>st</code> has no cut-paste option, so install <code>xclip</code> with <code>sudo apt-get install xclip</code> and set <code>alias xclip="xclip -selection c"</code> in <code>~/.zshrc</code>, and then use <code>cat somefile | xclip</code></p>
+</li>
+</ol>
+<h2>Useful commands</h2>
+<ol>
+<li><code>Alt+P</code> &ndash; Access menu</li>
+<li><code>Shift+Alt+Return</code> &ndash; New terminal window</li>
+<li><code>Shift+Alt+C</code> &ndash; Close window</li>
+<li><code>Shift+Alt+Q</code> &ndash; Close session (logout)</li>
+<li><code>surf</code> &ndash; Open surf browser, <code>Ctrl+G</code> Access URL bar</li>
+<li><code>Alt+H</code> &ndash; Resize tile window on the left hand side</li>
+<li><code>Alt+L</code> &ndash; Resize tile window on the right hand side</li>
+<li><code>eog</code> &ndash; Image viewer</li>
+<li><code>nautilus --no-desktop</code> &ndash; Access file manager</li>
+</ol>
+<p>There&rsquo;s a nice <a href="https://www.youtube.com/watch?v=GQ5s6T25jCc">introductory video by Jason Ryan</a>, if you&rsquo;re not familiar with dwm.</p>
+</article>
+</div>
+
+  <footer>
+    <span>&lsaquo;<a accesskey="j" href="/notes/">Notes</a></span>
+    <span><a accesskey="k" title="Search using REGEX in MS Word" href="/notes/regex-in-word">Next</a>&rsaquo;</span>
+  </footer>
+
+</main>
+</body>
+</html>

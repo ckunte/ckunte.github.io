@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte: Typst &rarr; pdf on MacOS and Windows</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<main>
+<h1>C Kunte&rsquo;s <a href="/" accesskey="/">homepage</a></h1>
+  
+  	
+<div id="a">
+<article>
+<h2>Typst &rarr; pdf on MacOS and Windows</h2>
+<h3>Using Sublime Text on older MacOS</h3>
+<p>Custom <code>Typst-py.sublime-build</code> with <a href="https://pypi.org/project/typst/">typst-py</a> and <a href="https://gist.github.com/ckunte/6c47b20dd2d77364dc652fdf091e9f24">ctd.py</a>:</p>
+<pre><code>{   
+  &quot;shell_cmd&quot; : &quot;python3 \\${HOME}/ctd.py -f \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.typ&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<p>This above allows one to type-set with <code>Cmd</code>+<code>B</code>.</p>
+<h3>Using Sublime Text on Windows (Cygwin)</h3>
+<p>Custom <code>Typst-Cyg.sublime-build</code> via Cygwin:</p>
+<pre><code>{   
+  &quot;shell_cmd&quot; : &quot;typst compile \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.typ&quot;,
+  &quot;path&quot; : &quot;C:\\Cygwin\\bin;$path&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<h3>Using GitHub Actions</h3>
+<p>A workflow is a set of instructions to be carried out as actions in a container provided by GitHub. These instructions are to be based inside a subfolder of the repository like so <code>.github/workflows/release.yml</code>, whose contents are as below:</p>
+<pre><code>name: Build Typst document
+on: 
+  push:
+    tags:
+      - &quot;v*.*.*&quot;
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: prep typst
+        uses: typst-community/setup-typst@v3
+      - run: typst compile m1.typ
+
+      - name: release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            m1.pdf
+</code></pre>
+</article>
+</div>
+
+  <footer>
+    <span>&lsaquo;<a accesskey="j" title="numpy2 compliance check" href="/notes/np2-chk">Prev</a></span>
+    <span><a accesskey="k" href="/notes/">Notes</a>&rsaquo;</span>
+  </footer>
+
+</main>
+</body>
+</html>

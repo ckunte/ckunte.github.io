@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte: Home-grown password manager</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<main>
+<h1>C Kunte&rsquo;s <a href="/" accesskey="/">homepage</a></h1>
+  
+  	
+<div id="a">
+<article>
+<h2>Home-grown password manager</h2>
+<p>I got myself an M1 MacBook Air. The switch however makes some tools I rely-on either obsolete or subscription-only. The notable ones are (a) TextExpander, and (b) 1Password. </p>
+<p>There is a replacement in mind for TextExpander, which I am yet to test. For the latter, I have been thinking about <a href="https://www.passwordstore.org" title="pass -- the standard unix password manager">pass</a> by Jason A. Donenfeld of <a href="https://www.wireguard.com/">WireGuard</a> fame for a while. Inspired by its elegance, simplicity and structure, but concerned by my own lack of rigour in managing GPG keys for vault security, I chose to roll my own, but without compromising security or usability.</p>
+<p>spm is simply an encrypted, mountable volume that contains a passwords-list in a plain-text file. The passwords-list file is a free-format. To enable better querying, I have chosen the following structure &mdash; a four-line block (and each block is separated by a single empty line. See an example (for demo purposes) below:</p>
+<pre><code># Telstra
+user (or num): my_unique_username
+pass (or pin): my_secret_password
+url: https://www.my.telstra.com.au/myaccount/home
+</code></pre>
+<p>spm is created in the following two steps:</p>
+<ol>
+<li>Create a passwords-list file <code>spm.md</code>; save it within a folder, say, <code>spm</code>.</li>
+<li>With MacOS&rsquo;s Disk Utility, create a new image from <code>spm</code> folder &mdash; with (a) AES 256 encryption, and (b) read-write options. (The password used to encrypt will be the vault&rsquo;s master password.)</li>
+</ol>
+<p>spm can either be read using a text editor or via command-line with grep. (All of the following is optional for those like me who prefer the Terminal.)</p>
+<h3>Prep for command-line</h3>
+<p>Create a function, say in a file like <code>.bash_func</code>:</p>
+<pre><code class="language-sh">function spm() {
+    if [ -z &quot;$1&quot; ]; then
+        echo &quot;Please provide a search term.&quot;
+        return 1
+    fi
+
+    local result=$(grep -A 3 &quot;$1&quot; /Volumes/spm/spm.md)
+    if [ -z &quot;$result&quot; ]; then
+        echo &quot;No matching results found.&quot;
+        return 1
+    fi
+
+    echo &quot;$result&quot;
+}
+</code></pre>
+<p>In the <code>.zshrc</code> file ensure it has access to <code>.bash_func</code> file like so:</p>
+<pre><code class="language-sh"># Source all files in ~/.bash_func and ~/.aliases
+for file in &quot;$HOME&quot;/.{bash_func,aliases}; do
+    if [ -r &quot;$file&quot; ] &amp;&amp; [ -f &quot;$file&quot; ]; then
+        source &quot;$file&quot;
+    fi
+done
+unset file
+</code></pre>
+<p>Restart Terminal, and this command is ready at your finger tips. </p>
+<h3>Querying password(s)</h3>
+<ol>
+<li>
+<p>Mount spm.dmg. If for instance, <code>spm.dmg</code> is stored on <code>~/Documents</code>, then run</p>
+<pre><code>open ~/Documents/spm.dmg
+</code></pre>
+<p>Enter master password at GUI prompt. (Common sense suggests it is unwise to check the box labelled &ldquo;Remember password in my keychain&rdquo;.) This will mount a volume on Desktop <code>/Volumes/spm</code> in MacOS.</p>
+</li>
+<li>
+<p>Now in Terminal (recommend running it in &ldquo;Secure Keyboard Entry&rdquo;), query spm like the example below (it&rsquo;s case-sensitive):</p>
+<pre><code>spm "Telstra"
+</code></pre>
+<p>This will produce the above example block to refer to, copy, paste, etc.</p>
+</li>
+</ol>
+<p>Once done using spm, (a) eject the spm volume from Desktop with Cmd + E, and (b) close Terminal window.</p>
+<p>spm.dmg file is portable, and I think can be carried in a portable drive without compromising its integrity.</p>
+<h3>Adding or updating new password(s)</h3>
+<p>To add new (or update) passwords, just mount <code>spm.dmg</code>, edit the spm.md file and add (or edit) a block of details, save file, and eject <code>spm</code> volume.</p>
+</article>
+</div>
+
+  <footer>
+    <span>&lsaquo;<a accesskey="j" title="LaTeX &rarr; pdf on MacOS and Windows" href="/notes/build-latex">Prev</a></span>
+    <span><a accesskey="k" title="Slice lists with Pandas" href="/notes/slice-lists">Next</a>&rsaquo;</span>
+  </footer>
+
+</main>
+</body>
+</html>

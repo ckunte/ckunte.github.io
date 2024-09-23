@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte: LaTeX &rarr; pdf on MacOS and Windows</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<main>
+<h1>C Kunte&rsquo;s <a href="/" accesskey="/">homepage</a></h1>
+  
+  	
+<div id="a">
+<article>
+<h2>LaTeX &rarr; pdf on MacOS and Windows</h2>
+<h3>Using Sublime Text on MacOS</h3>
+<ol>
+<li>
+<p>Select <em>Tools &gt; Build System &gt; New Build System&hellip;</em> and replace the entire pre-populated JSON instruction with the following:</p>
+<pre><code>{
+    "cmd": ["/Library/TeX/texbin/xelatex", "$file"],
+    "selector": "text.tex.latex"
+}
+</code></pre>
+<p>In the above, <code>xelatex</code> is being used as the type-setting system. For this, one must have a working LaTeX system pre-installed. (<a href="https://www.tug.org/mactex/morepackages.html">BasicTeX</a> is good for my general needs. It&rsquo;s small; packages can be installed on demand with tlmgr.)</p>
+</li>
+<li>
+<p>Save it as <code>LaTeX.sublime-build</code>. (It&rsquo;ll be saved under the folder: <code>~/Library/Application Support/Sublime Text 3/Packages/User/</code>.)</p>
+</li>
+</ol>
+<p>This above allows one to type-set with <code>Cmd</code>+<code>B</code>.</p>
+<p>A minor wrinkle with the build system is that unlike running <code>xelatex</code> from Terminal, building from within Sublime Text does not recognise artefacts (like class and style files) placed within <code>~/texmf</code> folder, and so common resources require a full path. Following is an example. Note, e.g., <code>ckunte.sty</code> (style) file has been given a full path like so: </p>
+<pre><code>\usepackage{/Users/ckunte/texmf/ckunte}
+</code></pre>
+<p>Same goes for any resource within <code>~/texmf/ckunte.sty</code>. For instance, I use a custom <code>pythonhighlight.sty</code> within <code>~/texmf/ckunte.sty</code>. That needs to have a full path as well:</p>
+<pre><code>\usepackage{/Users/ckunte/texmf/pythonhighlight}
+</code></pre>
+<h3>Using Sublime Text on Windows (WSL)</h3>
+<p>My <code>LaTeX.sublime-build</code> looks like so in Windows 10:</p>
+<pre><code>{
+    "cmd" : ["bash", "-c", "/usr/local/texlive/2022/bin/x86_64-linux/xelatex ${file_name}"],
+    "shell" : true,
+    "working_dir" : "${file_path}",
+    "selector" : "text.tex.latex"
+}
+</code></pre>
+<p>For a successful compilation, any user style called must have the full path.</p>
+<h3>Using Sublime Text on Windows (Cygwin)</h3>
+<p>My <code>LaTeX-Cyg.sublime-build</code> looks like so in Windows 10:</p>
+<pre><code>{   
+  "shell_cmd" : "xelatex \"$file_name\"",
+  "selector" : "source.tex",
+  "path" : "C:\\Cygwin\\&lt;path-to-xelatex&gt;;$path",
+  "working_dir" : "$file_path"
+}
+</code></pre>
+<h3>Using GitHub Actions</h3>
+<p>A workflow is a set of instructions to be carried out as actions in a container provided by GitHub. These instructions are to be based inside a subfolder of the repository like so <code>.github/workflows/release.yml</code>, whose contents are as below:</p>
+<pre><code>name: Build LaTeX document
+on: 
+  push:
+    tags:
+      - &quot;v*.*.*&quot;
+
+permissions:
+  contents: write
+
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v4
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: test.tex
+          latexmk_use_xelatex: true
+      - name: release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            test.pdf
+</code></pre>
+<p>The build is triggered when a commit has a tag number (e.g. v1.0.3) with tag pushed to GitHub.</p>
+</article>
+</div>
+
+  <footer>
+    <span>&lsaquo;<a accesskey="j" title="Self-documenting scripts" href="/notes/scridoc">Prev</a></span>
+    <span><a accesskey="k" title="Home-grown password manager" href="/notes/spm">Next</a>&rsaquo;</span>
+  </footer>
+
+</main>
+</body>
+</html>

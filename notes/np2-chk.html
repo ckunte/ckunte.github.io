@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte: numpy2 compliance check</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<main>
+<h1>C Kunte&rsquo;s <a href="/" accesskey="/">homepage</a></h1>
+  
+  	
+<div id="a">
+<article>
+<h2>numpy2 compliance check</h2>
+<p><a href="https://numpy.org/news/#numpy-200-released" title="NumPy 2.0.0 released">numpy 2.0 was released</a> this week. Given the numerous updates, I wanted to test if the code I&rsquo;d written over the years was still usable. <a href="https://numpy.org/devdocs/numpy_2_0_migration_guide.html" title="NumPy 2.0 migration guide">numpy 2.0 migration guide</a> suggests testing with <a href="https://docs.astral.sh/ruff/" title="An extremely fast Python linter and code formatter, written in Rust.">ruff</a>. With all my python code readily available in the <a href="https://github.com/ckunte/m-one/tree/master/src" title="All python code on this site">m-one</a> repo., this made it pretty easy. All I had to do was to run the following at command line. This command searches for files with <code>numpy</code> calls, and those found are checked for compliance:</p>
+<pre><code class="language-sh">grep &quot;numpy&quot; *.py | ruff check --select NPY201
+</code></pre>
+<p>Out of the 22 files, one did not comply. A cursory check revealed that it was not so much a specific change from numpy, but a legacy print statement. It was an <a href="https://github.com/ckunte/worknotes/commit/a077c767ef6d250cfd264b83c01e12cd858e7ca8">easy fix</a>.</p>
+</article>
+</div>
+
+  <footer>
+    <span>&lsaquo;<a accesskey="j" title="Sign git commits using an SSH key" href="/notes/sign-commits">Prev</a></span>
+    <span><a accesskey="k" title="Typst &rarr; pdf on MacOS and Windows" href="/notes/build-typst">Next</a>&rsaquo;</span>
+  </footer>
+
+</main>
+</body>
+</html>

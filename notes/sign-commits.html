@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte: Sign git commits using an SSH key</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<main>
+<h1>C Kunte&rsquo;s <a href="/" accesskey="/">homepage</a></h1>
+  
+  	
+<div id="a">
+<article>
+<h2>Sign git commits using an SSH key</h2>
+<p>Since version 2.34 of <a href="https://github.blog/2021-11-15-highlights-from-git-2-34/#tidbits" title="Tidbits: sign your work using SSH keys">git</a>, it has been possible to sign commits using SSH key(s). I find this handy, as it helps manage my version control workflow with just one key type. Here is a minimal example of <code>~/.gitconfig</code> to set it up: </p>
+<pre><code>[user]
+    name = Chetan Kunte
+    email = &lt;my email address&gt;
+    signingkey = ~/.ssh/&lt;public key filename&gt;.pub
+[commit]
+    gpgsign = true # sign commit(s)
+[tag]
+    gpgsign = true # sign tag(s)
+[gpg]
+    format = ssh  # use SSH key for signing commits
+[gpg &quot;ssh&quot;]
+    allowedSignersFile = ~/.ssh/allowed_signers    
+[init]
+    defaultBranch = master # force of habit
+[core]
+    editor = nvim # my preferred editor
+</code></pre>
+<p>To let GitHub know that you will use SSH key for signing commits, add the SSH public key to <em>Settings &rarr; SSH and GPG keys &rarr; Signing keys</em>. Copy public key as so:</p>
+<pre><code>pbcopy &lt; ~/.ssh/&lt;public key filename&gt;.pub
+</code></pre>
+<p>To avoid <em>&ldquo;error: gpg.ssh.allowedSignersFile needs to be configured and exist for ssh signature verification&rdquo;</em>, add a file <code>~/.ssh/allowed_signers</code> with the following contents (<em>email, key type, public key</em>):</p>
+<pre><code>&lt;my email address&gt; ssh-ed25519 &lt;public key&gt;
+</code></pre>
+<p>Replace placeholders (shown in angle brackets above) with the actual information. Test with <code>git show --show-signature</code>. It should show as valid. Refer to <a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification" title="About commit signature verification">GitHub Docs</a>, which offers details for both GPG as well as SSH commit signature verification.</p>
+</article>
+</div>
+
+  <footer>
+    <span>&lsaquo;<a accesskey="j" title="Slice lists with Pandas" href="/notes/slice-lists">Prev</a></span>
+    <span><a accesskey="k" title="numpy2 compliance check" href="/notes/np2-chk">Next</a>&rsaquo;</span>
+  </footer>
+
+</main>
+</body>
+</html>

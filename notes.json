@@ -1,0 +1,39 @@
+{
+  "version" : "https://jsonfeed.org/version/1.1",
+  "user_comment" : "This feed lets you know whenever a new note is published on this site. Copy the following URL -- https://ckunte.net/notes.json -- and add it to your feed reader.",
+  "title" : "C Kunte: notes",
+  "home_page_url" : "https://ckunte.net",
+  "feed_url" : "https://ckunte.net/notes.json",
+  "description" : "Notes",
+  "authors" : [
+    {
+      "name" : "C Kunte",
+      "url" : "https://ckunte.net"
+    }
+  ],
+  "icon" : "https://avatars.githubusercontent.com/u/177423",
+  "favicon" : "https://avatars.githubusercontent.com/u/177423",
+  "items": [
+    {
+      "id" : "https://ckunte.net/notes/build-typst",
+      "title" : "Typst &rarr; pdf on MacOS and Windows",
+      "url" : "https://ckunte.net/notes/build-typst",
+      "content_html" : "\u003ch3\u003eUsing Sublime Text on older MacOS\u003c/h3\u003e\n\u003cp\u003eCustom \u003ccode\u003eTypst-py.sublime-build\u003c/code\u003e with \u003ca href=\"https://pypi.org/project/typst/\"\u003etypst-py\u003c/a\u003e and \u003ca...",
+      "date_published" : "2024-06-27T19:52:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/notes/np2-chk",
+      "title" : "numpy2 compliance check",
+      "url" : "https://ckunte.net/notes/np2-chk",
+      "content_html" : "\u003cp\u003e\u003ca href=\"https://numpy.org/news/#numpy-200-released\" title=\"NumPy 2.0.0 released\"\u003enumpy 2.0 was released\u003c/a\u003e this week. Given the numerous updates, I wanted to test if the code I\u0026rsquo;d written over the years was still usable. \u003ca...",
+      "date_published" : "2024-06-19T23:15:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/notes/sign-commits",
+      "title" : "Sign git commits using an SSH key",
+      "url" : "https://ckunte.net/notes/sign-commits",
+      "content_html" : "\u003cp\u003eSince version 2.34 of \u003ca href=\"https://github.blog/2021-11-15-highlights-from-git-2-34/#tidbits\" title=\"Tidbits: sign your work using SSH keys\"\u003egit\u003c/a\u003e, it has been possible to sign commits using SSH key(s). I find this handy, as it helps manage my...",
+      "date_published" : "2023-04-24T23:59:00+08:00"
+    }    
+  ]
+}
