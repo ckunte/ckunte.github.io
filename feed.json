@@ -1,0 +1,25 @@
+{
+  "version" : "https://jsonfeed.org/version/1.1",
+  "user_comment" : "This feed lets you know whenever a new note is published on this site. Copy the following URL -- https://ckunte.net/feed.json -- and add it to your feed reader.",
+  "title" : "C Kunte: weeknotes",
+  "home_page_url" : "https://ckunte.net",
+  "feed_url" : "https://ckunte.net/feed.json",
+  "description" : "Weeknotes",
+  "authors" : [
+    {
+      "name" : "C Kunte",
+      "url" : "https://ckunte.net"
+    }
+  ],
+  "icon" : "https://avatars.githubusercontent.com/u/177423",
+  "favicon" : "https://avatars.githubusercontent.com/u/177423",
+  "items": [
+    {
+      "id" : "the-end",
+      "title" : "The end (of weeknotes)",
+      "url" : "https://ckunte.net/#the-end",
+      "content_html" : "\u003cp\u003eI am stepping away from this. Perhaps for a while, perhaps for good; at this point I do not know.\u003c/p\u003e\n\u003cp\u003eWriting about my week was something I enjoyed. I am broken inside; sad and empty. To continue expressing would be like being in denial. And I want to give myself the time to find that joy, if ever, again.\u003c/p\u003e\n\u003cp\u003eUntil then, adi\u00f3s.\u003c/p\u003e",
+      "date_published" : "2024-09-24T19:48:00+08:00"
+    }    
+  ]
+}
