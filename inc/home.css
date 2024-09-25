@@ -31,6 +31,10 @@ h1, h2, h3 {
   font-weight: 400  
 }
 
+h3 {
+  font-style: italic;
+}
+
 /*
 div {
   margin-top: 1.5rem;
@@ -53,7 +57,7 @@ ul {
 }
 
 #p:target,#r:target {
-  display: block
+  display: block;
 }
 
 li,p {
@@ -139,7 +143,6 @@ div::before {
   color: lightslategray;
 }
 */
-
 pre {
   border-radius: .4em
 }
