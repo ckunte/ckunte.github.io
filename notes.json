@@ -18,7 +18,7 @@
       "id" : "https://ckunte.net/notes/build-typst",
       "title" : "Typst &rarr; pdf on MacOS and Windows",
       "url" : "https://ckunte.net/notes/build-typst",
-      "content_html" : "\u003ch3\u003eUsing Sublime Text on older MacOS\u003c/h3\u003e\n\u003cp\u003eCustom \u003ccode\u003eTypst-py.sublime-build\u003c/code\u003e with \u003ca href=\"https://pypi.org/project/typst/\"\u003etypst-py\u003c/a\u003e and \u003ca...",
+      "content_html" : "\u003cp\u003eTypst can be installed on MacOS with brew. \u003ca href=\"https://packagecontrol.io/packages/Typst\"\u003eTypst\u003c/a\u003e package for Sublime Text provides the build setup needed to compile typ file to a pdf. For older MacOS, or Windows, see below. \u003c/p\u003e\n\u003ch3\u003eUsing...",
       "date_published" : "2024-06-27T19:52:00+08:00"
     },
     {
