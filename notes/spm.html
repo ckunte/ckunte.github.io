@@ -18,8 +18,7 @@
 <div id="a">
 <article>
 <h2>Home-grown password manager</h2>
-<p>I got myself an M1 MacBook Air. The switch however makes some tools I rely-on either obsolete or subscription-only. The notable ones are (a) TextExpander, and (b) 1Password. </p>
-<p>There is a replacement in mind for TextExpander, which I am yet to test. For the latter, I have been thinking about <a href="https://www.passwordstore.org" title="pass -- the standard unix password manager">pass</a> by Jason A. Donenfeld of <a href="https://www.wireguard.com/">WireGuard</a> fame for a while. Inspired by its elegance, simplicity and structure, but concerned by my own lack of rigour in managing GPG keys for vault security, I chose to roll my own, but without compromising security or usability.</p>
+<p>I have been thinking about <a href="https://www.passwordstore.org" title="pass -- the standard unix password manager">pass</a> by Jason A. Donenfeld of <a href="https://www.wireguard.com/">WireGuard</a> fame for a while. Inspired by its elegance, simplicity and structure, but concerned by my own lack of rigour in managing GPG keys for vault security, I chose to roll my own, but without compromising security or usability.</p>
 <p>spm is simply an encrypted, mountable volume that contains a passwords-list in a plain-text file. The passwords-list file is a free-format. To enable better querying, I have chosen the following structure &mdash; a four-line block (and each block is separated by a single empty line. See an example (for demo purposes) below:</p>
 <pre><code># Telstra
 user (or num): my_unique_username

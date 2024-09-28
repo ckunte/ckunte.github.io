@@ -35,15 +35,6 @@ h3 {
   font-style: italic;
 }
 
-/*
-div {
-  margin-top: 1.5rem;
-}
-div > h2, article > h2 {
-  margin-top: 1.5rem
-}
-*/
-
 ul>li {
   margin-left: 0
 }
@@ -52,11 +43,11 @@ ul {
   padding-left: 2.5ch
 }
 
-#p,#r {
+#c,#p,#r {
   display: none
 }
 
-#p:target,#r:target {
+#c:target,#p:target,#r:target {
   display: block;
 }
 
@@ -152,13 +143,13 @@ hr::after,pre,pre>code {
 }
 
 code,pre,pre>code {
-  background-color: #eee
+  background-color: #f8f8f8
 }
 
 :not(pre)>code {
   padding: 1px 4px;
   border-radius: 0.3ch;
-  background-color: #f8f8f8;
+  background-color: #f8f8f8
 }
 
 pre>code {
@@ -170,17 +161,6 @@ pre, code {
   font-family: var(--bfont);
 }
 
-/* Indicate external links */
-/*
-a[href^="http://"]:after, 
-a[href^="https://"]:after {
-  font-size: 100%;
-  vertical-align: top;
-  content: "\2197";
-  display: inline-block;
-  margin:-0.3ch 0 0 0;
-}
-*/
 pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}/*!
   Theme: a11y-light
   Author: @ericwbailey
@@ -193,7 +173,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
   body, header, article, aside, footer {
     background-color: rgb(48,56,65)
   }
-  h1, h2, h3, p, li, dl, time {
+  h1, h2, h3, p, li, dl, time, span {
     color: #bbb;
     background-color: transparent
   }
