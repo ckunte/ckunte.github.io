@@ -23,8 +23,8 @@
 <li>
 <p>Select <em>Tools &gt; Build System &gt; New Build System&hellip;</em> and replace the entire pre-populated JSON instruction with the following:</p>
 <pre><code>{
-    "cmd": ["/Library/TeX/texbin/xelatex", "$file"],
-    "selector": "text.tex.latex"
+  "cmd": ["/Library/TeX/texbin/xelatex", "$file"],
+  "selector": "text.tex.latex"
 }
 </code></pre>
 <p>In the above, <code>xelatex</code> is being used as the type-setting system. For this, one must have a working LaTeX system pre-installed. (<a href="https://www.tug.org/mactex/morepackages.html">BasicTeX</a> is good for my general needs. It&rsquo;s small; packages can be installed on demand with tlmgr.)</p>
@@ -43,10 +43,10 @@
 <h3>Using Sublime Text on Windows (WSL)</h3>
 <p>My <code>LaTeX.sublime-build</code> looks like so in Windows 10:</p>
 <pre><code>{
-    "cmd" : ["bash", "-c", "/usr/local/texlive/2022/bin/x86_64-linux/xelatex ${file_name}"],
-    "shell" : true,
-    "working_dir" : "${file_path}",
-    "selector" : "text.tex.latex"
+  "cmd" : ["bash", "-c", "/usr/local/texlive/2022/bin/x86_64-linux/xelatex ${file_name}"],
+  "shell" : true,
+  "working_dir" : "${file_path}",
+  "selector" : "text.tex.latex"
 }
 </code></pre>
 <p>For a successful compilation, any user style called must have the full path.</p>
