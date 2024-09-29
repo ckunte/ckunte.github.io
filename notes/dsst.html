@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte: Date stamp in Sublime Text</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<main>
+<h1>C Kunte&rsquo;s <a href="/" accesskey="/">homepage</a> &rarr; <a accesskey="n" href="/notes/">notes</a></h1>
+  
+  	
+<div id="a">
+<article>
+<h2>Date stamp in Sublime Text</h2>
+<p>Sublime Text does not have a built-in option to insert a date stamp, and it needs to be created.</p>
+<ol>
+<li>
+<p>From <em>Tools &rarr; Developer &rarr; New Plugin&hellip;</em> within Sublime Text, replace the template with the following python script:</p>
+<pre><code>import sublime
+import sublime_plugin
+from datetime import datetime
+
+class InsertFormattedDateCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        formatted_date = datetime.now().strftime("%Y-%m-%d %H:%M")
+            self.view.run_command("insert", {"characters": formatted_date})
+</code></pre>
+</li>
+<li>
+<p>Under Sublime Text <em>Package/User</em> folder, save the above script as <code>insert_formatted_date.py</code>.</p>
+</li>
+<li>
+<p>Add a keyboard shortcut to get the date under <em>Preferences &rarr; Key Bindings</em>:</p>
+<pre><code>[
+  { "keys": ["ctrl+shift+d"], "command": "insert_formatted_date" }
+]
+</code></pre>
+</li>
+<li>
+<p>Save the key bindings file, close Sublime Text, and reopen.</p>
+</li>
+<li>Now using <code>ctrl</code>+<code>shift</code>+<code>d</code>, insert formatted date.</li>
+</ol>
+<p>This following is at best comparable to Vim&rsquo;s much simpler way via an abbreviation, like so:</p>
+<pre><code>abbr &lt;expr&gt; ds strftime('%Y-%m-%d %H:%M')
+</code></pre>
+</article>
+</div>
+
+  <footer>
+    <span>&lsaquo; <a accesskey="j" title="Sign git commits using an SSH key" href="/notes/sign-commits">Prev</a></span>
+    <span><a accesskey="k" title="numpy2 compliance check" href="/notes/np2-chk">Next</a> &rsaquo;</span>
+  </footer>
+
+</main>
+</body>
+</html>

@@ -16,7 +16,7 @@
   "items": [
     {
       "id" : "https://ckunte.net/notes/build-typst",
-      "title" : "Typst &rarr; pdf on MacOS and Windows",
+      "title" : "Typst to pdf on MacOS and Windows",
       "url" : "https://ckunte.net/notes/build-typst",
       "content_html" : "\u003cp\u003eTypst can be installed on MacOS with brew. \u003ca href=\"https://packagecontrol.io/packages/Typst\"\u003eTypst\u003c/a\u003e package for Sublime Text provides the build setup needed to compile typ file to a pdf. For older MacOS, or Windows, see below. \u003c/p\u003e\n\u003ch3\u003eUsing...",
       "date_published" : "2024-06-27T19:52:00+08:00"
@@ -29,11 +29,11 @@
       "date_published" : "2024-06-19T23:15:00+08:00"
     },
     {
-      "id" : "https://ckunte.net/notes/sign-commits",
-      "title" : "Sign git commits using an SSH key",
-      "url" : "https://ckunte.net/notes/sign-commits",
-      "content_html" : "\u003cp\u003eSince version 2.34 of \u003ca href=\"https://github.blog/2021-11-15-highlights-from-git-2-34/#tidbits\" title=\"Tidbits: sign your work using SSH keys\"\u003egit\u003c/a\u003e, it has been possible to sign commits using SSH key(s). I find this handy, as it helps manage my...",
-      "date_published" : "2023-04-24T23:59:00+08:00"
+      "id" : "https://ckunte.net/notes/dsst",
+      "title" : "Date stamp in Sublime Text",
+      "url" : "https://ckunte.net/notes/dsst",
+      "content_html" : "\u003cp\u003eSublime Text does not have a built-in option to insert a date stamp, and it needs to be created.\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003e\n\u003cp\u003eFrom \u003cem\u003eTools \u0026rarr; Developer \u0026rarr; New Plugin\u0026hellip;\u003c/em\u003e within Sublime Text, replace the template with the following python...",
+      "date_published" : "2024-01-14T22:41:00+08:00"
     }    
   ]
 }

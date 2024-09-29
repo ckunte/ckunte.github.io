@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte: git workflow</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<main>
+<h1>C Kunte&rsquo;s <a href="/" accesskey="/">homepage</a> &rarr; <a accesskey="n" href="/notes/">notes</a></h1>
+  
+  	
+<div id="a">
+<article>
+<h2>git workflow</h2>
+<p>An organised approach tracks a repository better over time. So, it is about the discipline of maintaining a branch first and foremost. </p>
+<h3>For production</h3>
+<p><a href="https://github.com/ckunte/chisel" title="A simply static site generator in python">Chisel</a> has multiple branches. Since it is forked, my <code>master</code> branch is always at-par with the original developer&rsquo;s code base. Occasionally, I branch-out of <code>master</code>, work-on a feature, and when it is ready, I (rarely) send a pull request to the developer for merging it into the <code>master</code> branch.</p>
+<p>To update my site, I use the <code>ck</code> branch, which includes site-specific configuration, custom features, and modifications. I run Chisel as follows:</p>
+<pre><code class="language-sh">git -C &quot;$HOME/Projects/chisel&quot; checkout ck
+time python3 $HOME/Projects/chisel/chisel.py
+</code></pre>
+<p>The first line above ensures that I am switched to the branch I need before running.</p>
+<h3>For development</h3>
+<p><code>git help everyday</code> offers an overview of twenty odd commands to be productive in various roles as (a) an individual developer, (b) a participant developer, (c) an integrator, and as (d) a system administrator. It has taught me more than any book could, and it&rsquo;s one command away from access.</p>
+</article>
+</div>
+
+  <footer>
+    <span>&lsaquo; <a accesskey="j" title="Search using REGEX in MS Word" href="/notes/regex-in-word">Prev</a></span>
+    <span><a accesskey="k" title="Enabling Brother printer into an AirPrinter" href="/notes/airprint">Next</a> &rsaquo;</span>
+  </footer>
+
+</main>
+</body>
+</html>
