@@ -3,6 +3,7 @@
 :root {
   --cwidth: 62ch;
   --link-dark: #00BFFF;
+  --cfont: Consolas, Courier, monospace;
   --bfont: Consolas, Courier, monospace;
 }
 
@@ -134,6 +135,9 @@ div::before {
   color: lightslategray;
 }
 */
+pre, code {
+  font-family: var(--cfont);
+}
 pre {
   border-radius: .4em
 }
@@ -161,7 +165,7 @@ pre>code {
   padding: 0.75ch 1.5ch
 }
 pre, code {
-  font-family: var(--bfont);
+  font-family: var(--cfont);
 }
 
 pre code.hljs{display:block;overflow-x:auto}/*!
