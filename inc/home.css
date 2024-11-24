@@ -1,0 +1,238 @@
+@charset "utf-8";
+
+:root {
+  --cwidth: 42rem;
+  --link-dark: #00BFFF;
+  --cfont: Noto Sans Mono, Consolas, ui-monospace, monospace;
+  --bfont: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+html {
+  -webkit-text-size-adjust: 100%
+}
+
+body {
+  font: 21px/1.4 var(--bfont);
+  padding: 2ch 1ch;
+}
+
+footer,main {
+  margin: auto;
+  max-width: var(--cwidth)
+}
+
+p.archive {
+  color: lightslategray;
+  font-style: italic;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  margin: 2ch auto; 
+  color: lightslategray;
+}
+
+.logo {
+  margin-left: 1ch;
+  margin-bottom: 1ch;
+}
+
+h1, h2, h3 {
+  font-family: var(--bfont);
+  line-height: 1.05;
+  margin-bottom: 0
+}
+
+h1 {
+  font-size: 175%;
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 150%
+}
+
+h3 {
+  font-size: 125%
+}
+
+ul>li {
+  margin-left: 0
+}
+
+ul {
+  padding-left: 2.5ch
+}
+
+#c,#p,#n,#r {
+  display: none
+}
+
+#c:target,#p:target,#n:target,#r:target {
+  display: block;
+}
+
+li,p {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  hyphenate-limit-chars: 6 3 3;
+  hyphenate-limit-lines: 2;
+  hyphenate-limit-last: always;
+  hyphenate-limit-zone: 8%
+}
+
+figure {
+  min-width: 100%;
+  max-width: var(--cwidth);
+  margin-left: 0
+}
+
+figure>img,p>img,video {
+  width: 100%;
+  max-width: var(--cwidth)
+}
+
+figure>img,p>img {
+  min-width: 100%;
+  margin: 0;
+  border-radius: .5ch
+}
+
+video {
+  border-radius: .6ch
+}
+
+figure img+img,figure img+video,figure video+img,figure video+video {
+  margin-top: 0
+}
+
+figcaption {
+  font: 90%/130% var(--bfont);
+  color: lightslategray;
+  font-style: italic;
+  max-width: 100%;
+  margin: .5ch 1.5ch
+}
+
+small, time {
+  color: lightslategray;
+  font-style: italic;
+}
+/*
+p+p {
+  text-indent: 2ch;
+  margin-top: -1.5ch
+}
+*/
+mark {
+  background-color: #fffdaf
+}
+
+blockquote>p:first-of-type::before {
+  content: open-quote;
+  margin-left: -1ch
+}
+
+blockquote>p:last-of-type::after {
+  content: close-quote
+}
+
+hr {
+  border: 0
+}
+
+hr::after {
+  content: "* * *";
+  text-align: center;
+  color: lightslategray;
+}
+/*
+div::before {
+  content: "* * *";
+  display: flex;
+  justify-content: center;
+  color: lightslategray;
+}
+*/
+pre, code {
+  font-family: var(--cfont);
+}
+pre {
+  border-radius: .4em
+}
+code {
+  font-size: 87%;
+}
+
+hr::after,pre,pre>code {
+  display: block
+}
+
+code,pre,pre>code {
+  background-color: #f4f4f4;
+}
+
+:not(pre)>code {
+  padding: 0 3px;
+  border-radius: 0.2ch;
+  background-color: #f4f4f4
+}
+
+pre>code {
+  overflow-x: auto;
+  border-radius: 1ch;
+  padding: 1ch 1.5ch
+}
+pre, code {
+  font-family: var(--cfont);
+}
+
+/* hide scrollbar in browsers */
+pre>code::-webkit-scrollbar {
+  display:none
+} /* in Webkit browsers */
+pre>code {
+  scrollbar-width: none
+} /* in Firefox */
+pre>code {
+  -ms-overflow-style:none
+} /* in IE and Edge
+
+pre code.hljs{display:block;}/*!
+  Theme: a11y-light
+  Author: @ericwbailey
+  Maintainer: @ericwbailey
+
+  Based on the Tomorrow Night Eighties theme: https://github.com/isagalaev/highlight.js/blob/master/src/styles/tomorrow-night-eighties.css
+*/.hljs{background:var(--lite-bc);color: #545454;}.hljs-comment,.hljs-quote{color:#6495ED;font-style: italic}.hljs-deletion,.hljs-name,.hljs-regexp,.hljs-selector-class,.hljs-selector-id,.hljs-tag,.hljs-template-variable,.hljs-variable{color:#d91e18}.hljs-attribute,.hljs-built_in,.hljs-link,.hljs-literal,.hljs-meta,.hljs-number,.hljs-params,.hljs-type{color:#aa5d00}.hljs-addition,.hljs-bullet,.hljs-string,.hljs-symbol{color:green}.hljs-section,.hljs-title{color:#007faa}.hljs-keyword,.hljs-selector-tag{color:#7928a1}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}@media screen and (-ms-high-contrast:active){.hljs-addition,.hljs-attribute,.hljs-built_in,.hljs-bullet,.hljs-comment,.hljs-link,.hljs-literal,.hljs-meta,.hljs-number,.hljs-params,.hljs-quote,.hljs-string,.hljs-symbol,.hljs-type{color:highlight}.hljs-keyword,.hljs-selector-tag{font-weight:700}}
+
+@media (prefers-color-scheme: dark) {
+  body, header, article, aside, footer {
+    background-color: rgb(48,56,65)
+  }
+  h1, h2, h3, p, li, dl, time, span {
+    color: #bbb;
+    background-color: transparent
+  }
+  small, table, hr, img.screen, img.fig, warn {
+    filter: invert(0.85)
+  }
+  pre {
+    filter: invert(0.9)
+  }
+  p > code, li > code {
+    background-color: #222
+  }
+  mark {
+    color: #FFD700;
+    background-color: #222
+  }
+  a {
+    color: var(--link-dark)
+  }
+  a:visited {
+    color: #FF85FF
+  }
+}

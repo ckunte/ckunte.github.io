@@ -1,0 +1,60 @@
+{
+  "version" : "https://jsonfeed.org/version/1.1",
+  "user_comment" : "This feed lets you know whenever a new note is published on this site. Copy the following URL -- https://ckunte.net/notes.json -- and add it to your feed reader.",
+  "title" : "ckunte.net: notes",
+  "home_page_url" : "https://ckunte.net",
+  "feed_url" : "https://ckunte.net/notes.json",
+  "description" : "Notes",
+  "authors" : [
+    {
+      "name" : "C Kunte",
+      "url" : "https://ckunte.net"
+    }
+  ],
+  "icon" : "https://avatars.githubusercontent.com/u/177423",
+  "favicon" : "https://avatars.githubusercontent.com/u/177423",
+  "items": [
+    {
+      "id" : "https://ckunte.net/2024/bpy",
+      "title" : "Build python",
+      "url" : "https://ckunte.net/2024/bpy",
+      "content_html" : "\u003cp\u003eInstalling python on Windows has gotten better. Installing and updating modules is a breeze too. \u003c/p\u003e\n\u003cp\u003eI recently had to reinstall a python instance, had to set up my text editor for it in the process. Sublime Text prefers a path to python binary...",
+      "date_published" : "2024-11-23T00:30:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2024/pi5",
+      "title" : "The daily driver",
+      "url" : "https://ckunte.net/2024/pi5",
+      "content_html" : "\u003cp\u003eThe mail order placed last week arrived on Monday. The box contained (a) Raspberry Pi 5 + official power adapter, (b) official active cooler, and (c) micro HDMI adapter. Assembly was straightforward; I paid attention to installing the active...",
+      "date_published" : "2024-10-11T20:39:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2024/typst",
+      "title" : "Build Typst",
+      "url" : "https://ckunte.net/2024/typst",
+      "content_html" : "\u003cp\u003eTypst can be installed on MacOS with brew. \u003ca href=\"https://packagecontrol.io/packages/Typst\"\u003eTypst\u003c/a\u003e package for Sublime Text provides the build setup needed to compile typ file to a pdf. For older MacOS, or Windows, see below. \u003c/p\u003e\n\u003ch2\u003eUsing...",
+      "date_published" : "2024-06-27T19:52:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2024/ds",
+      "title" : "Date stamp",
+      "url" : "https://ckunte.net/2024/ds",
+      "content_html" : "\u003cp\u003eSublime Text does not have a built-in option to insert a date stamp, and it needs to be created.\u003c/p\u003e\n\u003cp\u003eFrom \u003cem\u003eTools \u0026rarr; Developer \u0026rarr; New Plugin\u0026hellip;\u003c/em\u003e within Sublime Text, replace the template with the following python...",
+      "date_published" : "2024-01-14T22:41:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2023/sgssh",
+      "title" : "Sign commits with SSH key",
+      "url" : "https://ckunte.net/2023/sgssh",
+      "content_html" : "\u003cp\u003eSince version 2.34 of \u003ca href=\"https://github.blog/2021-11-15-highlights-from-git-2-34/#tidbits\" title=\"Tidbits: sign your work using SSH keys\"\u003egit\u003c/a\u003e, it has been possible to sign commits using SSH key(s). I find this handy, as it helps manage my...",
+      "date_published" : "2023-04-24T23:59:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2022/slice",
+      "title" : "Slice lists",
+      "url" : "https://ckunte.net/2022/slice",
+      "content_html" : "\u003cp\u003eRecently, I received a document register consisting of hundreds of line items. Given the structure, it wasn\u0026rsquo;t easy to sort items, say for a particular month, or about a certain asset-type. The raw data contained over 25 columns with all sorts...",
+      "date_published" : "2022-06-04T15:21:00+08:00"
+    }    
+  ]
+}

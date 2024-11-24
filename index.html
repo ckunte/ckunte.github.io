@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte</title>
+<link rel="alternate" type="application/json" title="C Kunte: notes" href="https://ckunte.net/feed.json">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" href="/"><img alt="/" class="logo" src="/inc/apple-touch-icon.png" width="64" height="64"></a>
+</header>
+<article>
+   
+    <time datetime="2024-11-23T00:30:00+08:00">23 Nov 2024</time>
+    <h1>Build python</h1>
+    <p>Installing python on Windows has gotten better. Installing and updating modules is a breeze too. </p>
+<p>I recently had to reinstall a python instance, had to set up my text editor for it in the process. Sublime Text prefers a path to python binary defined in a build file. I named this one <code>Python-win.sublime-build</code> and placed it under <em>User</em> packages.</p>
+<pre><code>{   
+  &quot;shell_cmd&quot; : &quot;python \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.py&quot;,
+  &quot;path&quot; : &quot;C:\\path_to_python_binary_folder;$path&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<p>Now a python script can be run directly from within the editor by selecting <em>Python-win</em> from <em>Build</em> options, and then hitting <code>Ctrl</code>+<code>B</code>.</p>
+</article>
+
+<hr/>
+
+<p class="archive">Previously
+    <a accesskey="j" title="11 Oct 2024 &sdot; 2 min." href="/2024/pi5">The daily driver</a>,
+    <a title="27 Jun 2024 &sdot; 3 min." href="/2024/typst">Build Typst</a>,
+    <a title="14 Jan 2024 &sdot; 1 min." href="/2024/ds">Date stamp</a>,
+    <a title="24 Apr 2023 &sdot; 2 min." href="/2023/sgssh">Sign commits with SSH key</a>,
+    <a title="4 Jun 2022 &sdot; 3 min." href="/2022/slice">Slice lists</a>,
+    <a title="27 Sep 2020 &sdot; 3 min." href="/2020/latex">Build LaTeX</a>,
+    <a title="8 Aug 2020 &sdot; 4 min." href="/2020/cli">CLI</a>,
+    <a accesskey="k" title="1 Jun 2020 &sdot; 3 min." href="/2020/print">AirPrint</a>.
+</p>
+
+<footer>
+  <span>&nbsp;</span>
+  <span><i>produced by <a href="https://github.com/ckunte">C Kunt&eacute;</a></i></span>
+</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte: Date stamp</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" href="/"><img alt="/" class="logo" src="/inc/apple-touch-icon.png" width="64" height="64"></a>
+</header>
+  
+  	
+<article>
+<time datetime="2024-01-14T22:41:00+08:00">14 Jan 2024</time>
+<h1>Date stamp</h1>
+<p>Sublime Text does not have a built-in option to insert a date stamp, and it needs to be created.</p>
+<p>From <em>Tools &rarr; Developer &rarr; New Plugin&hellip;</em> within Sublime Text, replace the template with the following python script:</p>
+<pre><code>import sublime
+import sublime_plugin
+from datetime import datetime
+
+class InsertFormattedDateCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        formatted_date = datetime.now().strftime(&quot;%Y-%m-%d %H:%M&quot;)
+            self.view.run_command(&quot;insert&quot;, {&quot;characters&quot;: formatted_date})
+</code></pre>
+<p>Under Sublime Text <em>Package/User</em> folder, save the above script as <code>insert_formatted_date.py</code>. Add a keyboard shortcut to get the date under <em>Preferences &rarr; Key Bindings</em>:</p>
+<pre><code>[
+  { 
+    &quot;keys&quot;: [&quot;ctrl+shift+d&quot;], 
+    &quot;command&quot;: &quot;insert_formatted_date&quot; 
+  },
+]
+</code></pre>
+<p>Save the key bindings file, close Sublime Text, and reopen. Now using <code>ctrl</code>+<code>shift</code>+<code>d</code>, insert formatted date.</p>
+<h2>Vim</h2>
+<p>This following is at best comparable to Vim&rsquo;s much simpler way via an abbreviation, like so:</p>
+<pre><code>abbr &lt;expr&gt; ds strftime('%Y-%m-%d %H:%M')
+</code></pre>
+</article>
+
+  <footer>
+    <span>&lsaquo; <a accesskey="j" title="Sign commits with SSH key" href="/2023/sgssh">Prev</a></span>
+    <span><a accesskey="k" title="Build Typst" href="/2024/typst">Next</a> &rsaquo;</span>
+  </footer>
+
+</main>
+</body>
+</html>

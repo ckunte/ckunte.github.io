@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte: Build Typst</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" href="/"><img alt="/" class="logo" src="/inc/apple-touch-icon.png" width="64" height="64"></a>
+</header>
+  
+  	
+<article>
+<time datetime="2024-06-27T19:52:00+08:00">27 Jun 2024</time>
+<h1>Build Typst</h1>
+<p>Typst can be installed on MacOS with brew. <a href="https://packagecontrol.io/packages/Typst">Typst</a> package for Sublime Text provides the build setup needed to compile typ file to a pdf. For older MacOS, or Windows, see below. </p>
+<h2>Using Sublime Text on older MacOS</h2>
+<p>My 12+y old laptop, long out-of-date and warranty, is better than a Raspberry Pi for desktop computing in every practicable way. For writing, editing, scripting, typesetting, and for terminal applications, it works just fine. </p>
+<p>Last October, I replaced its cable-frayed, obsolete power adapter with a USB-C charger, thus making it safe to use.</p>
+<figure>
+  <img alt="MacBook Air (mid-2011) with its (old and new) chargers" src="https://gist.github.com/user-attachments/assets/58d5ed9a-488b-4dc9-91c2-a8f80969363b" loading="lazy">
+  <figcaption>MacBook Air (mid-2011) with its (old and new) chargers</figcaption>
+</figure>
+
+<p>I was looking to get Typst working on this Mac recently. Instead of the conventional route (via either Rust toolchain or Homebrew &mdash; both large and unnecessary on old Macs facing dependency issues and obsolescence), I discovered a simpler way. That Typst can also be installed as a <a href="https://pypi.org/project/typst/">py package</a>. With this, pdf documents can be produced like so:</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import typst
+
+# compile `document.typ` and save as `document.pdf`
+typst.compile(&quot;document.typ&quot;, output=&quot;document.pdf&quot;)
+</code></pre>
+<p>Using <a href="http://docopt.org">docopt</a>, this can be rewritten to accept a filename as an argument at command line:</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+&quot;&quot;&quot;Compile Typst document
+ctd.py 2024 ckunte
+
+Usage: ctd.py (-f &lt;file&gt;)
+       ctd.py --help
+       ctd.py --version
+
+Options:
+  -h, --help  Show this help
+  -f, --file   Specify Typst input file to compile (required)
+
+&quot;&quot;&quot;
+import typst
+from docopt import docopt
+
+def main(typstfile):
+    pdffile = f&quot;{typstfile.rsplit('.', 1)[0]}.pdf&quot;
+    print(f&quot;Compiling {typstfile} to {pdffile}...&quot;, end=&quot;&quot;)
+    typst.compile(typstfile, output=pdffile)
+    print(&quot;done.&quot;)
+
+if __name__ == '__main__':
+    args = docopt(__doc__, 
+        version=&quot;Compile Typst document, 0.1&quot;)
+    main(args[&quot;&lt;file&gt;&quot;])
+</code></pre>
+<p>Pre-install dependencies like so first:</p>
+<pre><code class="language-sh">$ python3 -m pip install --user --upgrade docopt typst
+</code></pre>
+<p>and the above script (<code>ctd.py</code>) can now be run as:</p>
+<pre><code class="language-sh">$ python3 ctd.py -f document.typ
+Compiling document.typ to document.pdf...done.
+</code></pre>
+<p>Custom <code>Typst-py.sublime-build</code> with <a href="https://pypi.org/project/typst/">typst-py</a> and ctd.py:</p>
+<pre><code>{   
+  &quot;shell_cmd&quot; : &quot;python3 \\${HOME}/ctd.py -f \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.typ&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<p>This above allows one to type-set with <code>Cmd</code>+<code>B</code>.</p>
+<h2>Using Sublime Text on Windows (Cygwin)</h2>
+<p>Download and place typst.exe under a path accessible from Cygwin first. To be able to build via Sublime Text, see below.</p>
+<p>Custom <code>Typst-Cyg.sublime-build</code> via Cygwin:</p>
+<pre><code>{   
+  &quot;shell_cmd&quot; : &quot;typst compile \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.typ&quot;,
+  &quot;path&quot; : &quot;C:\\Cygwin\\bin;$path&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<p>The approach should be similar for WSL, i.e., park typst for linux in an accessible path, e.g. <code>/usr/local/bin</code>, then write a build file with appropriate path.</p>
+<h2>Using GitHub Actions</h2>
+<p>A workflow is a set of instructions to be carried out as actions in a container provided by GitHub. These instructions are to be based inside a subfolder of the repository like so <code>.github/workflows/release.yml</code>, whose contents are as below:</p>
+<pre><code>name: Build Typst document
+on: 
+  push:
+    tags:
+      - &quot;v*.*.*&quot;
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: prep typst
+        uses: typst-community/setup-typst@v3
+      - run: typst compile m1.typ
+
+      - name: release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            m1.pdf
+</code></pre>
+</article>
+
+  <footer>
+    <span>&lsaquo; <a accesskey="j" title="Date stamp" href="/2024/ds">Prev</a></span>
+    <span><a accesskey="k" title="The daily driver" href="/2024/pi5">Next</a> &rsaquo;</span>
+  </footer>
+
+</main>
+</body>
+</html>
