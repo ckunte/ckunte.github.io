@@ -21,7 +21,15 @@ footer,main {
   max-width: var(--cwidth)
 }
 
-p.archive {
+p.archive::before {
+  content: "* * *";
+  display: flex;
+  justify-content: center;
+  color: lightslategray;
+  margin-bottom: 1ch;
+}
+
+p.archive, footer {
   color: lightslategray;
   font-style: italic;
 }
@@ -30,7 +38,6 @@ footer {
   display: flex;
   justify-content: space-between;
   margin: 2ch auto; 
-  color: lightslategray;
 }
 
 .logo {
@@ -140,22 +147,15 @@ blockquote>p:last-of-type::after {
 }
 
 hr {
+  color: lightslategray;
   border: 0
 }
 
 hr::after {
   content: "* * *";
   text-align: center;
-  color: lightslategray;
 }
-/*
-div::before {
-  content: "* * *";
-  display: flex;
-  justify-content: center;
-  color: lightslategray;
-}
-*/
+
 pre, code {
   font-family: var(--cfont);
 }

@@ -1,9 +1,9 @@
 {
   "version" : "https://jsonfeed.org/version/1.1",
-  "user_comment" : "This feed lets you know whenever a new note is published on this site. Copy the following URL -- https://ckunte.net/notes.json -- and add it to your feed reader.",
+  "user_comment" : "This feed lets you know whenever a new note is published on this site. Copy the following URL -- https://ckunte.net/feed.json -- and add it to your feed reader.",
   "title" : "ckunte.net: notes",
   "home_page_url" : "https://ckunte.net",
-  "feed_url" : "https://ckunte.net/notes.json",
+  "feed_url" : "https://ckunte.net/feed.json",
   "description" : "Notes",
   "authors" : [
     {
@@ -11,8 +11,8 @@
       "url" : "https://ckunte.net"
     }
   ],
-  "icon" : "https://avatars.githubusercontent.com/u/177423",
-  "favicon" : "https://avatars.githubusercontent.com/u/177423",
+  "icon" : "https://ckunte.net/inc/apple-touch-icon.png",
+  "favicon" : "https://ckunte.net/inc/apple-touch-icon.png",
   "items": [
     {
       "id" : "https://ckunte.net/2024/bpy",
