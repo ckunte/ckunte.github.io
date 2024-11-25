@@ -15,31 +15,24 @@
   "favicon" : "https://ckunte.net/inc/apple-touch-icon.png",
   "items": [
     {
-      "id" : "https://ckunte.net/2024/bpy",
-      "title" : "Build python",
-      "url" : "https://ckunte.net/2024/bpy",
-      "content_html" : "\u003cp\u003eInstalling python on Windows has gotten better. Installing and updating modules is a breeze too. \u003c/p\u003e\n\u003cp\u003eI recently had to reinstall a python instance, had to set up my text editor for it in the process. Sublime Text prefers a path to python binary...",
-      "date_published" : "2024-11-23T00:30:00+08:00"
-    },
-    {
       "id" : "https://ckunte.net/2024/pi5",
       "title" : "The daily driver",
       "url" : "https://ckunte.net/2024/pi5",
-      "content_html" : "\u003cp\u003eThe mail order placed last week arrived on Monday. The box contained (a) Raspberry Pi 5 + official power adapter, (b) official active cooler, and (c) micro HDMI adapter. Assembly was straightforward; I paid attention to installing the active...",
+      "content_html" : "\u003cp\u003eThe mail order arrived on Monday with the box containing Raspberry Pi 5 + official power adapter, the official active cooler, and a micro-HDMI adapter. Assembly was straightforward. Next up was \u003ca...",
       "date_published" : "2024-10-11T20:39:00+08:00"
     },
     {
-      "id" : "https://ckunte.net/2024/typst",
-      "title" : "Build Typst",
-      "url" : "https://ckunte.net/2024/typst",
-      "content_html" : "\u003cp\u003eTypst can be installed on MacOS with brew. \u003ca href=\"https://packagecontrol.io/packages/Typst\"\u003eTypst\u003c/a\u003e package for Sublime Text provides the build setup needed to compile typ file to a pdf. For older MacOS, or Windows, see below. \u003c/p\u003e\n\u003ch2\u003eUsing...",
-      "date_published" : "2024-06-27T19:52:00+08:00"
+      "id" : "https://ckunte.net/2024/build",
+      "title" : "Build",
+      "url" : "https://ckunte.net/2024/build",
+      "content_html" : "\u003cp\u003eThese are instructions for setting \u003ca href=\"https://www.sublimetext.com\"\u003eSublime Text\u003c/a\u003e up to build (i.e., compile, run, or type-set) a source to produce some output. Owing to different file paths, these would be different obviously for different...",
+      "date_published" : "2024-03-28T19:52:00+08:00"
     },
     {
       "id" : "https://ckunte.net/2024/ds",
       "title" : "Date stamp",
       "url" : "https://ckunte.net/2024/ds",
-      "content_html" : "\u003cp\u003eSublime Text does not have a built-in option to insert a date stamp, and it needs to be created.\u003c/p\u003e\n\u003cp\u003eFrom \u003cem\u003eTools \u0026rarr; Developer \u0026rarr; New Plugin\u0026hellip;\u003c/em\u003e within Sublime Text, replace the template with the following python...",
+      "content_html" : "\u003cp\u003eSublime Text does not have a built-in option to insert a date stamp, and it needs to be created.\u003c/p\u003e\n\u003cp\u003eFrom \u003cem\u003eTools \u0026gt; Developer \u0026gt; New Plugin\u0026hellip;\u003c/em\u003e within Sublime Text, replace the template with the following python...",
       "date_published" : "2024-01-14T22:41:00+08:00"
     },
     {
@@ -55,6 +48,13 @@
       "url" : "https://ckunte.net/2022/slice",
       "content_html" : "\u003cp\u003eRecently, I received a document register consisting of hundreds of line items. Given the structure, it wasn\u0026rsquo;t easy to sort items, say for a particular month, or about a certain asset-type. The raw data contained over 25 columns with all sorts...",
       "date_published" : "2022-06-04T15:21:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2020/cli",
+      "title" : "CLI",
+      "url" : "https://ckunte.net/2020/cli",
+      "content_html" : "\u003cp\u003eFor writing python scripts that are best served with user inputs at command line, \u003ca href=\"http://docopt.org/\" title=\"docopt\u2014language for description of command-line interfaces\"\u003edocopt\u003c/a\u003e is like magic. It transforms a simple comment block...",
+      "date_published" : "2020-08-08T17:15:00+08:00"
     }    
   ]
 }

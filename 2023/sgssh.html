@@ -44,7 +44,7 @@
 [core]
     editor = vim # my preferred editor
 </code></pre>
-<p>To let GitHub know that you will use SSH key for signing commits, add the SSH public key to <em>Settings &rarr; SSH and GPG keys &rarr; Signing keys</em>. Copy public key as so:</p>
+<p>To let GitHub know that you will use SSH key for signing commits, add the SSH public key to <em>Settings &gt; SSH and GPG keys &gt; Signing keys</em>. Copy public key as so:</p>
 <pre><code>pbcopy &lt; ~/.ssh/&lt;public key filename&gt;.pub
 </code></pre>
 <p>To avoid error: <code>gpg.ssh.allowedSignersFile needs to be configured and exist for ssh signature verification</code>, add a file <code>~/.ssh/allowed_signers</code> with the following contents (<em>email, key type, public key</em>):</p>
