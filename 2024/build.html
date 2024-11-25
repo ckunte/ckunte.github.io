@@ -21,15 +21,14 @@
 <time datetime="2024-03-28T19:52:00+08:00">28 Mar 2024</time>
 <h1>Build</h1>
 <p>These are instructions for setting <a href="https://www.sublimetext.com">Sublime Text</a> up to build (i.e., compile, run, or type-set) a source to produce some output. Owing to different file paths, these would be different obviously for different systems. In all of these, be sure to adjust paths as necessary.</p>
-<p><strong>Usage.</strong> Select <em>Tools &gt; Build System &gt; New Build System&hellip;</em>, and replace the entire pre-populated instructions with the following respectively. With a source file open in Sublime Text, Build is invoked with either <code>Ctrl</code>+<code>B</code> (Windows) or <code>Cmd</code>+<code>B</code> for MacOS.</p>
-<h2>LaTeX</h2>
-<p><strong>MacOS.</strong> Save the following build system as, say, <code>LaTeX-Mac.sublime-build</code>, which will, for example, be saved under <code>Packages/User</code>:</p>
+<p><em>Usage.</em> Select <em>Tools &gt; Build System &gt; New Build System&hellip;</em>, and replace the entire pre-populated instructions with the following respectively. With a source file open in Sublime Text, Build is invoked with either <code>Ctrl</code>+<code>B</code> (Windows) or <code>Cmd</code>+<code>B</code> for MacOS.</p>
+<p><em>LaTeX (MacOS):</em> <code>LaTeX-Mac.sublime-build</code>:</p>
 <pre><code>{
   &quot;cmd&quot;: [&quot;/Library/TeX/texbin/xelatex&quot;, &quot;$file&quot;],
   &quot;selector&quot;: &quot;text.tex.latex&quot;
 }
 </code></pre>
-<p><strong>Windows (WSL).</strong> Save the following build system as, say, <code>LaTeX-WSL.sublime-build</code>:</p>
+<p><em>LaTeX (Windows WSL):</em> <code>LaTeX-WSL.sublime-build</code>:</p>
 <pre><code>{
   &quot;cmd&quot; : [&quot;bash&quot;, &quot;-c&quot;, &quot;/usr/local/texlive/2022/bin/x86_64-linux/xelatex ${file_name}&quot;],
   &quot;shell&quot; : true,
@@ -37,7 +36,7 @@
   &quot;selector&quot; : &quot;text.tex.latex&quot;
 }
 </code></pre>
-<p><strong>Windows (Cygwin).</strong> Save the following build system as, say, <code>LaTeX-Cyg.sublime-build</code>:</p>
+<p><em>LaTeX (Windows Cygwin):</em> <code>LaTeX-Cyg.sublime-build</code>:</p>
 <pre><code>{   
   &quot;shell_cmd&quot; : &quot;xelatex \&quot;$file_name\&quot;&quot;,
   &quot;selector&quot; : &quot;source.tex&quot;,
@@ -45,7 +44,7 @@
   &quot;working_dir&quot; : &quot;$file_path&quot;
 }
 </code></pre>
-<p><strong>GitHub Actions (LaTeX).</strong> A workflow is a set of instructions to be carried out as actions in a container provided by GitHub. Save it under the repository like so <code>.github/workflows/rel.yml</code>. The build is triggered when a commit has a tag number (e.g. v1.0.3) with tag pushed to GitHub.</p>
+<p><em>LaTeX (GitHub Actions):</em> A workflow is a set of instructions to be carried out as actions in a container provided by GitHub. Save it under the repository like so <code>.github/workflows/rel.yml</code>. The build is triggered when a commit has a tag number (e.g. v1.0.3) with tag pushed to GitHub.</p>
 <pre><code>name: Build LaTeX document
 on: 
   push:
@@ -73,8 +72,7 @@ jobs:
           files: |
             test.pdf
 </code></pre>
-<h2>Python</h2>
-<p><strong>Windows.</strong> Save the following build system as, say, <code>Python-Win.sublime-build</code>:</p>
+<p><em>Python (Windows):</em> <code>Python-Win.sublime-build</code>:</p>
 <pre><code>{   
   &quot;shell_cmd&quot; : &quot;python \&quot;$file_name\&quot;&quot;,
   &quot;selector&quot; : &quot;source.py&quot;,
@@ -82,8 +80,7 @@ jobs:
   &quot;working_dir&quot; : &quot;$file_path&quot;
 }
 </code></pre>
-<h2>Typst</h2>
-<p><strong>Windows (Cygwin).</strong> Save the following build system as, say, <code>Typst-Cyg.sublime-build</code>:</p>
+<p><em>Typst (Windows Cygwin):</em> <code>Typst-Cyg.sublime-build</code>:</p>
 <pre><code>{   
   &quot;shell_cmd&quot; : &quot;typst compile \&quot;$file_name\&quot;&quot;,
   &quot;selector&quot; : &quot;source.typ&quot;,
@@ -91,14 +88,14 @@ jobs:
   &quot;working_dir&quot; : &quot;$file_path&quot;
 }
 </code></pre>
-<p>If for reasons Typst cannot be installed on your system, but Python can be, then Typst can be used via the <a href="https://pypi.org/project/typst/">typst-py</a> package, and a script (down below), then save the following build system, as say, <code>Typst-py.sublime-build</code>:</p>
+<p><em>Typst-py:</em> <code>Typst-py.sublime-build</code>:</p>
 <pre><code>{   
   &quot;shell_cmd&quot; : &quot;python3 \\${HOME}/ctd.py -f \&quot;$file_name\&quot;&quot;,
   &quot;selector&quot; : &quot;source.typ&quot;,
   &quot;working_dir&quot; : &quot;$file_path&quot;
 }
 </code></pre>
-<p>The above needs the following script, <code>ctd.py</code> to work:</p>
+<p>This is if for reasons Typst cannot be installed on your system, but Python can be, then Typst can be used via the <a href="https://pypi.org/project/typst/">typst-py</a> package. The above needs this script <code>ctd.py</code> to work:</p>
 <pre><code class="language-py">#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -128,7 +125,7 @@ if __name__ == '__main__':
         version=&quot;Compile Typst document, 0.1&quot;)
     main(args[&quot;&lt;file&gt;&quot;])
 </code></pre>
-<p><strong>GitHub Actions (Typst).</strong> Save the following under the repository like so <code>.github/workflows/rel.yml</code>.</p>
+<p><em>Typst (GitHub Actions):</em> <code>.github/workflows/rel.yml</code>.</p>
 <pre><code>name: Build Typst document
 on: 
   push:
@@ -150,13 +147,12 @@ jobs:
       - run: typst compile m1.typ
 
       - name: release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
             m1.pdf
 </code></pre>
-<p>The build is triggered when a commit has a tag number (e.g. v1.0.3) with tag pushed to GitHub.</p>
 </article>
 
   <footer>
