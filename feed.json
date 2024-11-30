@@ -15,6 +15,13 @@
   "favicon" : "https://ckunte.net/inc/apple-touch-icon.png",
   "items": [
     {
+      "id" : "https://ckunte.net/2024/mdsnip",
+      "title" : "Markdown snippets for Vim",
+      "url" : "https://ckunte.net/2024/mdsnip",
+      "content_html" : "\u003cp\u003eAfter resurrecting this website from being offline \u0026mdash; for don\u0026rsquo;t know how long, and post-switching to \u003ca href=\"https://neovim.io\" title=\"Neovim -- hyperextensible Vim based editor\"\u003eNeovim\u003c/a\u003e as my main text editor, I needed a few...",
+      "date_published" : "2024-11-30T19:50:00+08:00"
+    },
+    {
       "id" : "https://ckunte.net/2024/pi5",
       "title" : "The daily driver",
       "url" : "https://ckunte.net/2024/pi5",
@@ -48,13 +55,6 @@
       "url" : "https://ckunte.net/2022/slice",
       "content_html" : "\u003cp\u003eRecently, I received a document register consisting of hundreds of line items. Given the structure, it wasn\u0026rsquo;t easy to sort items, say for a particular month, or about a certain asset-type. The raw data contained over 25 columns with all sorts...",
       "date_published" : "2022-06-04T15:21:00+08:00"
-    },
-    {
-      "id" : "https://ckunte.net/2020/cli",
-      "title" : "CLI",
-      "url" : "https://ckunte.net/2020/cli",
-      "content_html" : "\u003cp\u003eFor writing python scripts that are best served with user inputs at command line, \u003ca href=\"http://docopt.org/\" title=\"docopt\u2014language for description of command-line interfaces\"\u003edocopt\u003c/a\u003e is like magic. It transforms a simple comment block...",
-      "date_published" : "2020-08-08T17:15:00+08:00"
     }    
   ]
 }

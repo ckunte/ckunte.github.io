@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="C Kunte's homepage">
 <link rel="icon" href="data:,">
-<title>C Kunte</title>
+<title>C Kunte: Markdown snippets for Vim</title>
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
 <script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
 <script>hljs.highlightAll();</script>
@@ -15,10 +15,12 @@
 <header>
   <a accesskey="/" href="/"><img alt="/" class="logo" src="/inc/apple-touch-icon.png" width="64" height="64"></a>
 </header>
+  
+  	
 <article>
-  <time datetime="2024-11-30T19:50:00+08:00">30 Nov 2024</time>
-  <h1>Markdown snippets for Vim</h1>
-  <p>After resurrecting this website from being offline &mdash; for don&rsquo;t know how long, and post-switching to <a href="https://neovim.io" title="Neovim -- hyperextensible Vim based editor">Neovim</a> as my main text editor, I needed a few snippets to be able to write without pausing to add mark-ups: one for links, and the other for figures. Powered by <a href="https://github.com/sirver/ultisnips" title="The ultimate snippet solution for Vim">UltiSnips</a>, it is just this:</p>
+<time datetime="2024-11-30T19:50:00+08:00">30 Nov 2024</time>
+<h1>Markdown snippets for Vim</h1>
+<p>After resurrecting this website from being offline &mdash; for don&rsquo;t know how long, and post-switching to <a href="https://neovim.io" title="Neovim -- hyperextensible Vim based editor">Neovim</a> as my main text editor, I needed a few snippets to be able to write without pausing to add mark-ups: one for links, and the other for figures. Powered by <a href="https://github.com/sirver/ultisnips" title="The ultimate snippet solution for Vim">UltiSnips</a>, it is just this:</p>
 <pre><code>snippet lnk &quot;Link&quot; b
 [${1:key}]: ${2:url} &quot;${3:title}&quot;
 endsnippet
@@ -43,21 +45,11 @@ let g:UltiSnipsJumpBackwardTrigger = '&lt;c-k&gt;'
 </code></pre>
 <p>For a demonstration of the power of snippets in action, see <a href="https://github.com/ckunte/latex-snippets-vim" title="LaTeX snippets for Vim and Neovim">this</a>.</p>
 </article>
-<aside>
-<p class="archive">&lsaquo; Previously
-    <a accesskey="j" title="11 Oct 2024. 1 min. read" href="/2024/pi5">The daily driver</a>,
-    <a title="28 Mar 2024. 4 min. read" href="/2024/build">Build</a>,
-    <a title="14 Jan 2024. 1 min. read" href="/2024/ds">Date stamp</a>,
-    <a title="24 Apr 2023. 2 min. read" href="/2023/sgssh">Sign commits with SSH key</a>,
-    <a title="4 Jun 2022. 3 min. read" href="/2022/slice">Slice lists</a>,
-    <a title="8 Aug 2020. 4 min. read" href="/2020/cli">CLI</a>,
-     and <a accesskey="k" title="1 Jun 2020. 3 min. read" href="/2020/print">AirPrint</a>. Subscribe to <a href="/feed.json">JSON feed</a>.
-</p>
-</aside> 
-<footer>
-  <span>&nbsp;</span>
-  <span>produced by <a href="https://github.com/ckunte">C Kunt&eacute;</a></span>
-</footer>
+
+  <footer>
+    <span>&lsaquo; <a accesskey="j" title="The daily driver" href="/2024/pi5">Prev</a></span>
+    <span><a accesskey="k" href="/">Home</a> &rsaquo;</span>
+  </footer>
 </main>
 </body>
 </html>
