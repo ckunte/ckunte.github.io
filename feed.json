@@ -29,13 +29,6 @@
       "date_published" : "2024-10-11T20:39:00+08:00"
     },
     {
-      "id" : "https://ckunte.net/2024/moveagain",
-      "title" : "Move again",
-      "url" : "https://ckunte.net/2024/moveagain",
-      "content_html" : "\u003cp\u003eWe moved seven times (or nine, if I count the two assignments that did not allow me until my kids finish school-year) in the last 17+ years. I was 34 then, and my kids were 6 and 2. Leaving school at one location and rejoining at another; packing...",
-      "date_published" : "2024-04-08T23:34:00+08:00"
-    },
-    {
       "id" : "https://ckunte.net/2024/build",
       "title" : "Build",
       "url" : "https://ckunte.net/2024/build",
@@ -55,6 +48,13 @@
       "url" : "https://ckunte.net/2024/ds",
       "content_html" : "\u003cp\u003eSublime Text does not have a built-in option to insert a date stamp, and it needs to be created.\u003c/p\u003e\n\u003cp\u003eFrom \u003cem\u003eTools \u0026gt; Developer \u0026gt; New Plugin\u0026hellip;\u003c/em\u003e within Sublime Text, replace the template with the following python...",
       "date_published" : "2024-01-14T22:41:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2023/sf",
+      "title" : "Sagrada Familia",
+      "url" : "https://ckunte.net/2023/sf",
+      "content_html" : "\u003cp\u003eWe stepped into \u003ca href=\"https://sagradafamilia.org/en/\"\u003eSagrada Fam\u0026iacute;lia\u003c/a\u003e last week to celebrate my daughter\u0026rsquo;s graduation. Standing beneath the starry ceiling, we let its magnificence wash over us.\u003c/p\u003e\n\u003cfigure\u003e\n  \u003cimg alt=\"Interior...",
+      "date_published" : "2023-09-24T21:35:00+08:00"
     }    
   ]
 }
