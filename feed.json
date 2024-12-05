@@ -1,0 +1,60 @@
+{
+  "version" : "https://jsonfeed.org/version/1.1",
+  "user_comment" : "This feed lets you know whenever a new note is published on this site. Copy the following URL -- https://ckunte.net/feed.json -- and add it to your feed reader.",
+  "title" : "ckunte.net: notes",
+  "home_page_url" : "https://ckunte.net",
+  "feed_url" : "https://ckunte.net/feed.json",
+  "description" : "Notes",
+  "authors" : [
+    {
+      "name" : "C Kunte",
+      "url" : "https://ckunte.net"
+    }
+  ],
+  "icon" : "https://ckunte.net/inc/apple-touch-icon.png",
+  "favicon" : "https://ckunte.net/inc/apple-touch-icon.png",
+  "items": [
+    {
+      "id" : "https://ckunte.net/2024/mdsnip",
+      "title" : "Markdown snippets for Vim",
+      "url" : "https://ckunte.net/2024/mdsnip",
+      "content_html" : "\u003cp\u003eAfter resurrecting this website from being offline \u0026mdash; for don\u0026rsquo;t know how long, and post-switching to \u003ca href=\"https://neovim.io\" title=\"Neovim -- hyperextensible Vim based editor\"\u003eNeovim\u003c/a\u003e as my main text editor, I needed a few...",
+      "date_published" : "2024-11-30T19:50:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2024/pi5",
+      "title" : "The daily driver",
+      "url" : "https://ckunte.net/2024/pi5",
+      "content_html" : "\u003cp\u003eThe mail order arrived on Monday with the box containing Raspberry Pi 5 + official power adapter, the official active cooler, and a micro-HDMI adapter. Assembly was straightforward. Next up was \u003ca...",
+      "date_published" : "2024-10-11T20:39:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2024/build",
+      "title" : "Build",
+      "url" : "https://ckunte.net/2024/build",
+      "content_html" : "\u003cp\u003eThese are instructions for setting \u003ca href=\"https://www.sublimetext.com\"\u003eSublime Text\u003c/a\u003e up to build (i.e., compile, run, or type-set) a source to produce some output. Owing to different file paths, these would be different obviously for different...",
+      "date_published" : "2024-03-28T19:52:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2024/ds",
+      "title" : "Date stamp",
+      "url" : "https://ckunte.net/2024/ds",
+      "content_html" : "\u003cp\u003eSublime Text does not have a built-in option to insert a date stamp, and it needs to be created.\u003c/p\u003e\n\u003cp\u003eFrom \u003cem\u003eTools \u0026gt; Developer \u0026gt; New Plugin\u0026hellip;\u003c/em\u003e within Sublime Text, replace the template with the following python...",
+      "date_published" : "2024-01-14T22:41:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2022/csv2sacs",
+      "title" : "CSV to SACS seastate",
+      "url" : "https://ckunte.net/2022/csv2sacs",
+      "content_html" : "\u003cp\u003eAt work, we\u0026rsquo;ve been looking to determine cyclic axial capacity of a fixed platform\u0026rsquo;s drilled and grouted foundations in calcareous soils from storm time-history sets. The approach is described in a paper titled \u003ca...",
+      "date_published" : "2022-11-10T22:20:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2022/slice",
+      "title" : "Slice lists",
+      "url" : "https://ckunte.net/2022/slice",
+      "content_html" : "\u003cp\u003eRecently, I received a document register consisting of hundreds of line items. Given the structure, it wasn\u0026rsquo;t easy to sort items, say for a particular month, or about a certain asset-type. The raw data contained over 25 columns with all sorts...",
+      "date_published" : "2022-06-04T15:21:00+08:00"
+    }    
+  ]
+}
