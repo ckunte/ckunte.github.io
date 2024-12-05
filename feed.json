@@ -18,7 +18,7 @@
       "id" : "https://ckunte.net/2024/mdsnip",
       "title" : "Markdown snippets for Vim",
       "url" : "https://ckunte.net/2024/mdsnip",
-      "content_html" : "\u003cp\u003eAfter resurrecting this website from being offline \u0026mdash; for don\u0026rsquo;t know how long, and post-switching to \u003ca href=\"https://neovim.io\" title=\"Neovim -- hyperextensible Vim based editor\"\u003eNeovim\u003c/a\u003e as my main text editor, I needed a few...",
+      "content_html" : "\u003cp\u003eAfter switching to \u003ca href=\"https://neovim.io\" title=\"Neovim -- hyperextensible Vim based editor\"\u003eNeovim\u003c/a\u003e as my main text editor, I needed a few snippets to be able to write without pausing to add mark-ups: one for links, and the other for...",
       "date_published" : "2024-11-30T19:50:00+08:00"
     },
     {
