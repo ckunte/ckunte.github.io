@@ -36,6 +36,13 @@
       "date_published" : "2024-03-28T19:52:00+08:00"
     },
     {
+      "id" : "https://ckunte.net/2024/offline",
+      "title" : "Offline",
+      "url" : "https://ckunte.net/2024/offline",
+      "content_html" : "\u003cp\u003eAt 9AM Tuesday, the connection dropped.\u003c/p\u003e\n\u003cp\u003eWe are in a rural setting, past KIA, a few klicks off NH44. The cellphone here registers one-bar, which makes WiFi-calling an existential necessity. Here, the country\u0026rsquo;s most-networked and...",
+      "date_published" : "2024-03-01T13:40:00+08:00"
+    },
+    {
       "id" : "https://ckunte.net/2024/ds",
       "title" : "Date stamp",
       "url" : "https://ckunte.net/2024/ds",
@@ -43,18 +50,11 @@
       "date_published" : "2024-01-14T22:41:00+08:00"
     },
     {
-      "id" : "https://ckunte.net/2022/csv2sacs",
-      "title" : "CSV to SACS seastate",
-      "url" : "https://ckunte.net/2022/csv2sacs",
-      "content_html" : "\u003cp\u003eAt work, we\u0026rsquo;ve been looking to determine cyclic axial capacity of a fixed platform\u0026rsquo;s drilled and grouted foundations in calcareous soils from storm time-history sets. The approach is described in a paper titled \u003ca...",
-      "date_published" : "2022-11-10T22:20:00+08:00"
-    },
-    {
-      "id" : "https://ckunte.net/2022/slice",
-      "title" : "Slice lists",
-      "url" : "https://ckunte.net/2022/slice",
-      "content_html" : "\u003cp\u003eRecently, I received a document register consisting of hundreds of line items. Given the structure, it wasn\u0026rsquo;t easy to sort items, say for a particular month, or about a certain asset-type. The raw data contained over 25 columns with all sorts...",
-      "date_published" : "2022-06-04T15:21:00+08:00"
+      "id" : "https://ckunte.net/2023/sf",
+      "title" : "Sagrada Familia",
+      "url" : "https://ckunte.net/2023/sf",
+      "content_html" : "\u003cp\u003eWe stepped into \u003ca href=\"https://sagradafamilia.org/en/\"\u003eSagrada Fam\u0026iacute;lia\u003c/a\u003e last week to celebrate my daughter\u0026rsquo;s graduation. Standing beneath the starry ceiling, we let its magnificence wash over us.\u003c/p\u003e\n\u003cfigure\u003e\n  \u003cimg alt=\"Interior...",
+      "date_published" : "2023-09-24T21:35:00+08:00"
     }    
   ]
 }
