@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte: Markdown snippets for Vim</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" href="/"><img alt="/" class="logo" src="/inc/apple-touch-icon.png" width="64" height="64"></a>
+</header>
+  
+  	
+<article>
+<time datetime="2024-11-30T19:50:00+08:00">30 Nov 2024</time>
+<h1>Markdown snippets for Vim</h1>
+<p>After switching to <a href="https://neovim.io" title="Neovim -- hyperextensible Vim based editor">Neovim</a>, I needed a two snippets to be able to write without pausing to add mark-ups: one for links, and the other for figures. Powered by <a href="https://github.com/sirver/ultisnips" title="The ultimate snippet solution for Vim">UltiSnips</a>, it is:</p>
+<pre><code>snippet lnk &quot;Link&quot; b
+[${1:key}]: ${2:url} &quot;${3:title}&quot;
+endsnippet
+
+snippet fig &quot;Figure&quot; b
+&lt;figure&gt;
+  &lt;img alt=&quot;${1:description}&quot; src=&quot;${2:url}&quot; loading=lazy /&gt;
+  &lt;figcaption&gt;${3:caption}&lt;/figcaption&gt;
+&lt;/figure&gt;
+endsnippet
+</code></pre>
+<p>It is now available on <a href="https://github.com/ckunte/markdown-snippets-vim" title="Markdown snippets for Vim">GitHub</a>. To get this working in Vim, one would add this to <code>~/.vimrc</code>, which assumes <a href="https://github.com/junegunn/vim-plug" title="Minimalist Vim Plugin Manager">Vim Plug</a> &mdash; for managing plug-ins:</p>
+<pre><code>call plug#begin()
+
+Plug 'sirver/ultisnips'
+Plug 'ckunte/markdown-snippets-vim'
+
+call plug#end()
+
+let g:UltiSnipsExpandTrigger = '&lt;tab&gt;'
+let g:UltiSnipsJumpForwardTrigger = '&lt;c-j&gt;'
+let g:UltiSnipsJumpBackwardTrigger = '&lt;c-k&gt;'
+</code></pre>
+<p>For a demonstration of the power of snippets in action, see <a href="https://github.com/ckunte/latex-snippets-vim" title="LaTeX snippets for Vim and Neovim">this</a>.</p>
+</article>
+
+  <footer>
+    <span>&lsaquo; <a accesskey="j" title="The daily driver" href="/2024/pi5">Prev</a></span>
+    <span><a accesskey="k" href="/">Home</a> &rsaquo;</span>
+  </footer>
+</main>
+</body>
+</html>

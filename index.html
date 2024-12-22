@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<link rel="alternate" type="application/json" title="JSON feed" href="https://ckunte.net/feed.json" />
+<script src="/inc/highlight.min.js" integrity="sha384-EYbc01reLvQ6Vo6hjBhFNgNjSYKypiAsoe9vcCWBnAfPbvK9bljNae6Ahd/9eEDe"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" href="/"><img alt="/" class="logo" src="/inc/apple-touch-icon.png" width="64" height="64"></a>
+</header>
+<article>
+  <time datetime="2024-11-30T19:50:00+08:00">30 Nov 2024</time>
+  <h1>Markdown snippets for Vim</h1>
+  <p>After switching to <a href="https://neovim.io" title="Neovim -- hyperextensible Vim based editor">Neovim</a>, I needed a two snippets to be able to write without pausing to add mark-ups: one for links, and the other for figures. Powered by <a href="https://github.com/sirver/ultisnips" title="The ultimate snippet solution for Vim">UltiSnips</a>, it is:</p>
+<pre><code>snippet lnk &quot;Link&quot; b
+[${1:key}]: ${2:url} &quot;${3:title}&quot;
+endsnippet
+
+snippet fig &quot;Figure&quot; b
+&lt;figure&gt;
+  &lt;img alt=&quot;${1:description}&quot; src=&quot;${2:url}&quot; loading=lazy /&gt;
+  &lt;figcaption&gt;${3:caption}&lt;/figcaption&gt;
+&lt;/figure&gt;
+endsnippet
+</code></pre>
+<p>It is now available on <a href="https://github.com/ckunte/markdown-snippets-vim" title="Markdown snippets for Vim">GitHub</a>. To get this working in Vim, one would add this to <code>~/.vimrc</code>, which assumes <a href="https://github.com/junegunn/vim-plug" title="Minimalist Vim Plugin Manager">Vim Plug</a> &mdash; for managing plug-ins:</p>
+<pre><code>call plug#begin()
+
+Plug 'sirver/ultisnips'
+Plug 'ckunte/markdown-snippets-vim'
+
+call plug#end()
+
+let g:UltiSnipsExpandTrigger = '&lt;tab&gt;'
+let g:UltiSnipsJumpForwardTrigger = '&lt;c-j&gt;'
+let g:UltiSnipsJumpBackwardTrigger = '&lt;c-k&gt;'
+</code></pre>
+<p>For a demonstration of the power of snippets in action, see <a href="https://github.com/ckunte/latex-snippets-vim" title="LaTeX snippets for Vim and Neovim">this</a>.</p>
+</article>
+<aside>
+<p class="archive">&lsaquo; Previously
+    <a accesskey="j" title="11 Oct 2024. 1 min. read" href="/2024/pi5">The daily driver</a>,
+    <a title="28 Mar 2024. 4 min. read" href="/2024/build">Build</a>,
+    <a title="1 Mar 2024. 1 min. read" href="/2024/offline">Offline</a>,
+    <a title="14 Jan 2024. 1 min. read" href="/2024/ds">Date stamp</a>,
+    <a title="24 Sep 2023. 1 min. read" href="/2023/sf">Sagrada Familia</a>,
+    <a title="10 Nov 2022. 11 min. read" href="/2022/csv2sacs">CSV to SACS seastate</a>,
+    <a title="4 Jun 2022. 3 min. read" href="/2022/slice">Slice lists</a>,
+    <a title="21 Feb 2021. 5 min. read" href="/2021/rel">Release notes</a>,
+    <a title="1 Nov 2020. 2 min. read" href="/2020/sacs_st">SACS syntax</a>,
+    <a title="8 Aug 2020. 4 min. read" href="/2020/cli">CLI</a>,
+    <a title="26 Jul 2020. 2 min. read" href="/2020/ust">USFOS syntax</a>,
+    <a title="1 Jun 2020. 3 min. read" href="/2020/print">AirPrint</a>,
+    <a title="29 Mar 2020. 3 min. read" href="/2020/outbreak">Outbreak</a>,
+    <a title="7 Jan 2020. 3 min. read" href="/2020/darksky">The Dark Sky Project</a>,
+    <a title="27 Nov 2016. 7 min. read" href="/2016/relconv">End releases</a>,
+    <a title="31 Dec 2015. 4 min. read" href="/2015/melor">Typhoon Melor</a>,
+    <a title="2 May 2015. 2 min. read" href="/2015/photos">Saving photos</a>,
+    <a title="23 Dec 2014. 2 min. read" href="/2014/phuket">Ground zero ten years on</a>,
+    <a title="30 Aug 2014. 5 min. read" href="/2014/lighthouse">Lighthouse technology</a>,
+    <a title="28 Aug 2014. 6 min. read" href="/2014/fram-vasa">Fram and Vasa</a>,
+    <a title="15 Apr 2013. 1 min. read" href="/2013/training">Training</a>,
+    <a title="28 Nov 2012. 8 min. read" href="/2012/china">China</a>,
+    <a title="18 Apr 2012. 3 min. read" href="/2012/titanic">Titanic</a>,
+    <a title="29 Oct 2011. 4 min. read" href="/2011/colosseum">Colosseum</a>,
+    <a title="28 May 2011. 5 min. read" href="/2011/agora">Agora</a>,
+    <a title="24 Aug 2010. 6 min. read" href="/2010/summer">Summer</a>,
+    <a title="5 May 2010. 5 min. read" href="/2010/chambord">Chateau de Chambord</a>,
+    <a title="30 Apr 2010. 2 min. read" href="/2010/normandy">Normandy</a>,
+     and <a accesskey="k" title="29 Jun 2006. 3 min. read" href="/2006/tide">Tide</a>.
+</p>
+</aside> 
+<footer>
+  <span>&nbsp;</span>
+  <span>produced by <a href="https://github.com/ckunte">C Kunt&eacute;</a></span>
+</footer>
+</main>
+</body>
+</html>

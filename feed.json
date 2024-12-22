@@ -1,0 +1,60 @@
+{
+  "version" : "https://jsonfeed.org/version/1.1",
+  "user_comment" : "This feed lets you know whenever a new note is published on this site. Copy the following URL -- https://ckunte.net/feed.json -- and add it to your feed reader.",
+  "title" : "C Kunte",
+  "home_page_url" : "https://ckunte.net",
+  "feed_url" : "https://ckunte.net/feed.json",
+  "description" : "Notes",
+  "authors" : [
+    {
+      "name" : "C Kunte",
+      "url" : "https://ckunte.net"
+    }
+  ],
+  "icon" : "https://ckunte.net/inc/apple-touch-icon.png",
+  "favicon" : "https://ckunte.net/inc/apple-touch-icon.png",
+  "items": [
+    {
+      "id" : "https://ckunte.net/2024/mdsnip",
+      "title" : "Markdown snippets for Vim",
+      "url" : "https://ckunte.net/2024/mdsnip",
+      "content_html" : "\u003cp\u003eAfter switching to \u003ca href=\"https://neovim.io\" title=\"Neovim -- hyperextensible Vim based editor\"\u003eNeovim\u003c/a\u003e, I needed a two snippets to be able to write without pausing to add mark-ups: one for links, and the other for figures. Powered by \u003ca...",
+      "date_published" : "2024-11-30T19:50:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2024/pi5",
+      "title" : "The daily driver",
+      "url" : "https://ckunte.net/2024/pi5",
+      "content_html" : "\u003cp\u003eThe mail order arrived on Monday with the box containing Raspberry Pi 5 + official power adapter, the official active cooler, and a micro-HDMI adapter. Assembly was straightforward. Next up was \u003ca...",
+      "date_published" : "2024-10-11T20:39:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2024/build",
+      "title" : "Build",
+      "url" : "https://ckunte.net/2024/build",
+      "content_html" : "\u003cp\u003eThese are instructions for setting \u003ca href=\"https://www.sublimetext.com\"\u003eSublime Text\u003c/a\u003e up to build (i.e., compile, run, or type-set) a source to produce some output. Owing to different file paths, these would be different obviously for different...",
+      "date_published" : "2024-03-28T19:52:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2024/offline",
+      "title" : "Offline",
+      "url" : "https://ckunte.net/2024/offline",
+      "content_html" : "\u003cp\u003eAt 9AM Tuesday, the connection dropped.\u003c/p\u003e\n\u003cp\u003eWe\u0026rsquo;re in a rural setting past KIA a few klicks off NH44. The cellphone here registers one-bar, which makes WiFi-calling an existential necessity. Here, the country\u0026rsquo;s most-networked and...",
+      "date_published" : "2024-03-01T13:40:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2024/ds",
+      "title" : "Date stamp",
+      "url" : "https://ckunte.net/2024/ds",
+      "content_html" : "\u003cp\u003eSublime Text does not have a built-in option to insert a date stamp, and it needs to be created. From \u003cem\u003eTools \u0026gt; Developer \u0026gt; New Plugin\u0026hellip;\u003c/em\u003e within Sublime Text, replace the template with the following python...",
+      "date_published" : "2024-01-14T22:41:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2023/sf",
+      "title" : "Sagrada Familia",
+      "url" : "https://ckunte.net/2023/sf",
+      "content_html" : "\u003cp\u003e\u003ca href=\"https://sagradafamilia.org/en/antoni-gaudi\"\u003eGaud\u0026iacute;\u0026lsquo;s\u003c/a\u003e tour de force is breathtaking. With its interior designed like a forest, it is a mesmerising, monumental undertaking, blending architecture, art, and engineering into...",
+      "date_published" : "2023-09-24T21:35:00+08:00"
+    }    
+  ]
+}
