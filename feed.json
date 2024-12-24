@@ -36,6 +36,13 @@
       "date_published" : "2024-03-28T19:52:00+08:00"
     },
     {
+      "id" : "https://ckunte.net/2024/offline",
+      "title" : "Offline",
+      "url" : "https://ckunte.net/2024/offline",
+      "content_html" : "\u003cp\u003eAt 9AM Tuesday, the connection dropped.\u003c/p\u003e\n\u003cp\u003eWe\u0026rsquo;re in a rural setting past KIA a few klicks off NH44. The cellphone here registers one-bar, which makes WiFi-calling an existential necessity. Here, the country\u0026rsquo;s most-networked and...",
+      "date_published" : "2024-03-01T13:40:00+08:00"
+    },
+    {
       "id" : "https://ckunte.net/2024/ds",
       "title" : "Date stamp",
       "url" : "https://ckunte.net/2024/ds",
@@ -48,13 +55,6 @@
       "url" : "https://ckunte.net/2023/sf",
       "content_html" : "\u003cp\u003e\u003ca href=\"https://sagradafamilia.org/en/antoni-gaudi\"\u003eGaud\u0026iacute;\u0026lsquo;s\u003c/a\u003e tour de force is breathtaking. With its interior designed like a forest, it is a mesmerising, monumental undertaking, blending architecture, art, and engineering into...",
       "date_published" : "2023-09-24T21:35:00+08:00"
-    },
-    {
-      "id" : "https://ckunte.net/2022/csv2sacs",
-      "title" : "CSV to SACS seastate",
-      "url" : "https://ckunte.net/2022/csv2sacs",
-      "content_html" : "\u003cp\u003eAt work, we\u0026rsquo;ve been looking to determine cyclic axial capacity of a fixed platform\u0026rsquo;s drilled and grouted foundations in calcareous soils from storm time-history sets. The approach is described in a paper titled \u003ca...",
-      "date_published" : "2022-11-10T22:20:00+08:00"
     }    
   ]
 }
