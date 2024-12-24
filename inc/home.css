@@ -13,7 +13,7 @@ html {
 
 body {
   font: 21px/1.4 var(--bfont);
-  padding: 2ch 1ch;
+  padding: 2.0ch 0.5ch;
 }
 
 footer,main {
@@ -157,20 +157,25 @@ p+p {
 mark {
   background-color: #fffdaf
 }
+
 blockquote {
-  margin: 0 1.5ch
+  margin: 0 1ch
 }
+
 blockquote p, blockquote li {
-  margin: 0 1.5ch;
+  margin: 0 1ch;
   font-style: italic
 }
+
 blockquote > p + p {
   text-indent: 2ch
 }
+
 blockquote>p:first-of-type::before {
   content: open-quote;
   margin-left: -1ch
 }
+
 blockquote>p:last-of-type::after {
   content: close-quote
 }
