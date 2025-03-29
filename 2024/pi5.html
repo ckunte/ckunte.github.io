@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte: The daily driver</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/apple-touch-icon.png" width="64" height="64"></a>
+</header>
+  
+  	
+<article>
+<time datetime="2024-10-11T20:39:00+08:00">11 Oct 2024</time>
+<h1>The daily driver</h1>
+<p>The mail order arrived on Monday with the box containing Raspberry Pi 5 + official power adapter, the official active cooler, and a micro-HDMI adapter. Assembly was straightforward. Next up was <a href="https://github.com/ckunte/ckunte/blob/master/uses.md">software</a>. </p>
+<figure>
+<img alt="Raspberry Pi 5." src="/img/2024-pi5-1.jpg" loading=lazy />
+<figcaption>Raspberry Pi 5.</figcaption>
+</figure>
+
+<p>The Raspberry Pi OS Desktop also comes pre-installed with Chromium browser and <a href="https://wiki.gnome.org/Apps/Evince">Evince</a> document viewer, which are both excellent. I also installed <a href="https://www.gimp.org/">Gimp</a> and considered installing <a href="https://inkscape.org/">Inkscape</a>.</p>
+<figure>
+<img alt="Evince showing a link preview" src="/img/2024-pi5-2.png" loading=lazy>
+<figcaption>Evince showing a link preview.</figcaption>
+</figure>
+
+<p>It&rsquo;s been running for days now, and needs some ventilation &mdash; to prevent increase in board temperature. The portability of this Pi I can get used to. There is also <a href="https://www.raspberrypi.com/news/raspberry-pi-connect/">Connect</a> as a service, which is interesting. The backup is as simple as copying the entire volume to an external one via the <em>SD Card Copier</em>, which has no trouble doing it from M.2 SSD to an external SSD either.</p>
+<p>It is refreshing to have a simple, usable interface without fluff, walled garden annoyances, with the freedom to setup, install, and have a system that is just sufficient and nothing more.</p>
+<h2>Custom keyboard shortcuts</h2>
+<p>There are a bunch of <a href="https://github.com/gnmearacaun/RasPiOS-labwc/blob/main/rc.xml">defaults in labwc</a>, which Raspberry Pi OS adopted late last year, and it took me a while to figure this out, and on how to add custom keyboard shortcuts for some basic things like starting an application, e.g., Chromium with, say, <kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>&nbsp;c&nbsp;</kbd>, and lock screen with, say, <kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>&nbsp;l&nbsp;</kbd>. (A couple of defaults I use the most is the window snapping to either left, rght, or full screen. These can be done with <kbd>Meta</kbd><kbd>&larr;</kbd>, <kbd>Meta</kbd><kbd>&rarr;</kbd>, or <kbd>Meta</kbd><kbd>a</kbd>; where <kbd>Meta</kbd> means <kbd>Win</kbd> or <kbd>Cmd</kbd>.) Add the keyboard section and key binds to <code>$HOME/.config/labwc/rc.xml</code> within the <code>openbox_config</code> open and close tags. (Ensure they do not clash with the defaults.) </p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;openbox_config xmlns=&quot;http://openbox.org/3.4/rc&quot;&gt;
+&lt;!-- pre-populated defaults here (leave'em alone) --&gt;
+
+&lt;keyboard&gt;
+
+  &lt;!-- Launch Chromium --&gt;
+  &lt;keybind key=&quot;C-A-c&quot;&gt;
+    &lt;action name=&quot;Execute&quot; command=&quot;chromium&quot;/&gt;
+  &lt;/keybind&gt;
+
+  &lt;!-- Launch File Explorer --&gt;
+  &lt;keybind key=&quot;W-e&quot;&gt;
+    &lt;action name=&quot;Execute&quot; command=&quot;pcmanfm&quot;/&gt;
+  &lt;/keybind&gt;
+
+  &lt;!-- Lock screen --&gt;
+  &lt;keybind key=&quot;C-A-l&quot;&gt;
+    &lt;action name=&quot;Execute&quot; command=&quot;dm-tool lock&quot;/&gt;
+  &lt;/keybind&gt;
+
+&lt;/keyboard&gt;
+
+&lt;/openbox_config&gt;
+</code></pre>
+<p>If this file is edited, then it should be followed-up by running the following for the settings to reload.</p>
+<pre><code class="language-shell">labwc --reconfigure
+</code></pre>
+<p><em>Update (2025-03-15):</em> Today I heard <a href="https://atp.fm/630">ATP.fm</a> complaining about the state of MacOS&rsquo;s UI. So I am not alone in this after all. The excess padding, the oddities of controls, the overzealous security along with a large portion of the little SSD locked-up for system software is all annoying! In contrast, when I fire up Pi, it feels like sanity.</p>
+</article>
+
+  <footer>
+    <span>&lsaquo; <a accesskey="j" title="Build" href="/2024/build">Prev</a></span>
+    <span><a accesskey="k" title="Markdown snippets for Vim" href="/2024/mdsnip">Next</a> &rsaquo;</span>
+  </footer>
+</main>
+<script src="/inc/hl.js"></script>
+</body>
+</html>

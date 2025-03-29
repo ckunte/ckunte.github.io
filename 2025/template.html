@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C Kunte's homepage">
+<link rel="icon" href="data:,">
+<title>C Kunte: Anatomy of a template</title>
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/apple-touch-icon.png" width="64" height="64"></a>
+</header>
+  
+  	
+<article>
+<time datetime="2025-03-29T22:17:00+08:00">29 Mar 2025</time>
+<h1>Anatomy of a template</h1>
+<p><a href="https://typst.app">Typst</a> is a computer program for typesetting documents. Developed by two graduate students from Technical University of Berlin, it is thoughtfully designed to be fast, portable, feature-packed, and script-able. It would not be unfair to call it the spiritual successor to <a href="https://en.wikipedia.org/wiki/LaTeX">LaTeX</a>. As evolves, it takes-on LaTeX&rsquo;s handicaps &mdash; with contributions from talented open-source enthusiasts, e.g.,</p>
+<ul>
+<li>compilation speed</li>
+<li>learning curve</li>
+<li>mark-up verbosity</li>
+<li>multi-run demand for referencing</li>
+<li>package size</li>
+<li>syntax highlighting</li>
+</ul>
+<p>With good defaults (paper size, font-face, font-size, paragraph, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned LaTeX user, then you&rsquo;d know how useful document <a href="https://ctan.org/topic/class">classes</a> are  &mdash; something Typst does not yet come pre-packaged with. A little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for the users, by the users. If you&rsquo;re one of them, like I am, and your tastes (or needs) are slightly different from those available there-in, then it would not hurt to know how to write a Typst template from scratch. Here is how in this note-to-self, like much of this website.</p>
+<p>Rule One of publishing is to separate presentation (styling) from content, be it offline or online. So, we create two files:</p>
+<ul>
+<li><em>main.typ</em> &mdash; this file will have all the report&rsquo;s content</li>
+<li><em>template.typ</em> &mdash; this one&rsquo;s for the report&rsquo;s presentation + styling</li>
+</ul>
+<p><em>main.typ</em>: This requires only a few key user-inputs (which would be variables pre-defined in <em>template.typ</em>), e.g. document title, name of the author, and paper size (useful for me) other than the content itself.</p>
+<pre><code>#import &quot;template.typ&quot;: *
+#show: note.with(
+  author: &quot;C Kunte&quot;,
+  paper: &quot;a4&quot;,
+  title: [On-bottom stability],
+)
+// report content from here-on
+</code></pre>
+<p><em>template.typ</em>: Basic preamble is as follows. Defaults will be used when things like margins are undefined in either of the two files. </p>
+<pre><code>#let note(
+  author: &quot;Author&quot;,
+  paper: &quot;a4&quot;,
+  title: [Note title],
+  body,
+) = {
+  // metadata
+  set document(title: title, author: author)
+  // page properties
+  set page(
+    paper: paper, // enables user-definable in main.typ
+    numbering: &quot;1&quot;,
+  )
+  // print title block (includes title, author, date)
+  align(center)[
+    #text(2em)[*#title*]
+    #v(2em, weak: true)
+    #text(1em, author)
+    #v(1em, weak: true)
+    #datetime.today().display(&quot;[month repr:long] [day], [year]&quot;)
+    #v(5em, weak: true)
+  ]
+  // content from here-on
+  body
+}
+</code></pre>
+<p>If I were to automate setting margins based on paper size, then it would be like so, in which <em>top</em> margin overrides <em>y</em> parameter to make room for a custom header.</p>
+<pre><code>set page(
+  // set margins based on paper size
+  margin: if paper == &quot;a5&quot; {
+    (x: 0.75in, y: 0.75in, top: 0.9in)
+  } else {
+    (x: 1.0in, y: 1.0in, top: 1.25in)
+  },
+)
+</code></pre>
+<p>We can do something similar for font size:</p>
+<pre><code>set text(
+  size: if paper == &quot;a5&quot; { 11pt } else { 12pt },
+)
+</code></pre>
+<p>Here is a little complex header code to make title of the note (paper) appear on every even page, and the active section appear on every odd page other than the first. </p>
+<pre><code>set page(
+  header: context {
+    // set custom header: make title appear on even pages
+    if calc.even(counter(page).get().first()) { 
+      emph(title) 
+    } else { none }
+
+    // make section appear on odd pages other than the first
+    let page-num = counter(page).get().first()
+    if page-num &gt; 1 and calc.odd(page-num) {
+      let headings = query(heading)
+      let curr-heading = none
+      let found = false
+
+      for heading-elem in headings {
+        if heading-elem.location() != none and heading-elem.location().page() == page-num {
+          curr-heading = heading-elem.body
+          found = true
+        } else if heading-elem.location() != none and heading-elem.location().page() &lt; page-num {
+          curr-heading = heading-elem.body // keep track of the last heading on a prev page
+        } else if found { break } // stop once we have moved past the curr page
+      }
+      align(right, emph(curr-heading))
+    } else { none }
+  }, // context ends
+) // page ends
+</code></pre>
+<p>Some of the above and more are available at my repository, <a href="https://github.com/ckunte/note">note</a>.</p>
+</article>
+
+  <footer>
+    <span>&lsaquo; <a accesskey="j" title="Building JSON feed" href="/2025/json-feed">Prev</a></span>
+    <span><a accesskey="k" href="/">Home</a> &rsaquo;</span>
+  </footer>
+</main>
+<script src="/inc/hl.js"></script>
+</body>
+</html>
