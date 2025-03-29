@@ -17,7 +17,7 @@
 <article>
   <time datetime="2025-03-29T22:17:00+08:00">29 Mar 2025</time>
   <h1>Anatomy of a template</h1>
-  <p><a href="https://typst.app">Typst</a> is a computer program for typesetting documents. Developed by two graduate students from Technical University of Berlin, it is thoughtfully designed to be fast, portable, feature-packed, and script-able. It would not be unfair to call it the spiritual successor to <a href="https://en.wikipedia.org/wiki/LaTeX">LaTeX</a>. As evolves, it takes-on LaTeX&rsquo;s handicaps &mdash; with contributions from talented open-source enthusiasts, e.g.,</p>
+  <p>Developed by two graduate students from Technical University of Berlin, <a href="https://typst.app">Typst</a> is a computer program for typesetting documents, thoughtfully designed to be fast, portable, feature-packed, and script-able. It would not be unfair to call it a spiritual successor to <a href="https://en.wikipedia.org/wiki/LaTeX">LaTeX</a>. It is evolving well and blowing-up LaTeX&rsquo;s handicaps &mdash; with contributions from talented open-source enthusiasts, e.g.,</p>
 <ul>
 <li>compilation speed</li>
 <li>learning curve</li>
@@ -26,13 +26,13 @@
 <li>package size</li>
 <li>syntax highlighting</li>
 </ul>
-<p>With good defaults (paper size, font-face, font-size, paragraph, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned LaTeX user, then you&rsquo;d know how useful document <a href="https://ctan.org/topic/class">classes</a> are  &mdash; something Typst does not yet come pre-packaged with. A little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for the users, by the users. If you&rsquo;re one of them, like I am, and your tastes (or needs) are slightly different from those available there-in, then it would not hurt to know how to write a Typst template from scratch. Here is how in this note-to-self, like much of this website.</p>
-<p>Rule One of publishing is to separate presentation (styling) from content, be it offline or online. So, we create two files:</p>
+<p>With good defaults (font and paragraph properties, paper size, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned LaTeX user, then you&rsquo;d know how useful <a href="https://ctan.org/topic/class">document classes</a> are  &mdash; something Typst does not yet come pre-packaged with. And so, a little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for the users, by the users. If you&rsquo;re one of them, like I am, and your tastes are slightly different from those available there-in, then it would not hurt to know how to write a Typst template from scratch. Here is how &mdash; in this note-to-self, like much of this website.</p>
+<p>Rule One of publishing is to separate presentation + styling from content, be it offline or online. So, we create two files:</p>
 <ul>
 <li><em>main.typ</em> &mdash; this file will have all the report&rsquo;s content</li>
 <li><em>template.typ</em> &mdash; this one&rsquo;s for the report&rsquo;s presentation + styling</li>
 </ul>
-<p><em>main.typ</em>: This requires only a few key user-inputs (which would be variables pre-defined in <em>template.typ</em>), e.g. document title, name of the author, and paper size (useful for me) other than the content itself.</p>
+<p><em>main.typ</em>: This requires only a few key user-inputs (which would be variables pre-defined in <em>template.typ</em>), e.g. document title, name of the author, and <a href="https://tex.stackexchange.com/questions/71172/why-are-default-latex-margins-so-big/71211#71211">paper size</a> (useful for me) other than the content itself.</p>
 <pre><code>#import &quot;template.typ&quot;: *
 #show: note.with(
   author: &quot;C Kunte&quot;,
@@ -68,7 +68,7 @@
   body
 }
 </code></pre>
-<p>If I were to automate setting margins based on paper size, then it would be like so, in which <em>top</em> margin overrides <em>y</em> parameter to make room for a custom header.</p>
+<p>If I were to automate setting margins based on paper size, then it would be like so, in which the <em>top</em> margin overrides the <em>y</em> parameter to make room for a custom header.</p>
 <pre><code>set page(
   // set margins based on paper size
   margin: if paper == &quot;a5&quot; {
@@ -83,7 +83,24 @@
   size: if paper == &quot;a5&quot; { 11pt } else { 12pt },
 )
 </code></pre>
-<p>Here is a little complex header code to make title of the note (paper) appear on every even page, and the active section appear on every odd page other than the first. </p>
+<p>Typographical controls are covered too, e.g.,</p>
+<pre><code>set text(
+  font: &quot;Segoe UI&quot;, // e.g. &quot;STIX Two Text&quot; or &quot;erewhon&quot;,
+  top-edge: &quot;cap-height&quot;, 
+  bottom-edge: &quot;baseline&quot;,
+  number-type: &quot;old-style&quot;,
+  size: if paper == &quot;a5&quot; { 11pt } else { 12pt },
+  )
+</code></pre>
+<p>Prefer indented classic look for paragraphs? You can do this:</p>
+<pre><code>set par(
+  spacing: 0.65em, 
+  leading: 0.65em, 
+  first-line-indent: 12pt, 
+  justify: true
+)
+</code></pre>
+<p>Here is a little complex header code to make the title of the note (paper) appear on every even page, and the active section name appear on every odd page other than the first. </p>
 <pre><code>set page(
   header: context {
     // set custom header: make title appear on even pages
@@ -111,7 +128,13 @@
   }, // context ends
 ) // page ends
 </code></pre>
-<p>Some of the above and more are available at my repository, <a href="https://github.com/ckunte/note">note</a>.</p>
+<figure>
+<img alt="View of a report compiled using Typst typesetting computer program" src="/img/typst-first.png" loading=lazy />
+<img alt="View of a report headers compiled using Typst typesetting computer program" src="/img/typst-header.png" loading=lazy />
+  <figcaption>View of the report (top-left); template (top-right); report headers (bott).</figcaption>
+</figure>
+
+<p>Some of the above are available at my repository, <a href="https://github.com/ckunte/note">note</a>. And if you&rsquo;re a Neovim user, then there is a <a href="https://github.com/ckunte/typst-snippets-vim">snippet plug-in</a> too.</p>
 </article>
 <aside>
 <p class="archive">&lsaquo; Previously,
