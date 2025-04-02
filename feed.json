@@ -11,8 +11,8 @@
       "url" : "https://ckunte.net"
     }
   ],
-  "icon" : "https://ckunte.net/inc/apple-touch-icon.png",
-  "favicon" : "https://ckunte.net/inc/apple-touch-icon.png",
+  "icon" : "https://ckunte.net/inc/apple-touch-icon.svg",
+  "favicon" : "https://ckunte.net/inc/apple-touch-icon.svg",
   "items": [
     {
       "id" : "https://ckunte.net/2025/template",

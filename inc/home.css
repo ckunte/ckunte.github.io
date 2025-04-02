@@ -244,6 +244,9 @@ pre>code {
   small, table, hr, img.screen, img.fig, warn {
     filter: invert(0.85)
   }
+  img.logo {
+    filter: invert(0.7)
+  }
   pre {
     filter: invert(0.9)
   }

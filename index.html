@@ -12,7 +12,7 @@
 <body>
 <main>
 <header>
-  <a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/apple-touch-icon.png" width="64" height="64"></a>
+  <a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/apple-touch-icon.svg" width="48" height="48"></a>
 </header>
 <article>
   <time datetime="2025-03-29T22:17:00+08:00">29 Mar 2025</time>
@@ -26,8 +26,8 @@
 <li>package size</li>
 <li>syntax highlighting</li>
 </ul>
-<p>With good defaults (font and paragraph properties, paper size, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned LaTeX user, then you&rsquo;d know how useful <a href="https://ctan.org/topic/class">document classes</a> are  &mdash; something Typst does not yet come pre-packaged with. And so, a little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for the users, by the users. If you&rsquo;re one of them, like I am, and your tastes are slightly different from those available there-in, then it would not hurt to know how to write a Typst template from scratch. Here is how &mdash; in this note-to-self, like much of this website.</p>
-<p>Rule One of publishing is to separate presentation + styling from content, be it offline or online. So, we create two files:</p>
+<p>With good defaults (font and paragraph properties, paper size, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned LaTeX user, then you&rsquo;d know how useful <a href="https://ctan.org/topic/class">document classes</a> are  &mdash; something Typst does not yet come pre-packaged with. And so, a little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for the users, by the users. If you&rsquo;re one of them, like I am, and your tastes are slightly different from those available there-in, then it would not hurt to know how to create a Typst template from scratch. Here is how &mdash; in this note-to-self, like much of this website.</p>
+<p>Rule one of publishing is to separate presentation + styling from content, be it offline or online. So we create two files:</p>
 <ul>
 <li><em>main.typ</em> &mdash; this file will have all the report&rsquo;s content</li>
 <li><em>template.typ</em> &mdash; this one&rsquo;s for the report&rsquo;s presentation + styling</li>
@@ -38,8 +38,7 @@
   author: &quot;C Kunte&quot;,
   paper: &quot;a4&quot;,
   title: [On-bottom stability],
-)
-// report content from here-on
+) // report content from here-on
 </code></pre>
 <p><em>template.typ</em>: Basic preamble is as follows. Defaults will be used when things like margins are undefined in either of the two files. </p>
 <pre><code>#let note(
@@ -48,14 +47,16 @@
   title: [Note title],
   body,
 ) = {
-  // metadata
-  set document(title: title, author: author)
-  // page properties
+  set document(
+    title: title, 
+    author: author
+  ) // metadata
+
   set page(
     paper: paper, // enables user-definable in main.typ
     numbering: &quot;1&quot;,
-  )
-  // print title block (includes title, author, date)
+  ) // page properties
+
   align(center)[
     #text(2em)[*#title*]
     #v(2em, weak: true)
@@ -63,14 +64,13 @@
     #v(1em, weak: true)
     #datetime.today().display(&quot;[month repr:long] [day], [year]&quot;)
     #v(5em, weak: true)
-  ]
-  // content from here-on
+  ] // title block
+
   body
 }
 </code></pre>
 <p>If I were to automate setting margins based on paper size, then it would be like so, in which the <em>top</em> margin overrides the <em>y</em> parameter to make room for a custom header.</p>
 <pre><code>set page(
-  // set margins based on paper size
   margin: if paper == &quot;a5&quot; {
     (x: 0.75in, y: 0.75in, top: 0.9in)
   } else {
@@ -90,7 +90,7 @@
   bottom-edge: &quot;baseline&quot;,
   number-type: &quot;old-style&quot;,
   size: if paper == &quot;a5&quot; { 11pt } else { 12pt },
-  )
+)
 </code></pre>
 <p>Prefer indented classic look for paragraphs? You can do this:</p>
 <pre><code>set par(
