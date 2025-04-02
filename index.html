@@ -3,17 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="C Kunte's homepage">
+<title>C Kunte</title> 
+<meta name="description" content="C Kunte's homepage" />
 <link rel="icon" href="data:,">
-<title>C Kunte</title>
-<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<link type="text/css" rel="stylesheet" href="/inc/home.css" />
 <link rel="alternate" type="application/feed+json" title="JSON feed" href="https://ckunte.net/feed.json" />
 </head>
 <body>
 <main>
-<header>
-  <a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/apple-touch-icon.png" width="64" height="64"></a>
-</header>
+<header><a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/favicon.svg" width="48" height="39.6"></a></header>
 <article>
   <time datetime="2025-03-29T22:17:00+08:00">29 Mar 2025</time>
   <h1>Anatomy of a template</h1>
@@ -26,8 +24,8 @@
 <li>package size</li>
 <li>syntax highlighting</li>
 </ul>
-<p>With good defaults (font and paragraph properties, paper size, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned LaTeX user, then you&rsquo;d know how useful <a href="https://ctan.org/topic/class">document classes</a> are  &mdash; something Typst does not yet come pre-packaged with. And so, a little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for the users, by the users. If you&rsquo;re one of them, like I am, and your tastes are slightly different from those available there-in, then it would not hurt to know how to write a Typst template from scratch. Here is how &mdash; in this note-to-self, like much of this website.</p>
-<p>Rule One of publishing is to separate presentation + styling from content, be it offline or online. So, we create two files:</p>
+<p>With good defaults (font and paragraph properties, paper size, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned LaTeX user, then you&rsquo;d know how useful <a href="https://ctan.org/topic/class">document classes</a> are  &mdash; something Typst does not yet come pre-packaged with. And so, a little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for the users, by the users. If you&rsquo;re one of them, like I am, and your tastes are slightly different from those available there-in, then it would not hurt to know how to create a Typst template from scratch. Here is how &mdash; in this note-to-self, like much of this website.</p>
+<p>Rule one of publishing is to separate presentation + styling from content, be it offline or online. So we create two files:</p>
 <ul>
 <li><em>main.typ</em> &mdash; this file will have all the report&rsquo;s content</li>
 <li><em>template.typ</em> &mdash; this one&rsquo;s for the report&rsquo;s presentation + styling</li>
@@ -38,39 +36,39 @@
   author: &quot;C Kunte&quot;,
   paper: &quot;a4&quot;,
   title: [On-bottom stability],
-)
-// report content from here-on
+) // report content from here-on
 </code></pre>
 <p><em>template.typ</em>: Basic preamble is as follows. Defaults will be used when things like margins are undefined in either of the two files. </p>
 <pre><code>#let note(
-  author: &quot;Author&quot;,
+  title: none,
+  author: none,
   paper: &quot;a4&quot;,
-  title: [Note title],
   body,
 ) = {
-  // metadata
-  set document(title: title, author: author)
-  // page properties
+  set document(
+    title: title, 
+    author: author
+  ) // metadata
+
   set page(
     paper: paper, // enables user-definable in main.typ
     numbering: &quot;1&quot;,
-  )
-  // print title block (includes title, author, date)
+  ) // page properties
+
   align(center)[
-    #text(2em)[*#title*]
+    #text(1.8em)[*#title*]
     #v(2em, weak: true)
     #text(1em, author)
     #v(1em, weak: true)
     #datetime.today().display(&quot;[month repr:long] [day], [year]&quot;)
     #v(5em, weak: true)
-  ]
-  // content from here-on
+  ] // title block
+
   body
 }
 </code></pre>
 <p>If I were to automate setting margins based on paper size, then it would be like so, in which the <em>top</em> margin overrides the <em>y</em> parameter to make room for a custom header.</p>
 <pre><code>set page(
-  // set margins based on paper size
   margin: if paper == &quot;a5&quot; {
     (x: 0.75in, y: 0.75in, top: 0.9in)
   } else {
@@ -90,7 +88,7 @@
   bottom-edge: &quot;baseline&quot;,
   number-type: &quot;old-style&quot;,
   size: if paper == &quot;a5&quot; { 11pt } else { 12pt },
-  )
+)
 </code></pre>
 <p>Prefer indented classic look for paragraphs? You can do this:</p>
 <pre><code>set par(
@@ -138,32 +136,25 @@
 </article>
 <aside>
 <p class="archive">&lsaquo; Previously,
-    <a accesskey="j" title="16 Feb 2025. 2 min. read" href="/2025/json-feed">Building JSON feed</a>,
-    <a title="26 Jan 2025. 2 min. read" href="/2025/nginx">nginx</a>,
-    <a title="4 Jan 2025. 1 min. read" href="/2025/mcal">Med school calendar</a>,
-    <a title="30 Nov 2024. 1 min. read" href="/2024/mdsnip">Markdown snippets for Vim</a>,
+    <a accesskey="j" title="4 Jan 2025. 1 min. read" href="/2025/mcal">Med school calendar</a>,
     <a title="11 Oct 2024. 3 min. read" href="/2024/pi5">The daily driver</a>,
     <a title="28 Mar 2024. 4 min. read" href="/2024/build">Build</a>,
     <a title="1 Mar 2024. 1 min. read" href="/2024/offline">Offline</a>,
     <a title="14 Jan 2024. 2 min. read" href="/2024/ds">Date stamp</a>,
     <a title="24 Sep 2023. 1 min. read" href="/2023/sf">Sagrada Familia</a>,
-    <a title="16 Aug 2023. 2 min. read" href="/2023/display">Display situation</a>,
     <a title="24 Apr 2023. 2 min. read" href="/2023/sgssh">Sign commits with SSH key</a>,
     <a title="10 Nov 2022. 11 min. read" href="/2022/csv2sacs">CSV to SACS seastate</a>,
     <a title="4 Jun 2022. 3 min. read" href="/2022/slice">Slice lists</a>,
-    <a title="21 Feb 2021. 5 min. read" href="/2021/rel">Release notes</a>,
+    <a title="21 Feb 2021. 8 min. read" href="/2021/rel">Release notes</a>,
     <a title="1 Nov 2020. 2 min. read" href="/2020/sacs_st">SACS syntax</a>,
     <a title="8 Aug 2020. 4 min. read" href="/2020/cli">CLI</a>,
     <a title="26 Jul 2020. 2 min. read" href="/2020/ust">USFOS syntax</a>,
-    <a title="1 Jun 2020. 3 min. read" href="/2020/print">AirPrint</a>,
     <a title="29 Mar 2020. 3 min. read" href="/2020/outbreak">Outbreak</a>,
     <a title="7 Jan 2020. 3 min. read" href="/2020/darksky">Dark sky</a>,
-    <a title="16 Feb 2019. 3 min. read" href="/2019/india">India</a>,
     <a title="27 Nov 2016. 7 min. read" href="/2016/relconv">End releases</a>,
     <a title="31 Dec 2015. 4 min. read" href="/2015/melor">Typhoon Melor</a>,
     <a title="30 Aug 2014. 5 min. read" href="/2014/lighthouse">Lighthouse tech.</a>,
     <a title="28 Aug 2014. 6 min. read" href="/2014/fram-vasa">Fram and Vasa</a>,
-    <a title="14 Jan 2014. 7 min. read" href="/2014/photography">Photography</a>,
     <a title="15 Apr 2013. 1 min. read" href="/2013/training">Training</a>,
     <a title="28 Nov 2012. 8 min. read" href="/2012/china">China</a>,
     <a title="18 Apr 2012. 3 min. read" href="/2012/titanic">Titanic</a>,

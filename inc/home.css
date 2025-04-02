@@ -41,8 +41,7 @@ footer {
 }
 
 .logo {
-  margin-left: 1ch;
-  margin-bottom: 1ch;
+  margin: 1.5ch 1ch 1ch 1ch;
 }
 
 h1, h2, h3 {
@@ -241,7 +240,7 @@ pre>code {
     color: #bbb;
     background-color: transparent
   }
-  small, table, hr, img.screen, img.fig, warn {
+  small, table, hr, img.screen, img.fig, img.logo, warn {
     filter: invert(0.85)
   }
   pre {

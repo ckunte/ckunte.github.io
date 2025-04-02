@@ -3,16 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="C Kunte's homepage">
-<link rel="icon" href="data:,">
 <title>C Kunte: Release notes</title>
-<link type="text/css" rel="stylesheet" href="/inc/home.css">
+<meta name="description" content="The publishing mechanism used to produce this website is a topic of little interest,..." />
+<link rel="icon" href="data:,">
+<link type="text/css" rel="stylesheet" href="/inc/home.css" />
 </head>
 <body>
 <main>
-<header>
-  <a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/apple-touch-icon.png" width="64" height="64"></a>
-</header>
+<header><a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/favicon.svg" width="48" height="39.6"></a></header>
   
   	
 <article>
@@ -62,6 +60,92 @@
 <li>Numerous template snippets re-factored to be modular (update)</li>
 <li>Re-design, html5 and css3 compliant (new)</li>
 </ul>
+<h2>Building JSON feed (2025)</h2>
+<p>JSON is an open standard file format, which has been in existence since the early 2000s. Created by Douglas Crockford, it has a simple, dictionary-like structure, e.g.,</p>
+<pre><code class="language-json">{
+    &quot;key&quot; : &quot;value&quot;,
+}
+</code></pre>
+<p>In 2017, two entrepreneurs developed a <a href="https://www.jsonfeed.org">JSON feed spec.</a>, leveraging the simplicity of JSON format. The spec is a lightweight alternative to XML-heavy formats (like RSS or Atom), and despite its recency, it enjoys mainstream support across feed reader apps. </p>
+<p>The first I wrote a template to produce <a href="/feed.json">JSON feed</a> for this web site was in 2020. Over the next few years, I dismantled the Atom feed, leaving only JSON feed as the channel to alert the subscriber of a new note, whenever I produced one. </p>
+<p>While the spec allows html content, using <code>content_text</code> I think is more appropriate for a notification system. This is aside from being simpler and readable, and so that is what I use. <a href="https://jinja.palletsprojects.com/" title="Jinja">Jinja</a>, the templating engine I use, has some <a href="https://jinja.palletsprojects.com/en/stable/templates/#filters">nice filters</a> (viz., <a href="https://jinja.palletsprojects.com/en/stable/templates/#jinja-filters.tojson">tojson</a>, <a href="https://jinja.palletsprojects.com/en/stable/templates/#jinja-filters.truncate">truncate</a>, and <a href="https://jinja.palletsprojects.com/en/stable/templates/#jinja-filters.striptags">striptags</a>), making it easy to produce a JSON feed. </p>
+<p>The template to produce a <a href="https://validator.jsonfeed.org/?url=https%3A%2F%2Fckunte.net%2Ffeed.json">valid</a> JSON feed for <a href="https://github.com/ckunte/chisel/tree/ck">Chisel</a> is as follows.</p>
+<pre><code class="language-json">{% from 'sitesettings.j2' import site_title, site_author, site_url, site_desc -%}
+{
+  &quot;version&quot; : &quot;https://jsonfeed.org/version/1.1&quot;,
+  &quot;user_comment&quot; : &quot;This feed lets you know when a new note is published. Copy the following URL -- {{ site_url }}/feed.json -- and add it to your feed reader.&quot;,
+  &quot;title&quot; : &quot;{{ site_author }}&quot;,
+  &quot;home_page_url&quot; : &quot;{{ site_url }}&quot;,
+  &quot;feed_url&quot; : &quot;{{ site_url }}/feed.json&quot;,
+  &quot;description&quot; : &quot;{{ site_desc | title }}&quot;,
+  &quot;authors&quot; : [
+    {
+      &quot;name&quot; : &quot;{{ site_author }}&quot;,
+      &quot;url&quot; : &quot;{{ site_url }}&quot;
+    }
+  ],
+  &quot;icon&quot; : &quot;{{ site_url }}/inc/apple-touch-icon.png&quot;,
+  &quot;favicon&quot; : &quot;{{ site_url }}/inc/apple-touch-icon.png&quot;,
+  &quot;items&quot;: [
+  {%- for entry in entries %}
+    {
+      &quot;id&quot; : &quot;{{ site_url }}/{{ entry.url }}&quot;,
+      &quot;title&quot; : &quot;{{ entry.title }}&quot;,
+      &quot;url&quot; : &quot;{{ site_url }}/{{ entry.url }}&quot;,
+      &quot;content_text&quot; : {{ entry.content|truncate|striptags|tojson }},
+      &quot;date_published&quot; : &quot;{{ entry.feed_date }}&quot;
+    }{%- if not loop.last %},{%- endif %}
+  {%- endfor %}    
+  ]
+}
+</code></pre>
+<h2>nginx (2025)</h2>
+<p>The 2025 version of setting up on a home network to serve a static local website is as follows. (Note: the file <code>/etc/nginx/nginx.conf</code> does not need editing at all, since it loads <code>*.conf</code> files under the <code>conf.d</code> folder.)</p>
+<ol>
+<li>
+<p>Install nginx</p>
+<pre><code>sudo apt update
+sudo apt install nginx-light
+</code></pre>
+</li>
+<li>
+<p>Upload a folder to be served, e.g., <code>ck.lo</code> in the example above to be under <code>/var/www/</code>. </p>
+</li>
+<li>
+<p>Create a file named <code>virtual.conf</code> under <code>/etc/nginx/conf.d</code>, and populate it with the following:</p>
+<pre><code>server {
+    listen 80;
+    server_name ck.lo;
+    location / {
+        root /var/www/ck.lo;
+        index index.html;
+        try_files $uri $uri/ $uri.html =404;
+    }
+    error_page 404 /404.html;
+}
+</code></pre>
+<p>Add more server blocks to the file, if there is a need to serve more than one local website. Test it with <code>sudo nginx -t</code> to ensure there are no errors.</p>
+</li>
+<li>
+<p>Set permissions for the server folder <code>/var/www</code></p>
+<pre><code>sudo adduser $USER www-data
+sudo chown -R www-data:www-data /var/www
+sudo find /var/www -type d -exec chmod 755 {} \;
+sudo find /var/www -type f -exec chmod 644 {} \;
+</code></pre>
+</li>
+<li>
+<p>Reload nginx</p>
+<pre><code>sudo systemctl reload nginx
+</code></pre>
+</li>
+<li>
+<p>Optional: In <code>/etc/pihole/custom.list</code>, set local DNS like so. The local IP address in the following is but an example.</p>
+<pre><code>10.0.1.100 ck.lo
+</code></pre>
+</li>
+</ol>
+<p>With this, the local website should be accessible at http://ck.lo</p>
 </article>
 
   <footer>
