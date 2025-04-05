@@ -43,6 +43,7 @@ footer {
 .logo {
   margin-left: 1ch;
   margin-bottom: 1ch;
+  filter: invert(0.4);
 }
 
 h1, h2, h3 {
