@@ -3,20 +3,21 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>C Kunte: Markdown snippets for Vim</title>
-<meta name="description" content="After switching to <a href="https://neovim.io" title="Neovim -- hyperextensible Vim based..." />
-<link rel="canonical" href="https://ckunte.net/2024/mdsnip" />
+<title>C Kunte: Markdown snippets</title>
+<meta name="description" content="After switching to Vim, I needed two snippets to be able to write without pausing to add..." />
 <link rel="icon" href="data:," />
 <link type="text/css" rel="stylesheet" href="/inc/home.css" />
-<script src="/inc/code-math.js"></script>
+<script src="/inc/code-math.js" integrity="sha384-qyDAxAKbKYvnSFnpTxOqJxk8Kop9o7dg+NS5tQ7DhpojP5l76DV2P5UkBhUdeiRC"></script>
 </head>
 <body>
 <main>
-<header><a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/favicon.svg" width="48" height="39.6"></a></header>	
+<header>
+<a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/favicon.svg" width="48" height="39.6"></a>
+</header>	
 <article>
-  <h1>Markdown snippets for Vim</h1>
+  <h1>Markdown snippets</h1>
       <time datetime="2024-11-30T19:50:00+08:00">30 Nov 2024</time>
-<p>After switching to <a href="https://neovim.io" title="Neovim -- hyperextensible Vim based editor">Neovim</a>, I needed two snippets to be able to write without pausing to add mark-ups for links, and figures. They are as below, and now available from <a href="https://github.com/ckunte/markdown-snippets-vim" title="Markdown snippets for Vim">GitHub</a>.</p>
+<p>After switching to Vim, I needed two snippets to be able to write without pausing to add mark-ups for links, and figures. They are as below, and now available from <a href="https://github.com/ckunte/markdown-snippets-vim" title="Markdown snippets for Vim">GitHub</a>.</p>
 <pre><code>snippet lnk &quot;Link&quot; b
 [${1:key}]: ${2:url} &quot;${3:title}&quot;
 endsnippet
