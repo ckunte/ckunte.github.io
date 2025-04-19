@@ -1,0 +1,37 @@
+{
+  "version" : "https://jsonfeed.org/version/1.1",
+  "user_comment" : "This feed lets you know when a new note is published. Copy the following URL -- https://ckunte.net/feed.json -- and add it to your feed reader.",
+  "title" : "C Kunte",
+  "home_page_url" : "https://ckunte.net",
+  "feed_url" : "https://ckunte.net/feed.json",
+  "description" : "Notes",
+  "authors" : [
+    {
+      "name" : "C Kunte",
+      "url" : "https://ckunte.net"
+    }
+  ],
+  "items": [
+    {
+      "id" : "https://ckunte.net/2025/wave",
+      "title" : "Wave",
+      "url" : "https://ckunte.net/2025/wave",
+      "content_text" : "The energy industry uses highly specialised software \u2014 written, refined, and perfected over decades. Little scripts are no match against their sophistication. Instead, the idea is to not feel challenged when they are either inaccessible or...",
+      "date_published" : "2025-04-18T13:02:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2025/template",
+      "title" : "Anatomy of a template",
+      "url" : "https://ckunte.net/2025/template",
+      "content_text" : "Developed by two graduate students from Technical University of Berlin, Typst is a computer program for typesetting documents, thoughtfully designed to be fast, portable, feature-packed, and script-able. It would not...",
+      "date_published" : "2025-03-29T22:17:00+08:00"
+    },
+    {
+      "id" : "https://ckunte.net/2025/mcal",
+      "title" : "Med school calendar",
+      "url" : "https://ckunte.net/2025/mcal",
+      "content_text" : "Kid\u2019s year starts-off with post-grad sem 1 of Med school \u2014 a 20 week programme, and it is packed. While bush-walking in Yanchep National Park earlier this week, she said the school chose to provide a pdf version of the time table, but...",
+      "date_published" : "2025-01-04T14:41:00+08:00"
+    }    
+  ]
+}

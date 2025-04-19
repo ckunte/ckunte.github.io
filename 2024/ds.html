@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>C Kunte: Date stamp</title>
+<meta name="description" content="Sublime Text does not have a built-in option to insert a date stamp, and it needs to be..." />
+<link rel="canonical" href="https://ckunte.net/2024/ds" />
+<link rel="icon" href="data:," />
+<link type="text/css" rel="stylesheet" href="/inc/home.css" />
+<script src="/inc/code-math.js"></script>
+</head>
+<body>
+<main>
+<header><a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/favicon.svg" width="48" height="39.6"></a></header>	
+<article>
+  <h1>Date stamp</h1>
+      <time datetime="2024-01-14T22:41:00+08:00">14 Jan 2024</time>
+<p>Sublime Text does not have a built-in option to insert a date stamp, and it needs to be created. From <em>Tools &gt; Developer &gt; New Plugin&hellip;</em> within Sublime Text, replace the template with the following python script:</p>
+<pre><code class="language-python">import sublime
+import sublime_plugin
+from datetime import datetime
+
+class InsertFormattedDateCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        formatted_date = datetime.now().strftime(&quot;%Y-%m-%d %H:%M&quot;)
+            self.view.run_command(&quot;insert&quot;, {&quot;characters&quot;: formatted_date})
+</code></pre>
+<p>Under Sublime Text <em>Package/User</em> folder, save the above script as <code>insert_formatted_date.py</code>. Add a keyboard shortcut to get the date under <em>Preferences &gt; Key Bindings</em>:</p>
+<pre><code class="language-json">[
+  { 
+    &quot;keys&quot;: [&quot;ctrl+shift+d&quot;], 
+    &quot;command&quot;: &quot;insert_formatted_date&quot; 
+  },
+]
+</code></pre>
+<p>Save the key bindings file, close Sublime Text, and reopen. Now using <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>&nbsp;d&nbsp;</kbd>, insert formatted date.</p>
+<p>The above is at best comparable to Vim&rsquo;s much simpler via an abbreviation, like so:</p>
+<pre><code>abbr &lt;expr&gt; ds strftime('%Y-%m-%d %H:%M')
+</code></pre>
+<p>Feb 2025: On <a href="https://news.ycombinator.com/item?id=42875300">a thread</a> discussing this, Sublime Text developer shared that a one-liner is possible too &mdash; using <em>Arithmetic</em>, a feature that is as yet unfamiliar to me, from the command palette (i.e. <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>&nbsp;p&nbsp;</kbd>), where among other things one can just string code like below to produce a date stamp in Sublime Text (similar to Vim).</p>
+<pre><code class="language-python">__import__('datetime').datetime.now().strftime(&quot;%Y-%m-%d %H:%M&quot;)
+</code></pre>
+<p>While not handy as a keyboard shortcut, I think it can be made into one, i.e., attach the above snippet to a trigger and have Sublime Text produce this code literally on a line. Then select this line, and use Arithmetic from the command palette.</p>
+</article>
+<footer>
+  <span>&lsaquo; <a accesskey="j" title="Sagrada Familia" href="/2023/sf">Prev</a></span>
+  <span><a accesskey="k" title="Offline" href="/2024/offline">Next</a> &rsaquo;</span>
+</footer>
+</main>
+</body>
+</html>

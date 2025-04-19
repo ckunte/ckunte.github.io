@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>C Kunte: Anatomy of a template</title>
+<meta name="description" content="Developed by two graduate students from Technical University of Berlin, <a..." />
+<link rel="canonical" href="https://ckunte.net/2025/template" />
+<link rel="icon" href="data:," />
+<link type="text/css" rel="stylesheet" href="/inc/home.css" />
+<script src="/inc/code-math.js"></script>
+</head>
+<body>
+<main>
+<header><a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/favicon.svg" width="48" height="39.6"></a></header>	
+<article>
+  <h1>Anatomy of a template</h1>
+      <time datetime="2025-03-29T22:17:00+08:00">29 Mar 2025</time>
+<p>Developed by two graduate students from Technical University of Berlin, <a href="https://typst.app">Typst</a> is a computer program for typesetting documents, thoughtfully designed to be fast, portable, feature-packed, and script-able. It would not be unfair to call it a spiritual successor to <a href="https://en.wikipedia.org/wiki/LaTeX">LaTeX</a>. With contributions from talented open-source enthusiasts, it is evolving well and blowing-up LaTeX&rsquo;s handicaps, e.g.,</p>
+<ul>
+<li>compilation speed</li>
+<li>learning curve</li>
+<li>mark-up verbosity</li>
+<li>multi-run demand for referencing</li>
+<li>package size</li>
+<li>syntax highlighting</li>
+</ul>
+<p>With good defaults (font and paragraph properties, paper size, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned LaTeX user, then you&rsquo;d know how useful <a href="https://ctan.org/topic/class">document classes</a> are  &mdash; something Typst does not yet come pre-packaged with. And so, a little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for the users, by the users. If you&rsquo;re one of them, like I am, and your tastes are slightly different from those available there-in, then it would not hurt to know how to create a Typst template from scratch. Here is how &mdash; in this note-to-self, like much of this website.</p>
+<p>Rule one of publishing is to separate presentation + styling from content, be it offline or online. So we create two files:</p>
+<ul>
+<li><em>main.typ</em> &mdash; this file will have all the report&rsquo;s content</li>
+<li><em>template.typ</em> &mdash; this one&rsquo;s for the report&rsquo;s presentation + styling</li>
+</ul>
+<p><em>main.typ</em>: This requires only a few key user-inputs (which would be variables pre-defined in <em>template.typ</em>), e.g. document title, name of the author, and <a href="https://tex.stackexchange.com/questions/71172/why-are-default-latex-margins-so-big/71211#71211">paper size</a> (useful for me) other than the content itself.</p>
+<pre><code>#import &quot;template.typ&quot;: *
+#show: note.with(
+  author: &quot;C Kunte&quot;,
+  paper: &quot;a4&quot;,
+  title: [On-bottom stability],
+) // report content from here-on
+</code></pre>
+<p><em>template.typ</em>: Basic preamble is as follows. Defaults will be used when things like margins are undefined in either of the two files. </p>
+<pre><code>#let note(
+  title: none,
+  author: none,
+  paper: &quot;a4&quot;,
+  body,
+) = {
+  set document(
+    title: title, 
+    author: author
+  ) // metadata
+
+  set page(
+    paper: paper, // enables user-definable in main.typ
+    numbering: &quot;1&quot;,
+  ) // page properties
+
+  align(center)[
+    #text(1.8em)[*#title*]
+    #v(2em, weak: true)
+    #text(1em, author)
+    #v(1em, weak: true)
+    #datetime.today().display(&quot;[month repr:long] [day], [year]&quot;)
+    #v(5em, weak: true)
+  ] // title block
+
+  body
+}
+</code></pre>
+<p>If I were to automate setting margins based on paper size, then it would be like so, in which the <em>top</em> margin overrides the <em>y</em> parameter to make room for a custom header.</p>
+<pre><code>set page(
+  margin: if paper == &quot;a5&quot; {
+    (x: 0.75in, y: 0.75in, top: 0.9in)
+  } else {
+    (x: 1.0in, y: 1.0in, top: 1.25in)
+  },
+)
+</code></pre>
+<p>We can do something similar for font size:</p>
+<pre><code>set text(
+  size: if paper == &quot;a5&quot; { 11pt } else { 12pt },
+)
+</code></pre>
+<p>Typographical controls are covered too, e.g.,</p>
+<pre><code>set text(
+  font: &quot;Segoe UI&quot;, // e.g. &quot;STIX Two Text&quot; or &quot;erewhon&quot;,
+  top-edge: &quot;cap-height&quot;, 
+  bottom-edge: &quot;baseline&quot;,
+  number-type: &quot;old-style&quot;,
+  size: if paper == &quot;a5&quot; { 11pt } else { 12pt },
+)
+</code></pre>
+<p>Prefer indented classic look for paragraphs? You can do this:</p>
+<pre><code>set par(
+  spacing: 0.65em, 
+  leading: 0.65em, 
+  first-line-indent: 12pt, 
+  justify: true
+)
+</code></pre>
+<p>Here is a little complex header code to make the title of the note (paper) appear on every even page, and the active section name appear on every odd page other than the first. </p>
+<pre><code>set page(
+  header: context {
+    // set custom header: make title appear on even pages
+    if calc.even(counter(page).get().first()) { 
+      emph(title) 
+    } else { none }
+
+    // make section appear on odd pages other than the first
+    let page-num = counter(page).get().first()
+    if page-num &gt; 1 and calc.odd(page-num) {
+      let headings = query(heading)
+      let curr-heading = none
+      let found = false
+
+      for heading-elem in headings {
+        if heading-elem.location() != none and heading-elem.location().page() == page-num {
+          curr-heading = heading-elem.body
+          found = true
+        } else if heading-elem.location() != none and heading-elem.location().page() &lt; page-num {
+          curr-heading = heading-elem.body // keep track of the last heading on a prev page
+        } else if found { break } // stop once we have moved past the curr page
+      }
+      align(right, emph(curr-heading))
+    } else { none }
+  }, // context ends
+) // page ends
+</code></pre>
+<figure>
+<img alt="View of a report compiled using Typst typesetting computer program" src="/img/typst-first.png" loading=lazy />
+<img alt="View of a report headers compiled using Typst typesetting computer program" src="/img/typst-header.png" loading=lazy />
+  <figcaption>View of the report (top-left); template (top-right); report headers (bott).</figcaption>
+</figure>
+
+<p>An example template is at my repository, <a href="https://github.com/ckunte/note">note</a>. For a Neovim user there is also a <a href="https://github.com/ckunte/typst-snippets-vim">snippet plug-in</a>.</p>
+</article>
+<footer>
+  <span>&lsaquo; <a accesskey="j" title="Med school calendar" href="/2025/mcal">Prev</a></span>
+  <span><a accesskey="k" title="Wave" href="/2025/wave">Next</a> &rsaquo;</span>
+</footer>
+</main>
+</body>
+</html>

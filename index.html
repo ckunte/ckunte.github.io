@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>C Kunte</title> 
+<meta name="description" content="C Kunte's homepage" />
+<link rel="icon" href="data:," />
+<link type="text/css" rel="stylesheet" href="/inc/home.css" />
+<script src="/inc/code-math.js"></script>
+<link rel="alternate" type="application/feed+json" title="JSON feed" href="https://ckunte.net/feed.json" />
+<link rel="canonical" href="https://ckunte.net/" />
+</head>
+<body>
+<main>
+<header><a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/favicon.svg" width="48" height="39.6"></a></header>
+<article>
+  <h1>Wave</h1>
+      <time datetime="2025-04-18T13:02:00+08:00">18 Apr 2025</time>
+  <p>The energy industry uses highly specialised software &mdash; written, refined, and perfected over decades. Little scripts are no match against their sophistication. Instead, the idea is to not feel challenged when they are either inaccessible or too time-consuming to reproduce results using them, before offering feedback on the work done.</p>
+<p>Recently while reviewing a young colleague&rsquo;s work I realised my handicap was the tooling. </p>
+<p>To avoid getting into the annals of specific software, my request to engineers &mdash; I assist and guide typically &mdash; is simple: a print / screenshot of output from analyses, which I can look at, and ask reasonable questions. I do some simple calculations on the side, if required, to assist in the review.</p>
+<p>In my role, I consciously choose to guide and lead, but not necessarily roll-up sleeves and work it myself. This has its benefits:</p>
+<ul>
+<li>Working the state-of-the-art software myself is inefficient</li>
+<li>My time is better spent reviewing and troubleshooting</li>
+<li>Given the above, avoid locking-in expensive licenses</li>
+<li>Good for knowledge transfer, and better collaboration</li>
+<li>I have time to develop a strategy than technique</li>
+<li>Avoid confirmation bias, verify independently</li>
+<li>Use simpler techniques, where practicable</li>
+</ul>
+<p>But some things are beyond the realm of the back-of-the-envelope, and demand a bit of rigour. If iteration is involved, then it quickly gets out of hand. In such cases, if I have to write some code on the side, then the attempt is to get some ROI, i.e. not only to get reasonably approximate answers, but also some insights as well.</p>
+<p>Back to the problem, I needed to generate hydrodynamic forces on a slender caisson to review the force profile in segments of the water column I was interested-in &mdash; for different hydrodynamic coefficients. Previously, I&rsquo;d do this by simply building a stick model and run a wave through it. In this case, without the software pre-installed on my work machine, the only option was to write some code from first principles, and calculate hydrodynamic forces in close approximation to what an expensive software suite would produce.</p>
+<p>The conventional way to generate hydrodynamic forces is by employing <a href="https://en.wikipedia.org/wiki/Morison_equation">Morison&rsquo;s equation</a>:</p>
+<p>$$
+F = F_{drag} + F_{inertia}
+$$</p>
+<p>$$
+F_{drag} = \frac{1}{2} \rho \ C_d \ D \ U |U|
+$$</p>
+<p>$$
+F_{inertia} = C_m \ \rho V \ \frac{\partial U}{\partial t}
+$$</p>
+<p>where,</p>
+<ul>
+<li>F &ndash; local action vector per unit length normal to the tube</li>
+<li>$C_d$, $C_m$ &ndash; drag and inertia hydrodynamic coefficients respectively</li>
+<li>$\rho$ &ndash; mass density of seawater</li>
+<li>D &ndash; effective width of tube (incl. marine fouling)</li>
+<li>V &ndash; displaced volume of tube per unit length respectively</li>
+<li>U, |U| &ndash; component of local water particle velocity vector normal to the tube, and its absolute value respectively</li>
+<li>$\frac{\partial U}{\partial t}$ &ndash; component of the local water particle acceleration vector normal to the tube</li>
+</ul>
+<p>See <a href="/2020/wavelength">wave length</a> for calculating wave number ($\kappa$). The orbital velocity $U$ can be taken as the sum of $U_{wave}$ and $U_{current}$ (from the profile); where the angular frequency, $\omega = \frac{2\pi}{T}$, and where $H$ and $T$ are wave height and associated period respectively. </p>
+<p>$$
+U_{wave} = H \omega \frac{\cosh(\kappa z)}{2\sinh(\kappa d)} \cos(\omega t)
+$$</p>
+<p>The wave orbital acceleration can be expressed as:</p>
+<p>$$
+\frac{\partial U}{\partial t} = -H \omega^2 \frac{\cosh(\kappa z)}{2\sinh(\kappa d)} \sin(\omega t) 
+$$</p>
+<p>The simplification here is that it does not account for marine-fouling, which would further expand the problem and the resulting code into an array of tube diameters. For a sense-check though, this seems sufficient.</p>
+<figure>
+  <img class="fig" alt="Hydrodynamic force" src="/img/hydforce.svg" loading=lazy />
+  <figcaption>Hydrodynamic force profile in seawater column.</figcaption>
+</figure>
+
+<p>The code for the plot is as follows. </p>
+<pre><code class="language-py">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Hydrodynamic force on a tube
+# 2025 C Kunte
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.interpolate import interp1d
+
+
+def create_depth_array(water_depth, num_points=200):
+    # Creates an array of depths from seabed to surface
+    return np.linspace(0, water_depth, num_points)
+
+
+def interpolate_current_profile(current_data):
+    # Interpolates the current profile based on depth and
+    # velocity data
+    depths = current_data[:, 0]
+    velocities = current_data[:, 1]
+    return interp1d(
+        depths,
+        velocities,
+        kind=&quot;linear&quot;,
+        fill_value=&quot;extrapolate&quot;,
+    )
+
+
+def calc_wave_number(
+    wave_period,
+    water_depth,
+    tolerance=1e-6,
+    max_iterations=100,
+):
+    # Calculates the wave number using the dispersion
+    # relation (iterative)
+    omega = 2 * np.pi / wave_period
+    k = omega**2 / g  # Initial guess
+    for _ in range(max_iterations):
+        k_new = omega**2 / (g * np.tanh(k * water_depth))
+        if np.abs(k_new - k) &lt; tolerance:
+            return k_new
+        k = k_new
+    return k  # Return the last estimate if no convergence
+
+
+def wave_orbital_velo(
+    depth,
+    time,
+    wave_height,
+    wave_period,
+    water_depth,
+    wave_number,
+):
+    # Computes the wave orbital velocity at a given depth
+    # and time
+    omega = 2 * np.pi / wave_period
+    amplitude = wave_height / 2
+    return (
+        amplitude
+        * omega
+        * np.cosh(wave_number * depth)
+        / np.sinh(wave_number * water_depth)
+        * np.cos(omega * time)
+    )
+
+
+def wave_orbital_accel(
+    depth,
+    time,
+    wave_height,
+    wave_period,
+    water_depth,
+    wave_number,
+):
+    # Computes the wave orbital acceleration at a given
+    # depth and time
+    omega = 2 * np.pi / wave_period
+    amplitude = wave_height / 2
+    return (
+        -amplitude
+        * omega**2
+        * np.cosh(wave_number * depth)
+        / np.sinh(wave_number * water_depth)
+        * np.sin(omega * time)
+    )
+
+
+def hydrodynamic_force_at_depth(
+    depth,
+    time_points,
+    wave_height,
+    wave_period,
+    water_depth,
+    current_profile_func,
+    wave_number,
+    cd,
+    cm,
+    d_tube,
+):
+    # Calculates the hydrodynamic force per unit length at
+    # a given depth over a wave cycle
+    u_current = current_profile_func(depth)
+    u_wave = wave_orbital_velo(
+        depth,
+        time_points,
+        wave_height,
+        wave_period,
+        water_depth,
+        wave_number,
+    )
+    du_dt_wave = wave_orbital_accel(
+        depth,
+        time_points,
+        wave_height,
+        wave_period,
+        water_depth,
+        wave_number,
+    )
+    u_total = u_wave + u_current
+    f_drag = (
+        0.5 * rho * cd * d_tube * u_total * np.abs(u_total)
+    )
+    f_inertia = (
+        rho * cm * (np.pi * d_tube**2 / 4) * du_dt_wave
+    )
+    f_total = f_drag + f_inertia
+    return np.max(
+        np.abs(f_total * 1e-3)
+    )  # Peak absolute force in kN/m
+
+
+def calc_force_profile(
+    depth_array,
+    time_points,
+    wave_height,
+    wave_period,
+    water_depth,
+    current_profile_func,
+    wave_number,
+    cd,
+    cm,
+    d_tube,
+):
+    # Calculates the hydrodynamic force profile over the
+    # specified depth array.
+    return [
+        hydrodynamic_force_at_depth(
+            z,
+            time_points,
+            wave_height,
+            wave_period,
+            water_depth,
+            current_profile_func,
+            wave_number,
+            cd,
+            cm,
+            d_tube,
+        )
+        for z in depth_array
+    ]
+
+
+def plot_force_profile(
+    force_profile_data,
+    depth_array,
+    wave_height,
+    wave_period,
+    water_depth,
+    structure_data,
+):
+    # Plot hydrodynamic force profiles for multiple data sets
+    # of Cd, Cm, and D_tube
+    for i in range(len(force_profile_data)):
+        force_profile = force_profile_data[i]
+        cd = structure_data[i][&quot;Cd&quot;]
+        cm = structure_data[i][&quot;Cm&quot;]
+        d_tube = structure_data[i][&quot;D_tube&quot;]
+        plt.plot(
+            force_profile,
+            depth_array,
+            label=f&quot;$C_d$: {cd}, $C_m$: {cm}, D: {d_tube} m&quot;,
+        )
+
+    plt.xlabel(&quot;Hydrodynamic force (kN/m)&quot;)
+    plt.ylabel(&quot;Depth above seabed (m)&quot;)
+    plt.title(
+        f&quot;Hydrodynamic load profile in {water_depth} m depth\nHmp: {wave_height} m; Tmp: {wave_period} s&quot;
+    )
+    plt.grid(True)
+    plt.legend()
+    plt.savefig(&quot;hydforce.svg&quot;)
+    plt.show()
+
+
+if __name__ == &quot;__main__&quot;:
+    # --- INPUTS ---
+    wave_height_input = 26.52  # wave height (m)
+    wave_period_input = 13.58  # wave period (s)
+    water_depth_input = 130.0  # total depth (m)
+    current_data_input = np.array(
+        [
+            [0, 1.49],
+            [5, 1.46],
+            [10, 1.43],
+            [20, 1.37],
+            [30, 1.30],
+            [40, 1.24],
+            [50, 1.18],
+            [60, 1.11],
+            [70, 1.05],
+            [80, 0.99],
+            [90, 0.92],
+            [100, 0.86],
+            [110, 0.79],
+            [120, 0.73],
+            [130, 0.67],
+        ]
+    )
+    # Define sets of Cd, Cm, and D_tube values
+    struc_data_sets = [
+        {&quot;Cd&quot;: 1.05, &quot;Cm&quot;: 1.20, &quot;D_tube&quot;: 0.760},
+        {&quot;Cd&quot;: 2.0, &quot;Cm&quot;: 1.2, &quot;D_tube&quot;: 1.250},
+    ]
+    # --- END OF INPUTS ---
+
+    # CONSTANTS
+    rho = 1025  # seawater density (kg/m^3)
+    g = 9.81  # gravitational acceleration (m/s^2)
+
+    # Create depth array
+    depths = create_depth_array(water_depth_input)
+
+    # Interpolate current profile
+    current_profile_interpolator = (
+        interpolate_current_profile(current_data_input)
+    )
+
+    # Calculate wave number
+    wave_number = calc_wave_number(
+        wave_period_input, water_depth_input
+    )
+
+    # Time array for dynamic force
+    time = np.linspace(
+        0, wave_period_input, 200
+    )  # one wave cycle
+
+    # Compute force profiles for both sets of parameters
+    all_force_profiles = []
+    for data_set in struc_data_sets:
+        force_profile = calc_force_profile(
+            depths,
+            time,
+            wave_height_input,
+            wave_period_input,
+            water_depth_input,
+            current_profile_interpolator,
+            wave_number,
+            data_set[&quot;Cd&quot;],
+            data_set[&quot;Cm&quot;],
+            data_set[&quot;D_tube&quot;],
+        )
+        all_force_profiles.append(force_profile)
+
+    # Plot the results
+    plot_force_profile(
+        all_force_profiles,
+        depths,
+        wave_height_input,
+        wave_period_input,
+        water_depth_input,
+        struc_data_sets,
+    )
+</code></pre>
+</article>
+<aside>
+<p class="archive">&lsaquo; Previously,
+    <a accesskey="j" title="29 Mar 2025. 4 min read" href="/2025/template">Anatomy of a template</a>,
+    <a title="4 Jan 2025. 1 min read" href="/2025/mcal">Med school calendar</a>,
+    <a title="30 Nov 2024. 1 min read" href="/2024/mdsnip">Markdown snippets for Vim</a>,
+    <a title="11 Oct 2024. 4 min read" href="/2024/pi5">The daily driver</a>,
+    <a title="31 Aug 2024. 2 min read" href="/2024/reply">Scripting replies in Outlook</a>,
+    <a title="28 Mar 2024. 4 min read" href="/2024/build">Build</a>,
+    <a title="1 Mar 2024. 1 min read" href="/2024/offline">Offline</a>,
+    <a title="14 Jan 2024. 2 min read" href="/2024/ds">Date stamp</a>,
+    <a title="24 Sep 2023. 1 min read" href="/2023/sf">Sagrada Familia</a>,
+    <a title="24 Apr 2023. 2 min read" href="/2023/sgssh">Sign commits with SSH key</a>,
+    <a title="10 Nov 2022. 11 min read" href="/2022/csv2sacs">CSV to SACS seastate</a>,
+    <a title="4 Jun 2022. 3 min read" href="/2022/slice">Slice lists</a>,
+    <a title="30 Apr 2022. 3 min read" href="/2022/cosfunc">Cosine interaction</a>,
+    <a title="29 Oct 2021. 6 min read" href="/2021/slenderness">Tube slenderness</a>,
+    <a title="26 Jun 2021. 4 min read" href="/2021/tep">Managing editor plug-ins</a>,
+    <a title="23 Mar 2021. 7 min read" href="/2021/jf">Jacket flooding</a>,
+    <a title="21 Feb 2021. 8 min read" href="/2021/rel">Release notes</a>,
+    <a title="17 Jan 2021. 2 min read" href="/2021/storm-safety">Storm safety</a>,
+    <a title="4 Dec 2020. 4 min read" href="/2020/wavelength">Wave length</a>,
+    <a title="15 Nov 2020. 4 min read" href="/2020/ebs">Shell buckling</a>,
+    <a title="1 Nov 2020. 2 min read" href="/2020/sacs_st">SACS syntax</a>,
+    <a title="18 Oct 2020. 5 min read" href="/2020/impact">Dropped pipe</a>,
+    <a title="14 Oct 2020. 13 min read" href="/2020/unconditional">Unconditional</a>,
+    <a title="4 Oct 2020. 7 min read" href="/2020/model">Building a model</a>,
+    <a title="8 Aug 2020. 4 min read" href="/2020/cli">CLI</a>,
+    <a title="26 Jul 2020. 2 min read" href="/2020/ust">USFOS syntax</a>,
+    <a title="29 Mar 2020. 3 min read" href="/2020/outbreak">Outbreak</a>,
+    <a title="7 Jan 2020. 3 min read" href="/2020/darksky">Dark sky</a>,
+    <a title="19 Jul 2019. 5 min read" href="/2019/viv">VIV</a>,
+    <a title="24 Apr 2018. 15 min read" href="/2018/reliability">Reliability</a>,
+    <a title="27 Nov 2016. 7 min read" href="/2016/relconv">End releases</a>,
+    <a title="6 Sep 2016. 6 min read" href="/2016/wind">Wind</a>,
+    <a title="28 Aug 2016. 4 min read" href="/2016/dwm">dwm notes</a>,
+    <a title="25 Apr 2016. 3 min read" href="/2016/fenders">Berthing fenders</a>,
+    <a title="2 Feb 2016. 8 min read" href="/2016/crane">Offshore crane</a>,
+    <a title="31 Dec 2015. 4 min read" href="/2015/melor">Typhoon Melor</a>,
+    <a title="11 Jul 2015. 4 min read" href="/2015/reactions">Mapping dynamics</a>,
+    <a title="14 Jun 2015. 10 min read" href="/2015/lib">Libraries</a>,
+    <a title="30 May 2015. 4 min read" href="/2015/ea">Chain stiffness</a>,
+    <a title="30 Aug 2014. 5 min read" href="/2014/lighthouse">Lighthouse tech.</a>,
+    <a title="28 Aug 2014. 6 min read" href="/2014/fram-vasa">Fram and Vasa</a>,
+    <a title="31 Jul 2014. 4 min read" href="/2014/sn-curves">S-N curves</a>,
+    <a title="26 Oct 2013. 10 min read" href="/2013/tow">Tow</a>,
+    <a title="15 Apr 2013. 1 min read" href="/2013/training">Training</a>,
+    <a title="28 Nov 2012. 8 min read" href="/2012/china">China</a>,
+    <a title="18 Apr 2012. 3 min read" href="/2012/titanic">Titanic</a>,
+    <a title="29 Oct 2011. 4 min read" href="/2011/colosseum">Colosseum</a>,
+    <a title="28 May 2011. 5 min read" href="/2011/agora">Agora</a>,
+    <a title="19 Jan 2011. 4 min read" href="/2011/interpolation">Interpolation</a>,
+    <a title="24 Aug 2010. 5 min read" href="/2010/summer">Summer</a>,
+    <a title="5 May 2010. 5 min read" href="/2010/chambord">Chateau de Chambord</a>,
+    <a title="30 Apr 2010. 2 min read" href="/2010/normandy">Normandy</a>,
+     and <a accesskey="k" title="29 Jun 2006. 3 min read" href="/2006/tide">Tide</a>. Subscribe to <a href="/feed.json">JSON feed</a> for the latest.
+</p>
+<p class="archive">Via keyboard: <kbd>Alt</kbd><kbd>&nbsp;J&nbsp;</kbd> (Prev), <kbd>Alt</kbd><kbd>&nbsp;K&nbsp;</kbd> (Next), and <kbd>Alt</kbd><kbd>&nbsp;/&nbsp;</kbd> (Home). Mac users, replace <kbd>Alt</kbd> with <kbd>&nbsp;^</kbd><kbd>&nbsp;&#8997;</kbd> in the shortcuts above.
+</p>
+</aside> 
+<footer>
+  <span>&nbsp;</span>
+  <span>produced by <a href="https://github.com/ckunte">C Kunt&eacute;</a></span>
+</footer>
+</main>
+</body>
+</html>

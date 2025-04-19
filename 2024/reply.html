@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>C Kunte: Scripting replies in Outlook</title>
+<meta name="description" content="Some years ago I used an email reply script that emulated not only..." />
+<link rel="canonical" href="https://ckunte.net/2024/reply" />
+<link rel="icon" href="data:," />
+<link type="text/css" rel="stylesheet" href="/inc/home.css" />
+<script src="/inc/code-math.js"></script>
+</head>
+<body>
+<main>
+<header><a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/favicon.svg" width="48" height="39.6"></a></header>	
+<article>
+  <h1>Scripting replies in Outlook</h1>
+      <time datetime="2024-08-31T21:56:00+08:00">31 Aug 2024</time>
+<p>Some years ago I used an email reply script that emulated not only <kbd>Ctrl</kbd><kbd>&nbsp;r&nbsp;</kbd> but also pre-populated a pleasantry by correctly picking the first name up from a variety of &ldquo;From:&rdquo; types (e.g. &ldquo;Firstname Lastname&rdquo;, &ldquo;Lastname, Firstname&rdquo;) like so:</p>
+<pre><code class="language-txt">Hello Andrew,
+Thank you for your message.
+</code></pre>
+<p>It stopped working when AutoHotkey introduced breaking changes in v2.0. But I like pleasantries, and I like saving keystrokes. So after some trials with ChatGPT, I got it working again this week.</p>
+<p>In the fifty years of email and its evolution, no single email client offers &ldquo;humanities&rdquo; option in settings to be able to do like the above. Shame. Here&rsquo;s <a href="https://gist.github.com/ckunte/5709bb372a371b5f48a5068bbe051bbd">that script</a>.</p>
+<pre><code>; Scripting replies in Outlook with AutoHotkey v2
+; Hit Alt + x (or !x) to create a reply email (template) with
+; salutation to sender's First Name from selected / opened
+; email in Microsoft Outlook, which looks like this:
+;
+; Hello &lt;FirstName&gt;,
+; Thank you for your email.
+; &lt;Signature appears here, if set-up in Outlook&gt;
+;
+#Requires AutoHotkey &gt;=2.0
+
+!x::
+{
+    ; Get the active email item
+    ol := ComObjActive(&quot;Outlook.Application&quot;).ActiveExplorer().Selection.Item(1)
+
+    ; Check if the item is valid and get the sender's name
+    if (IsObject(ol)) {
+        senderName := ol.SenderName
+        ; MsgBox &quot;Sender Name: &quot; . senderName ; Debug message to check senderName
+
+        ; Initialize variables
+        firstName := &quot;&quot;
+
+        ; Check if the name is in &quot;Lastname, Firstname&quot; format
+        commaPos := InStr(senderName, &quot;,&quot;)
+        if (commaPos &gt; 0) {
+            ; Extract first name after the comma
+            firstName := SubStr(senderName, commaPos + 2) ; Skip &quot;, &quot; (comma and space)
+        } else {
+            ; Handle &quot;Firstname Lastname&quot; format
+            spacePos := InStr(senderName, &quot; &quot;)
+            if (spacePos &gt; 0) {
+                firstName := SubStr(senderName, 1, spacePos - 1) ; Extract first name before the space
+            }
+        }
+
+        ;; Display the extracted first name
+        ; MsgBox &quot;Extracted First Name: &quot; . firstName
+
+        ; Send the reply with the template
+        Send(&quot;^r&quot;) ; Open reply
+        Sleep(10) ; Wait for the reply window to open
+        Send(&quot;Hello &quot; . firstName . &quot;,{Enter 2}Thank you for your email.{Enter 2}&quot;)
+    } else {
+        MsgBox &quot;No valid Outlook item found.&quot;
+    }
+}
+</code></pre>
+</article>
+<footer>
+  <span>&lsaquo; <a accesskey="j" title="Build" href="/2024/build">Prev</a></span>
+  <span><a accesskey="k" title="The daily driver" href="/2024/pi5">Next</a> &rsaquo;</span>
+</footer>
+</main>
+</body>
+</html>

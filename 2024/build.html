@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>C Kunte: Build</title>
+<meta name="description" content="These are instructions for setting Sublime Text up..." />
+<link rel="canonical" href="https://ckunte.net/2024/build" />
+<link rel="icon" href="data:," />
+<link type="text/css" rel="stylesheet" href="/inc/home.css" />
+<script src="/inc/code-math.js"></script>
+</head>
+<body>
+<main>
+<header><a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/favicon.svg" width="48" height="39.6"></a></header>	
+<article>
+  <h1>Build</h1>
+      <time datetime="2024-03-28T19:52:00+08:00">28 Mar 2024</time>
+<p>These are instructions for setting <a href="https://www.sublimetext.com">Sublime Text</a> up to build (i.e., compile, run, or type-set) a source to produce some output. Owing to different file paths, these would be different obviously for different systems. In all of these, be sure to adjust paths as necessary.</p>
+<p><em>Usage.</em> Select <em>Tools &gt; Build System &gt; New Build System&hellip;</em>, and replace the entire pre-populated instructions with the following respectively. With a source file open in Sublime Text, Build is invoked with either <kbd>Ctrl</kbd><kbd>&nbsp;b&nbsp;</kbd> (Windows) or <kbd>&nbsp;&#8984;</kbd><kbd>&nbsp;b&nbsp;</kbd> (MacOS).</p>
+<p><em>LaTeX (MacOS):</em> <code>LaTeX-Mac.sublime-build</code>:</p>
+<pre><code class="language-json">{
+  &quot;cmd&quot;: [&quot;/Library/TeX/texbin/xelatex&quot;, &quot;$file&quot;],
+  &quot;selector&quot;: &quot;text.tex.latex&quot;
+}
+</code></pre>
+<p><em>LaTeX (Windows WSL):</em> <code>LaTeX-WSL.sublime-build</code>:</p>
+<pre><code class="language-json">{
+  &quot;cmd&quot; : [&quot;bash&quot;, &quot;-c&quot;, &quot;/usr/local/texlive/2022/bin/x86_64-linux/xelatex ${file_name}&quot;],
+  &quot;shell&quot; : true,
+  &quot;working_dir&quot; : &quot;${file_path}&quot;,
+  &quot;selector&quot; : &quot;text.tex.latex&quot;
+}
+</code></pre>
+<p><em>LaTeX (Windows Cygwin):</em> <code>LaTeX-Cyg.sublime-build</code>:</p>
+<pre><code class="language-json">{   
+  &quot;shell_cmd&quot; : &quot;xelatex \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.tex&quot;,
+  &quot;path&quot; : &quot;C:\\Cygwin\\&lt;path-to-xelatex&gt;;$path&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<p><em>LaTeX (GitHub Actions):</em> A workflow is a set of instructions to be carried out as actions in a container provided by GitHub. Save it under the repository like so <code>.github/workflows/rel.yml</code>. The build is triggered when a commit has a tag number (e.g. v1.0.3) with tag pushed to GitHub.</p>
+<pre><code class="language-yaml">name: Build LaTeX document
+on: 
+  push:
+    tags:
+      - &quot;v*.*.*&quot;
+
+permissions:
+  contents: write
+
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v4
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: test.tex
+          latexmk_use_xelatex: true
+      - name: release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            test.pdf
+</code></pre>
+<p><em>Python (Windows):</em> <code>Python-Win.sublime-build</code>:</p>
+<pre><code class="language-json">{   
+  &quot;shell_cmd&quot; : &quot;python \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.py&quot;,
+  &quot;path&quot; : &quot;C:\\path_to_python_binary_folder;$path&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<p><em>Typst (Windows Cygwin):</em> <code>Typst-Cyg.sublime-build</code>:</p>
+<pre><code class="language-json">{   
+  &quot;shell_cmd&quot; : &quot;typst compile \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.typ&quot;,
+  &quot;path&quot; : &quot;C:\\Cygwin\\bin;$path&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<p><em>Typst-py:</em> <code>Typst-py.sublime-build</code>:</p>
+<pre><code class="language-json">{   
+  &quot;shell_cmd&quot; : &quot;python3 \\${HOME}/ctd.py -f \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.typ&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<p>This is if for reasons Typst cannot be installed on your system, but Python can be, then Typst can be used via the <a href="https://pypi.org/project/typst/">typst-py</a> package. The above needs this script <code>ctd.py</code> to work:</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+&quot;&quot;&quot;Compile Typst document
+ctd.py ckunte
+
+Usage: ctd.py (-f &lt;file&gt;)
+       ctd.py --help
+       ctd.py --version
+
+Options:
+  -h, --help  Show this help
+  -f, --file   Specify Typst input file to compile (required)
+
+&quot;&quot;&quot;
+import typst
+from docopt import docopt
+
+def main(typstfile):
+    pdffile = f&quot;{typstfile.rsplit('.', 1)[0]}.pdf&quot;
+    print(f&quot;Compiling {typstfile} to {pdffile}...&quot;, end=&quot;&quot;)
+    typst.compile(typstfile, output=pdffile)
+    print(&quot;done.&quot;)
+
+if __name__ == '__main__':
+    args = docopt(__doc__, 
+        version=&quot;Compile Typst document, 0.1&quot;)
+    main(args[&quot;&lt;file&gt;&quot;])
+</code></pre>
+<p><em>Typst (GitHub Actions):</em> <code>.github/workflows/rel.yml</code>.</p>
+<pre><code class="language-yaml">name: Build Typst document
+on: 
+  push:
+    tags:
+      - &quot;v*.*.*&quot;
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: prep typst
+        uses: typst-community/setup-typst@v3
+      - run: typst compile m1.typ
+
+      - name: release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            m1.pdf
+</code></pre>
+</article>
+<footer>
+  <span>&lsaquo; <a accesskey="j" title="Offline" href="/2024/offline">Prev</a></span>
+  <span><a accesskey="k" title="Scripting replies in Outlook" href="/2024/reply">Next</a> &rsaquo;</span>
+</footer>
+</main>
+</body>
+</html>

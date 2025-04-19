@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>C Kunte: Interpolation</title>
+<meta name="description" content="<img alt="Sketch of fixed and sliding riser clamps used in an offshore fixed platform."..." />
+<link rel="canonical" href="https://ckunte.net/2011/interpolation" />
+<link rel="icon" href="data:," />
+<link type="text/css" rel="stylesheet" href="/inc/home.css" />
+<script src="/inc/code-math.js"></script>
+</head>
+<body>
+<main>
+<header><a accesskey="/" title="Home" href="/"><img alt="C Kunte" class="logo" src="/inc/favicon.svg" width="48" height="39.6"></a></header>	
+<article>
+  <h1>Interpolation</h1>
+      <time datetime="2011-01-19T23:10:00+08:00">19 Jan 2011</time>
+<p><img alt="Sketch of fixed and sliding riser clamps used in an offshore fixed platform." src="/img/rclamp0.jpg" /></p>
+<p>To check for maximum bending stress in flat plates &mdash; this for a hanger clamp, Roark&rsquo;s formulas are handy. Here&rsquo;s a table that offers a recipe.</p>
+<p><img alt="Formulas for flat plates with straight boundaries and constant thickness from Roarke's formulas for stress and strain." class="fig" src="/img/rclamp1.png"></p>
+<p>Manually, this is straightforward: First, I calculate the aspect ratio (a / b) of the flat plate, and then pick a value of &beta;<sub>1</sub> that corresponds to the ratio. If I do not find a ready match, then I perform a linear interpolation between the two values that form the intermediate lower and upper boundaries of (a / b). </p>
+<p>For example, if my plate size is 200&times;100, then (a / b) is 2.0 (in the sixth column), whose corresponding &beta;<sub>1</sub> would then be equal to 1.226.</p>
+<p><img alt="Interpolation sketch" class="fig" src="/img/interpolation.jpg" loading="lazy"></p>
+<p>But if my plate size is 220&times;100, then (a / b) becomes 2.2. Now, the nearest lower and upper boundary values in the table are 2.0 and 3.0 respectively. Since Roark&rsquo;s table does not readily offer a corresponding &beta;<sub>1</sub> value, this further requires interpolation &mdash; let&rsquo;s stick to linear, for simplicity.</p>
+<p>$$ \frac{p}{q} = \frac{P}{Q} $$</p>
+<p>$$ p = \frac{P \cdot q}{Q} $$</p>
+<p>$$ = \frac{(2.106 - 1.226) \cdot (2.2 - 2.0)}{(3.0 - 2.0)} $$</p>
+<p>$$ \therefore \beta_1 = 1.226 + p $$</p>
+<p>How to automate this in python? Here&rsquo;s one way:</p>
+<pre><code>from bisect import bisect
+# Roark's Table 11.4, Case 10, with three edges fixed
+# a / b, and b1 are defined as lists below:
+raob = [0.25, 0.50, 0.75, 1.00, 1.50, 2.00, 3.00]
+b1 = [0.020, 0.081, 0.173, 0.321, 0.727, 1.226, 2.105]
+
+a, b = input("Enter a, b: ")
+a, b = float(a), float(b)
+aob = a / b
+
+try:
+    i = raob.index(aob)
+    beta1 = b1[i]
+except ValueError:
+    # aob did not match any value in raob
+    i = bisect(raob, aob)
+    j = i - 1
+    P = b1[i] - b1[j] 
+    q = (aob - raob[j])
+    Q = (raob[i] - raob[j])
+    beta1 =  b1[j] + (P * q / Q)
+finally:
+    print "a/b               : ", round(aob, 3)
+    print "Index of a/b ratio: ", i
+    print "beta1             : ", round(beta1, 3)
+pass
+</code></pre>
+<p>And here&rsquo;s how the above code works:</p>
+<ol>
+<li>First, I import <code>bisect</code> standard library for referencing across two lists (<code>raob</code>, and <code>b1</code>).</li>
+<li>Get user input for plate size in terms of <code>a</code> (length) and <code>b</code> (width).</li>
+<li>Then, in the <code>try</code> statement, I attempt to find the index, <code>i</code> (column number) that matches the aspect ratio (a / b).<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> Finding the index is key, which lets me refer to the corresponding value in the second list.</li>
+<li>If an exact numerical match of (a / b) ratio is not found in the <code>raob</code> list, then the control jumps to process the <code>except ValueError</code> part.</li>
+<li>Using <code>bisect</code>, I try and find the nearest next numerical value and its corresponding index number. So to take the aforementioned example, if my (a / b) ratio turns out to be 2.2, then the next numerical value that bisect finds for me is 3.0, and its corresponding i value, which is 6 in this case.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></li>
+<li>Rest of the code thereafter deals with linear interpolation between two limits (2.0 and 3.0 in this case, and their corresponding &beta;<sub>1</sub> values) to get the &beta;<sub>1</sub> value (corresponding to 2.2 in this example); and then print those values.</li>
+</ol>
+<p>The only shortcut I&rsquo;ve taken in this crude &mdash; doesn&rsquo;t-catch-all-errors &mdash; code yet I think, is in the exception part. I&rsquo;ve used that to move the control from simply throwing up <code>ValueError</code> to the next part of the code where the interpolation occurs. (Note: I haven&rsquo;t addressed the <code>IndexError</code> that would occur &mdash; when the ratio is either lower than 0.25 or greater than 3.0 &mdash; in this code.) Until I work out a more elegant way to do the above, this I think will do for now.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>For instance, the index of 0.75 in the <code>raob</code> list is 2. (Index numbers in python start with 0, not 1.)&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>For tracing index, and the subsequent interpolation, I preferred using <code>bisect</code> from the standard library (instead of using a custom package like <code>numpy</code> that comes with better interpolation tools), so I could keep the number of dependencies (and package installation requirements) to a minimum in order to run this code. Without having to resort to using a sledge hammer to kill a mosquito, I&rsquo;m happy with it so far.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+  <span>&lsaquo; <a accesskey="j" title="Summer" href="/2010/summer">Prev</a></span>
+  <span><a accesskey="k" title="Agora" href="/2011/agora">Next</a> &rsaquo;</span>
+</footer>
+</main>
+</body>
+</html>
