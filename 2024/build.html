@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chetan Kunté: Build</title>
+<meta name="description" content="These are instructions for setting Sublime Text up..." />
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="data:," />
+<link type="text/css" rel="stylesheet" href="/inc/home.css" />
+</head>
+<body>
+<main>
+<header>
+    <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="21.37"></a>
+</header>	
+<article>
+<h1>Build</h1>
+<time datetime="2024-03-28T19:52:00+08:00">
+28 Mar 2024, 
+4 min</time>
+<p>These are instructions for setting <a href="https://www.sublimetext.com">Sublime Text</a> up to build (i.e., compile, run, or type-set) a source to produce some output. Owing to different file paths, these would be different obviously for different systems. In all of these, be sure to adjust paths as necessary.</p>
+<p>Select <em>Tools &gt; Build System &gt; New Build System&hellip;</em>, and replace the entire pre-populated instructions with the following respectively. With a source file open in Sublime Text, Build is invoked with either <kbd>Ctrl</kbd><kbd>&nbsp;b&nbsp;</kbd> (Windows) or <kbd>&nbsp;&#8984;</kbd><kbd>&nbsp;b&nbsp;</kbd> (MacOS). See TOC below.</p>
+<div class="toc">
+<ul>
+<li><a href="#latex-macos-latex-macsublime-build">LaTeX (MacOS) &ndash; LaTeX-Mac.sublime-build</a></li>
+<li><a href="#latex-windows-wsl-latex-wslsublime-build">LaTeX (Windows WSL) &ndash; LaTeX-WSL.sublime-build</a></li>
+<li><a href="#latex-windows-cygwin-latex-cygsublime-build">LaTeX (Windows Cygwin) &ndash; LaTeX-Cyg.sublime-build</a></li>
+<li><a href="#latex-github-actions-relyml">LaTeX (GitHub Actions) &ndash; rel.yml</a></li>
+<li><a href="#python-windows-python-winsublime-build">Python (Windows) &ndash; Python-Win.sublime-build</a></li>
+<li><a href="#typst-windows-cygwin-typst-cygsublime-build">Typst (Windows Cygwin) &ndash; Typst-Cyg.sublime-build</a></li>
+<li><a href="#typst-py-typst-pysublime-build">Typst-py &ndash; Typst-py.sublime-build</a></li>
+<li><a href="#typst-github-actions-githubworkflowsrelyml">Typst (GitHub Actions) &ndash; .github/workflows/rel.yml</a></li>
+</ul>
+</div>
+<h2 id="latex-macos-latex-macsublime-build">LaTeX (MacOS) &ndash; LaTeX-Mac.sublime-build</h2>
+<pre><code class="language-json">{
+  &quot;cmd&quot;: [&quot;/Library/TeX/texbin/xelatex&quot;, &quot;$file&quot;],
+  &quot;selector&quot;: &quot;text.tex.latex&quot;
+}
+</code></pre>
+<h2 id="latex-windows-wsl-latex-wslsublime-build">LaTeX (Windows WSL) &ndash; LaTeX-WSL.sublime-build</h2>
+<pre><code class="language-json">{
+  &quot;cmd&quot; : [&quot;bash&quot;, &quot;-c&quot;, &quot;/usr/local/texlive/2022/bin/x86_64-linux/xelatex ${file_name}&quot;],
+  &quot;shell&quot; : true,
+  &quot;working_dir&quot; : &quot;${file_path}&quot;,
+  &quot;selector&quot; : &quot;text.tex.latex&quot;
+}
+</code></pre>
+<h2 id="latex-windows-cygwin-latex-cygsublime-build">LaTeX (Windows Cygwin) &ndash; LaTeX-Cyg.sublime-build</h2>
+<pre><code class="language-json">{   
+  &quot;shell_cmd&quot; : &quot;xelatex \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.tex&quot;,
+  &quot;path&quot; : &quot;C:\\Cygwin\\&lt;path-to-xelatex&gt;;$path&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<h2 id="latex-github-actions-relyml">LaTeX (GitHub Actions) &ndash; rel.yml</h2>
+<p>A workflow is a set of instructions to be carried out as actions in a container provided by GitHub. Save it under the repository like so <code>.github/workflows/rel.yml</code>. The build is triggered when a commit has a tag number (e.g. v1.0.3) with tag pushed to GitHub.</p>
+<pre><code class="language-yaml">name: Build LaTeX document
+on: 
+  push:
+    tags:
+      - &quot;v*.*.*&quot;
+
+permissions:
+  contents: write
+
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v4
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: test.tex
+          latexmk_use_xelatex: true
+      - name: release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            test.pdf
+</code></pre>
+<h2 id="python-windows-python-winsublime-build">Python (Windows) &ndash; Python-Win.sublime-build</h2>
+<pre><code class="language-json">{   
+  &quot;shell_cmd&quot; : &quot;python \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.py&quot;,
+  &quot;path&quot; : &quot;C:\\path_to_python_binary_folder;$path&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<h2 id="typst-windows-cygwin-typst-cygsublime-build">Typst (Windows Cygwin) &ndash; Typst-Cyg.sublime-build</h2>
+<pre><code class="language-json">{   
+  &quot;shell_cmd&quot; : &quot;typst compile \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.typ&quot;,
+  &quot;path&quot; : &quot;C:\\Cygwin\\bin;$path&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<h2 id="typst-py-typst-pysublime-build">Typst-py &ndash; Typst-py.sublime-build</h2>
+<pre><code class="language-json">{   
+  &quot;shell_cmd&quot; : &quot;python3 \\${HOME}/ctd.py -f \&quot;$file_name\&quot;&quot;,
+  &quot;selector&quot; : &quot;source.typ&quot;,
+  &quot;working_dir&quot; : &quot;$file_path&quot;
+}
+</code></pre>
+<p>This is if for reasons Typst cannot be installed on your system, but Python can be, then Typst can be used via the <a href="https://pypi.org/project/typst/">typst-py</a> package. The above needs this script <code>ctd.py</code> to work:</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+&quot;&quot;&quot;Compile Typst document
+ctd.py ckunte
+
+Usage: ctd.py (-f &lt;file&gt;)
+       ctd.py --help
+       ctd.py --version
+
+Options:
+  -h, --help  Show this help
+  -f, --file   Specify Typst input file to compile (required)
+
+&quot;&quot;&quot;
+import typst
+from docopt import docopt
+
+def main(typstfile):
+    pdffile = f&quot;{typstfile.rsplit('.', 1)[0]}.pdf&quot;
+    print(f&quot;Compiling {typstfile} to {pdffile}...&quot;, end=&quot;&quot;)
+    typst.compile(typstfile, output=pdffile)
+    print(&quot;done.&quot;)
+
+if __name__ == '__main__':
+    args = docopt(__doc__, 
+        version=&quot;Compile Typst document, 0.1&quot;)
+    main(args[&quot;&lt;file&gt;&quot;])
+</code></pre>
+<h2 id="typst-github-actions-githubworkflowsrelyml">Typst (GitHub Actions) &ndash; .github/workflows/rel.yml</h2>
+<pre><code class="language-yaml">name: Build Typst document
+on: 
+  push:
+    tags:
+      - &quot;v*.*.*&quot;
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: prep typst
+        uses: typst-community/setup-typst@v3
+      - run: typst compile m1.typ
+
+      - name: release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            m1.pdf
+</code></pre>
+</article>
+<footer>
+  <span>&lsaquo; <a accesskey="j" title="Sagrada Familia" href="/2023/sf">Prev</a></span>
+  <span><a accesskey="k" title="numpy 2.0 compliance check" href="/2024/numpy2">Next</a> &rsaquo;</span>
+</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chetan Kunté: MacPorts</title>
+<meta name="description" content="<img alt="MacBook Air (mid-2011) with its (old and new) chargers"..." />
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="data:," />
+<link type="text/css" rel="stylesheet" href="/inc/home.css" />
+</head>
+<body>
+<main>
+<header>
+    <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="21.37"></a>
+</header>	
+<article>
+<h1>MacPorts</h1>
+<time datetime="2025-02-25T21:42:00+08:00">
+25 Feb 2025, 
+2 min</time>
+<figure>
+  <img alt="MacBook Air (mid-2011) with its (old and new) chargers" src="/img/2025-macports.jpg" loading="lazy">
+  <figcaption>MacBook Air 11 (2011) with its (old and new) chargers</figcaption>
+</figure>
+
+<p><a href="https://www.macports.org">MacPorts</a> keeps my 13 year old MacBook Air 11 alive and usable. While no longer <a href="/2024/pi5" title="The daily driver">my primary computer</a>, I find the laptop on the go useful. So when Typst v0.13.0 <a href="https://github.com/typst/typst/releases/tag/v0.13.0">got released</a> last Wednesday, I looked up to see if the port was updated. It wasn&rsquo;t. That was last Friday. Not wanting to wait for someone else to get the wheels turning, I decided to send a pull request myself. The maintainers <a href="https://github.com/macports/macports-ports/pull/27724">merged it</a> on Sunday, after incorporating a couple of helpful suggestions.</p>
+<p>Update (Oct 24): Being a single binary, Typst offers a command line update option. One just needs to run this to be updated to the latest. How cool is that?<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<pre><code class="language-sh">sudo typst update
+</code></pre>
+<p>In the above, <code>sudo</code> is needed if Typst is saved in a location like <code>/usr/local/bin</code> for write access.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>However, the MacPorts version does not support the update option. So, I uninstalled the MacPorts version of Typst, and downloaded the typst binary.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+  <span>&lsaquo; <a accesskey="j" title="Med school calendar" href="/2025/mcal">Prev</a></span>
+  <span><a accesskey="k" title="Anatomy of a Typst template" href="/2025/template">Next</a> &rsaquo;</span>
+</footer>
+</main>
+</body>
+</html>

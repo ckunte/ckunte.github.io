@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chetan Kunté: Tailscale</title>
+<meta name="description" content="I never thought I’d say this to describe a networking tool + service, but <a..." />
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="data:," />
+<link type="text/css" rel="stylesheet" href="/inc/home.css" />
+</head>
+<body>
+<main>
+<header>
+    <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="21.37"></a>
+</header>	
+<article>
+<h1>Tailscale</h1>
+<time datetime="2020-04-04T09:30:00+08:00">
+4 Apr 2020, 
+2 min</time>
+<p>I never thought I&rsquo;d say this to describe a networking tool + service, but <a href="https://tailscale.com/" title="Tailscale">Tailscale</a> is deliverance to internet&rsquo;s inertia problem I&rsquo;ve been waiting for.</p>
+<p>Kicking tyres, it took just five minutes to (a) sign-up and install Tailscale on two nodes (a very old iMac, and a very old MacBook Air), (b) connect one to my home network, and other to a cellular network, and (c) open a connection between the two. The experience is like you&rsquo;re already there. Amazing! Here&rsquo;s <a href="https://tailscale.com/blog/how-tailscale-works/" title="How Tailscale works">how it works</a>.</p>
+<p>In 2010, Avery Pennarun <a href="https://apenwarr.ca/log/?m=201005" title="201005 - apenwarr">created sshuttle</a>, which could open a tunnel between my laptop and my then $2/mo web host (with no admin access) with just this command: </p>
+<pre><code>$ ./sshuttle -r &lt;username&gt;@&lt;webhost&gt; 0.0.0.0/0 -v
+</code></pre>
+<p>Running this in a Terminal, I could access internet on my laptop at web host&rsquo;s IP address &mdash; be it via browser, email, chat, terminal, or any app. In other words, with sshuttle I could re-purpose a cheap web host as my VPN! </p>
+<p>Like I said, I&rsquo;ve <a href="https://groups.google.com/d/msg/sshuttle/1-sZogGfAHM/yNNmMO0yR2kJ">experienced this magic</a> before, but Tailscale is an order of magnitude better, faster, and safer with <a href="https://www.wireguard.com/" title="WireGuard: fast, modern, secure VPN tunnel">WireGuard</a> as its data plane. Tailscale also happens to be an offering by Avery and team. These good engineers have been thinking about enabling a poor man&rsquo;s VPN for a decade, and are now working to get back the internet we&rsquo;ve all wanted &mdash; access our home computer(s) from the road without the complexity or the horrors of security that come along with it.</p>
+</article>
+<footer>
+  <span>&lsaquo; <a accesskey="j" title="Outbreak" href="/2020/outbreak">Prev</a></span>
+  <span><a accesskey="k" title="USFOS syntax" href="/2020/ust">Next</a> &rsaquo;</span>
+</footer>
+</main>
+</body>
+</html>
