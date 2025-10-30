@@ -14,6 +14,13 @@
   ],
   "items" : [
     {
+      "id" : "c782cef9be4d89ae22e9cec5d0bdda4526f04f5b",
+      "title" : "Fish functions",
+      "url" : "https://ckunte.net/2025/fish-func",
+      "content_text" : "For system information: sbcinf.fish function sbcinf set -l mem (free -h | awk \u0027/Mem:/ {print $3 \"/\" $2}\u0027) set -l dsk (df -h | awk \u0027/\\/$/ {print $3 \"/\" $2}\u0027) set -l tem (vcgencmd measure_temp | grep -o...",
+      "date_published" : "2025-10-30T22:43:00+08:00"
+    },
+    {
       "id" : "f59d692a283db2b77d77f0c043564b1a63ca334d",
       "title" : "shell functions for rebase",
       "url" : "https://ckunte.net/2025/rebase-func",
@@ -26,13 +33,6 @@
       "url" : "https://ckunte.net/2025/keyboard",
       "content_text" : "My oft-used at home is a VIA enabled, mechanical keyboard featuring 60-key hot-swappable, low-profile wisteria switches. I like the form factor, and...",
       "date_published" : "2025-10-05T13:17:00+08:00"
-    },
-    {
-      "id" : "9fdf3ecc084c70e59e0d840c9c573e342f936060",
-      "title" : "My father",
-      "url" : "https://ckunte.net/2025/my-father",
-      "content_text" : "He broke his right femur bone in July. After a successful operation involving a steel rod and a couple of screws to hold his leg joint, he was brought home on a stretcher, and recovery began with a regular dose of physiotherapy, medicine (incl....",
-      "date_published" : "2025-09-08T13:58:00+08:00"
     }    
   ]
 }
