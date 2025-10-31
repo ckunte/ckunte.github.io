@@ -43,7 +43,7 @@ squash c8fb9a8 # m:edit
 <p>The <a href="https://git-scm.com/docs/git-rebase" title="Reapply commits on top of another base tip">rebase</a> command feels a little tedious to type out at the prompt, and so this function (placed in <code>~/.config/fish/config.fish</code>) helps me do the job quickly by running the command <code>gr 4 master</code>, which translates to the first command above:</p>
 <pre><code class="language-sh"># fish function to rebase, e.g., gr 4 master
 function gr
-  git rebase -i origin/$argv[2]~argv[1] $argv[2]
+  git rebase -i origin/$argv[2]~$argv[1] $argv[2]
 end
 </code></pre>
 <p>Using two arguments for the freedom to define the number of commits, and the other being able to choose the branch. </p>
