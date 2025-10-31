@@ -142,6 +142,31 @@ function check_hashes
 end
 </code></pre>
 </li>
+<li>
+<p>Open folder from within WSL</p>
+<pre><code>function open
+    if test (count $argv) -eq 0
+        # No arguments: open current directory
+        explorer.exe .
+    else
+        for arg in $argv
+            # If it's a URL
+            if string match -qr '^https?://|^mailto:' $arg
+                explorer.exe $arg
+            # If it's a file or directory that exists
+            else if test -e $arg
+                explorer.exe (wslpath -w $arg)
+            # If it's a Windows-style path (C:\Users\...), try passing directly
+            else if string match -qr '^[A-Za-z]:\\' $arg
+                explorer.exe $arg
+            else
+                echo "open: '$arg' not found or invalid" &gt;&amp;2
+            end
+        end
+    end
+end
+</code></pre>
+</li>
 </ol>
 </article>
 <footer>
