@@ -17,7 +17,7 @@
       "id" : "c782cef9be4d89ae22e9cec5d0bdda4526f04f5b",
       "title" : "Fish functions",
       "url" : "https://ckunte.net/2025/fish-func",
-      "content_text" : "For system information: sbcinf.fish function sbcinf set -l mem (free -h | awk \u0027/Mem:/ {print $3 \"/\" $2}\u0027) set -l dsk (df -h | awk \u0027/\\/$/ {print $3 \"/\" $2}\u0027) set -l tem (vcgencmd measure_temp | grep -o...",
+      "content_text" : "This is a placeholder for my commonly used fish shell functions \u2014 saved as files under ~/.config/fish/functions/. For system information: sbcinf.fish #...",
       "date_published" : "2025-10-30T22:43:00+08:00"
     },
     {

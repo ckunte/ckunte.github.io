@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Chetan Kunté: Fish functions</title>
-<meta name="description" content="For system information: sbcinf.fish function sbcinf set..." />
+<meta name="description" content="This is a placeholder for my commonly used fish shell..." />
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="data:," />
 <link type="text/css" rel="stylesheet" href="/inc/home.css" />
@@ -19,10 +19,12 @@
 <time datetime="2025-10-30T22:43:00+08:00">
 30 Oct 2025, 
 3 min</time>
+<p>This is a placeholder for my commonly used <a href="https://fishshell.com/">fish</a> shell functions &mdash; saved as files under <code>~/.config/fish/functions/</code>.</p>
 <ol>
 <li>
 <p>For system information: <em>sbcinf.fish</em></p>
-<pre><code>function sbcinf
+<pre><code># sbcinf.fish
+function sbcinf
     set -l mem (free -h | awk '/Mem:/ {print $3 "/" $2}')
     set -l dsk (df -h | awk '/\/$/ {print $3 "/" $2}')
     set -l tem (vcgencmd measure_temp | grep -o -E '[[:digit:]].*')
@@ -41,7 +43,8 @@ end
 </li>
 <li>
 <p>For downloading a file from GitHub repo. with <code>ghdl user/repo/file.ext</code>. If specific about a branch, then this works too: <code>ghdl user/repo@master/file.ext</code></p>
-<pre><code>function ghdl
+<pre><code># ghdl.fish
+function ghdl
     if test (count $argv) -ne 1
         echo "Usage: ghdl user/repo[@branch]/path/to/file"
         return 1
@@ -94,9 +97,8 @@ end
 </li>
 <li>
 <p>Rebase function</p>
-<pre><code># rebase (master or bb branches)
+<pre><code># gr.fish
 # examples:
-#
 #   gr 4 master
 #   gr 3 bb
 #
@@ -107,7 +109,8 @@ end
 </li>
 <li>
 <p>Get the latest release version of a GitHub repo.</p>
-<pre><code># e.g. glr "ckunte/tce"
+<pre><code># glr.fish
+# e.g. glr "ckunte/tce"
 function glr \
     --argument-names user_repo
     curl \
@@ -119,7 +122,7 @@ end
 </li>
 <li>
 <p>Check file hash</p>
-<pre><code># Check hashes
+<pre><code># check_hashes.fish
 function check_hashes
     # Ensure the user provided a file argument
     if test (count $argv) -ne 1
@@ -144,7 +147,8 @@ end
 </li>
 <li>
 <p>Open folder from within WSL</p>
-<pre><code>function open
+<pre><code># open.fish
+function open
     if test (count $argv) -eq 0
         # No arguments: open current directory
         explorer.exe .
