@@ -1,0 +1,320 @@
+@charset "utf-8";
+@import url("/inc/xcode.min.css");
+:root {
+  --cwidth: 36em;
+  --link-dark: #00BFFF;
+  --lite-bc: #eee; 
+  --cfont: Noto Sans Mono, Consolas, ui-monospace, monospace;
+  --bfont: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+html {
+  -webkit-text-size-adjust: 100%
+}
+
+body {
+  font: 1.13rem/1.4 var(--bfont);
+  padding: 2.0ch 0.5ch;
+}
+
+footer,main {
+  margin: auto;
+  max-width: var(--cwidth)
+}
+/*
+aside::before {
+  content: "* * *";
+  display: flex;
+  justify-content: center;
+  color: lightslategray;
+  margin-bottom:0.5ch;
+}
+*/
+aside, footer, footer > p {
+  color: lightslategray;
+  /* font-style: italic; */
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  margin: 2ch auto; 
+  font-style: italic;
+}
+
+.logo {
+  margin: 1.5ch 1ch 1ch 1.5ch;
+}
+
+h1, h2, h3 {
+  font-family: var(--bfont);
+  line-height: 1.05;
+  margin-bottom: 0;
+  padding-bottom: 0
+}
+
+h1 {
+  font-size: 136%;
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 120%
+}
+
+h3 {
+  font-size: 113%
+}
+
+ul>li {
+  margin-left: 0
+}
+
+ul {
+  padding-left: 2.5ch
+}
+
+#notes,#proj { display: none }
+#notes:target, #proj:target { display: inline }
+
+li,p {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  hyphenate-limit-chars: 6 3 3;
+  hyphenate-limit-lines: 2;
+  hyphenate-limit-last: always;
+  hyphenate-limit-zone: 8%
+}
+
+figure {
+  min-width: 100%;
+  max-width: var(--cwidth);
+  margin-left: 0
+}
+
+figure>img,p>img,video,table {
+  width: 100%;
+  max-width: var(--cwidth)
+}
+
+figure>img,p>img {
+  min-width: 100%;
+  margin: 0;
+  border-radius: .5ch
+}
+
+video {
+  border-radius: .6ch
+}
+
+figure img+img,figure img+video,figure video+img,figure video+video {
+  margin-top: 0
+}
+
+figcaption {
+  font: 90%/130% var(--bfont);
+  color: lightslategray;
+  font-style: italic;
+  max-width: 100%;
+  margin: .5ch 1.5ch
+}
+
+time, small, #notes, i {
+  color: lightslategray;
+}
+
+small { font-size: 72% }
+
+time {
+  font-style: italic;
+}
+
+table {
+  border-spacing:0;
+  text-align:left;
+  border-collapse:collapse;
+  margin:2ch 0!important
+}
+tr:nth-child(n) {
+  border-top: 1px solid var(--lite-bc);
+  border-bottom: 1px solid var(--lite-bc)
+}
+
+th {
+  font-style: italic;
+  font-weight: normal  
+}
+
+th, td {
+  text-align:left;
+  vertical-align:top;
+  padding:0.5ch
+}
+/*
+p+p {
+  text-indent: 2ch;
+  margin-top: -1.5ch
+}
+*/
+mark {
+  background-color: #fffdaf
+}
+
+article.frontpage {
+  margin: 0;
+}
+
+blockquote {
+  margin: 0
+}
+
+blockquote p, blockquote li {
+  margin: 0 3ch;
+  font-style: italic
+}
+
+article.frontpage > p + p, blockquote > p + p { text-indent: 2ch }
+article.frontpage > p + p { margin-top:-1.5ch }
+
+blockquote>p:first-of-type::before {
+  content: open-quote;
+  margin-left: -1ch
+}
+
+blockquote>p:last-of-type::after {
+  content: close-quote
+}
+hr {
+  margin-top: 1lh;
+}
+.footnote hr {
+  margin:1.5rem auto 0.75rem 0;
+  width:36%;
+  border-color: var(--lite-hr);
+  border-style:solid;
+  border-width:1px 0 0
+}
+.footnote hr:after {
+  content: none!important
+}
+.footnote li {
+  font-size: 87%
+}
+.footnote li + li {
+  margin-top: -1ch;
+}
+hr {
+  border: none;
+  text-align: center
+}
+hr:after {
+  content: "* * *";
+  position: relative
+} /*
+hr {
+  color: lightslategray;
+  border: 0
+} */
+hr::after {
+  content: "* * *";
+  text-align: center;
+}
+pre, code {
+  font-family: var(--cfont);
+}
+pre {
+  border-radius: .4em
+}
+code {
+  font-size: 84%;
+}
+
+hr::after,pre,pre>code {
+  display: block
+}
+
+code,pre,pre>code {
+  background-color: #f4f4f4;
+}
+
+:not(pre)>code {
+  padding: 0 3px;
+  border-radius: 0.2ch;
+  background-color: #f4f4f4
+}
+
+pre>code {
+  overflow-x: auto;
+  border-radius: 1ch;
+  padding: 1ch 1.5ch
+}
+pre, code {
+  font-family: var(--cfont);
+}
+
+/* hide scrollbar in browsers */
+pre>code::-webkit-scrollbar {
+  display:none
+} /* in Webkit browsers */
+pre>code {
+  scrollbar-width: none
+} /* in Firefox */
+pre>code {
+  -ms-overflow-style:none
+}
+@media (prefers-color-scheme: dark) {
+  body, header, article, aside {
+    background-color: rgb(48,56,65)
+  }
+  h1, h2, h3, p, li, dl, details, summary, math > * {
+    color: #bbb;
+    background-color: transparent
+  }
+  table, hr, img.screen, img.fig, warn {
+    filter: invert(0.85)
+  }
+  pre {
+    filter: invert(0.9)
+  }
+  p > code, li > code {
+    background-color: #222
+  }
+  mark {
+    color: #FFD700;
+    background-color: #222
+  }
+  a {
+    color: var(--link-dark);
+  }
+  a:visited {
+    color: #FF85FF;
+  }
+}
+kbd {
+  /* text-transform: uppercase; */
+  font-size: 60%;
+  line-height: 0.75rem;
+  padding: 4px 8px 2px 8px;
+  margin: 2px;
+  border-radius: 5px;
+  border: 1px solid lightslategray;
+  border-bottom: 2px solid lightslategray;
+  vertical-align: middle;
+}
+/* KaTeX overflow */
+.katex-display > .katex {
+  display: inline-block;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y:hidden;
+  text-align: initial
+}
+.katex {
+  font: normal 1.13rem KaTeX_Main, Times New Roman, serif;
+  line-height: 1.4;
+  white-space: normal;
+  text-indent: 0
+}
+sup { vertcal-align: text-top; font-size: 69% }

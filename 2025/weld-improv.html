@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Endurance gain from weld improvements</title>
+<meta name="description" content="DNV has published RP-C203 Fatigue design of offshore steel structures (2025). It now...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Endurance gain from weld improvements</h1>
+<time datetime="2025-11-16T12:10:00+08:00">
+16 Nov 2025, 
+3 min</time>
+<p>DNV has published <em>RP-C203 Fatigue design of offshore steel structures (2025)</em>. It now covers bankable endurance<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> from weld improvement techniques such as grinding, and hammer peening.</p>
+<p>I&rsquo;ve taken a stab at comparing Tables 2-3 and F-15, see figure below. The legend  to be read as [N] &ndash; no improvements, [G] &ndash; grinding, and [P] &ndash; hammer peening.</p>
+<figure>
+  <img alt="S-N curves for tubular joints in air and in seawater" class="fig" src="/img/sncurves_t_rpc203-2025.svg">
+  <figcaption>S-N curves for tubular joints in seawater with cathodic protection without and with weld improvements (grinding, hammer peening) as per DNV RP-C203 (2025) standard.</figcaption>
+</figure>
+
+<details>
+<summary>Data and plot code for weld improvements</summary>
+
+
+<pre><code>curve,r_start,r_mid,r_end,a1,m1,a2,m2
+T (DNV 2025) [N],1.00E+03,1.80E+06,1.00E+08,12.180,3.0,16.130,5.0
+T (DNV 2025 [G]),1.00E+03,1.00E+06,1.00E+08,14.597,4.0,18.896,6.0
+T (DNV 2025 [P]),1.00E+03,1.00E+06,1.00E+08,17.082,5.0,21.515,7.0
+</code></pre>
+
+
+
+<pre><code class="language-py">#!/usr/bin/env python3
+# -*- encoding: utf-8 -*-
+# Grinding and hammer peening improvements in DNV-RP-C203 (2025)
+# snc.py  -- 2025 C Kunte
+
+# uv:require numpy
+# uv:require pandas
+# uv:require matplotlib
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import itertools
+import hashlib
+
+
+def lbls():
+    &quot;&quot;&quot;Apply consistent labels, legend, and grid.&quot;&quot;&quot;
+    plt.legend(loc=&quot;best&quot;, fontsize=&quot;small&quot;)
+    plt.xlabel(r&quot;Number of cycles, N&quot;)
+    plt.ylabel(r&quot;Hotspot stress, $\sigma$ (MPa)&quot;)
+    plt.grid(True, which=&quot;both&quot;, linestyle=&quot;--&quot;, linewidth=0.5)
+
+
+def sncurve(
+    curve,
+    r_start,
+    r_mid,
+    r_end,
+    a1,
+    m1,
+    a2,
+    m2,
+    color=None,
+    linestyle=None,
+):
+    # First slope
+    n1 = np.logspace(np.log10(r_start), np.log10(r_mid), num=200)
+    s1 = (n1 / 10**a1) ** (-1 / m1)
+
+    # Second slope, shifted to connect smoothly
+    n2 = np.logspace(np.log10(r_mid), np.log10(r_end), num=200)
+    s_mid = (r_mid / 10**a1) ** (-1 / m1)  # endpoint of first slope
+    s2 = s_mid * (n2 / r_mid) ** (
+        -1 / m2
+    )  # scale so it starts from s_mid
+
+    # Plot first segment with label
+    plt.loglog(
+        n1,
+        s1,
+        base=10,
+        label=f&quot;{curve} (m1={m1}, m2={m2})&quot;,
+        color=color,
+        linestyle=linestyle,
+    )
+
+    # Plot second segment without label
+    plt.loglog(n2, s2, base=10, color=color, linestyle=linestyle)
+
+
+def deterministic_color(name, colors):
+    &quot;&quot;&quot;
+    Return a deterministic color from a list, based on the curve name.
+    Uses a hash of the name so the color assignment is stable across runs.
+    &quot;&quot;&quot;
+    idx = int(hashlib.sha256(name.encode()).hexdigest(), 16) % len(
+        colors
+    )
+    return colors[idx]
+
+
+def main():
+    # === Read CSV file ===
+    # csv_file = input(&quot;Enter CSV filename (e.g., data.csv): &quot;).strip()
+    df = pd.read_csv(&quot;./sncurves_t.csv&quot;)
+
+    # === Define at least 10 distinct line styles ===
+    linestyles = [
+        &quot;-&quot;,
+        &quot;--&quot;,
+        &quot;-.&quot;,
+        &quot;:&quot;,
+        (0, (5, 10)),
+        (0, (3, 5, 1, 5)),
+        (0, (1, 10)),
+        (0, (5, 1)),
+        (0, (3, 1, 1, 1)),
+        (0, (2, 2)),
+    ]
+
+    # Use 10 distinct colors from matplotlib's tab10 colormap
+    colors = list(plt.cm.tab10.colors)
+
+    # Create a line style cycle
+    linestyle_cycle = itertools.cycle(linestyles)
+
+    # === Plot all curves ===
+    for _, row in df.iterrows():
+        color = deterministic_color(str(row[&quot;curve&quot;]), colors)
+        linestyle = next(linestyle_cycle)
+        sncurve(**row.to_dict(), color=color, linestyle=linestyle)
+
+    lbls()
+    plt.title(f&quot;S–N curves as per DNV RP-C203 (2025)&quot;)
+    plt.savefig(&quot;sncurves_t.svg&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+
+</details>
+
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>See also <a href="/2020/tsa-pilewelds">TSA for pile welds?</a> and <a href="/2014/sn-curves">S-N curves</a>.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+  <span>&lsaquo; <a accesskey="j" title="python on Windows" href="/2025/python-on-windows">Prev</a></span>
+  <span><a accesskey="k" href="/">Home</a> &rsaquo;</span>
+</footer>
+</main>
+</body>
+</html>
