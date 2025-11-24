@@ -70,8 +70,8 @@
 <li>A clutter-free access to text-only web browsers like lynx, links</li>
 <li>UTF-8 encoding compliance in both HTML and JSON feed (new)</li>
 </ul>
-<h2>Building JSON feed (2025)</h2>
-<p>JSON is an open standard file format, which has been in existence since the early 2000s. Created by Douglas Crockford, it has a simple, dictionary-like structure, e.g.,</p>
+<hr />
+<p><em>Building JSON feed (2025):</em> JSON is an open standard file format, which has been in existence since the early 2000s. Created by Douglas Crockford, it has a simple, dictionary-like structure, e.g.,</p>
 <pre><code class="language-json">{
     &quot;key&quot; : &quot;value&quot;,
 }
@@ -115,8 +115,8 @@
 
 </details>
 
-<h2>nginx (2025)</h2>
-<p>The 2025 version of setting up on a home network to serve a static local website is as follows. (Note: the file <code>/etc/nginx/nginx.conf</code> does not need editing at all, since it loads <code>*.conf</code> files under the <code>conf.d</code> folder.)</p>
+<hr />
+<p><em>Local server (NGINX 2025):</em> The 2025 version of setting up on a home network to serve a static local website is as follows. (Note: the file <code>/etc/nginx/nginx.conf</code> does not need editing at all, since it loads <code>*.conf</code> files under the <code>conf.d</code> folder.)</p>
 <ol>
 <li>
 <p>Install nginx</p>
@@ -162,10 +162,10 @@ sudo chmod g+s /var/www
 </li>
 </ol>
 <p>With this, the local website should be accessible at http://ck.lo</p>
-<h2>Author&rsquo;s age (2025)</h2>
-<p>In lieu of manually updating the age in the bio, I <a href="https://github.com/ckunte/chisel/commit/94a8416d0ffc79981c098ae691f922de046f7fff" title="Add a filter to display author's age">dropped a little filter</a> that picks up the DOB (using month and year) and computes it.</p>
-<h2>JSON feed ID as a SHA1 hash of the permalink (2025)</h2>
-<p>Another <a href="https://github.com/ckunte/chisel/commit/9daa8bbf078731cf498c72ef458805daf60e609d" title="Add a filter to turn JSON feed ID into a SHA1 hash of the permalink">filter to Jinja is added</a> to turn permalink of the note (or post) into a SHA1 hash.</p>
+<hr />
+<p><em>Author&rsquo;s age (2025):</em> In lieu of manually updating the age in the bio, I <a href="https://github.com/ckunte/chisel/commit/94a8416d0ffc79981c098ae691f922de046f7fff" title="Add a filter to display author's age">dropped a little filter</a> that picks up the DOB (using month and year) and computes it.</p>
+<hr />
+<p><em>JSON feed ID as a SHA1 hash of the permalink (2025):</em> Another <a href="https://github.com/ckunte/chisel/commit/9daa8bbf078731cf498c72ef458805daf60e609d" title="Add a filter to turn JSON feed ID into a SHA1 hash of the permalink">filter to Jinja is added</a> to turn permalink of the note (or post) into a SHA1 hash.</p>
 </article>
 <footer>
   <span>&lsaquo; <a accesskey="j" title="Storm safety" href="/2021/storm-safety">Prev</a></span>

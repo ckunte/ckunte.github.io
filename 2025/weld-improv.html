@@ -43,106 +43,45 @@ T (DNV 2025 [P]),1.00E+03,1.00E+06,1.00E+08,17.082,5.0,21.515,7.0
 # Grinding and hammer peening improvements in DNV-RP-C203 (2025)
 # snc.py  -- 2025 C Kunte
 
-# uv:require numpy
-# uv:require pandas
-# uv:require matplotlib
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import itertools
-import hashlib
 
 
 def lbls():
-    &quot;&quot;&quot;Apply consistent labels, legend, and grid.&quot;&quot;&quot;
     plt.legend(loc=&quot;best&quot;, fontsize=&quot;small&quot;)
     plt.xlabel(r&quot;Number of cycles, N&quot;)
     plt.ylabel(r&quot;Hotspot stress, $\sigma$ (MPa)&quot;)
     plt.grid(True, which=&quot;both&quot;, linestyle=&quot;--&quot;, linewidth=0.5)
 
 
-def sncurve(
-    curve,
-    r_start,
-    r_mid,
-    r_end,
-    a1,
-    m1,
-    a2,
-    m2,
-    color=None,
-    linestyle=None,
-):
+def sncurve(curve, r_start, r_mid, r_end, a1, m1, a2, m2, color):
     # First slope
     n1 = np.logspace(np.log10(r_start), np.log10(r_mid), num=200)
     s1 = (n1 / 10**a1) ** (-1 / m1)
 
-    # Second slope, shifted to connect smoothly
+    # Second slope
     n2 = np.logspace(np.log10(r_mid), np.log10(r_end), num=200)
-    s_mid = (r_mid / 10**a1) ** (-1 / m1)  # endpoint of first slope
-    s2 = s_mid * (n2 / r_mid) ** (
-        -1 / m2
-    )  # scale so it starts from s_mid
+    s_mid = (r_mid / 10**a1) ** (-1 / m1)
+    s2 = s_mid * (n2 / r_mid) ** (-1 / m2)
 
-    # Plot first segment with label
-    plt.loglog(
-        n1,
-        s1,
-        base=10,
-        label=f&quot;{curve} (m1={m1}, m2={m2})&quot;,
-        color=color,
-        linestyle=linestyle,
-    )
-
-    # Plot second segment without label
-    plt.loglog(n2, s2, base=10, color=color, linestyle=linestyle)
-
-
-def deterministic_color(name, colors):
-    &quot;&quot;&quot;
-    Return a deterministic color from a list, based on the curve name.
-    Uses a hash of the name so the color assignment is stable across runs.
-    &quot;&quot;&quot;
-    idx = int(hashlib.sha256(name.encode()).hexdigest(), 16) % len(
-        colors
-    )
-    return colors[idx]
+    plt.loglog(n1, s1, base=10, color=color,
+               label=f&quot;{curve} ($m_1$={m1}, $m_2$={m2})&quot;)
+    plt.loglog(n2, s2, base=10, color=color)
 
 
 def main():
-    # === Read CSV file ===
-    # csv_file = input(&quot;Enter CSV filename (e.g., data.csv): &quot;).strip()
     df = pd.read_csv(&quot;./sncurves_t.csv&quot;)
 
-    # === Define at least 10 distinct line styles ===
-    linestyles = [
-        &quot;-&quot;,
-        &quot;--&quot;,
-        &quot;-.&quot;,
-        &quot;:&quot;,
-        (0, (5, 10)),
-        (0, (3, 5, 1, 5)),
-        (0, (1, 10)),
-        (0, (5, 1)),
-        (0, (3, 1, 1, 1)),
-        (0, (2, 2)),
-    ]
+    # Exactly three colors, in order:
+    colors = [&quot;red&quot;, &quot;darkorange&quot;, &quot;green&quot;]
 
-    # Use 10 distinct colors from matplotlib's tab10 colormap
-    colors = list(plt.cm.tab10.colors)
-
-    # Create a line style cycle
-    linestyle_cycle = itertools.cycle(linestyles)
-
-    # === Plot all curves ===
-    for _, row in df.iterrows():
-        color = deterministic_color(str(row[&quot;curve&quot;]), colors)
-        linestyle = next(linestyle_cycle)
-        sncurve(**row.to_dict(), color=color, linestyle=linestyle)
+    for (i, (_, row)) in enumerate(df.iterrows()):
+        color = colors[i]  # select 1st, 2nd, 3rd
+        sncurve(**row.to_dict(), color=color)
 
     lbls()
-    plt.title(f&quot;S–N curves as per DNV RP-C203 (2025)&quot;)
+    plt.title(&quot;S–N curves as per DNV RP-C203 (2025)&quot;)
     plt.savefig(&quot;sncurves_t.svg&quot;)
 
 
