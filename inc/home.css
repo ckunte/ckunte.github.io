@@ -4,7 +4,7 @@
   --cwidth: 36em;
   --link-dark: #00BFFF;
   --lite-bc: #eee; 
-  --cfont: Noto Sans Mono, Consolas, ui-monospace, monospace;
+  --cfont: "PT Mono", Menlo, "TheSansMono Office", "Noto Sans Mono", Consolas, ui-monospace, monospace;
   --bfont: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
@@ -74,8 +74,8 @@ ul {
   padding-left: 2.5ch
 }
 
-#notes,#proj { display: none }
-#notes:target, #proj:target { display: inline }
+#notes,#proj,#about { display: none }
+#notes:target, #proj:target, #about:target { display: inline }
 
 li,p {
   word-wrap: break-word;
@@ -148,7 +148,7 @@ th {
 
 th, td {
   text-align:left;
-  vertical-align:top;
+  vertical-align:text-top;
   padding:0.5ch
 }
 /*
@@ -317,4 +317,4 @@ kbd {
   white-space: normal;
   text-indent: 0
 }
-sup { vertcal-align: text-top; font-size: 69% }
+sup { vertical-align: text-top; font-size: 69% }
