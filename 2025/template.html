@@ -19,7 +19,7 @@
 <time datetime="2025-03-30T22:17:00+08:00">
 30 Mar 2025, 
 7 min</time>
-<p>Developed by two graduate students from Technical University of Berlin, <a href="https://typst.app">Typst</a> is a computer program for typesetting documents, thoughtfully designed to be fast, portable, feature-packed, and script-able. It would not be unfair to call it a spiritual successor to <a href="https://en.wikipedia.org/wiki/LaTeX">LaTeX</a>. With contributions from talented open-source enthusiasts, it is evolving well and blowing-up LaTeX&rsquo;s handicaps, e.g.,</p>
+<p>Developed by two graduate students from Technical University of Berlin, <a href="https://typst.app">Typst</a> is a computer program for typesetting documents, thoughtfully designed to be fast, portable, feature-packed, and script-able. It would not be unfair to call it a spiritual successor to <a href="https://en.wikipedia.org/wiki/LaTeX">LaTeX</a>. With contributions from talented open-source enthusiasts, it is evolving well and blowing-up LaTeX&rsquo;s handicaps, viz.,</p>
 <ul>
 <li>compilation speed</li>
 <li>learning curve</li>
@@ -28,7 +28,7 @@
 <li>package size</li>
 <li>syntax highlighting</li>
 </ul>
-<p>With good defaults (font and paragraph properties, paper size, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned LaTeX user, then you&rsquo;d know how useful <a href="https://ctan.org/topic/class">document classes</a> are  &mdash; something Typst does not yet come pre-packaged with. And so, a little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for the users, by the users. If you&rsquo;re one of them, and your tastes are slightly different from those available there-in, then it would not hurt to know how to create a Typst template from scratch. Here is how.</p>
+<p>With good defaults (font and paragraph properties, paper size, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned LaTeX user, then you&rsquo;d know how useful <a href="https://ctan.org/topic/class">document classes</a> are  &mdash; something Typst does not yet come pre-packaged with. And so, a little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for users, by users. If you&rsquo;re one of them, and your tastes are slightly different from those available there-in, then it would not hurt to know how to create a Typst template from scratch. Here is how.</p>
 <p>Rule one of publishing is to separate presentation + styling from content, be it offline or online. So we create two files:</p>
 <ul>
 <li><em>main.typ</em> &mdash; this file will have all the report&rsquo;s content</li>
@@ -186,7 +186,7 @@
 <p>The entire table of contents block can be placed in a separate file, if you like, say, <em>toc.typ</em> and called on demand: with the following:</p>
 <pre><code>#include(&quot;toc.typ&quot;)
 </code></pre>
-<p>with the contents of the <em>toc.typ</em> file as below:</p>
+<p>with the contents of the <em>toc.typ</em> file, combining the above:</p>
 <pre><code>#outline(
   indent: 1em, 
   depth: 4,
