@@ -25,19 +25,19 @@
 <p>For system information: <em>sbcinf.fish</em></p>
 <pre><code># sbcinf.fish
 function sbcinf
-    set -l mem (free -h | awk '/Mem:/ {print $3 "/" $2}')
-    set -l dsk (df -h | awk '/\/$/ {print $3 "/" $2}')
-    set -l tem (vcgencmd measure_temp | grep -o -E '[[:digit:]].*')
-    set -l pow (vcgencmd measure_volts | sed 's/volt=//g')
-    set -l ipa (hostname -I | awk '{print $1}')
-    set -l upt (uptime -p | sed 's/^up //')
+  set -l mem (free -h | awk '/Mem:/ {print $3 "/" $2}')
+  set -l dsk (df -h | awk '/\/$/ {print $3 "/" $2}')
+  set -l tem (vcgencmd measure_temp | grep -o -E '[[:digit:]].*')
+  set -l pow (vcgencmd measure_volts | sed 's/volt=//g')
+  set -l ipa (hostname -I | awk '{print $1}')
+  set -l upt (uptime -p | sed 's/^up //')
 
-    echo "Board temp: $tem"
-    echo "Disk usage: $dsk"
-    echo "IP address: $ipa"
-    echo "Memory use: $mem"
-    echo "Power cons: $pow"
-    echo "Sys uptime: $upt"
+  echo "Board temp: $tem"
+  echo "Disk usage: $dsk"
+  echo "IP address: $ipa"
+  echo "Memory use: $mem"
+  echo "Power cons: $pow"
+  echo "Sys uptime: $upt"
 end
 </code></pre>
 </li>
@@ -45,39 +45,39 @@ end
 <p>For downloading a file from GitHub repo. with <code>ghdl user/repo/file.ext</code>. If specific about a branch, then this works too: <code>ghdl user/repo@master/file.ext</code></p>
 <pre><code># ghdl.fish
 function ghdl
-    if test (count $argv) -ne 1
-        echo "Usage: ghdl user/repo[@branch]/path/to/file"
-        return 1
-    end
+  if test (count $argv) -ne 1
+    echo "Usage: ghdl user/repo[@branch]/path/to/file"
+    return 1
+  end
 
-    set input $argv[1]
+  set input $argv[1]
 
-    # Split the input into repo and path
-    set repo_part (echo $input | cut -d'/' -f1-2)
-    set path_part (echo $input | cut -d'/' -f3-)
+  # Split the input into repo and path
+  set repo_part (echo $input | cut -d'/' -f1-2)
+  set path_part (echo $input | cut -d'/' -f3-)
 
-    # Extract user and repo (and optional branch)
-    set user (echo $repo_part | cut -d'/' -f1)
-    set repo_branch (echo $repo_part | cut -d'/' -f2)
+  # Extract user and repo (and optional branch)
+  set user (echo $repo_part | cut -d'/' -f1)
+  set repo_branch (echo $repo_part | cut -d'/' -f2)
 
-    if string match -q '*@*' $repo_branch
-        set repo (echo $repo_branch | cut -d'@' -f1)
-        set branch (echo $repo_branch | cut -d'@' -f2)
-    else
-        set repo $repo_branch
-        set branch "master"  # default fallback branch
-    end
+  if string match -q '*@*' $repo_branch
+    set repo (echo $repo_branch | cut -d'@' -f1)
+    set branch (echo $repo_branch | cut -d'@' -f2)
+  else
+    set repo $repo_branch
+    set branch "master"  # default fallback branch
+  end
 
-    if test -z "$user" -o -z "$repo" -o -z "$path_part"
-        echo "Error: Must be in the form user/repo[@branch]/path/to/file"
-        return 1
-    end
+  if test -z "$user" -o -z "$repo" -o -z "$path_part"
+    echo "Error: Must be in the form user/repo[@branch]/path/to/file"
+    return 1
+  end
 
-    # Construct modern raw.githubusercontent.com URL
-    set url "https://raw.githubusercontent.com/$user/$repo/refs/heads/$branch/$path_part"
+  # Construct modern raw.githubusercontent.com URL
+  set url "https://raw.githubusercontent.com/$user/$repo/refs/heads/$branch/$path_part"
 
-    echo "Downloading from: $url"
-    curl -LO $url
+  echo "Downloading from: $url"
+  curl -LO $url
 end
 </code></pre>
 </li>
@@ -112,11 +112,11 @@ end
 <pre><code># glr.fish
 # e.g. glr "ckunte/tce"
 function glr \
-    --argument-names user_repo
-    curl \
-        --silent \
-        "https://api.github.com/repos/$user_repo/releases/latest" \
-    | string match --regex '"tag_name": "\K.*?(?=")'
+  --argument-names user_repo
+  curl \
+      --silent \
+      "https://api.github.com/repos/$user_repo/releases/latest" \
+  | string match --regex '"tag_name": "\K.*?(?=")'
 end
 </code></pre>
 </li>
@@ -124,24 +124,24 @@ end
 <p>Check file hash</p>
 <pre><code># check_hashes.fish
 function check_hashes
-    # Ensure the user provided a file argument
-    if test (count $argv) -ne 1
-        echo "Usage: check_hashes &lt;file&gt;"
-        return 1
-    end
-    # Store the file path
-    set file $argv[1]
-    # Check if the file exists
-    if not test -e $file
-        echo "Error: File '$file' does not exist."
-        return 1
-    end
-    # Calculate and display the RMD160 hash
-    echo "RMD160 hash:"
-    printf "%s" "$file" | openssl dgst -rmd160
-    # Calculate and display the SHA256 hash
-    echo "SHA256 hash:"
-    printf "%s" "$file" | openssl dgst -sha256
+  # Ensure the user provided a file argument
+  if test (count $argv) -ne 1
+    echo "Usage: check_hashes &lt;file&gt;"
+    return 1
+  end
+  # Store the file path
+  set file $argv[1]
+  # Check if the file exists
+  if not test -e $file
+    echo "Error: File '$file' does not exist."
+    return 1
+  end
+  # Calculate and display the RMD160 hash
+  echo "RMD160 hash:"
+  printf "%s" "$file" | openssl dgst -rmd160
+  # Calculate and display the SHA256 hash
+  echo "SHA256 hash:"
+  printf "%s" "$file" | openssl dgst -sha256
 end
 </code></pre>
 </li>
@@ -149,25 +149,25 @@ end
 <p>Open folder from within WSL</p>
 <pre><code># open.fish
 function open
-    if test (count $argv) -eq 0
-        # No arguments: open current directory
-        explorer.exe .
-    else
-        for arg in $argv
-            # If it's a URL
-            if string match -qr '^https?://|^mailto:' $arg
-                explorer.exe $arg
-            # If it's a file or directory that exists
-            else if test -e $arg
-                explorer.exe (wslpath -w $arg)
-            # If it's a Windows-style path (C:\Users\...), try passing directly
-            else if string match -qr '^[A-Za-z]:\\' $arg
-                explorer.exe $arg
-            else
-                echo "open: '$arg' not found or invalid" &gt;&amp;2
-            end
-        end
+  if test (count $argv) -eq 0
+    # No arguments: open current directory
+    explorer.exe .
+  else
+    for arg in $argv
+      # If it's a URL
+      if string match -qr '^https?://|^mailto:' $arg
+        explorer.exe $arg
+      # If it's a file or directory that exists
+      else if test -e $arg
+        explorer.exe (wslpath -w $arg)
+      # If it's a Windows-style path (C:\Users\...), try passing directly
+      else if string match -qr '^[A-Za-z]:\\' $arg
+        explorer.exe $arg
+      else
+        echo "open: '$arg' not found or invalid" &gt;&amp;2
+      end
     end
+  end
 end
 </code></pre>
 </li>
@@ -175,8 +175,8 @@ end
 <p>Rename photos</p>
 <pre><code># renfoto.fish: rename photos e.g. renfoto ST-159
 function renfoto
-    set prefix $argv[1]
-    rename -N ...01 -X -e '$_ = $prefix . "-photo-$N"' *.png
+  set prefix $argv[1]
+  rename -N ...01 -X -e '$_ = $prefix . "-photo-$N"' *.png
 end
 </code></pre>
 </li>

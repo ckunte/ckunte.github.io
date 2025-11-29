@@ -120,13 +120,13 @@ figcaption {
   margin: .5ch 1.5ch
 }
 
-time, small, i {
+time, small, i, span.desc {
   color: lightslategray;
 }
 
 small { font-size: 72% }
 
-time {
+time, span.desc {
   font-style: italic;
 }
 
@@ -333,3 +333,4 @@ article pre code:before {
     text-align: right;
     color: #888;
 }
+span.desc { display: block; }
