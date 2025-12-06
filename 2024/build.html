@@ -92,11 +92,11 @@ build_latex:
 </code></pre>
 </li>
 <li>
-<p>Typst (Windows Cygwin) <code>Typst-Cyg.sublime-build</code>:</p>
+<p>Typst (Windows) <code>Typst-Win.sublime-build</code>:</p>
 <pre><code>{   
   "shell_cmd" : "typst compile \"$file_name\"",
   "selector" : "source.typ",
-  "path" : "C:\\Cygwin\\bin;$path",
+  "path" : "C:\\path_to_typst_binary_folder;$path",
   "working_dir" : "$file_path"
 }
 </code></pre>

@@ -166,6 +166,30 @@ sudo chmod g+s /var/www
 <p><em>Author&rsquo;s age (2025):</em> In lieu of manually updating the age in the bio, I <a href="https://github.com/ckunte/chisel/commit/94a8416d0ffc79981c098ae691f922de046f7fff" title="Add a filter to display author's age">dropped a little filter</a> that picks up the DOB (using month and year) and computes it.</p>
 <hr />
 <p><em>JSON feed ID as a SHA1 hash of the permalink (2025):</em> Another <a href="https://github.com/ckunte/chisel/commit/9daa8bbf078731cf498c72ef458805daf60e609d" title="Add a filter to turn JSON feed ID into a SHA1 hash of the permalink">filter to Jinja is added</a> to turn permalink of the note (or post) into a SHA1 hash.</p>
+<hr />
+<p><em>Binary executable (2025):</em> Nearly thirteen years after forking, updating, and personalising, I attempted creating a single binary executable of Chisel &mdash; now that my templates and config files are just as I like them to be, tested, and frozen. It was a nice moment when it successfully created a single binary application. Here&rsquo;s how I went about creating it:</p>
+<ol>
+<li>
+<p>Initialise the project with uv:</p>
+<pre><code>uv init
+uv add markdown jinja2
+uv pip install pyinstaller
+</code></pre>
+</li>
+<li>
+<p>Activate virtual environment from command prompt (with my shell being fish) from within the project folder:</p>
+<pre><code>source .venv/bin/activate.fish
+</code></pre>
+</li>
+<li>
+<p>Run compile command:</p>
+<pre><code>pyinstaller --onefile mc.py
+</code></pre>
+</li>
+<li>
+<p>Copy the generated <code>mc</code> binary executable from <code>./dist</code> folder to <code>/usr/local/bin</code>, so it&rsquo;s accessible from anywhere on command prompt.</p>
+</li>
+</ol>
 </article>
 <footer>
   <span>&lsaquo; <a accesskey="j" title="Storm safety" href="/2021/storm-safety">Prev</a></span>
