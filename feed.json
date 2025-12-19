@@ -17,7 +17,7 @@
       "id" : "e29e4e7e28ca06f5f776b587dd09f924ec79c2f0",
       "title" : "zellij terminal workspace",
       "url" : "https://ckunte.net/2025/zellij",
-      "content_text" : "A month or so ago, I began using zellij \u2014 as my workflow at work got complicated, I needed a single window but with multiple terminal prompts on the work laptop running debian (via WSL). I set a layout, which...",
+      "content_text" : "I began using zellij a month or so ago, as my workflow at work got complicated, for which, I needed a single window with multiple terminal prompts on the work laptop running debian (via WSL). Set a layout, which I...",
       "date_published" : "2025-12-18T21:39:00+08:00"
     },
     {

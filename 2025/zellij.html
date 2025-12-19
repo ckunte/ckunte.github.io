@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: zellij terminal workspace</title>
-<meta name="description" content="A month or so ago, I began using zellij — as my...">
+<meta name="description" content="I began using zellij a month or so ago, as my workflow at...">
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -19,7 +19,7 @@
 <time datetime="2025-12-18T21:39:00+08:00">
 18 Dec 2025, 
 1 min</time>
-<p>A month or so ago, I began using <a href="https://zellij.dev/">zellij</a> &mdash; as my workflow at work got complicated, I needed a single window but with multiple terminal prompts on the work laptop running debian (via WSL). I set a layout, which I was previously setting-up manually at every terminal session &mdash; a pane split horizontally, like so, and saved it to <code>~/.config/zellij/layouts/ck_layout.kdl</code>:</p>
+<p>I began using <a href="https://zellij.dev/">zellij</a> a month or so ago, as my workflow at work got complicated, for which, I needed a single window with multiple terminal prompts on the work laptop running debian (via WSL). Set a layout, which I was previously setting-up manually at every terminal session &mdash; a pane split horizontally, like so, and saved it to <code>~/.config/zellij/layouts/ck_layout.kdl</code>:</p>
 <pre><code>layout {
     pane split_direction=&quot;horizontal&quot; {
         pane // top pane
@@ -30,7 +30,7 @@
 <p>and called this in within <code>~/.config/zellij/config.kdl</code> like so:</p>
 <pre><code>default_layout &quot;ck_layout&quot;
 </code></pre>
-<p>Pretty simple. Now every terminal session loads with this pre-set layout, and it saves me a few keystrokes. I like this simple split so much that I&rsquo;ve ported this layout to <a href="/2024/pi5">my daily driver</a> as well.</p>
+<p>Every terminal session now loads with this pre-set layout, and it saves me a few keystrokes. I like this simple split so much that I&rsquo;ve ported it to <a href="/2024/pi5">my daily driver</a>.</p>
 <p><img alt="My zellij terminal workspace" src="/img/zellij.png" /></p>
 </article>
 <footer>
