@@ -18,7 +18,7 @@
 <h1>Anatomy of a Typst template</h1>
 <time datetime="2025-03-30T22:17:00+08:00">
 30 Mar 2025, 
-7 min</time>
+8 min</time>
 <p>Developed by two graduate students from Technical University of Berlin, <a href="https://typst.app">Typst</a> is a computer program for typesetting documents, thoughtfully designed to be fast, portable, feature-packed, and script-able. It would not be unfair to call it a spiritual successor to <a href="https://en.wikipedia.org/wiki/LaTeX">LaTeX</a>. With contributions from talented open-source enthusiasts, it is evolving well and blowing-up LaTeX&rsquo;s handicaps, viz.,</p>
 <ul>
 <li>compilation speed</li>
@@ -281,6 +281,13 @@
 )
 </code></pre>
 <p>In the above, <code>..,</code> can be used to skip data from preceding columns.</p>
+<h2>WSL specific</h2>
+<p>To make Windows fonts available for Typst via WSL in fish shell, set this once:</p>
+<pre><code>set -Ux TYPST_FONT_PATHS &quot;/mnt/c/Windows/Fonts&quot;
+</code></pre>
+<p>Alternatively, add this line to config.fish:</p>
+<pre><code>set -gx TYPST_FONT_PATHS &quot;/mnt/c/Windows/Fonts&quot;
+</code></pre>
 </article>
 <footer>
   <span>&lsaquo; <a accesskey="j" title="Med school calendar" href="/2025/mcal">Prev</a></span>
