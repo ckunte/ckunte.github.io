@@ -18,7 +18,7 @@
 <h1>Anatomy of a Typst template</h1>
 <time datetime="2025-03-30T22:17:00+08:00">
 30 Mar 2025, 
-8 min</time>
+9 min</time>
 <p>Developed by two graduate students from Technical University of Berlin, <a href="https://typst.app">Typst</a> is a computer program for typesetting documents, thoughtfully designed to be fast, portable, feature-packed, and script-able. It would not be unfair to call it a spiritual successor to <a href="https://en.wikipedia.org/wiki/LaTeX">LaTeX</a>. With contributions from talented open-source enthusiasts, it is evolving well and blowing-up LaTeX&rsquo;s handicaps, viz.,</p>
 <ul>
 <li>compilation speed</li>
@@ -281,6 +281,64 @@
 )
 </code></pre>
 <p>In the above, <code>..,</code> can be used to skip data from preceding columns.</p>
+<h2>Records</h2>
+<p>For a project I&rsquo;m on, there&rsquo;s a need to call a bunch of scope-specific records into scope documents, so rather than having this data per scope in each document file, I can place the records like so:</p>
+<pre><code>// data.typ
+#let records = (
+    &quot;co076&quot;: (
+        &quot;sco&quot;: &quot;CO-076&quot;,
+        &quot;loc&quot;: &quot;MCS&quot;,
+        &quot;nti&quot;: &quot;1000022092&quot;,
+        &quot;wor&quot;: &quot;100070489&quot;,
+        &quot;aut&quot;: &quot;C Kunte&quot;,
+        &quot;chk&quot;: &quot;&quot;,
+        &quot;app&quot;: &quot;&quot;,
+        &quot;poi&quot;: &quot; &quot;
+    ),
+    ...
+    [other records here]
+    ...
+    ),
+    &quot;st689&quot;: (
+        &quot;sco&quot;: &quot;ST-689&quot;,
+        &quot;loc&quot;: &quot;MBS&quot;,
+        &quot;nti&quot;: &quot;1000058228&quot;,
+        &quot;wor&quot;: &quot;100101333&quot;,
+        &quot;aut&quot;: &quot;C Kunte&quot;,
+        &quot;chk&quot;: &quot;&quot;,
+        &quot;app&quot;: &quot;&quot;,
+        &quot;poi&quot;: &quot; &quot;
+    )
+)
+</code></pre>
+<p><em>data.typ</em> becomes the single source of truth, and easy to update one file than having to open hundreds of files and edit, if the scope records change, or require updates. Using <em>data.typ</em>, I can call this in each document like so, say, in this case for a scope ID: co076:</p>
+<pre><code>#import &quot;tmpl.typ&quot;: scopesheet
+#import &quot;data.typ&quot;: records
+#let fm = records.at(&quot;co076&quot;)
+#show: scopesheet.with(..fm)
+</code></pre>
+<p>Using this, within the document, I can call the data like <code>#fm.sco</code>, which corresponds to calling the value of key <code>sco</code> (scope id), and other data from the structure in <code>data.typ</code> above. I find this handy and neat.</p>
+<p>For the above to work, the template file <em>tmpl.typ</em> needs to contain the following:</p>
+<pre><code>//  2025 C Kunte
+#let scopesheet(
+  sco: none,
+  loc: none,
+  wor: none,
+  nti: none,
+  aut: none,
+  poi: none,
+  chk: none,
+  app: none,
+  body,
+) = {
+  // metadata for the scopesheet (or paper)
+  set document(title: sco, author: aut)
+  ...
+  ... // other template specific instructions
+  ...
+  body
+}
+</code></pre>
 <h2>WSL specific</h2>
 <p>To make Windows fonts available for Typst via WSL in fish shell, set this once:</p>
 <pre><code>set -Ux TYPST_FONT_PATHS &quot;/mnt/c/Windows/Fonts&quot;
