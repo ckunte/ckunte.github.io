@@ -5,7 +5,7 @@
   --link-dark: #00BFFF;
   --lite-bc: #eee; 
   --cfont: "PT Mono", Menlo, "TheSansMono Office", "Noto Sans Mono", Consolas, ui-monospace, monospace;
-  --bfont: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --bfont: system-ui, -apple-system, verdana, sans-serif;
 }
 
 html {
