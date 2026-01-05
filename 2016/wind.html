@@ -18,7 +18,7 @@
 <h1>Wind</h1>
 <time datetime="2016-09-06T21:50:00+08:00">
 6 Sep 2016, 
-6 min</time>
+5 min</time>
 <p>The following offers a way to visualize wind profile for a given <code>Uo</code> and <code>t</code> for a range of heights up to a maximum of <code>h</code>.</p>
 <h2>Based on ISO 19901-1:2005</h2>
 <figure>
@@ -26,7 +26,9 @@
   <figcaption>Wind as per ISO 19901</figcaption>
 </figure>
 
-<p>Plot code is as follows.</p>
+<details>
+<summary>Plot code</summary>
+
 <pre><code class="language-python">#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
@@ -79,6 +81,9 @@ def main():
 if __name__ == '__main__':
     main()
 </code></pre>
+
+</details>
+
 <h2>Probability density function</h2>
 <p>The following code lets me regenerate wind pdf function plots shown below.</p>
 <figure>
@@ -86,7 +91,9 @@ if __name__ == '__main__':
   <figcaption>Probability density function</figcaption>
 </figure>
 
-<p>Plot code:</p>
+<details>
+<summary>Plot code</summary>
+
 <pre><code class="language-python">#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 &quot;&quot;&quot;
@@ -124,10 +131,16 @@ def main():
 if __name__ == '__main__':
     main()
 </code></pre>
+
+</details>
+
 <h2>Based on EN 1991-1-4:2005</h2>
 <p>The generic nature of EN&rsquo;s applicability makes for a complicated recipe. The number of things one needs to determine before one even gets to wind velocity is staggering. Here&rsquo;s a flavour of things that come with the territory.</p>
 <p><img class="fig" src="/img/enwind.png" alt="PVP, RF, TI, TLS"></p>
-<p>Here&rsquo;s the code for these plots.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>Here&rsquo;s the code for these plots.</p>
+<details>
+<summary>Plot code</summary>
+
 <pre><code class="language-python">#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
@@ -247,17 +260,13 @@ def main():
 if __name__ == '__main__':
     main()
 </code></pre>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>The arguments in square brackets are optional, while at least one in those parenthesis is mandatory. (Now using the smart <a href="http://docopt.org/" title="docopt—language for description of command-line interfaces">docopt</a>, which makes coding for arguments super simple.)&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
+
+</details>
+
+<p>The arguments in square brackets (in the code above) are optional, while at least one in those parenthesis is mandatory. (Now using the smart <a href="http://docopt.org/" title="docopt—language for description of command-line interfaces">docopt</a>, which makes coding for arguments super simple.)</p>
 </article>
 <footer>
-  <span>&lsaquo; <a accesskey="j" title="Berthing fenders" href="/2016/fenders">Prev</a></span>
+  <span>&lsaquo; <a accesskey="j" title="dwm notes" href="/2016/dwm">Prev</a></span>
   <span><a accesskey="k" title="End releases" href="/2016/relconv">Next</a> &rsaquo;</span>
 </footer>
 </main>

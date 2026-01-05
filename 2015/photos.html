@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Saving photos</title>
+<meta name="description" content="iPhoto is a real piece of work. It grows and grows until it becomes too big to fail. Not once...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Saving photos</h1>
+<time datetime="2015-05-02T22:09:00+08:00">
+2 May 2015, 
+2 min</time>
+<p>iPhoto is a real piece of work. It grows and grows until it becomes too big to fail. Not once does it warn that the library size is too big. (It would not surprise me if the new <a href="https://www.apple.com/osx/photos/">Photos</a> app follows its predecessor&rsquo;s blind-side in archive management features. Just don&rsquo;t bet your life on it.) Not once does it offer to split the library in to archive-able, and salvageable chunks of photos. Then it fails &mdash; no notice, no warning. Just blank; just dead. It corrupts files, it loses its meta data, and it loses your photos. Crashing, tumbling, and taking along with all your little precious memories you have had of your family, things, and of people you were fortunate to meet and be friends with. With the instant gratification of taking unlimited digital photos comes along the challenge of managing, and dangers of losing them is real. It happened to us. It could, in all likelihood, happen to you.</p>
+<p>The iMac at home was used mostly by the wife and children, and they assumed iPhoto was all good, until it could no longer open our photos. 60 gigs of our lives inconveniently gone. It took some time for the shock to register, and by the end of it, I was in a scramble mode, trying whatever I could to get our stuff off iPhoto Libraries. </p>
+<p>We were extremely lucky to have raw photo backups on CDs &mdash; not up to date, of course, but we are lucky to have them at all. Last month, I dumped CD after CD on to an SSD drive, and began preparing them in a way I&rsquo;ve never done before: rename, add a rolling counter to files, prepend each file with its folder name, and update file permissions. (Contrary to apps sold for as high as $20.- on the App Store, you are better off running on command line, once you get comfortable with it.) I use <code>zmv</code> below for doing all that in one go (run <code>autoload zmv</code> at prompt once before the following):</p>
+<pre><code>zmv '(*).JPG' '$1.jpg'; c=1 zmv '*.jpg' '${PWD##*/}-$((c++)).jpg'; chmod 0644 *;
+</code></pre>
+<p>Then I got wife to get us a bunch of SD cards, to which I plan to write the sorted, labelled files above back once, lock, and save them in a safe place. (I am just beginning to realize that the real value of having hard copies is equivalent to at least 2-3 virtual copies.)</p>
+</article>
+<footer>
+  <span>&lsaquo; <a accesskey="j" title="Ground zero ten years on" href="/2014/phuket">Prev</a></span>
+  <span><a accesskey="k" title="Chain stiffness" href="/2015/ea">Next</a> &rsaquo;</span>
+</footer>
+</main>
+</body>
+</html>

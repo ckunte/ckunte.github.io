@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Enclose text</title>
+<meta name="description" content="In Windows, <a href="https://youtu.be/qm99S2UpiwA" title="Demo enclosing text within...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Enclose text</h1>
+<time datetime="2025-05-18T21:42:00+08:00">
+18 May 2025, 
+2 min</time>
+<p>In Windows, <a href="https://youtu.be/qm99S2UpiwA" title="Demo enclosing text within delimiters">enclosing text</a> with delimiters using a keyboard shortcut (see examples below) can be achieved using a <a href="https://www.autohotkey.com/">AutoHotkey</a> script.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<ul>
+<li><kbd>Ctrl</kbd><kbd> &ldquo;</kbd>:  adds double quotes to the phrase</li>
+<li><kbd>Ctrl</kbd><kbd> &lsquo;</kbd>:  adds single quotes &ndash; do &ndash;</li>
+<li><kbd>Ctrl</kbd><kbd> ]</kbd>:  adds square brackets &ndash; do &ndash;</li>
+<li><kbd>Ctrl</kbd><kbd> )</kbd>:  adds parentheses &ndash; do &ndash;</li>
+</ul>
+<pre><code class="language-ahk">#Requires AutoHotkey &gt;=v2.0
+
+; Function to enclose selected text
+EnclSelText(openChar, closeChar) {
+    A_Clipboard := &quot;&quot;
+    SendEvent &quot;^c&quot;
+    if ClipWait(0.1) {
+        cSelected := A_Clipboard
+        Send openChar cSelected closeChar
+    }
+}
+
+; Hotkeys with different enclosures
+^)::EnclSelText(&quot;(&quot;, &quot;)&quot;)
+^]::EnclSelText(&quot;[&quot;, &quot;]&quot;)
+^&quot;::EnclSelText('&quot;', '&quot;')
+^'::EnclSelText(&quot;'&quot;, &quot;'&quot;)
+</code></pre>
+<p>In MacOS, the above can be achieved using <a href="https://support.apple.com/en-au/guide/automator/welcome/mac">Automator</a>; steps described below.</p>
+<ol>
+<li><em>Automator &rarr; New &rarr; Quick Action</em></li>
+<li>Drag action <em>Run Shell Script</em> from <em>Library</em> to the right pane</li>
+<li>Right pane settings:<ul>
+<li>Set to &ldquo;Automatic (text)&rdquo;</li>
+<li>Enable &ldquo;Output replaces selected text&rdquo;</li>
+<li>Set <code>/bin/bash</code></li>
+<li><em>Pass input</em> &ldquo;as arguments&rdquo;</li>
+<li>In the box, add <code>echo "($1)"</code></li>
+</ul>
+</li>
+<li>Save as <em>Enclose parentheses</em>. Gets saved in <em>~/Library/Services</em> folder.</li>
+<li>From <em>System Settings &rarr; Keyboard shortcuts &rarr; Services &rarr; Text &rarr;</em> Click on <em>Enclose parentheses</em>, and hit <kbd>Ctrl</kbd><kbd>0</kbd>, click <em>Done</em> </li>
+</ol>
+<p>This above would now make the action available in any application.</p>
+<figure>
+  <img alt="Enclose text in MacOS using Automator." src="/img/textencl-1.png" loading=lazy />
+  <img alt="Services menu under Keyboard shortcuts" src="/img/textencl-2.png" loading=lazy />
+  <figcaption>Enclose text in MacOS using Automator (top); Services under Keyboard shortcuts to add <kbd>Ctrl</kbd><kbd>0</kbd> to Enclose parentheses (bott).</figcaption>
+</figure>
+
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>This note is after all about saving keystrokes.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+  <span>&lsaquo; <a accesskey="j" title="Wave" href="/2025/wave">Prev</a></span>
+  <span><a accesskey="k" title="Flare radiation" href="/2025/radiation">Next</a> &rsaquo;</span>
+</footer>
+</main>
+</body>
+</html>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: python on Windows</title>
-<meta name="description" content="Setting python up on Windows 11 is needlessly complex,...">
+<meta name="description" content="I realise what I illustrate below is still for someone familiar with the command-line, and...">
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -19,6 +19,8 @@
 <time datetime="2025-11-08T17:19:00+08:00">
 8 Nov 2025, 
 3 min</time>
+<p>I realise what I illustrate below is still for someone familiar with the command-line, and the concept of <a href="https://docs.python.org/3/library/venv.html">virtual environments</a>. If you&rsquo;re a beginner, then you can&rsquo;t go wrong with <a href="https://thonny.org/" title="Python IDE for beginners">Thonny</a>; get a portable version and try.</p>
+<hr />
 <p>Setting <a href="https://www.python.org/">python</a> up on Windows 11 is needlessly complex, but it does not have to be, <a href="https://learn.microsoft.com/en-us/windows/python/beginners">Microsoft&rsquo;s own guide</a> notwithstanding.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> For its part, python has been a <a href="https://xkcd.com/1987/">victim of its own success</a>. The best way to overcome system-wide conflicts and other teething issues is by setting-up and managing project-specific versions and modules via virtual environments. The absolute best tool for this job is <a href="https://docs.astral.sh/uv/">uv</a> from the boutique start-up, <a href="https://astral.sh/">Astral</a>. It gets you off the ground like nothing ever has before. Here&rsquo;s how.</p>
 <ol>
 <li>
@@ -69,7 +71,7 @@ uv add numpy matplotlib pandas
 </div>
 </article>
 <footer>
-  <span>&lsaquo; <a accesskey="j" title="Fish functions" href="/2025/fish-func">Prev</a></span>
+  <span>&lsaquo; <a accesskey="j" title="shell functions" href="/2025/shell-func">Prev</a></span>
   <span><a accesskey="k" title="Endurance gain from weld improvements" href="/2025/weld-improv">Next</a> &rsaquo;</span>
 </footer>
 </main>
