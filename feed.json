@@ -14,13 +14,6 @@
   ],
   "items" : [
     {
-      "id" : "e29e4e7e28ca06f5f776b587dd09f924ec79c2f0",
-      "title" : "zellij terminal workspace",
-      "url" : "https://ckunte.net/2025/zellij",
-      "content_text" : "I began using zellij a month or so ago, as my workflow at work got complicated, for which, I needed a single window with multiple terminal prompts on the work laptop running debian (over \u003ca...",
-      "date_published" : "2025-12-18T21:39:00+08:00"
-    },
-    {
       "id" : "111773e408137fa5466e6ec41e0645bd9c2eb1c9",
       "title" : "Endurance gain from weld improvements",
       "url" : "https://ckunte.net/2025/weld-improv",
@@ -33,6 +26,13 @@
       "url" : "https://ckunte.net/2025/python-on-windows",
       "content_text" : "Beginners can\u2019t go wrong with Thonny (portable) and can ignore the following \u2014 meant for those familiar with CLI and the concept of \u003ca...",
       "date_published" : "2025-11-08T17:19:00+08:00"
+    },
+    {
+      "id" : "820eb7e05826faa516db84819b683c4dfa169984",
+      "title" : "shell functions",
+      "url" : "https://ckunte.net/2025/shell-func",
+      "content_text" : "For rebase Often I find the need to squash commits, especially those that don\u2019t need to stand-alone. And so little a function, which is more an alias with...",
+      "date_published" : "2025-10-05T15:40:00+08:00"
     }    
   ]
 }
