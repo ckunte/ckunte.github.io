@@ -18,21 +18,24 @@
       "title" : "Endurance gain from weld improvements",
       "url" : "https://ckunte.net/2025/weld-improv",
       "content_text" : "DNV has published RP-C203 Fatigue design of offshore steel structures (2025). It now covers bankable endurance1 from weld improvement techniques such as grinding, and hammer...",
-      "date_published" : "2025-11-16T12:10:00+08:00"
+      "date_published" : "2025-11-16T12:10:00Z",
+      "date_modified" : "2025-11-18T13:05:57Z"
     },
     {
       "id" : "51f40daeafad1a43699091cb088c501686843f13",
       "title" : "python on Windows",
       "url" : "https://ckunte.net/2025/python-on-windows",
-      "content_text" : "Beginners can\u2019t go wrong with Thonny (portable) and can ignore the following \u2014 meant for those familiar with CLI and the concept of \u003ca...",
-      "date_published" : "2025-11-08T17:19:00+08:00"
+      "content_text" : "Beginners cannot go wrong with Thonny (portable) and can ignore the following \u2014 meant for those familiar with CLI and the concept of \u003ca...",
+      "date_published" : "2025-11-08T17:19:00Z",
+      "date_modified" : "2026-01-26T09:20:36.869240Z"
     },
     {
       "id" : "820eb7e05826faa516db84819b683c4dfa169984",
       "title" : "shell functions",
       "url" : "https://ckunte.net/2025/shell-func",
       "content_text" : "For rebase Often I find the need to squash commits, especially those that don\u2019t need to stand-alone. And so little a function, which is more an alias with...",
-      "date_published" : "2025-10-05T15:40:00+08:00"
+      "date_published" : "2025-10-05T15:40:00Z",
+      "date_modified" : "2026-01-06T08:30:15.337704Z"
     }    
   ]
 }
