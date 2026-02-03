@@ -17,8 +17,8 @@
 <article>
 <h1>shell functions</h1>
 <time datetime="2025-10-05T15:40:00Z">
-5 Oct 2025, 
-6 min</time>
+5 Oct 2025 &sdot;  
+6 min read</time>
 <h2>For rebase</h2>
 <p>Often I find the need to <a href="https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History">squash commits</a>, especially those that don&rsquo;t need to stand-alone. And so little a function, which is more an alias with arguments, is used for the job, so I don&rsquo;t have to think. The <a href="https://git-scm.com" title="git -- a free and open source distributed version control system">git</a> command I use for this in, say, <code>master</code> branch, looks like this:</p>
 <pre><code class="language-sh">git rebase -i origin/master~4 master

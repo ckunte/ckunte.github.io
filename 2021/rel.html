@@ -17,8 +17,8 @@
 <article>
 <h1>Release notes</h1>
 <time datetime="2021-02-21T22:50:00Z">
-21 Feb 2021, 
-10 min</time>
+21 Feb 2021 &sdot;  
+5 min read</time>
 <p>The publishing mechanism assembled to produce this website is a topic likely of little interest, nonetheless, I&rsquo;d like to, if only as release notes. But first, some trivia.</p>
 <p>By 2010, I was fed-up with a popular open source web publishing software I&rsquo;d been using since 2004. Its code base was changing so rapidly that I could not keep up. To quote <a href="https://tom.preston-werner.com/2008/11/17/blogging-like-a-hacker.html" title="Blogging Like a Hacker">Tom Preston-Werner</a> (2008):</p>
 <blockquote>
@@ -46,8 +46,8 @@
 <li>Fenced code markdown extension enabled (new)</li>
 <li>Generator specific config file (new)</li>
 <li>Re-factored to python 3 (new)</li>
-<li>Select contributions sent upstream via pull requests (update)</li>
-<li>Taxonomy (tag) feature added (new, Nov 2023)</li>
+<li>Select contributions sent upstream via pull requests (update)
+ Taxonomy (tag) feature added (new, Nov 2023)</li>
 </ul>
 <h2>Model</h2>
 <ul>
@@ -70,171 +70,6 @@
 <li>A clutter-free access to text-only web browsers like lynx, links</li>
 <li>UTF-8 encoding compliance in both HTML and JSON feed (new)</li>
 </ul>
-<hr />
-<p><em>Building JSON feed (2025):</em> JSON is an open standard file format, which has been in existence since the early 2000s. Created by Douglas Crockford, it has a simple, dictionary-like structure, e.g.,</p>
-<pre><code class="language-json">{
-    &quot;key&quot; : &quot;value&quot;,
-}
-</code></pre>
-<p>In 2017, two entrepreneurs developed a <a href="https://www.jsonfeed.org">JSON feed spec.</a>, leveraging the simplicity of JSON format. The spec is a lightweight alternative to XML-heavy formats (like RSS or Atom), and despite its recency, it enjoys mainstream support across feed reader apps. </p>
-<p>The first I wrote a template to produce <a href="/feed.json">JSON feed</a> for this web site was in 2020. Over the next few years, I dismantled the Atom feed, leaving only JSON feed as the channel to alert the subscriber of a new note, whenever I produced one. </p>
-<p>While the spec allows html content, using <code>content_text</code> I think is more appropriate for a notification system. This is aside from being simpler and readable, and so that is what I use. <a href="https://jinja.palletsprojects.com/" title="Jinja">Jinja</a> has some <a href="https://jinja.palletsprojects.com/en/stable/templates/#filters">nice filters</a> (viz., <a href="https://jinja.palletsprojects.com/en/stable/templates/#jinja-filters.tojson">tojson</a>, <a href="https://jinja.palletsprojects.com/en/stable/templates/#jinja-filters.truncate">truncate</a>, and <a href="https://jinja.palletsprojects.com/en/stable/templates/#jinja-filters.striptags">striptags</a>), making it easy to produce a JSON feed.</p>
-<details>
-<summary>The template to produce a valid JSON feed for Chisel.</summary>
-
-
-<pre><code class="language-json">{% from 'sitesettings.j2' import site_title, site_author, site_url, site_desc -%}
-{
-  &quot;version&quot; : &quot;https://jsonfeed.org/version/1.1&quot;,
-  &quot;user_comment&quot; : &quot;This feed lets you know when a new note is published. Copy the following URL -- {{ site_url }}/feed.json -- and add it to your feed reader.&quot;,
-  &quot;title&quot; : &quot;{{ site_author }}&quot;,
-  &quot;home_page_url&quot; : &quot;{{ site_url }}&quot;,
-  &quot;feed_url&quot; : &quot;{{ site_url }}/feed.json&quot;,
-  &quot;description&quot; : &quot;{{ site_desc | title }}&quot;,
-  &quot;authors&quot; : [
-    {
-      &quot;name&quot; : &quot;{{ site_author }}&quot;,
-      &quot;url&quot; : &quot;{{ site_url }}&quot;
-    }
-  ],
-  &quot;icon&quot; : &quot;{{ site_url }}/inc/apple-touch-icon.png&quot;,
-  &quot;favicon&quot; : &quot;{{ site_url }}/inc/apple-touch-icon.png&quot;,
-  &quot;items&quot;: [
-  {%- for entry in entries %}
-    {
-      &quot;id&quot; : &quot;{{ site_url }}/{{ entry.url }}&quot;,
-      &quot;title&quot; : &quot;{{ entry.title }}&quot;,
-      &quot;url&quot; : &quot;{{ site_url }}/{{ entry.url }}&quot;,
-      &quot;content_text&quot; : {{ entry.content|truncate|striptags|tojson }},
-      &quot;date_published&quot; : &quot;{{ entry.feed_date }}&quot;
-    }{%- if not loop.last %},{%- endif %}
-  {%- endfor %}    
-  ]
-}
-</code></pre>
-
-</details>
-
-<hr />
-<p><em>Local server (NGINX 2025):</em> The 2025 version of setting up on a home network to serve a static local website is as follows. (Note: the file <code>/etc/nginx/nginx.conf</code> does not need editing at all, since it loads <code>*.conf</code> files under the <code>conf.d</code> folder.)</p>
-<ol>
-<li>
-<p>Install nginx</p>
-<pre><code>sudo apt update
-sudo apt install nginx-light
-</code></pre>
-</li>
-<li>
-<p>Upload a folder to be served, e.g., <code>ck.lo</code> in the example above to be under <code>/var/www/</code>. </p>
-</li>
-<li>
-<p>Create a file named <code>virtual.conf</code> under <code>/etc/nginx/conf.d</code>, and populate it with the following:</p>
-<pre><code>server {
-    listen 80;
-    server_name ck.lo;
-    location / {
-        root /var/www/ck.lo;
-        index index.html;
-        try_files $uri $uri/ $uri.html =404;
-    }
-    error_page 404 /404.html;
-}
-</code></pre>
-<p>Add more server blocks to the file, if there is a need to serve more than one local website. Test it with <code>sudo nginx -t</code> to ensure there are no errors.</p>
-</li>
-<li>
-<p>Set permissions for the server folder <code>/var/www</code></p>
-<pre><code>sudo find /var/www -type d -exec chmod 755 {} \;
-sudo find /var/www -type f -exec chmod 644 {} \;
-sudo usermod -a -G www-data $USER
-sudo chmod g+s /var/www
-</code></pre>
-</li>
-<li>
-<p>Reload nginx</p>
-<pre><code>sudo systemctl reload nginx
-</code></pre>
-</li>
-<li>
-<p>Optional: In <code>/etc/pihole/custom.list</code>, set local DNS like so. The local IP address in the following is but an example.</p>
-<pre><code>10.0.1.100 ck.lo
-</code></pre>
-</li>
-</ol>
-<p>With this, the local website should be accessible at http://ck.lo</p>
-<hr />
-<p><em>Author&rsquo;s age (2025):</em> In lieu of manually updating the age in the bio, I <a href="https://github.com/ckunte/chisel/commit/94a8416d0ffc79981c098ae691f922de046f7fff" title="Add a filter to display author's age">dropped a little filter</a> that picks up the DOB (using month and year) and computes it.</p>
-<hr />
-<p><em>JSON feed ID as a SHA1 hash of the permalink (2025):</em> Another <a href="https://github.com/ckunte/chisel/commit/9daa8bbf078731cf498c72ef458805daf60e609d" title="Add a filter to turn JSON feed ID into a SHA1 hash of the permalink">filter to Jinja is added</a> to turn permalink of the note (or post) into a SHA1 hash.</p>
-<hr />
-<p><em>Binary executable (2025):</em> Nearly thirteen years after forking, updating, and personalising, I attempted creating a single binary executable of Chisel &mdash; now that my templates and config files are just as I like them to be, tested, and frozen. It was a nice moment when it successfully created a single binary application. Here&rsquo;s how I went about creating it:</p>
-<ol>
-<li>
-<p>Initialise the project with uv:</p>
-<pre><code>uv init
-uv add markdown jinja2
-uv pip install pyinstaller
-</code></pre>
-</li>
-<li>
-<p>Activate virtual environment from command prompt (with my shell being fish) from within the project folder:</p>
-<pre><code>source .venv/bin/activate.fish
-</code></pre>
-</li>
-<li>
-<p>Run compile command:</p>
-<pre><code>pyinstaller --onefile mc.py
-</code></pre>
-</li>
-<li>
-<p>Copy the generated <code>mc</code> binary executable from <code>./dist</code> folder to <code>/usr/local/bin</code>, so it&rsquo;s accessible from anywhere on command prompt.</p>
-</li>
-</ol>
-<hr />
-<p><em>Date modified (2026):</em> The generator now <a href="https://github.com/ckunte/chisel/commit/1a1b123c3c50f6629a1c21b80370985d17ef159d" title="Include date modified">includes this code</a> to capture like so:</p>
-<pre><code class="language-py">import subprocess
-from datetime import datetime, timezone
-
-def git_modified_date(path):
-    &quot;&quot;&quot;
-    Return last git commit date as strict RFC3339 (UTC, Z).
-    Falls back to filesystem mtime.
-    &quot;&quot;&quot;
-    try:
-        out = subprocess.check_output(
-            [&quot;git&quot;, &quot;log&quot;, &quot;-1&quot;, &quot;--format=%cI&quot;, &quot;--&quot;, str(path)],
-            stderr=subprocess.DEVNULL,
-            text=True,
-        ).strip()
-
-        if out:
-            dt = datetime.fromisoformat(out)
-            return dt.astimezone(timezone.utc).isoformat().replace(&quot;+00:00&quot;, &quot;Z&quot;)
-
-    except Exception:
-        pass
-
-    # Fallback: filesystem mtime → RFC3339 UTC
-    dt = datetime.fromtimestamp(path.stat().st_mtime, tz=timezone.utc)
-    return dt.isoformat().replace(&quot;+00:00&quot;, &quot;Z&quot;)
-</code></pre>
-<p>register <code>date_modified</code> key like so:</p>
-<pre><code class="language-py">files.append(
-    {
-        ...
-        # new (git-based)
-        &quot;date_modified&quot;: date_modified,
-    }
-)
-</code></pre>
-<p>and then to emit it in the feed, I&rsquo;ve added this to the template:</p>
-<pre><code>{
-  ...
-  ...
-  &quot;date_published&quot; : &quot;{{ entry.feed_date }}&quot;,
-  &quot;date_modified&quot; : &quot;{{ entry.date_modified }}&quot;
-}
-</code></pre>
 </article>
 <footer>
   <span>&lsaquo; <a accesskey="j" title="Storm safety" href="/2021/storm-safety">Prev</a></span>

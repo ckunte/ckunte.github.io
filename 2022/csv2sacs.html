@@ -17,8 +17,8 @@
 <article>
 <h1>CSV to SACS seastate</h1>
 <time datetime="2022-11-10T22:20:00Z">
-10 Nov 2022, 
-11 min</time>
+10 Nov 2022 &sdot;  
+11 min read</time>
 <p>At work, we&rsquo;ve been looking to determine cyclic axial capacity of a fixed platform&rsquo;s drilled and grouted foundations in calcareous soils from storm time-history sets. The approach is described in a paper titled <a href="https://research-repository.uwa.edu.au/en/publications/axial-and-lateral-pile-design-in-carbonate-soils" title="C.T. Erbrich, et al., UWA, 2010.">Axial and lateral pile design in carbonate soils</a> by C.T. Erbrich, et al. (2010). The team is looking to generate pile loads from this using Bentley&rsquo;s SACS analysis suite. When totalled it adds to upwards of 30,000 discreet load cases.</p>
 <p>With the archaic fixed-format, reminiscent of FORTRAN, SACS is unfriendly when it comes to developing user input files by hand, and in our case a seastate load input file. With 8,000 load cases, this requires generating about 127,000 unique lines of input, per history, error-free. Manually this is impractical.</p>
 <p>I volunteered to find a way to automate this, if storm history were made available in comma separated value (CSV) files, which our Metocean team kindly did make. Last weekend, I rolled up sleeves and began coding in earnest in python, using <a href="https://pandas.pydata.org" title="A fast, powerful, flexible and easy to use open source data analysis and manipulation tool, built on top of the Python programming language.">pandas</a> dataframe structure, to turn thousands of lines of Metocean data into hundreds of thousands of ungodly SACS input. I am glad that I now have a working script that does this in a couple of seconds. The approach to generating input file is done in two steps:</p>

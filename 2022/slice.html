@@ -17,8 +17,8 @@
 <article>
 <h1>Slice lists</h1>
 <time datetime="2022-06-04T15:21:00Z">
-4 Jun 2022, 
-3 min</time>
+4 Jun 2022 &sdot;  
+3 min read</time>
 <p>Recently, I received a document register consisting of hundreds of line items. Given the structure, it wasn&rsquo;t easy to sort items, say for a particular month, or about a certain asset-type. The raw data contained over 25 columns with all sorts of information, of which I required only four. So, instead of using <a href="https://en.wikipedia.org/wiki/Grep">grep</a>, I figured I&rsquo;d slice the raw data with <a href="https://pandas.pydata.org">Pandas</a> first. </p>
 <p>The demo below runs through the large register and gets me, say, a list of deliverables for April. The script (a) reads a <a href="https://en.wikipedia.org/wiki/Comma-separated_values">csv</a> file into memory, (b) sorts it by a specific column, (c) selects only the columns I need, (d) writes it all to a new csv file, and (e) also prints this list to screen.</p>
 <figure>
