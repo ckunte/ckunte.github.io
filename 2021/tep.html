@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Managing editor plug-ins</title>
+<meta name="description" content="Package Control supplements and enhances the functionality of Sublime Text. It offers a couple...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Managing editor plug-ins</h1>
+<time datetime="2021-06-26T16:36:00Z">26 Jun 2021</time>
+<p><a href="https://packagecontrol.io" title="The Sublime Text package manager.">Package Control</a> supplements and enhances the functionality of Sublime Text. It offers a couple of ways end-users can install and use plug-ins, viz., (a) from the official index list, which requires developers to make an effort to <a href="https://packagecontrol.io/docs/submitting_a_package" title="Submitting a package -- Package Control">submit theirs</a>, or (b) it allows a package repository to be added directly to Sublime Text without the need to go via the method (a) route. Both these methods are described in <a href="https://packagecontrol.io/docs/usage" title="Package Control Usage">Usage</a>. Here is a demo covering both methods.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<figure>
+  <video src="https://user-images.githubusercontent.com/177423/123505842-d5c62000-d693-11eb-903c-6da7322947bc.mov" data-canonical-src="https://user-images.githubusercontent.com/177423/123505842-d5c62000-d693-11eb-903c-6da7322947bc.mov" controls="controls" muted="muted"></video>
+  <figcaption>Ways to install packages (plug-ins) in Sublime Text.</figcaption>
+</figure>
+
+<p>The two packages <a href="/2020/sacs_st" title="SACS syntax for Sublime Text">sacs_st</a> and <a href="/2020/ust" title="USFOS syntax for Sublime Text">usfos_st</a> got developed because I needed syntax highlighting for my model files. I took the time to have them listed, thinking these could readily be useful to others too. Whereas for <a href="https://github.com/ckunte/latex-snippets-st" title="Custom LaTeX snippets for use in Sublime Text.">latex-snippets-st</a>, my other package, I decided not, since Sublime Text is pre-bundled with a good LaTeX package already; my above package supplements it with personalised triggers and snippets. Still the interested can easily install. See the video from 36s onward on how-to.</p>
+<p><a href="https://github.com/junegunn/vim-plug" title="Minimalist Vim plugin manager.">Vim Plug</a> is a one-line installer, followed by a simple block within <code>.vimrc</code> to download and install the plug-ins of choice. Here is an example using my <a href="/2021/latex-snippets-vim" title="LaTeX snippets for Vim and Neovim.">latex-snippets-vim</a> plug-in.</p>
+<pre><code>call plug#begin('~/.vim/plugged')
+Plug 'sirver/ultisnips'
+Plug 'ckunte/latex-snippets-vim'
+call plug#end()
+</code></pre>
+<p><code>Plug</code> calls GitHub repositories by default. Then all one needs is reload <code>.vimrc</code> and <code>:PlugInstall</code> to install plug-ins. Plug-ins can be updated with <code>:PlugUpdate</code>. Removing plug-ins is also as easy as removing <code>Plug</code> lines from <code>.vimrc</code>, reload, and running <code>:PlugClean</code> from within Vim. See a demo below.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
+<figure>
+  <video src="https://user-images.githubusercontent.com/177423/123516204-7f75d300-d6cd-11eb-82a1-7433b4750ff1.mov" data-canonical-src="https://user-images.githubusercontent.com/177423/123516204-7f75d300-d6cd-11eb-82a1-7433b4750ff1.mov" controls="controls" muted="muted"></video>
+  <figcaption>Updating plug-ins via Vim Plug.</figcaption>
+</figure>
+
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Each method has its benefits. Method (a) offers greater visibility to end-users, while method (b) enables greater control and access to packages that may not be available from Package Control&rsquo;s global list.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>See also <a href="https://nickjanetakis.com/blog/why-and-how-i-use-vim-plug-to-manage-my-vim-plugins" title="Why and How I Use Vim-Plug to Manage My Vim Plugins — Nick Janetakis">Nick&rsquo;s video commentary</a> regarding Vim Plug.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Jacket flooding" href="/2021/jf">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Tube slenderness" href="/2021/slenderness">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

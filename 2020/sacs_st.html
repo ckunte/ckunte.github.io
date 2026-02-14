@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: SACS syntax</title>
+<meta name="description" content="Bentley’s SACS is the other suite I often use at work. So in the tradition of improving one’s...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>SACS syntax</h1>
+<time datetime="2020-11-01T10:38:00Z">1 Nov 2020</time>
+<p>Bentley&rsquo;s <a href="https://www.bentley.com/en/products/brands/sacs">SACS</a> is the other suite I often use at work. So in the <a href="/2020/ust" title="USFOS syntax in ST3">tradition</a> of improving one&rsquo;s own work environment, I extended syntax-highlighting for SACS input files with this public repository <a href="https://github.com/ckunte/sacs_st" title="SACS syntax for Sublime Text">sacs_st</a>. Here is a view of a couple of files syntax-highlighted in <a href="https://www.sublimetext.com/" title="Sublime Text - A sophisticated text editor for code, markup and prose">Sublime Text</a>.</p>
+<figure>
+  <img alt="SACS input file syntax-highlighted in Sublime Text." src="/img/2020-sacs_st.png">
+  <figcaption>SACS input file syntax-highlighted in Sublime Text.</figcaption>
+</figure>
+
+<p>Ensure SACS input files end with <code>.inp</code> for syntax highlighting to work.</p>
+<p>With this package now available from <a href="https://packagecontrol.io/packages/SACS" title="SACS - Packages - Package Control">Package Control</a>, <code>sacs_st</code> can be installed from directly within Sublime Text. Here is how:</p>
+<ol>
+<li>From <em>Tools</em>, select <em>Install Package Control&hellip;</em> (Skip if already installed.) </li>
+<li>From <em>Preferences &gt; Package Control &gt; Install Package</em>, search for <code>sacs</code> and select.</li>
+</ol>
+<h2>Trivia</h2>
+<p>SACS commands are spread across its numerous manuals, and so it was an interesting exercise in amassing them all into a <a href="https://gist.github.com/ckunte/d4bd35e2ac07dc6d575d95c60a61a8ef" title="SACS commands common across its modules · GitHub">list</a> first, and then sort them to remove duplicates. But before doing so, I wanted to see <a href="https://gist.github.com/ckunte/d4bd35e2ac07dc6d575d95c60a61a8ef" title="SACS commands common across its modules · GitHub">which ones were repeated</a>. So I wrote this script to find out:</p>
+<pre><code class="language-python">#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+# Find most common sacs commands across modules
+# 2020 ckunte
+
+import re
+from collections import Counter
+
+# read a file containing all sacs commands
+commands = re.findall(r'\w+', open('sacs-commands-all.txt').read())
+
+# print 85 most common commands across all sacs modules
+mcom = Counter(commands).most_common(85)
+for com, nos in mcom:
+    print(&quot;{:&lt;12}{:&lt;9}&quot;.format(com, nos))
+</code></pre>
+<p>The number 85 in the code above is arbitrary. I tried a few others before like 100, 90, until single occurrences of commands reduced to just a couple. Now that I think of it, there is an even simpler way to sort unique list of commands using chained shell commands like so:</p>
+<pre><code>curl https://gist.githubusercontent.com/ckunte/d4bd35e2ac07dc6d575d95c60a61a8ef/raw/07cdd051893455544cac2185c08a83aab3e468e1/sacs-commands-all.txt | sort | uniq -c | sort -nr | grep -v "#"
+</code></pre>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Dropped pipe" href="/2020/impact">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Shell buckling" href="/2020/ebs">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

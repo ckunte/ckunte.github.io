@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Building a model</title>
+<meta name="description" content="A few months ago, I found the need to rebuild a complex finite element model of a jacket...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Building a model</h1>
+<time datetime="2020-10-04T14:50:00Z">4 Oct 2020</time>
+<p>A few months ago, I found the need to rebuild a complex finite element model of a jacket substructure. This was after exhausting the option of modifying one built by an agency. I needed to shift two of jacket&rsquo;s horizontal frames in the water column, and move to re-align all the associated frames and elements. Thereafter port the model to USFOS error-free, re-code loads, hydrodynamic properties, marine growth, and re-attach foundation model before proceeding to perform a series of non-linear progressive collapse analyses.</p>
+<p>Every time I tried modifying the geometry of the existing model, I found the highly fragmented launch truss in my way. The more I tried changing it, the more I found it exhausting and frustrating. But I dreaded building one from scratch more. For one, the existing model was built by a team of engineers, had undergone rigorous quality control, and was the foundation upon which an entire phase of the project was engineered. In other words, I was not sure I&rsquo;d do any better than this team. And two, it&rsquo;s been years since I built one from ground up, and so it was going to test my rusty skills, and hammer my confidence if I failed.</p>
+<p>On building a model, Dr Holm&aring;s once said to me:</p>
+<blockquote>
+<p>Build your computer model like you would build a scaled physical model with details relevant and sufficient (no less and no more) to undertake model testing.</p>
+</blockquote>
+<p>It&rsquo;s common sense, of course, but in reality give man a sophisticated piece of software only to watch him get entangled in complexity. People build the most complex models even when all they need is a simple one. That said, it is hard not to empathise with teams that work under tremendous time pressures, and there are no credits for creating task-specific models. Instead, teams build one that can be used and re-purposed for performing a series of tasks.</p>
+<p>Fortunately, my task is always specific &mdash; concept development, stress-testing asset integrity, design optimisation, or trouble-shooting. So Dr Holm&aring;s&rsquo;s words have since been guiding me.</p>
+<p>Planning my approach on building a model first on a piece of paper was therapeutic, and I set myself ample time, just to be consoled that I had the time necessary to build one needed for the task. In the process, I re-discovered that symmetry is my friend, which helps one produce error-free replicable and merge-able geometry. The planning allowed identifying parts of the structure I could replicate. The first part (a 2D frame) I actually built using a spreadsheet &mdash; by mapping key coordinates, and then exporting it to a comma separated file.</p>
+<pre><code>Label, ID, X, Y, Z
+NODE,4,-15.0,-23.50,-18.0
+NODE,5,-15.0,23.50,-18.0
+NODE,6,15.0,-23.50,-18.0
+NODE,7,15.0,23.50,-18.0
+NODE,8,0.0,-36.50,-62.37
+...
+</code></pre>
+<p>Then I wrote this tiny script to format the above csv file (say, <code>part.csv</code>):</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- encoding: utf-8 -*-
+&quot;&quot;&quot;Format model data from CSV file
+2020 ckunte
+
+Usage: gendata.py --fn=filename.ext
+       gendata.py --help
+       gendata.py --version
+
+Options:
+  --help             Show help screen
+  --fn=filename.ext  Furnish datafile, e.g., part.csv
+  --version          Show version
+&quot;&quot;&quot;
+from docopt import docopt
+import csv
+from tabulate import tabulate
+
+args = docopt(__doc__, version=&quot;Format model data from CSV file, 0.1&quot;)
+f = str(args[&quot;--fn&quot;])
+
+with open(f, &quot;r&quot;) as csvfile:
+    alldata = []
+    reader = csv.reader(csvfile, skipinitialspace=True)
+    for i in reader:
+        alldata.append(i)
+    print(tabulate(alldata, headers=&quot;firstrow&quot;, floatfmt=&quot;.6f&quot;))
+</code></pre>
+<p>This would format the <code>part.csv</code> file and produce the following output, which could be copy-pasted (or exported) to a new input file.</p>
+<pre><code>$ python3 gendata.py --fn=part.csv
+Label      ID           X           Y            Z
+-------  ----  ----------  ----------  -----------
+NODE        4  -15.000000  -23.500000   -18.000000
+NODE        5  -15.000000   23.500000   -18.000000
+NODE        6   15.000000  -23.500000   -18.000000
+NODE        7   15.000000   23.500000   -18.000000
+NODE        8    0.000000  -36.500000   -62.370000
+...
+</code></pre>
+<p>The good thing about the script is that it does not care how long your csv file is. For example, if it is less than ten lines, then writing a script to format it is an overkill. But if it is made up of hundreds, then mindless formatting by hand is taxing. So it helps to work smart, while also keeping the edited file error-free.</p>
+<p>For parts that had complex geometric transitions, I ended up modelling these in SACS first as SACS Precede has excellent modelling features. In aggregate 25% of the model was built by hand and the rest by replication &mdash; via copying, mirroring, and offsetting. In the part built by hand, I selectively excluded features in the stiffness model that were either not relevant or whose exclusion would not impact the quality of results. The parts excluded from the substructure pushover model, while retaining their self-weight, were:</p>
+<ol>
+<li>Topsides<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></li>
+<li>Pile sleeves<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></li>
+<li>Complex joint cans and conical transition segments within horizontal frames</li>
+<li>Joint cans for reinforcing braces</li>
+<li>Certain (secondary) supporting diagonal members</li>
+<li>Conductor guide frames through the water column</li>
+<li>Mudmats, and</li>
+<li>Miscellaneous appurtenances</li>
+</ol>
+<p>Many items from the list above could also be excluded because I had prior estimates of loads from the environment (wave, wind, and current), which could be suitably factored without the need to have a full geometry for generating hydrodynamic loading accurately from the simplified model alone. This is not always possible, especially if one does not have the results from a detailed model that could be re-purposed, but in this case, it helped save a substantial amount of time. In the case of the latter, one could still reasonably account for geometry by hand-calculating effective contributions via drag and mass coefficients (<em>Cd</em> and <em>Cm</em> respectively), like so:</p>
+<p>$$ C_d = \frac{\Sigma(A_i \cdot C_{di})}{A^{\prime}} $$</p>
+<p>$$ C_m = \frac{\Sigma(V_i \cdot C_{mi})}{V^{\prime}} $$</p>
+<p>where,</p>
+<ul>
+<li><em>Ai</em> &ndash; drag area of a component (typically projected),</li>
+<li><em>Cdi</em> &ndash; corresponding drag coefficient,</li>
+<li><em>A&rsquo;</em> &ndash; drag area of adjusted members (typically projected),</li>
+<li><em>Vi</em> &ndash; volume of a component, </li>
+<li><em>Cmi</em> &ndash; corresponding mass coefficient, and</li>
+<li><em>V&rsquo;</em> &ndash; volume of adjusted members</li>
+</ul>
+<p>Any manual work demands time, and therefore it&rsquo;s a trade-off &mdash; whether to hand-code coefficients or to model the entire geometry. Most time-constrained engineers tend to take the latter route, since it is easier to build geometry than it is to calculate coefficients for adjusted members in at least three directions.<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup></p>
+<figure>
+  <img alt="A pushover model" class="fig" src="/img/model.png" loading="lazy">
+  <figcaption>Building this model from scratch with error-checking, testing for integrity, and preparing it to be ready for pushover took about 30 hours.</figcaption>
+</figure>
+
+<p>In summary, taking the road generally not taken was both fruitful and satisfying. I could produce comparable results with a substantially simpler model, while also marginally improving its reserve strength in certain directions. Sometimes all that matters is moving the needle a little bit &mdash; in incremental and positive ways that is not only reassuring to the business, but also in building confidence.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>While keeping load distribution intact via reactions and moments.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>Instead, I modelled piles to be connected directly to the diaphragm plates, which in turn lace jacket legs. I did this to simplify the model, since bond strength between piles and pile sleeves, which is enabled via infill grout, is assumed to be sufficiently developed to not undermine pile-to-sleeve mechanical strength at collapse level loads.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>Drag and inertia coefficients for various shapes are available in &sect;6.8 Hydrodynamic loading, in the seminal book, <em>Dynamics of Fixed Marine Structures</em>, Barltrop and Adams, Third Edition, 1991.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="CLI" href="/2020/cli">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Unconditional" href="/2020/unconditional">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

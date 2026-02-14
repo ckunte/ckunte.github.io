@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Dropped pipe</title>
+<meta name="description" content="Last week I had an interesting problem to review at work: For a falling body through the water...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Dropped pipe</h1>
+<time datetime="2020-10-18T09:29:00Z">18 Oct 2020</time>
+<p>Last week I had an interesting problem to review at work: For a falling body through the water column, I needed to find the impact energy if it hit infrastructure on seabed. I haven&rsquo;t ever done this before, which itself is a question, isn&rsquo;t it? </p>
+<p>I brought this up during a FaceTime call with my daughter at  university. She said she had written a paper in her pre-university IB diploma years entitled, <em>&ldquo;Investigating the relationship between the radius of a body and terminal velocity&rdquo;</em>, and emailed a copy. She used <em>honey</em> as the medium, and determined the submerged mass of the falling body, honey&rsquo;s viscosity, et al. How cool is that?</p>
+<p>Back to the problem, one can find a wide variety of examples online using a spherical object, and you&rsquo;d wonder why. It&rsquo;s because much of the theory is from <a href="https://en.wikipedia.org/wiki/Stokes%27_law">Stoke&rsquo;s Law</a>. For his experiments, George Stokes used a sphere as the falling body. Whereas my falling body was a pipe with open ends, and I had to calculate its drag force. While Stoke&rsquo;s Law itself is not directly applicable, since it uses properties of a sphere, the basic approach by Stokes for calculating the terminal velocity is still valid.</p>
+<h2>Impact energy</h2>
+<p>Impact energy (W) of a falling body through fluid can be expressed as follows:</p>
+<p>$$ W = \frac{1}{2} m v^2 $$</p>
+<p>where, <em>m</em> is the submerged mass of the object, and <em>v</em> is the velocity of the falling object.</p>
+<h2>Terminal velocity</h2>
+<p>From first principles, as the pipe falls through seawater, its gravitational force (<em>F<sub>g</sub></em>) is resisted by its drag force (<em>F<sub>d</sub></em>). The maximum velocity achievable by a falling object is known as the <em>terminal velocity</em> (<em>v<sub>t</sub></em>), at which <em>Fg</em> = <em>Fd</em> and buoyancy.</p>
+<p>$$ F_g = F_d $$</p>
+<p>$$ m g = F_{dn} + F_{dt} $$</p>
+<p><em>F<sub>dn</sub></em> is drag force for a cross section normal to the direction of motion, which uses the normal coefficient of drag, <em>C<sub>dn</sub></em>. Whereas <em>F<sub>dt</sub></em> is the drag (frictional) force generated due to the surface area that is parallel to the direction of motion, and which uses the tangential coefficient of drag, <em>C<sub>dt</sub></em>.</p>
+<p>$$ F_{dn} = \frac{1}{2} \rho C_{dn} A v^2 $$</p>
+<p>where, <em>&rho;</em> is the seawater density, and <em>A</em> is the cross sectional area of the pipe.</p>
+<p>$$ F_{dt} = \frac{1}{2} \rho C_{dt} \pi D L v^2 $$</p>
+<p>where, <em>D</em> and <em>L</em> are pipe diameter and length respectively. Notice that in <em>F<sub>dt</sub></em>, I have used only the outer surface. If the diameter is sufficiently large, then one could also potentially consider drag from pipe&rsquo;s inner surface. To keep the problem simple, I have chosen to ignore it because flow through pipe may modify its <em>C<sub>dt</sub></em> value, since Reynolds number (an indicator of fluid flow) may change (potentially making it a turbulent flow) when considered within the pipe. Also, the <em>C<sub>dt</sub></em> value is already so low at 0.008 for the outer surface, that ignoring surface friction inside the pipe is not too inaccurate.</p>
+<p>In the above, <em>F<sub>d</sub></em> formulation is for a pipe falling vertically (i.e., with its longitudinal axis parallel to the direction of motion). This is the worst case since any change in the angle of incidence relative to the direction of motion increases drag substantially due to projected surface area times the drag coefficient.</p>
+<p>This then becomes:</p>
+<p>$$ mg = \frac{1}{2} \rho (C_{dn} A + C_{dt} \pi D L) v_t^2 $$</p>
+<p>Finding terminal velocity (<em>v<sub>t</sub></em>) from above is straight forward, as below:</p>
+<p>$$ v_t = \sqrt{\frac{mg}{\frac{1}{2} \rho (C_{dn} A + C_{dt} \pi D L)}} $$</p>
+<p>Once the terminal velocity is known, we can find the time it takes the dropped pipe from surface to reach seabed using the following expression:</p>
+<p>$$ y(t) = y_0 - \left(\frac{v_t^2}{g}\right) \cdot \ln \cosh\left(\frac{gt}{v_t}\right) $$</p>
+<p>where, <em>y(t)</em> is the altitude w.r.t. time, <em>g</em> is the acceleration due to gravity, <em>y<sub>0</sub></em> is the initial altitude, <em>t</em> is time elapsed, and <em>v<sub>t</sub></em> is of course the terminal velocity.</p>
+<p>To determine intermediate velocity of a falling object, the following can be used:</p>
+<p>$$ v(t) = v_t \cdot \tanh\left(\frac{g t}{v_t}\right) $$</p>
+<p>For a problem I was reviewing, the plots look somewhat like these with code furnished below for generating them.</p>
+<figure>
+  <img class="fig" alt="Time taken by the falling pipe through seawater versus the depth." src="/img/impact.png" loading="lazy">
+  <figcaption>Time taken by the falling pipe through seawater versus (a) the velocity (left), and (b) the depth (right).</figcaption>
+</figure>
+
+<details>
+<summary>Plot code</summary>
+
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+&quot;&quot;&quot;
+Time versus velocity and depth of a dropped pipe through seawater
+2020 ckunte
+&quot;&quot;&quot;
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Legend:
+#   v_t -- terminal velocity (m/s)
+#   t -- time (s)
+g = 9.81  # acceleration due to gravity (m/s^2)
+
+
+def tvelo(v_t, t):
+    # v_t -- terminal velocity
+    # t -- time
+    v = v_t * np.tanh(g * t / v_t)
+    plt.plot(t, v, linewidth=2)
+    plt.xlabel(&quot;Time, t (s)&quot;)
+    plt.ylabel(&quot;Velocity, v (m/s)&quot;)
+    plt.grid(True)
+    plt.savefig(&quot;t_v.png&quot;)
+    plt.close()
+
+
+def tdepth(y0, v_t, t):
+    y = y0 - (v_t ** 2 / g) * np.log(np.cosh(g * t / v_t))
+    plt.plot(t, y, linewidth=2)
+    plt.xlabel(&quot;Time, t (s)&quot;)
+    plt.ylabel(&quot;Depth, d (m)&quot;)
+    plt.axhline(y=-168.5, color=&quot;r&quot;, linestyle=&quot;:&quot;)
+    plt.grid(True)
+    plt.savefig(&quot;t_d.png&quot;)
+    plt.close()
+
+
+def main():
+    tvelo(13.654, np.arange(0.1, 10.0, 0.01))
+    tdepth(0.0, 13.654, np.arange(0.1, 14.0, 0.01))
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+
+</details>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Unconditional" href="/2020/unconditional">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="SACS syntax" href="/2020/sacs_st">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

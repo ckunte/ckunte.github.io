@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Libraries</title>
+<meta name="description" content="When using libraries, I often find myself torn between the standard ones versus importing a...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Libraries</h1>
+<time datetime="2015-06-14T22:04:00Z">14 Jun 2015</time>
+<p>When using libraries, I often find myself torn between the <a href="https://docs.python.org/2/library/" title="The Python Standard Library">standard ones</a> versus importing a fire-hose like <a href="http://www.numpy.org/" title="NumPy, the fundamental package for scientific computing with Python.">numpy</a>. The former gives me the base upon which I build functions and get the task at hand done, which is often tedious, but offers a sense of accomplishment in the end. Whereas with the latter, all the heavy lifting is done for you by this powerful library. (There are, of course, occasions where I do not hesitate to use numpy, like generating plots for example, where I am less interested in understanding graphics, more in getting results for further realisation.) This I suppose rarely crosses a full-time programmer&rsquo;s or a data scientist&rsquo;s mind, who may be doing this all day with a key objective of writing error-free code quickly and painlessly.</p>
+<p>For someone who programs occasionally &mdash; not as my primary work routine, I find developing muscle memory valuable, as it helps me reapply techniques across a variety of tasks. Failing often forces me to pay attention to details, and seek clarity on control flow. I realised this when I was writing a block of code to process vessel motions data from sea-transporting assets recently. The list (or array) looked like this (saved in a file named <code>motions_data.py</code>):</p>
+<pre><code class="language-python">topside_assets = [
+    {'asset': 'A1', 'ves': 'S1', 
+    'rangle': 10.5, 'rperiod': 12.2, 
+    'pangle': 5.7, 'pperiod': 12.2, 
+    'heave_accl': 0.2, 'heave_period': 12.2, 
+    'cargo_wt': 2231.1}, 
+    {'asset': 'A2', 'ves': 'P1', 
+    'rangle': 13.7, 'rperiod': 12.2, 
+    'pangle': 7.4, 'pperiod': 12.2, 
+    'heave_accl': 0.2, 'heave_period': 12.2, 
+    'cargo_wt': 2231.1}, 
+    ... longlist skipped for brevity ...
+    {'asset': 'B1', 'ves': 'M1', 
+    'rangle': 15.3, 'rperiod': 6.9, 
+    'pangle': 4.8, 'pperiod': 7.3, 
+    'heave_accl': 0.2, 'heave_period': 6.9, 
+    'cargo_wt': 1676.7}, 
+    {'asset': 'B2', 'ves': 'M1', 
+    'rangle': 15.3, 'rperiod': 6.9, 
+    'pangle': 4.8, 'pperiod': 7.3, 
+    'heave_accl': 0.2, 'heave_period': 6.9, 
+    'cargo_wt': 1383.8}]
+</code></pre>
+<p>I&rsquo;ve taken a simple CSV file and added a structure to it in the above &mdash; with anonymised data, as you can tell. Of course, most people I think won&rsquo;t bother to do this by hand, and instead read a file, and get it as a list with the same virtual structure in a few lines of code. But, I like seeing data structure beforehand &mdash; as a personal preference and where practically possible, to avoid overloading my mind with too many abstractions. In that regard, I find comfort in <a href="https://usesthis.com/interviews/rob.pike/">Rob Pike&rsquo;s</a> Rule 5 of programming:</p>
+<blockquote>
+<p>Data dominates. If you&rsquo;ve chosen the right data structures and organised things well, [then] the algorithms will almost always be self-evident. Data structures, not algorithms, are central to programming.</p>
+</blockquote>
+<p>If desired, a dictionary like structure can easily be added to raw csv data using the code below, whose output would look much like the list shown above.</p>
+<pre><code class="language-python">#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
+import csv
+
+with open('motions_rawdata.csv', 'rU') as f:
+    columns = ['asset', 'ves', 'rangle', 'rperiod', 'pangle', 
+        'pperiod', 'heave_accl', 'heave_period', 'cargo_wt']
+    for row in csv.DictReader(f, fieldnames=columns):
+        print row,','
+</code></pre>
+<h2>Using standard library</h2>
+<p>Now to get mean, standard deviation, and max. values for, say, roll angles from the above data set, here&rsquo;s a hard way. In this method, I use <code>map()</code>, <code>filter()</code> and <code>reduce()</code> functions from standard library to get results (If you&rsquo;re interested in <a href="https://docs.python.org/2.7/howto/functional.html" title="Functional Programming HOWTO — Python 2.7.10 documentation">Functional Programming</a>, then <a href="http://maryrosecook.com/" title="Mary Rose Cook">Mary Rose Cook</a> offers <a href="https://codewords.recurse.com/issues/one/an-introduction-to-functional-programming" title="An introduction to functional programming - Mary Rose Cook">a wonderful primer at Recurse</a>):</p>
+<pre><code class="language-python">#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
+from operator import add
+from math import sqrt
+
+# Import motion data
+from motions_data import *
+
+# Map and filter roll angles and turn them into a list
+roll_angles_topside = map(lambda x: x['rangle'], \
+    filter(lambda x: 'rangle' in x, topside_assets))
+
+if len(roll_angles_topside) &gt; 0:
+    average_roll_angle_topside = reduce(add, roll_angles_topside) \
+    / len(roll_angles_topside)
+    vfn = map(lambda x: (x - average_roll_angle_topside)**2, \
+        roll_angles_topside)
+    variance_roll_angle_topside = reduce(add, vfn) / \
+    len(roll_angles_topside)
+    print &quot;Mean (roll):&quot;, average_roll_angle_topside, &quot;deg&quot;
+    print &quot;Max (roll):&quot;, max(roll_angles_topside), &quot;deg&quot;
+    print &quot;SD (roll)&quot;, sqrt(variance_roll_angle_topside), &quot;deg&quot;
+    pass
+</code></pre>
+<p>Here&rsquo;s how it works:</p>
+<ol>
+<li>
+<p>On line 10, <code>map()</code> takes an anonymous inline function (via <code>lambda</code>) to pick values corresponding to <code>rangle</code> (roll angle) and form a list subset from the larger <code>motions_data</code> list. The result of line 10 looks like this:</p>
+<pre><code>[10.5, 13.7, ..., 15.3, 15.3]
+</code></pre>
+<p>Notice from above that only values corresponding to roll angles (those with <code>rangle</code> labels) appear in this list &mdash; this is via <code>x['rangle']</code>, which would still have output like <code>'rangle': 10.5</code>. Thereafter, <code>filter()</code> is further used to remove the remaining labels in the list, namely, all instances of <code>rangle</code>. The code on line 10, therefore, is essential in either the standard library method, or the numpy method that we&rsquo;ll see later.</p>
+</li>
+<li>
+<p>With <code>if len(roll_angles_topside) &gt; 0:</code>, overflow error is avoided, and we then want to progress further to calculate the average (or mean) of these roll angles. This is done with <code>reduce()</code>, which takes a function (<code>add</code>, an operator in this case) to sum all values in the list, <code>roll_angles_topside</code>. The sum is then divided by the number of values in the list to get mean roll angle.</p>
+</li>
+<li>
+<p>Determining <a href="https://en.wikipedia.org/wiki/Variance" title="Variance">variance</a> is similar to finding mean, but just a little more complex, as it requires calculating the deviation of each value in the list, deduct it from the mean, square the result, and then convert these in to a list of deviations. This is done by the function, <code>vfn</code>:</p>
+<pre><code>vfn = map(lambda x: (x - average_roll_angle_topside)**2, roll_angles_topside)
+</code></pre>
+<p>The output of <code>vfn</code> looks like this:</p>
+<pre><code>[35.02487603305781, 7.388512396694199, ..., 1.2503305785123868, 1.2503305785123868]
+</code></pre>
+<p>Then as in step 2, we employ <code>reduce()</code> to get variance as below:</p>
+<pre><code>variance_roll_angle_topside = reduce(add, vfn) / len(roll_angles_topside)
+</code></pre>
+</li>
+<li>
+<p>Lastly, <a href="https://en.wikipedia.org/wiki/Standard_deviation" title="Standard deviation">standard deviation</a> is calculated as the square root of the variance, from step 3.</p>
+</li>
+</ol>
+<h2>Using Numerical Python</h2>
+<p>With <code>numpy</code>, the whole code looks like this:</p>
+<pre><code class="language-python">#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
+import numpy
+
+# Import motion data
+from motions_data import *
+
+# Map and filter roll angles and turn them into a list
+roll_angles_topside = map(lambda x: x['rangle'], \
+    filter(lambda x: 'rangle' in x, topside_assets))
+
+if len(roll_angles_topside) &gt; 0:
+    print &quot;Mean (roll):&quot;, numpy.mean(numpy.array(roll_angles_topside)), &quot;deg&quot;
+    print &quot;SD (roll):&quot;, numpy.std(numpy.array(roll_angles_topside)), &quot;deg&quot;
+    print &quot;Max (roll): &quot;, max(roll_angles_topside), &quot;deg&quot;
+    pass
+</code></pre>
+<p>All the functional acrobatics are performed invisibly by this magical library, and so, just by invoking <code>numpy.mean()</code> and <code>numpy.std()</code> and feeding an array, <code>numpy.array(roll_angles_topside)</code>, to these functions, one can determine the mean and standard deviation in one simple call each. So, as one can see, it&rsquo;s easy to get high on <code>numpy</code>. (Python 3.x has <a href="https://docs.python.org/3/library/statistics.html" title="9.7. statistics — Mathematical statistics functions — Python 3.4.3 documentation">statistics module</a> that caters specifically to these functions.)</p>
+<h2>Making the script generic</h2>
+<p>The above examples take a hardcoded motion parameter (<code>rangle</code>) and dataset (<code>topside_assets</code>), so to extend them to allow the user to choose a dataset as well as a motion parameter desired (without having the edit the script), I&rsquo;ve modified to code below slightly &mdash; again for both the methods:</p>
+<pre><code class="language-python">#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
+from operator import add
+from math import sqrt
+
+# Import motion data
+from motions_data import *
+
+def main():
+    print &quot;Available motion datasets: topside_assets, jacket_assets, misc_assets&quot;
+    print &quot;Available parameters: 'rangle', 'rperiod', 'pangle', 'pperiod', 'heave_accl', 'heave_period', 'cargo_wt'&quot;
+    dataset, param = input(&quot;Enter dataset, 'param' to use: &quot;)
+
+    params = map(lambda x: x[param], filter(lambda x: param in x, dataset))
+
+    if len(params) &gt; 0:
+        mean = reduce(add, params) / len(params)
+        vfn = map(lambda x: (x - mean)**2, params)
+        variance = reduce(add, vfn) / len(params)
+        print &quot;Mean    :&quot;, mean
+        print &quot;Std.dev.:&quot;, sqrt(variance)
+        print &quot;Maximum :&quot;, max(params)
+        print &quot;Minimum :&quot;, min(params)
+    pass
+
+if __name__ == '__main__':
+    main()
+</code></pre>
+<p>To do the same using <code>numpy</code>, the code is as follows:</p>
+<pre><code class="language-python">#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
+import numpy
+
+# Import motion data
+from motions_data import *
+
+def main():
+    print &quot;Available motion datasets: topside_assets, jacket_assets, misc_assets&quot;
+    print &quot;Available parameters: 'rangle', 'rperiod', 'pangle', 'pperiod', 'heave_accl', 'heave_period', 'cargo_wt'&quot;
+    dataset, param = input(&quot;Enter dataset, 'param' to use: &quot;)
+
+    params = map(lambda x: x[param], filter(lambda x: param in x, dataset))
+
+    if len(params) &gt; 0:
+        print &quot;Mean    :&quot;, numpy.mean(numpy.array(params))
+        print &quot;Std.dev.:&quot;, numpy.std(numpy.array(params))
+        print &quot;Maximum :&quot;, max(params)
+        print &quot;Minimum :&quot;, min(params)
+    pass
+
+if __name__ == '__main__':
+    main()
+</code></pre>
+<p>When run, the output with either method would be as illustrated below:</p>
+<pre><code>$ python motion-stats.py
+Available motion datasets: topside_assets, jacket_assets, misc_assets
+Available parameters: 'rangle', 'rperiod', 'pangle', 'pperiod', 'heave_accl', 'heave_period', 'cargo_wt'
+Enter dataset, 'param' to use: topside_assets, 'pangle'
+Mean    : 6.00454545455
+Std.dev.: 1.56973572551
+Maximum : 9.2
+Minimum : 3.2
+</code></pre>
+<h2>Zip</h2>
+<p>A couple of days ago, I was stuck with a problem calculating wave lengths: I had three lists (of equal lengths, or number of items) &mdash; generated from a tuple, which consisted of significant wave heights (Hs) &amp; peak wave periods (Tp) &mdash; both corresponding to 1-month return period, and water depths (d).</p>
+<pre><code class="language-python"># Make filtered lists of Hs, Tp, and d from the chosen dataset
+hs_all = map(lambda x: x['hs'], filter(lambda x: 'hs' in x, dataset))
+tp_all = map(lambda x: x['tp'], filter(lambda x: 'tp' in x, dataset))
+d_all = map(lambda x: x['d'], filter(lambda x: 'd' in x, dataset))    
+</code></pre>
+<p>Due to the need to perform depth criteria check &mdash; as shallow water non-linearity kicks-in for intermediate and shallow depths, I could not use the <code>map()</code> function. This is because the anonymous function, <a href="https://docs.python.org/2/reference/expressions.html#lambda" title="5. Expressions — Python 2.7.10 documentation">lambda()</a>, is too simple for multiple conditional checks. </p>
+<p>After scouting around built-in functions, I found <a href="https://docs.python.org/2/library/functions.html#zip" title="2. Built-in Functions — Python 2.7.10 documentation">zip()</a>, and it did not disappoint. Before I proceed to show how I used it, here&rsquo;s the depth criteria check for wave length calculations (Table 3.3, Deepwater criterion and wave length, Subrata K. Chakrabarti, Handbook of Offshore Engineering, Volume I, 2005):</p>
+<table>
+<thead>
+<tr>
+<th>Depth</th>
+<th>Criterion</th>
+<th>$tanh(\kappa d)$</th>
+<th>Deep water</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deep</td>
+<td>$\frac{d}{L} \geq \frac{1}{2}$</td>
+<td>1</td>
+<td>$L_0 = \frac{gT^2}{2\pi}$</td>
+</tr>
+<tr>
+<td>Shallow</td>
+<td>$\frac{d}{L} \leq \frac{1}{20}$</td>
+<td>$\kappa d$</td>
+<td>$L = T \sqrt{gd}$</td>
+</tr>
+<tr>
+<td>Intermediate</td>
+<td>$\frac{1}{20} &lt; \frac{d}{L} &lt; \frac{1}{2}$</td>
+<td></td>
+<td>$L = L_0 \sqrt{\frac{tanh(2 \pi d)}{L_0}}$</td>
+</tr>
+</tbody>
+</table>
+<p>To get this in code, I calculated wave lengths for all types first, and then mapped them into lists each, <code>Ld_all</code>, <code>Li_all</code>, <code>Ls_all</code> as below:</p>
+<pre><code class="language-python"># Wave length (Deepwater)
+if len(tp_all) &gt; 0:
+    Ld_all = map(
+        lambda x: g * x**2 / (2 * pi), tp_all
+        )
+# Wave length (Intermediate)
+if len(Ld_all) &gt; 0:
+    Li_all = map(
+        lambda x, y: y * sqrt(tanh(2 * pi * x / y)), d_all, Ld_all
+        )
+# Wave length (Shallow)
+if len(tp_all) &gt; 0:
+    Ls_all = map(
+        lambda x, y: x * ((g * y)**0.5), tp_all, d_all
+        )
+</code></pre>
+<p>Then, to select and populate the appropriate wave length based on criteria, I did the following:</p>
+<pre><code class="language-python"># WAVE LENGTHS
+# Populate wavelengths in to a list: L_all
+
+# Start with an empty list L_all
+L_all = []
+
+# Call four separate lists using zip(), compare and 
+# cherry pick conditionally, and then populate L_all
+# list with the chosen ones.
+for i, j, k, l in zip(d_all, Ld_all, Li_all, Ls_all):
+    if ((i / j) &gt;= 0.5):
+        L = j
+    if (0.05 &lt; (i / k) &lt; 0.5):
+        L = k
+    if ((i / l) &lt;= 0.05):
+        L = l
+    L_all.append(L)
+</code></pre>
+<p>So, the task that I could not do in one line with <code>map()</code> function, I split it into creating an empty list (<code>L_all = []</code>) first, and then populate a criteria-matching wave length for each value in lists. </p>
+<p><code>zip()</code> is a function that lets me perform acrobatics across multiple tuples, and I like it a lot.</p>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Chain stiffness" href="/2015/ea">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Mapping dynamics" href="/2015/reactions">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

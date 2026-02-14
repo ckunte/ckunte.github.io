@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: VIV</title>
+<meta name="description" content="Effects of vortex shedding can be problematic for slender structural members. Shedding...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>VIV</h1>
+<time datetime="2019-07-19T21:23:00Z">19 Jul 2019</time>
+<p>Effects of vortex shedding can be problematic for slender structural members. Shedding frequencies and their interactions, together with other hydrodynamic quantities (e.g. (a) added mass and damping, (b) Reynolds number, (c) lift coefficient and (d) correlation of force components) have the potential to impair. </p>
+<p>Given that vortex induced vibration (VIV) continues to be an area of contemporary research, the slender elements are commonly engineered to prevent VIV, and where unavoidable, countermeasures (VIV suppression devices e.g. strakes) are introduced.</p>
+<p>Following the industry recognised recommended practice, <em>DNVGL-RP-C205 &ndash; Environmental conditions and environmental loads</em>, the <em>viv.py</em> script below checks for the occurrence of VIV for a range of user-specified pipe sizes subjected to current(s) in the water column.</p>
+<table>
+  <tr>
+    <th>Excitation</th>
+    <th>Vortex shedding resonance (lock-in)</th>
+  </tr>
+  <tr>
+    <td>Inline</td>
+    <td>1.0 &le; Vr &le; 4.5, and Ks &le; 1.8</td>
+  </tr>
+  <tr>
+    <td>Crossflow</td>
+    <td>3.0 &le; Vr &le; 16.0</td>
+  </tr>
+</table>
+
+<p>The script requires the following inputs (together with consistent units). These are to be provided by the user by editing the <code>viv.py</code> and updating input parameters marked under <em>User inputs</em> section:</p>
+<ol>
+<li>Current velocity, V (m/s) &mdash; typically for a 1-year environment</li>
+<li>Marine growth thickness, tm (m)</li>
+<li>Flooding condition, f (<code>1</code> for flooded; <code>0</code> for buoyant)</li>
+<li>End (boundary) conditions of the pipe (fixed: <code>22.2</code>; clamped: <code>15.4</code>; simply-supported: <code>9.87</code>; cantilevered: <code>3.52</code>)</li>
+</ol>
+<figure>
+  <img class="fig" alt="Vortex induced vibration check for a range of pipe diameters and span lengths." src="https://raw.githubusercontent.com/ckunte/m-one/refs/heads/master/img/vivc.svg" loading="lazy">
+  <figcaption>Vortex induced vibration check for a range of pipe diameters and span lengths.</figcaption>
+</figure>
+
+<p>The way to read the above graph is pretty simple:</p>
+<ol>
+<li>Unshaded area (or area in white background) is the safe area.</li>
+<li>The intersection of the curve (for each pipe size of D &times; t) with the upper boundary of the non-shaded area (i.e., Vr = 1.0) indicates the max. possible pipe length (span) that is unlikely to experience VIV from (ocean) current. For example, 762OD &times; 22WT pipe can span up to 40m, while a 406OD &times; 22WT only up to 22m before VIV occurs.</li>
+<li>The shaded overlap is a zone in which both inline as well as cross-flow VIV excitations occur. (See range of occurrences in the Table above.)</li>
+</ol>
+<details>
+<summary>Plot code</summary>
+
+
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+&quot;&quot;&quot;
+Check for vortex-induced vibration occurrence in drill casing 
+due to seawater current, based on DNV-RP-C205
+2019-21 ckunte
+Jul 19, 2019: Initial commit
+Jan 29, 2021: Code re-factored
+&quot;&quot;&quot;
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def vivc(*args):
+    for i in D:
+        # Pipe cross sectional area (m^2):
+        A = (np.pi / 4.0) * (i ** 2 - (i - 2 * t) ** 2)
+        # Pipe cross sectional moment of inertia (m^4):
+        I = (np.pi / 64.0) * (i ** 4 - (i - 2 * t) ** 4)
+        # Mass of pipe (kg/m):
+        Ms = A * ys
+        # Added mass (kg/m):
+        Ma = cm * rho * np.pi * (i + 2 * tm) ** 2 / 4.0
+        # Entrained mass (kg/m):
+        Mi = f * rho * (np.pi / 4) * (i - 2 * t) ** 2
+        # Marine growth mass (kg/m):
+        Mg = np.pi * (i + tm) * tm * ym
+        # Total mass (kg/m):
+        Mtot = Ms + Ma + Mi + Mg
+        # Pipe natural frequency (Roark):
+        fn = (0.5 * c / np.pi) * (E * I / (Mtot * l ** 4)) ** 0.5
+        # Stability parameter (Ks):
+        Ks = 2 * Mtot * (2 * np.pi * beta) / (rho * (i + 2 * tm) ** 2)
+        # Reduced velocity:
+        vr = v / (fn * i)
+        lbl = &quot;%0.0f$\\times$ %0.0f (D/t=%.1f), Ks=%.1f&quot; % (
+            (i * 1e3),
+            (t * 1e3),
+            (i / t),
+            Ks,
+        )
+        plt.plot(l, vr, label=lbl)
+
+    plt.title(&quot;VIV check for %.1fm/s current&quot; % v)
+
+    # In-line VIV occurrence limits ( 1.0 =&lt; Vr =&lt; 4.5 )
+    plt.axhspan(1.0, 4.5, facecolor=&quot;r&quot;, alpha=0.18)
+
+    # Cross flow VIV occurrence limits (3.0 =&lt; Vr =&lt; 16.0 )
+    # change upper limit 16.0 to a lower value for plot
+    # clarity, if necessary
+    plt.axhspan(3.0, 5.0, facecolor=&quot;orange&quot;, alpha=0.18)
+    plt.grid(True)
+    plt.legend(loc=0)
+    plt.xlabel(&quot;Length of pipe, L (m)&quot;)
+    plt.ylabel(&quot;Reduced velocity, $v_r$&quot;)
+    plt.savefig(&quot;vivc.svg&quot;)
+    plt.close()
+
+
+if __name__ == &quot;__main__&quot;:
+    # -- USER INPUTS --
+    # List of pipe diameters
+    D = [0.4064, 0.4572, 0.508, 0.5588, 0.6096, 0.6604, 0.762]
+    # Pipe wall thickness
+    t = 0.022
+    # Pipe length: min.length, max.length, increment (m)
+    l = np.arange(0.1, 40.0, 0.1)
+    # Pipe flooded state: (1 = flooded; 0 = buoyant)
+    f = 1
+    # End condition, c: 
+    #   fixed = 22.2; 
+    #   clamped = 15.4;
+    #   simply-supported = 9.87; 
+    #   cantilevered = 3.52
+    c = 15.4
+    # Steel modulus of elasticity (N/m^2)
+    E = 2.05e11
+    # Steel density (kg/m^3)
+    ys = 7850.0
+    # Seawater density (kg/m^3)
+    rho = 1025.0
+    # Structural damping ratio for slender steel pipes in water
+    beta = 0.05
+    # Current velocity (m/s) for 1-year return period
+    v = 0.7
+    # Marine growth thickness (m)
+    tm = 0.0
+    # Marine growth density (kg/m^3)
+    ym = 575.0
+    # -- END of USER INPUTS --
+    # Added mass coefficient (hydrodynamic property)
+    cm = 1.2 if (tm &gt; 0.0) else 1.6
+    # Plot pipe length versus reduced velocity
+    vivc(D, t, l, f, c, E, ys, rho, beta, v, tm, ym, cm)
+</code></pre>
+
+</details>
+
+<p>While the upper limit for cross-flow VIV lock-in is 16 (according to RP-C205), the plot may be set to a lower max.value of say 5.0 &mdash; (e.g. as done in the plot above) to keep the curvatures of plots more readable (in <code>plt.axhspan()</code> in the script) as so. Change the following line:</p>
+<pre><code>plt.axhspan(3.0, 16.0, facecolor='orange', alpha=0.18)
+</code></pre>
+<p>to:</p>
+<pre><code>plt.axhspan(3.0, 5.0, facecolor='orange', alpha=0.18)
+</code></pre>
+<p>One may use the unix command <code>seq</code> to generate a range of diameters like so: <code>seq &lt;initval&gt; &lt;incr&gt; &lt;endval&gt;</code>. Here is an example:</p>
+<pre><code>$ seq 0.4064 0.0508 0.7620
+</code></pre>
+<p>This generates:</p>
+<pre><code>0.4064
+0.4572
+0.508
+0.5588
+0.6096
+0.6604
+0.7112
+0.762
+</code></pre>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Reliability" href="/2018/reliability">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="USFOS syntax" href="/2020/ust">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

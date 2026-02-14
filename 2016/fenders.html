@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Berthing fenders</title>
+<meta name="description" content="Aerial view of breasting dolphins. To avoid downtime in LNG carrier berthing, I was looking to...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Berthing fenders</h1>
+<time datetime="2016-04-25T22:44:00Z">25 Apr 2016</time>
+<figure>
+  <img alt="Aerial view of breasting dolphins." src="/img/bdolphin.jpg">
+  <figcaption>Aerial view of breasting dolphins.</figcaption>
+</figure>
+
+<p>To avoid downtime in <a href="https://en.wikipedia.org/wiki/LNG_carrier">LNG carrier</a> berthing, I was looking to evaluate the adequacy of breasting dolphins, at an age old jetty, coupled temporarily with floating pneumatic fenders (FPF), while new air block fenders (ABF) get procured and replaced. </p>
+<p><img alt="Fenders" class="fig" src="/img/fenders.jpg"></p>
+<p>To assess fenders, I was given performance curves, one that of an ABF from the 70s, and the other of an FPF, furnished by its vendor. Here they are, side-by-side:</p>
+<p><img class="fig" src="/img/abfpf.jpg" alt="ABF, FPF performance curves"></p>
+<p>I&rsquo;ve put the two together to illustrate how similar they look at first glance, while in fact, how different they actually are. Sharp eyes will quickly notice the inconsistent units, unequal ordinates, and interchanged twin-axes. It&rsquo;s obvious that I needed to put all these four curves on to a single graph to avoid optical illusion. With no data except for these plots, I had to digitize, convert to consistent units, and interpolate between data points to generate this following comparison:</p>
+<p>Note the effect units have over curve-slopes. By visual inspection of the first image alone, I&rsquo;d not have picked up the fact that ABFs perform by a factor of 4 over FPFs at their respective maximum deflections, and by a factor of 2 at equivalent deflections. Also that FPFs are demonstrably softer than ABFs. And just for fun, I&rsquo;ve also added cell fender type to the mix. Here&rsquo;s how they fare.</p>
+<p><img class="fig" src="/img/cf.png" alt="Fender performances"></p>
+<p>where,</p>
+<ul>
+<li><em>EVD</em> curves correspond to Energy v. Displacement,</li>
+<li><em>RVD</em> curves correspond to Reaction v. Displacement</li>
+</ul>
+<details>
+<summary>Plot code</summary>
+
+
+<pre><code class="language-python">#!/usr/bin/env python3
+# encoding: utf-8
+&quot;&quot;&quot;
+pcurves.py: Plotting performance curves for the following 
+fenders:
+
+1. ABF-P 2800X2800 fender, P0 = 1.2kgf/cm^2
+2. FPF: Yokohama 2500X4000 - P50 (50kPa)
+3. Cell fender MCS 2500, G0
+
+Air block fender (ABF) curves from jetty's as-built 
+documentation. Floating pneumatic fender (FPF) curves 
+are furnished by Yokohama.
+
+2016 ckunte
+&quot;&quot;&quot;
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import interpolate
+
+rcurves = [&quot;ABFRVD&quot;, &quot;FPFRVD&quot;, &quot;CELRVD&quot;]
+ecurves = [&quot;ABFEVD&quot;, &quot;FPFEVD&quot;, &quot;CELEVD&quot;]
+
+rplot_styles = {&quot;ABFRVD&quot;: &quot;m-&quot;, &quot;FPFRVD&quot;: &quot;b:&quot;, &quot;CELRVD&quot;: &quot;c--&quot;}
+eplot_styles = {&quot;ABFEVD&quot;: &quot;g-&quot;, &quot;FPFEVD&quot;: &quot;r:&quot;, &quot;CELEVD&quot;: &quot;y--&quot;}
+
+fig, ax1 = plt.subplots()
+
+rdata = {}
+for name in rcurves:
+    rdata = np.loadtxt(&quot;{}.csv&quot;.format(name), delimiter=&quot;,&quot;)
+    x = rdata[:, 0]
+    y = rdata[:, 1]
+    y = y / 1e3  # Converting kN values into MN
+    spline = interpolate.splrep(x, y)
+    xnew = np.linspace(0, max(x), 100)
+    ynew = interpolate.splev(xnew, spline, der=0)
+    ax1.plot(xnew, ynew, rplot_styles[name], linewidth=2)
+
+ax2 = ax1.twinx()
+
+edata = {}
+for name in ecurves:
+    edata = np.loadtxt(&quot;{}.csv&quot;.format(name), delimiter=&quot;,&quot;)
+    x = edata[:, 0]
+    y = edata[:, 1]
+    y = y / 1e3  # Converting kN.m in to MN.m
+    spline = interpolate.splrep(x, y)
+    xnew = np.linspace(0, max(x), 100)
+    ynew = interpolate.splev(xnew, spline, der=0)
+    ax2.plot(xnew, ynew, eplot_styles[name], linewidth=2)
+
+x_range = 70  # Deflection
+y_range = 5.5  # Reaction force or Energy absorption
+
+ax1.legend(rcurves, loc=(0.03, 0.68), frameon=False)
+ax2.legend(ecurves, loc=(0.03, 0.83), frameon=False)
+
+ax1.set_xlim((0, x_range))
+ax1.set_ylim((0, y_range))
+ax2.set_ylim((0, y_range))
+ax1.grid()
+ax1.set_xlabel(&quot;Deflection, D (%)&quot;)
+ax1.set_ylabel(&quot;Reaction force, R (MN)&quot;)
+ax2.set_ylabel(&quot;Energy absorption, E (MJ)&quot;)
+plt.savefig(&quot;fpc-w-cf.svg&quot;)
+</code></pre>
+
+</details>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Offshore crane" href="/2016/crane">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Wind" href="/2016/wind">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: python on Windows</title>
+<meta name="description" content="Beginners cannot go wrong with Thonny (portable) and can ignore the following — meant for those...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>python on Windows</h1>
+<time datetime="2025-11-08T17:19:00Z">8 Nov 2025</time>
+<p><em>Beginners cannot go wrong with <a href="https://thonny.org/" title="Python IDE for beginners">Thonny</a> (portable) and can ignore the following &mdash; meant for those familiar with CLI and the concept of <a href="https://docs.python.org/3/library/venv.html">virtual environs</a>.</em> </p>
+<hr />
+<p>Setting <a href="https://www.python.org/">python</a> up on Windows 11 is needlessly complex, but it does not have to be, <a href="https://learn.microsoft.com/en-us/windows/python/beginners">Microsoft&rsquo;s own guide</a> notwithstanding.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> For its part, python has been a <a href="https://xkcd.com/1987/">victim of its own success</a>. The best way to overcome system-wide conflicts and other teething issues is by setting-up and managing project-specific versions and modules via virtual environments. The absolute best tool for this job is <a href="https://docs.astral.sh/uv/">uv</a> from the boutique start-up, <a href="https://astral.sh/">Astral</a>. It gets you off the ground like nothing ever has before. Here&rsquo;s how.</p>
+<ol>
+<li>
+<p>Install uv</p>
+<pre><code>powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+</code></pre>
+<p>Restart PowerShell for the path to uv to reload and be accessible from the command line.</p>
+</li>
+<li>
+<p>Install python</p>
+<pre><code>uv python install
+</code></pre>
+</li>
+<li>
+<p>Initialise project folder and install modules required by the project</p>
+<pre><code>uv init
+uv add numpy matplotlib pandas
+</code></pre>
+<p>uv project manages python version and the packages required for the project.</p>
+</li>
+<li>
+<p>Run a script</p>
+<pre><code>uv run somescript.py
+</code></pre>
+<p>Python via uv is now setup to run scripts from command line. (See also some helpful <a href="https://docs.astral.sh/uv/guides/">guides</a>.)</p>
+</li>
+<li>
+<p>Set it up to run from within a text editor, say, <a href="https://www.sublimetext.com/">Sublime Text</a></p>
+<p>From <em>Tools &gt; Build System</em>, choose <em>New Build System..</em>, and in the opened tab/window, paste the following:</p>
+<pre><code>{
+    "shell_cmd" : "uv run \"$file_name\"",
+    "selector" : "source.python",
+    "path" : "C\\Users\\ckun\\.local\\bin;$path",
+    "working_dir" : "$file_path"
+}
+</code></pre>
+<p>Be sure to change the <code>path</code> in the above to reflect <em>your own Windows username</em> in lieu of <code>ckun</code>. Save the file as <code>Python-uv.sublime-build</code>. Now with a python script in the editor, select <em>Python-uv</em> from <em>Tools &gt; Build System</em>, and hit <kbd>Ctrl</kbd><kbd>B</kbd> to run the script.</p>
+</li>
+</ol>
+<p>And for every new project, you will have to use steps 3 and 4 from above, i.e.,  (a) initialise, (b) add the required modules, and (c) run.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>The wheels come off when you try setting-up Visual Studio Code editor along with it, especially when making it play nice with uv and installing modules.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="shell functions" href="/2025/shell-func">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Endurance gain from weld improvements" href="/2025/weld-improv">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

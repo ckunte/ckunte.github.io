@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Wave length</title>
+<meta name="description" content="This is a script I have had to write at different times and in different tools in the past —...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Wave length</h1>
+<time datetime="2016-12-04T07:24:00Z">4 Dec 2016</time>
+<p>This is a script I have had to write at different times and in different tools in the past &mdash; either to figure out the depth type or when requiring appropriate wave length(s) to calculate hydrostatic pressure. Here&rsquo;s hoping this will be the last.</p>
+<p>For background, dispersion relation<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, which expresses wave length (&lambda;)<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> in terms of wave number (\( \kappa = \frac{2\pi}{\lambda} \)) and angular wave frequency (\( \omega = \frac{2\pi}{T} \)) is as follows:</p>
+<p>$$ \frac{\omega^2}{g} = \kappa \tanh(\kappa d) $$</p>
+<p>When \( \lim_{d\to\infty} \tanh(\kappa d) \approx 1 \), it reduces the expression to:</p>
+<p>$$ \lambda = \frac{2\pi g}{\omega^2} $$</p>
+<p>For practical purposes, water depth (d) is considered deep when d/&lambda; &ge; 0.5. In other words,</p>
+<p>$$ \lambda_d = \frac{2 \pi g}{\omega^2} = \frac{gT^2}{2\pi} $$</p>
+<p>For shallow water depth (i.e., d/&lambda; &le; 0.05), wave length is expressed as:</p>
+<p>$$ \lambda_s = T \sqrt{gd} $$</p>
+<p>This is because \( \lim_{d\to 0} \tanh(\kappa d) \approx \kappa d \). For intermediate water depth (i.e., 0.05 &lt; d/&lambda; &lt; 0.5), wave length can be expressed as:</p>
+<p>$$ \lambda_{i} = \lambda_d \sqrt{\tanh\left({\frac{2 \pi d}{\lambda_d}}\right)} $$</p>
+<details>
+<summary>Code for wave periods</summary>
+
+
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+&quot;&quot;&quot;Determine water depth type and corresponding wave length
+wavelength.py -- 2020 ckunte
+&quot;&quot;&quot;
+import numpy as np
+
+g = 9.81  # Acceleration due to gravity (m/s^2)
+
+
+def L_d(d, T):
+    return list(map(lambda x: g * x ** 2 / (2 * np.pi), T))
+
+
+def L_s(d, T):
+    return list(map(lambda x: x * np.sqrt(g * d), T))
+
+
+def L_i(d, T):
+    return list(
+        map(
+            lambda x: x * np.sqrt(np.tanh(2 * np.pi * d / x)),
+            L_d(d, T),
+        )
+    )
+
+
+def typ_check(d, T):
+    # Get all wave lengths in to one list
+    L_all = [L_d(d, T), L_s(d, T), L_i(d, T)]
+    # Collapse all sublists into one list, L
+    L = [item for sublist in L_all for item in sublist]
+    # Water depth to wave length ratio, r
+    r = list(map(lambda x: d / x, L))
+    # Depth type check and append `typ_all` list
+    typ_all = []
+    for item in r:
+        if item &gt;= 0.5:
+            typ = &quot;Deep&quot;
+            typ_all.append(typ)
+        elif item &lt;= 0.05:
+            typ = &quot;Shallow&quot;
+            typ_all.append(typ)
+        elif 0.05 &lt; item &lt; 0.5:
+            typ = &quot;Intermediate&quot;
+            typ_all.append(typ)
+        else:
+            print(&quot;No depth type criteria found.&quot;)
+        pass
+    # Check type by majority
+    typ = max(typ_all, key=typ_all.count)
+    return typ
+
+
+def wavelength(d, T):
+    typ = typ_check(d, T)
+    print(&quot;Water depth type (by majority):&quot;, typ)
+    # Print wave lengths
+    if typ == &quot;Deep&quot;:
+        return print(&quot;Wave length, Ld:&quot;, L_d(d, T))
+    elif typ == &quot;Shallow&quot;:
+        return print(&quot;Wave length, Ls:&quot;, L_s(d, T))
+    elif typ == &quot;Intermediate&quot;:
+        return print(&quot;Wave length, Li:&quot;, L_i(d, T))
+    else:
+        return print(&quot;d/T ratio does not match a criteria.&quot;)
+
+
+def main():
+    # -- BEGIN USER INPUTS --
+    d = 171.18  # Water depth (m)
+    T = [9.4, 11.5, 12.0]  # Wave periods (s)
+    # -- END of USER INPUTS --
+    print(&quot;Water depth:&quot;, d)
+    print(&quot;Wave periods:&quot;, T)
+    wavelength(d, T)
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+
+</details>
+
+<p>When run, it produces this:</p>
+<pre><code class="language-bash">$ python3 wavelength.py
+Water depth: 171.18
+Wave periods: [9.4, 11.5, 12.0]
+Water depth type (by majority): Deep
+Wave length, Ld: [137.9573508693948, 206.48324640649003, 224.82863880933505]
+</code></pre>
+<p>I may not have said this before but the other reason I write any of these is (a) to force myself to think in <a href="https://en.wikipedia.org/wiki/Abstraction_principle_(computer_programming)" title="Abstraction principle (computer programming) - Wikipedia">abstractions</a>, and (b) to try and capture good known programming practice(s) (to me) at any moment in time, which a cursory view may not necessarily reveal. Note for instance, this script contains functional programming bits <a href="/2015/lib" title="Libraries">discussed earlier</a>, and a succinct snippet to collapse sublists into one.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Dispersion relation (eq. 24), Wave and Wave Effects (pp. 240&ndash;246), J.N. Newman, Marine Hydrodynamics, The MIT Press, 1977.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>&lambda; is not to be confused with <em>lambda</em> <a href="https://en.wikipedia.org/wiki/Anonymous_function#Python" title="Anonymous function - Wikipedia">the anonymous function</a> in python programming language.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="End releases" href="/2016/relconv">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Reliability" href="/2018/reliability">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

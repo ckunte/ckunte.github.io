@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Flare radiation</title>
+<meta name="description" content="In asset after asset I keep seeing structural steel corrode at a rate far higher than they are...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Flare radiation</h1>
+<time datetime="2025-08-11T20:02:00Z">11 Aug 2025</time>
+<p>In asset after asset I keep seeing structural steel corrode at a rate far higher than they are presumed to, especially when they are in the vicinity of a flare. A common rule of thumb is that corrosion rate can roughly double for every 10&deg;C increase in temperature, though this can vary depending on the specific environment and type of steel.</p>
+<p><a href="https://en.wikipedia.org/wiki/Arrhenius_equation">Arrhenius equation</a> puts this phenomenon plainly &mdash; that there is non-linear relationship between chemical reaction and temperature. Interestingly, Process / Mechanical Engineers do often correctly assess the radiated field and even map the sphere of influence. So, there is a need to suitably protect structures from exposure, for it can be a costly and messy affair to rectify later.</p>
+<p>If radiated energy is available, then temperature can be calculated as follows:</p>
+<p>$$ T = \left(\frac{E}{\sigma}\right)^\frac{1}{4} $$</p>
+<p>where,</p>
+<ul>
+<li>E &ndash; radiated energy, typically in kW/$m^2$, and</li>
+<li>$\sigma$ &ndash; Stefan-Boltzmann constant (=5.670E-11 kW/($m^2 K^4$)</li>
+</ul>
+<figure>
+  <img alt="Temperature versus radiation" class="fig" src="/img/rad-temp.svg" loading=lazy>
+  <figcaption>Temperature versus radiation.</figcaption>
+</figure>
+
+<p>It should be noted that surface temperatures are usually 20&ndash;30&deg;C higher than the above. The elevated temperatures should be instructive enough to consider suitable thermal shielding (e.g. coatings) to prevent rapid and premature deterioration of steel.</p>
+<details>
+<summary>Plot code</summary>
+
+
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# 2025 C Kunte
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Constants
+sigma = 5.670e-8  # Stefan-Boltzmann constant in W/m²K⁴
+E0 = (
+    100 * 1000
+)  # Initial energy in W/m² (100 kW/m² converted to W/m²)
+
+# Temperature range
+E_min = 0.5  # in kW/m² (converted to W/m²)
+E_max = 2.0  # in kW/m² (converted to W/m²)
+num_points = 500  # Number of points for the plot
+
+# Energy range (in W/m²)
+E = np.linspace(E_min * 1000, E_max * 1000, num_points)
+
+# Calculate the corresponding temperature using the Stefan-Boltzmann
+# equation
+T = (E / sigma) ** (1 / 4)
+
+# Convert temperature from Kelvin to Celsius
+T_Celsius = T - 273.15
+
+plt.plot(
+    E / 1000,
+    T_Celsius,
+    label=r&quot;$T = \left(\frac{E}{\sigma}\right)^{1/4}$&quot;,
+    color=&quot;blue&quot;,
+)
+plt.title(&quot;Temperature vs Energy&quot;)
+plt.xlabel(&quot;Energy (kW/m²)&quot;)
+plt.ylabel(&quot;Temperature (°C)&quot;)
+plt.grid(True)
+plt.legend()
+plt.savefig(&quot;rad-temp.svg&quot;)
+plt.show()
+</code></pre>
+
+</details>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Wave" href="/2025/wave">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="shell functions" href="/2025/shell-func">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

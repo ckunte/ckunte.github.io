@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Slice lists</title>
+<meta name="description" content="Recently, I received a document register consisting of hundreds of line items. Given the...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Slice lists</h1>
+<time datetime="2022-06-04T15:21:00Z">4 Jun 2022</time>
+<p>Recently, I received a document register consisting of hundreds of line items. Given the structure, it wasn&rsquo;t easy to sort items, say for a particular month, or about a certain asset-type. The raw data contained over 25 columns with all sorts of information, of which I required only four. So, instead of using <a href="https://en.wikipedia.org/wiki/Grep">grep</a>, I figured I&rsquo;d slice the raw data with <a href="https://pandas.pydata.org">Pandas</a> first. </p>
+<p>The demo below runs through the large register and gets me, say, a list of deliverables for April. The script (a) reads a <a href="https://en.wikipedia.org/wiki/Comma-separated_values">csv</a> file into memory, (b) sorts it by a specific column, (c) selects only the columns I need, (d) writes it all to a new csv file, and (e) also prints this list to screen.</p>
+<figure>
+  <video src="https://user-images.githubusercontent.com/177423/171986094-f7f158ed-bc48-464f-b8d2-b3e1ba333852.mov" data-canonical-src="https://user-images.githubusercontent.com/177423/171986094-f7f158ed-bc48-464f-b8d2-b3e1ba333852.mov" controls="controls" muted="muted"></video>
+  <figcaption>Slice through a large list with Pandas and grep.</figcaption>
+</figure>
+
+<p>Notice items occurring in the register &mdash; from the first column of line numbers. This indicates how deliverables to-be-issued (e.g. in April) are all over the place, but it is easy track them this way. Using pipe (|) and grep with regular expressions at command line, I can do things to the list, e.g., filter stuff out to see only what I need to.</p>
+<pre><code class="language-shell"># filter for all reports
+python3 mdr.py | grep -i &quot;report&quot;
+
+# filter reports expected in, say, Apr 2022 (when date is in yyyy-mm-dd format)
+python3 mdr.py | grep &quot;2022-04-&quot; | grep -i &quot;report&quot;
+
+# get a list of expected deliverables for, say, Apr and May 2022
+python3 mdr.py | grep -E &quot;2022\-0[4-5]-&quot;
+
+# get a list of expected deliverables for, say, CG, CS, CX tags
+python3 mdr.py | grep -E &quot;\-C[G|S|X]-&quot;
+
+# get a list of expected deliverables for, say, CG, CS, CX, and NZ tags
+python3 mdr.py | grep -E &quot;\-C[G|S|X]-|\-NZ-&quot;
+
+# get the above for say Q3 and Q4 of Year 2022
+python3 mdr.py | grep -E &quot;\-C[G|S|X]-|\-NZ-&quot; | grep -E &quot;2022\-0[6-9]|1[0-2]-&quot;
+</code></pre>
+<p>And so on. Here&rsquo;s the script for slicing the raw CSV data.</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+&quot;&quot;&quot;
+Query master document register for info
+mdr.py 2022 ckunte
+
+&quot;&quot;&quot;
+import pandas as pd
+
+
+def main():
+    # Read data
+    df = pd.read_csv(&quot;./mdr.csv&quot;)
+
+    # Limit &quot;TITLE&quot; column width
+    df[&quot;TITLE&quot;] = df[&quot;TITLE&quot;].str[:30]
+
+    # Sort data by a specific column
+    df.sort_values(by=&quot;IFR FORECAST&quot;, inplace=True)
+
+    # Select fewer columns to export
+    df_sel = df[[&quot;TITLE&quot;, &quot;NUMBER&quot;, &quot;CAT&quot;, &quot;IFR FORECAST&quot;]]
+
+    # Export data of selected columns to a csv file
+    df_sel.to_csv(&quot;./mdr-ifr_fc.csv&quot;)
+
+    # Print filtered data to screen
+    print(df_sel.to_string())
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<p>The raw data I am trying to slice has these column labels, viz., <code>TITLE</code>, <code>NUMBER</code>, <code>CAT</code>, etc., which is why they are used in the script.</p>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Cosine interaction" href="/2022/cosfunc">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="CSV to SACS seastate" href="/2022/csv2sacs">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: USFOS syntax</title>
+<meta name="description" content="In 2007, to avoid the monotony of looking at a wall of text and numbers within long FEM input...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>USFOS syntax</h1>
+<time datetime="2020-07-26T19:50:00Z">26 Jul 2020</time>
+<p>In 2007, to avoid the monotony of looking at a wall of text and numbers within long FEM input files, I created a <a href="https://textpad.com/addons/syntax-u2z">couple of plug-ins</a> for TextPad, my primary text editor of choice back then. These included a syntax file and a clip library. However in 2012, I switched to using <a href="https://www.sublimetext.com/" title="Sublime Text - A sophisticated text editor for code, markup and prose">Sublime Text</a> as my primary text editor, since it works across all three major platforms (MacOS, Linux, Windows), but more importantly, because it is also available as a portable version for Windows. While I did create a similar one for Sublime Text 2 post the switch, its syntax was a messy plist file.</p>
+<p>With version 3, Sublime Text has <a href="https://www.sublimetext.com/docs/3/syntax.html" title="Syntax Definitions – Sublime Text Documentation">simplified its syntax</a>. So this weekend, I took the opportunity to fix my handicap. The outcome is this public repository <a href="https://github.com/ckunte/usfos_st" title="USFOS syntax for Sublime Text">usfos_st</a> &mdash; released as always under a liberal license. Here is a view of USFOS control file syntax-highlighted in Sublime Text.</p>
+<figure>
+  <img alt="USFOS control file syntax highlighted in Sublime Text." src="/img/2020-ust.png">
+  <figcaption>USFOS control file syntax-highlighted in Sublime Text.</figcaption>
+</figure>
+
+<p>Ensure USFOS model files and control files end with <code>.fem</code> for syntax highlighting to work.</p>
+<p>With this package now available from <a href="https://packagecontrol.io/packages/USFOS" title="USFOS - Packages - Package Control">Package Control</a>, <code>usfos_st</code> can be installed from directly within Sublime Text. Here is how:</p>
+<ol>
+<li>From <em>Tools</em>, select <em>Install Package Control&hellip;</em> (Skip if already installed.) </li>
+<li>From <em>Preferences &gt; Package Control &gt; Install Package</em>, search for <code>usfos</code> and select.</li>
+</ol>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="VIV" href="/2019/viv">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="CLI" href="/2020/cli">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

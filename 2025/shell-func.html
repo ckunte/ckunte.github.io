@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: shell functions</title>
+<meta name="description" content="For rebase Often I find the need to squash commits, especially those that don’t need to...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>shell functions</h1>
+<time datetime="2025-10-05T15:40:00Z">5 Oct 2025</time>
+<h2>For rebase</h2>
+<p>Often I find the need to <a href="https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History">squash commits</a>, especially those that don&rsquo;t need to stand-alone. And so little a function, which is more an alias with arguments, is used for the job, so I don&rsquo;t have to think. The <a href="https://git-scm.com" title="git -- a free and open source distributed version control system">git</a> command I use for this in, say, <code>master</code> branch, looks like this:</p>
+<pre><code class="language-sh">git rebase -i origin/master~4 master
+</code></pre>
+<p>The <code>-i</code> switch makes it interactive, and in the (below) list it produces, I can mark lines selectively from <code>pick</code> to <code>squash</code> for items to be squashed, followed by <code>:wq</code>.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> If there are multiples marked up in the list, then git produces parent commits with an option to edit commit message(s) should you want to, and you can follow it up with <code>:wq</code>. Here&rsquo;s an example of the list, in which, one can markup the first column as required.</p>
+<pre><code>pick fa77b22 # m:homepage updates
+pick 04863ce # link titles update
+squash c8fb9a8 # m:edit
+
+# Rebase 69a0567..c8fb9a8 onto 69a0567 (3 commands)
+#
+# Commands:
+# p, pick &lt;commit&gt; = use commit
+# r, reword &lt;commit&gt; = use commit, but edit the commit message
+# e, edit &lt;commit&gt; = use commit, but stop for amending
+# s, squash &lt;commit&gt; = use commit, but meld into previous commit
+...
+</code></pre>
+<p>I follow it up with a forced <a href="https://git-scm.com/docs/git-push" title="Update remote refs along with associated objects">push</a> like so &mdash; for sending it upstream. It&rsquo;s <em>only</em> if the remote already <em>has</em> commits you&rsquo;re trying to squash.</p>
+<pre><code class="language-sh">git push -u origin +master
+</code></pre>
+<h3>fish shell</h3>
+<p>The <a href="https://git-scm.com/docs/git-rebase" title="Reapply commits on top of another base tip">rebase</a> command feels a little tedious to type out at the prompt, and so this function (placed in <code>~/.config/fish/config.fish</code>) helps me do the job quickly by running the command <code>gr 4 master</code>, which translates to the first command above:</p>
+<pre><code class="language-sh"># fish function to rebase, e.g., gr 4 master
+function gr
+  git rebase -i origin/$argv[2]~$argv[1] $argv[2]
+end
+</code></pre>
+<p>Using two arguments for the freedom to define the number of commits, and the other being able to choose the branch. </p>
+<p>For the push, I could write a function to run <code>gpp master</code> like so:</p>
+<pre><code class="language-sh"># fish function for push following rebase, e.g., gpp master
+function gpp
+  git push -u origin +$argv[1]
+end
+</code></pre>
+<h3>bash shell</h3>
+<p>Of course, I have machines where bash is still the default. For those, the function (placed in, e.g., <code>~/.bashrc</code>) becomes:</p>
+<pre><code class="language-sh"># bash function for rebase, e.g., gr 4 master
+gr() {
+  git rebase -i origin/&quot;${2}~${1}&quot; &quot;$2&quot;
+}
+</code></pre>
+<p>And for the push in bash, the function would be:</p>
+<pre><code class="language-sh"># bash function for the push post rebase, e.g., gpp master
+gpp() {
+  git push -u origin +&quot;$1&quot;
+}
+</code></pre>
+<hr />
+<p>Pulling from a force-pushed remote repository, say, <code>origin/master</code> needs some care. The right way is as follows:</p>
+<pre><code class="language-sh">git fetch origin
+git reset --hard origin/master
+</code></pre>
+<h2>Fish functions</h2>
+<p>This is a placeholder for my commonly used <a href="https://fishshell.com/">fish</a> shell functions &mdash; saved as files under <code>~/.config/fish/functions/</code>.</p>
+<ol>
+<li>
+<p>For system information: <em>sbcinf.fish</em></p>
+<pre><code># sbcinf.fish
+function sbcinf
+  set -l mem (free -h | awk '/Mem:/ {print $3 "/" $2}')
+  set -l dsk (df -h | awk '/\/$/ {print $3 "/" $2}')
+  set -l tem (vcgencmd measure_temp | grep -o -E '[[:digit:]].*')
+  set -l pow (vcgencmd measure_volts | sed 's/volt=//g')
+  set -l ipa (hostname -I | awk '{print $1}')
+  set -l upt (uptime -p | sed 's/^up //')
+
+  echo "Board temp: $tem"
+  echo "Disk usage: $dsk"
+  echo "IP address: $ipa"
+  echo "Memory use: $mem"
+  echo "Power cons: $pow"
+  echo "Sys uptime: $upt"
+end
+</code></pre>
+</li>
+<li>
+<p>For downloading a file from GitHub repo. with <code>ghdl user/repo/file.ext</code>. If specific about a branch, then this works too: <code>ghdl user/repo@master/file.ext</code></p>
+<pre><code># ghdl.fish
+function ghdl
+  if test (count $argv) -ne 1
+    echo "Usage: ghdl user/repo[@branch]/path/to/file"
+    return 1
+  end
+
+  set input $argv[1]
+
+  # Split the input into repo and path
+  set repo_part (echo $input | cut -d'/' -f1-2)
+  set path_part (echo $input | cut -d'/' -f3-)
+
+  # Extract user and repo (and optional branch)
+  set user (echo $repo_part | cut -d'/' -f1)
+  set repo_branch (echo $repo_part | cut -d'/' -f2)
+
+  if string match -q '*@*' $repo_branch
+    set repo (echo $repo_branch | cut -d'@' -f1)
+    set branch (echo $repo_branch | cut -d'@' -f2)
+  else
+    set repo $repo_branch
+    set branch "master"  # default fallback branch
+  end
+
+  if test -z "$user" -o -z "$repo" -o -z "$path_part"
+    echo "Error: Must be in the form user/repo[@branch]/path/to/file"
+    return 1
+  end
+
+  # Construct modern raw.githubusercontent.com URL
+  set url "https://raw.githubusercontent.com/$user/$repo/refs/heads/$branch/$path_part"
+
+  echo "Downloading from: $url"
+  curl -LO $url
+end
+</code></pre>
+</li>
+<li>
+<p>Push functions</p>
+<pre><code># push function
+#   gp master // normal push to master repo
+#   gpp bb    // rebased push to bb repo
+#
+function gp
+  git push -u origin $argv[1]
+end
+function gpp
+  git push -u origin +$argv[1]
+end
+</code></pre>
+</li>
+<li>
+<p>Rebase function</p>
+<pre><code># gr.fish
+# examples:
+#   gr 4 master
+#   gr 3 bb
+#
+function gr
+  git rebase -i origin/$argv[2]~$argv[1] $argv[2]
+end
+</code></pre>
+</li>
+<li>
+<p>Get the latest release version of a GitHub repo.</p>
+<pre><code># glr.fish
+# e.g. glr "ckunte/tce"
+function glr \
+  --argument-names user_repo
+  curl \
+      --silent \
+      "https://api.github.com/repos/$user_repo/releases/latest" \
+  | string match --regex '"tag_name": "\K.*?(?=")'
+end
+</code></pre>
+</li>
+<li>
+<p>Check file hash</p>
+<pre><code># check_hashes.fish
+function check_hashes
+  # Ensure the user provided a file argument
+  if test (count $argv) -ne 1
+    echo "Usage: check_hashes &lt;file&gt;"
+    return 1
+  end
+  # Store the file path
+  set file $argv[1]
+  # Check if the file exists
+  if not test -e $file
+    echo "Error: File '$file' does not exist."
+    return 1
+  end
+  # Calculate and display the RMD160 hash
+  echo "RMD160 hash:"
+  printf "%s" "$file" | openssl dgst -rmd160
+  # Calculate and display the SHA256 hash
+  echo "SHA256 hash:"
+  printf "%s" "$file" | openssl dgst -sha256
+end
+</code></pre>
+</li>
+<li>
+<p>Open folder from within WSL</p>
+<pre><code># open.fish
+function open
+  if test (count $argv) -eq 0
+    # No arguments: open current directory
+    explorer.exe .
+  else
+    for arg in $argv
+      # If it's a URL
+      if string match -qr '^https?://|^mailto:' $arg
+        explorer.exe $arg
+      # If it's a file or directory that exists
+      else if test -e $arg
+        explorer.exe (wslpath -w $arg)
+      # If it's a Windows-style path (C:\Users\...), try passing directly
+      else if string match -qr '^[A-Za-z]:\\' $arg
+        explorer.exe $arg
+      else
+        echo "open: '$arg' not found or invalid" &gt;&amp;2
+      end
+    end
+  end
+end
+</code></pre>
+</li>
+<li>
+<p>Rename photos</p>
+<pre><code># renfoto.fish: rename photos e.g. renfoto ST-159
+function renfoto
+  set prefix $argv[1]
+  rename -N ...01 -X -e '$_ = $prefix . "-photo-$N"' *.png
+end
+</code></pre>
+</li>
+</ol>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Write and quit in Vim, which is my default git commit editor.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Flare radiation" href="/2025/radiation">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="python on Windows" href="/2025/python-on-windows">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

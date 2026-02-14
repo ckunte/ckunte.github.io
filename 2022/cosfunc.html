@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Cosine interaction</title>
+<meta name="description" content="While reviewing the changes introduced in the new ISO 19902:2020 standard, this one jumped at...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Cosine interaction</h1>
+<time datetime="2022-04-30T22:15:00Z">30 Apr 2022</time>
+<p>While reviewing the changes introduced in the new ISO 19902:2020 standard, this one jumped at me:</p>
+<blockquote>
+<p>[T]ubular member strength formulae for combined axial and bending loading now of cosine interaction form instead of previously adopted linear interaction;</p>
+</blockquote>
+<p>In ISO 19902:2020, the combined unity check for axial (tension | compression) + bending takes the following general expression:</p>
+<p>$$ U_m = 1 - \cos\left( \frac{\pi}{2} \frac{\gamma_{R,t|c} \, \sigma_{t|c}}{f_{t|yc}} \right) + \frac{\gamma_{R,b} \sqrt{\sigma_{b,y}^2 + \sigma_{b,z}^2}}{f_b} $$</p>
+<p>This form of unity check has existed since 1993 in API RP-2A LRFD, 1st edition, and whose introduction into ISO 19902:2020 is briefly described in &sect;A13.3.2 and &sect;A13.3.3.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> This form makes its presence felt throughout <em>&sect;13 Strength of tubular members</em>.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
+<p>Previously, <em>Um</em> in ISO 19902:2007 was expressed as:</p>
+<p>$$ U_m = \frac{\gamma_{R,t|c} \, \sigma_{t|c}}{f_{t|yc}} + \frac{\gamma_{R,b} \sqrt{\sigma_{b,y}^2 + \sigma_{b,z}^2}}{f_b} $$</p>
+<p>The reduction of <em>Um</em> in the first equation is notable, see Figure below. For example, if the axial unity check value (x) is, say, 0.2, then its contribution is reduced to 0.05 (\(= 1 - \cos\left( \frac{\pi}{2} x\right)\)). Remember <code>cos()</code> is in radians.</p>
+<figure>
+  <img class="fig" loading="lazy" alt="Axial utilisation versus axial component under cosine interaction in the combined utilisation expression." src="/img/tuc_under_cosint.svg">
+  <figcaption>Figure: Axial utilisation versus axial component under cosine interaction in the combined utilisation expression.</figcaption>
+</figure>
+
+<details>
+<summary>Plot code</summary>
+
+
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+&quot;&quot;&quot;
+cosplay.py -- Effect of cosine interaction form on axial utilisation 
+component in the combined axial + bending utilisation expressions
+2022 ckunte
+&quot;&quot;&quot;
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def cosinefunc(uc_t):
+    return 1 - np.cos(uc_t * np.pi / 2.0)
+
+
+def plot_tuc_under_cosinteraction(uc_t):
+    cfunc = cosinefunc(uc_t)
+    plt.xlabel(&quot;$\\frac{\\gamma_{R,t|c}\\,\\sigma_{t|c}}{f_{t|yc}}$&quot;)
+    plt.ylabel(
+        &quot;$1 - \\cos\\left(\\frac{\\pi}{2}\\frac{\\gamma_{R,t|c}\\,\\sigma_{t|c}}{f_{t|yc}}\\right)$&quot;
+    )
+    plt.plot(uc_t, cfunc)
+    plt.savefig(&quot;tuc_under_cosint.svg&quot;)
+    plt.show()
+
+
+if __name__ == &quot;__main__&quot;:
+    # Increasing tension utilisation from 0.0 to 1.0
+    t1 = np.arange(0.01, 1.0, 0.01)
+    plot_tuc_under_cosinteraction(t1)
+</code></pre>
+
+</details>
+
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>I am still processing the explanation in &sect;A13.3.2, and in the <a href="https://www.researchgate.net/publication/267606391" title="P. Frieze, ISO 19902 Tubular Members Including Damaged and Grouted Members">paper</a>.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>This form, i.e., 1 - cos(x) occurs in as many as eleven equations, viz., Eq. 13.3-1, 13.3-2, 13.3-4, 13.3-8, 13.3-18, 13.3-19, 13.3-21, 13.3-23, 13.4-7, 13.4-13, and 13.4-19 in ISO 19902:2020. Curiously, this is not applied to dented tubes in §13.7.3, whose combined UC expression(s) remains like before.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Tube slenderness" href="/2021/slenderness">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Slice lists" href="/2022/slice">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

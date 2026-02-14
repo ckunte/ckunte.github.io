@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: S-N curves</title>
+<meta name="description" content="Update (2021): Comparing S-N curves between standards ISO 19902 and DNV-RP-C203 (DOI:...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>S-N curves</h1>
+<time datetime="2014-07-31T21:35:00Z">31 Jul 2014</time>
+<p><em>Update (2021): Comparing S-N curves between standards</em></p>
+<ol>
+<li>ISO 19902 and DNV-RP-C203 (DOI: <a href="http://dx.doi.org/10.13140/RG.2.2.14995.20006">10.13140/RG.2.2.14995.20006</a>)</li>
+<li>BS 7608 and DNV-RP-C203 (DOI: <a href="http://dx.doi.org/10.13140/RG.2.2.28416.97289">10.13140/RG.2.2.28416.97289</a>)</li>
+</ol>
+<hr />
+<p>In order to set a suitable design criteria, I am looking to compare two classes of S-N curves for a fatigue design, viz., E and F2, and I cannot find a handy plot to refer to, and it is frustrating when standards fail to include. So, I channel it to write some code to roll my own:</p>
+<figure>
+  <img alt="S-N curves in seawater with cathodic protection based on ISO 19902:2007." class="fig" src="/img/sncurves.svg">
+  <figcaption>S-N curves in seawater with cathodic protection based on ISO 19902:2007.</figcaption>
+</figure>
+
+<p>The basic S-N curve equation is as follows, which one may know is from Paris-Erdogan law (fracture mechanics):</p>
+<p>$$ N = k_1 \cdot S^{-m} $$</p>
+<p>The standard does describe it in its logarithmic form, which is as follows:</p>
+<p>$$ \log N = \log k_1 - m \cdot \log S $$</p>
+<p>and then it goes on to furnish its two sets of key components that form parts of the equation &mdash; highlighted below.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> </p>
+<p>For graphing purposes, the above can also be written as:</p>
+<p>$$ S = \left(\frac{N}{k_1}\right)^{-\frac{1}{m}} $$</p>
+<p>For example, and I am writing this for myself since I struggle with logarithms, if</p>
+<p>$$ log_{10}k_1 = 12.18 $$</p>
+<p>then,</p>
+<p>$$ k_1 = (10)^{12.18} $$</p>
+<figure>
+  <img alt="Table 16.11-1 Basic representative S-N curves for air and seawater, ISO 19902:2007." class="fig" src="/img/sncurves1.jpg" loading="lazy">
+  <figcaption>Table 16.11-1 Basic representative S-N curves for air and seawater, ISO 19902:2007.</figcaption>
+</figure>
+
+<details>
+<summary>Plot code</summary>
+
+
+<pre><code class="language-python">#!/usr/bin/env python3
+# encoding: utf-8
+&quot;&quot;&quot;
+sncurves.py -- 2016 ckunte
+May 7: Initial commit.
+Apr 29, 2020: Code simplified
+Dec 27, 2020: basex is now base (since matplotlib V3.3)
+Feb 17, 2021: A practical stress range is set for structural steel
+&quot;&quot;&quot;
+import numpy as np
+import matplotlib.pyplot as plt
+
+# a = log_10(k1)
+a = [
+    12.18, 16.13,  # TJ
+    14.61, 17.01,  # B
+    13.23, 16.47,  # C
+    11.78, 15.63,  # D
+    11.62, 15.37,  # E
+    11.40, 15.00,  # F
+    11.23, 14.71,  # F2
+    11.00, 14.33,  # G
+    10.57, 13.62,  # W1
+]
+m = [3.0, 3.5, 4.0, 5.0]  # Slope
+r = [1.8e6, 1.0e5, 4.68e5, 1.0e6]  # Range limit for curves
+
+
+def style():
+    plt.rcParams[&quot;grid.linestyle&quot;] = &quot;:&quot;
+    plt.rcParams[&quot;grid.linewidth&quot;] = 0.5
+    plt.grid(True)
+
+
+def sncurve(curve, r_start, r_mid, r_end, a1, m1, a2, m2, graphcolor):
+    # For slope 1 (m1)
+    n = np.arange(r_start, r_mid, 1.0e3)
+    s = (n / 10**a1) ** (-1 / m1)
+    plt.loglog(n, s, base=10, color=graphcolor, linewidth=1.0, label=curve)
+    # For slope 2 (m2)
+    n = np.arange(r_mid, r_end, 1.0e3)
+    s = (n / 10**a2) ** (-1 / m2)
+    return plt.loglog(n, s, base=10, color=graphcolor, linewidth=1.0)
+
+
+def main():
+    # Plot all
+    style()
+    sncurve(&quot;TJ curve&quot;, 1.0e3, r[0], 1.0e9, a[0], m[0], a[1], m[3], &quot;black&quot;)
+    sncurve(&quot; B curve&quot;, 1.0e3, r[1], 1.0e9, a[2], m[2], a[3], m[3], &quot;magenta&quot;)
+    sncurve(&quot; C curve&quot;, 1.0e3, r[2], 1.0e9, a[4], m[1], a[5], m[3], &quot;blue&quot;)
+    sncurve(&quot; D curve&quot;, 1.0e3, r[3], 1.0e9, a[6], m[0], a[7], m[3], &quot;orange&quot;)
+    sncurve(&quot; E curve&quot;, 1.0e3, r[3], 1.0e9, a[8], m[0], a[9], m[3], &quot;green&quot;)
+    sncurve(&quot; F curve&quot;, 1.0e3, r[3], 1.0e9, a[10], m[0], a[11], m[3], &quot;olive&quot;)
+    sncurve(&quot;F2 curve&quot;, 1.0e3, r[3], 1.0e9, a[12], m[0], a[13], m[3], &quot;brown&quot;)
+    sncurve(&quot; G curve&quot;, 1.0e3, r[3], 1.0e9, a[14], m[0], a[15], m[3], &quot;deeppink&quot;)
+    sncurve(&quot;W1 curve&quot;, 1.0e3, r[3], 1.0e9, a[16], m[0], a[17], m[3], &quot;olivedrab&quot;)
+    plt.legend(loc=0)
+    plt.xlabel(&quot;Number of cycles, N&quot;)
+    plt.ylabel(&quot;Hotspot stress, $\sigma$ (MPa)&quot;)
+    return plt.savefig(&quot;sncurves.svg&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+
+</details>
+
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Playing with logarithms is fraught with error, as they are not the same as plain algebra &mdash; Leonhard Euler&rsquo;s gift to the world, which reminds me I should jog my memory from high-school. There is a <a href="http://downloads.bbc.co.uk/podcasts/radio4/iot/iot_20140925-1205a.mp3" title="Euler's e">very nice podcast recording</a> on Euler&rsquo;s e that also discusses the history of logarithms, which was in ancient days allowed to transform &ldquo;complicated&rdquo; multiplication into simple addition, which makes perfect sense in a world that had no computers, no calculators, and no slide rules.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Tow" href="/2013/tow">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Fram and Vasa" href="/2014/fram-vasa">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

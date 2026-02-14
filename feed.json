@@ -1,0 +1,38 @@
+{
+  "version" : "https://jsonfeed.org/version/1.1",
+  "user_comment" : "This feed lets you know when a new note is published. Copy the following URL -- https://ckunte.net/feed.json -- and add it to your feed reader.",
+  "title" : "Chetan Kunt\u00e9",
+  "home_page_url" : "https://ckunte.net",
+  "feed_url" : "https://ckunte.net/feed.json",
+  "favicon" : "https://ckunte.net/inc/favicon.svg",
+  "description" : "Offshore Structures Engineer, Chartered Naval Architect",
+  "authors" : [
+    {
+      "name" : "Chetan Kunt\u00e9",
+      "url" : "https://ckunte.net"
+    }
+  ],
+  "items" : [
+    {
+      "id" : "https://ckunte.net/2025/weld-improv",
+      "title" : "Endurance gain from weld improvements",
+      "url" : "https://ckunte.net/2025/weld-improv",
+      "content_text" : "DNV has published RP-C203 Fatigue design of offshore steel structures (2025). It now covers bankable endurance1 from weld improvement techniques such as grinding, and hammer...",
+      "date_published" : "2025-11-16T12:10:00Z"
+    },
+    {
+      "id" : "https://ckunte.net/2025/python-on-windows",
+      "title" : "python on Windows",
+      "url" : "https://ckunte.net/2025/python-on-windows",
+      "content_text" : "Beginners cannot go wrong with Thonny (portable) and can ignore the following \u2014 meant for those familiar with CLI and the concept of \u003ca...",
+      "date_published" : "2025-11-08T17:19:00Z"
+    },
+    {
+      "id" : "https://ckunte.net/2025/shell-func",
+      "title" : "shell functions",
+      "url" : "https://ckunte.net/2025/shell-func",
+      "content_text" : "For rebase Often I find the need to squash commits, especially those that don\u2019t need to stand-alone. And so little a function, which is more an alias with...",
+      "date_published" : "2025-10-05T15:40:00Z"
+    }    
+  ]
+}

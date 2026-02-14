@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Offshore crane</title>
+<meta name="description" content="API spec 2C and EN 13852-1 are two well known standards that offer guidance in developing...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Offshore crane</h1>
+<time datetime="2016-02-02T23:21:00Z">2 Feb 2016</time>
+<p>API spec 2C and EN 13852-1 are two well known standards that offer guidance in developing minimum offshore pedestal-mounted crane requirements. They represent Gulf of Mexico and the North Sea respectively.</p>
+<p>API specification considers Gulf of Mexico to be of &ldquo;very mild sea and wind conditions&rdquo; (&sect;5.4.4 Legacy Dynamic Method). Environmental conditions in the Gulf of Mexico are indeed mild when hurricanes are excluded. Also, given the unpredictable variation in hurricane strengths and hence the impracticality of designing for such events, offshore facilities in the Gulf of Mexico are operated as <em>manned-evacuated</em>. In other words, operations (including crane operations) are suspended and the facility evacuated in the event of an impending hurricane in the facility&rsquo;s path.</p>
+<p>When a sizeable number of assets are validated by their use, standards developed primarily for a specific domain find acceptance internationally. However, liberal use is never without a catch, as standards often carry certain domain specific assumptions and criteria that may need revisiting when considered for a domain outside the primary for which it is written and valid for.</p>
+<p>Take for instance the primary purpose of offshore cranes mounted on pedestals on offshore platforms &mdash; fixed or floating. They lift cargo and supplies off a floating vessel, which in turn are influenced by incoming waves.</p>
+<p>Off-board lift, as API spec 2C explains, is &ldquo;the hoisting velocity at the elevation where lift is initiated (i.e., supply boat deck level) shall be fast enough to avoid re-contact after the load is lifted.&rdquo; </p>
+<p><em>Off-board lift using API spec 2C:</em></p>
+<p>Minimum required steady hoisting velocity (in ft/s) for off-board lift as per &sect;5.4.5.2, API spec 2C:</p>
+<p>For Hsig &leq; 6ft:</p>
+<p>$$ V_{hmin} = 0.033 + 0.098 \cdot H_{sig} $$</p>
+<p>For Hsig &gt; 6ft:</p>
+<p>$$ V_{hmin} = 0.067 \cdot (H_{sig} + 3.3) $$</p>
+<p><em>Off-board lift using EN 13852-1:</em></p>
+<p>Minimum hoisting and lowering velocity (in m/s) for lifting from/to a supply vessel in EN 13852-1 (&sect;B.4) is given as follows:</p>
+<p>$$ V_H = K_H \cdot \sqrt{V_D^2 + V_C^2} $$</p>
+<p>where,</p>
+<ul>
+<li>V<sub>D</sub> &ndash; vertical velocity of load&rsquo;s supporting deck for lifting to or from a supply vessel (m/s), from Table B.2</li>
+<li>V<sub>C</sub> &ndash; vertical velocity of the crane boom tip due to the movement of the crane base (m/s), from Table B.3</li>
+<li>K<sub>H</sub> &ndash; velocity factor coving (single fall, multiple fall) reeving and for both no-hook load as well as at rated capacity</li>
+</ul>
+<p>$$ V_D = \left(\frac{6.0 \cdot H_{sig}}{H_{sig} + 8.0} \right) $$</p>
+<p>For crane on bottom-founded structures, there is no movement of the crane base, and therefore, V<sub>C</sub> = 0.</p>
+<p>I wrote a little code to compare the two standards over the weekend (see below) to produce the following graph.</p>
+<figure>
+  <img class="fig" alt="Crane (off-board) hoisting velocity" src="/img/vhmin.svg" loading="lazy">
+  <figcaption>Comparing minimum hoisting velocities between API spec 2C and EN 13852-1</figcaption>
+</figure>
+
+<p>A couple of observations:</p>
+<ol>
+<li>API prescription for <em>V<sub>hmin</sub></em> covers supply vessels, while EN offers two additional options, viz., barge, and sea surface. (Graphs for barge or sea surface are not shown in the above, but can be separately generated, if desired, using the <a href="https://gist.github.com/ckunte/4ba581c85bcfd50976ef">code</a> I&rsquo;ve shared.)</li>
+<li>EN is explicit about reeving efficiency &mdash; note the reduced velocity requirements in the case of multi-fall reeving. Looking at the two graphs above, i.e., for API and for EN, the multi-part reeving option appears to be somewhat close to API prescription in terms of <em>V<sub>hmin</sub></em>. It could be that API considers multi-part reeving efficiency in its prescription, even though it does not mention in &sect;5.4.5.2.</li>
+</ol>
+<figure>
+  <img class="fig" alt="An illustration showing the position of a supply vessel carrying a package, which is hooked-up and ready to be hoisted-up by the platform crane, w.r.t. the oncoming wave." src="/img/crane-hoist.png" loading="lazy">
+  <figcaption>An illustration showing the position of a supply vessel carrying a package, which is hooked-up and ready to be hoisted-up by the platform crane, w.r.t. the oncoming wave.</figcaption>
+</figure>
+
+<p>Now to the crux of the matter on whether or not a standard&rsquo;s recipe enables safe-clearing of the package lifted before the next wave crest appears. The package travel can be calculated, for a given significant wave height (H<sub>sig</sub>) and corresponding period (T), as follows:</p>
+<p>$$ h = V_{hmin} \cdot T $$</p>
+<p>Testing API spec 2C recipe for the Australian Northwest Shelf environment:</p>
+<table>
+<thead>
+<tr>
+<th>Hsig</th>
+<th>T</th>
+<th>Vhmin</th>
+<th>h</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.4m</td>
+<td>4.9s</td>
+<td>0.14m/s</td>
+<td>0.72m &lt; Hsig (Not Good)</td>
+</tr>
+<tr>
+<td>2.7m</td>
+<td>5.7s</td>
+<td>0.25m/s</td>
+<td>1.42m &lt; Hsig (Not Good)</td>
+</tr>
+<tr>
+<td>3.6m</td>
+<td>6.4s</td>
+<td>0.30m/s</td>
+<td>1.98m &lt; Hsig (Not Good)</td>
+</tr>
+</tbody>
+</table>
+<p>From the table above, clearly it does not work. In other words, a lifted package experiences re-contact by the next wave crest before clearing safely.</p>
+<p>Now let&rsquo;s test this for EN 13852-1 again for the Australian Northwest Shelf environment:</p>
+<table>
+<thead>
+<tr>
+<th>Hsig</th>
+<th>T</th>
+<th>Vhmin</th>
+<th>h</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.4m</td>
+<td>4.9s</td>
+<td>0.44m/s</td>
+<td>2.19m &gt; Hsig (OK)</td>
+</tr>
+<tr>
+<td>2.7m</td>
+<td>5.7s</td>
+<td>0.75m/s</td>
+<td>4.31m &gt; Hsig (OK)</td>
+</tr>
+<tr>
+<td>3.6m</td>
+<td>6.4s</td>
+<td>0.92m/s</td>
+<td>5.96m &gt; Hsig (OK)</td>
+</tr>
+</tbody>
+</table>
+<p>From above, it can be seen that the recipe offered by EN 13852-1 clears the package comfortably before the next wave crest arrives. So EN&rsquo;s recipe works for NWS where API&rsquo;s does not.</p>
+<details>
+<summary>Plot code for Figure 1</summary>
+
+
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+# Offshore crane minimum off-board hoisting velocity
+# vhmin.py -- 2016-21 ckunte
+# Mar 2021: code re-factored
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def api_spec_2C(*args):
+    cf = 0.3048  # ft -&gt; m conversion factor
+    v1 = (0.033 * cf) + 0.098 * x1
+    v2 = 0.067 * (x2 + (3.3 * cf))
+    plt.plot(x1, v1, color=&quot;red&quot;, label=&quot;API spec 2C&quot;)
+    plt.plot(x2, v2, color=&quot;red&quot;)
+    pass
+
+
+def en_13852_1(*args):
+    K_H = [0.50, 0.28]  # at rated capacity: [single, multiple] fall reeving
+    Vd = 6.0 * x / (x + 8.0)  # crane on fixed platform lifting off supply vessel
+    Vc = 0  # crane boom tip velocity
+    VH_sfr = K_H[0] * (Vd ** 2 + Vc ** 2) ** 0.5
+    VH_mfr = K_H[1] * (Vd ** 2 + Vc ** 2) ** 0.5
+    plt.plot(x, VH_sfr, label=&quot;EN 13852-1 (RC, SFR)&quot;)
+    plt.plot(x, VH_mfr, label=&quot;EN 13852-1 (RC, MFR)&quot;)
+    pass
+
+
+def plot_min_hoist_velo(*args):
+    api_spec_2C(x1, x2)
+    en_13852_1(x)
+    plt.grid(True)
+    plt.legend(loc=0)
+    plt.title(&quot;API v. EN for (off-board) lift off supply vessel&quot;)
+    plt.xlabel(&quot;$H_{sig}$ (m)&quot;)
+    plt.ylabel(&quot;$v_{h\,min}$ (m/s)&quot;)
+    plt.savefig(&quot;vhmin.svg&quot;)
+    plt.close()
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    # x, x1, x2: significant wave height ranges
+    x1 = np.arange(0.0, 1.83, 0.001)
+    x2 = np.arange(1.83, 3.0, 0.001)
+    x = np.arange(0.0, 3.0, 0.001)
+    plot_min_hoist_velo(x1, x2, x)
+    pass
+</code></pre>
+
+</details>
+
+<p><strong>Update (Dec 2018):</strong> <a href="http://extranet.iogp.org/Publications.aspx">IOGP specification</a> S-618<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> issued in Dec 2018 now fixes the low velocity in API&rsquo;s off-board lift recipe, which stuck out like an anomaly<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>, see plot above, and is now in step with that of EN 13852-1, which can be seen in the updated plot below.</p>
+<figure>
+  <img class="fig" alt="Crane (off-board) hoisting velocity updated with IOGP S-618 recommendations" class="fig" src="/img/vhmin_iogp.svg" loading="lazy">
+  <figcaption>Figure 2: Crane (off-board) hoisting velocity updated with IOGP S-618 recommendations</figcaption>
+</figure>
+
+<details>
+<summary>Plot code for Figure 2</summary>
+
+
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+# Offshore crane minimum off-board hoisting velocity
+# vhmin.py -- 2016-21 ckunte
+# Dec 2018: IOGP fixes the issue w/ API's low vhmin prescription
+# Mar 2021: code re-factored
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def api_spec_2C(*args):
+    cf = 3.2808  # ft -&gt; m conversion factor
+    v_main = (-0.0032 * (x * cf) ** 2 + 0.179 * (x * cf) + 0.0499) / cf
+    v_auxi = 1.79 * v_main
+    plt.plot(x, v_auxi, color=&quot;magenta&quot;, label=&quot;API spec 2C + IOGP S-618 (Auxi)&quot;)
+    plt.plot(x, v_main, color=&quot;red&quot;, label=&quot;API spec 2C + IOGP S-618 (Main)&quot;)
+    pass
+
+
+def en_13852_1(*args):
+    K_H = [0.50, 0.28]  # at rated capacity: [single, multiple] fall reeving
+    Vd = 6.0 * x / (x + 8.0)  # crane on fixed platform lifting off supply vessel
+    Vc = 0  # crane boom tip velocity
+    VH_sfr = K_H[0] * (Vd ** 2 + Vc ** 2) ** 0.5
+    VH_mfr = K_H[1] * (Vd ** 2 + Vc ** 2) ** 0.5
+    plt.plot(x, VH_sfr, label=&quot;EN 13852-1 (RC, SFR)&quot;)
+    plt.plot(x, VH_mfr, label=&quot;EN 13852-1 (RC, MFR)&quot;)
+    pass
+
+
+def plot_min_hoist_velo(*args):
+    api_spec_2C(x)
+    en_13852_1(x)
+    plt.grid(True)
+    plt.legend(loc=0)
+    plt.title(&quot;API v. EN for (off-board) lift off supply vessel&quot;)
+    plt.xlabel(&quot;$H_{sig}$ (m)&quot;)
+    plt.ylabel(&quot;$v_{h\,min}$ (m/s)&quot;)
+    plt.savefig(&quot;vhmin_iogp.svg&quot;)
+    plt.close()
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    # x: significant wave height ranges
+    x = np.arange(0.0, 3.0, 0.001)
+    plot_min_hoist_velo(x)
+    pass
+</code></pre>
+
+</details>
+
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>IOGP S-618 Supplementary specification to API specification 2C Offshore Pedestal-mounted Cranes.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>To be sure, my interest in API spec 2C is now academic, and I am not judging it for its merits or demerits, since API&rsquo;s application domain is primarily the US. However, due to the fact that API standards are generally good to very good that the engineering community tends to adopt them across domains (outside USA) &mdash; sometimes without pausing to consider whether or not cross-domain application is appropriate.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Typhoon Melor" href="/2015/melor">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Berthing fenders" href="/2016/fenders">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

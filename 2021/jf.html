@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Jacket flooding</title>
+<meta name="description" content="For a jacket that requires certain buoyancy, assessing its flooding potential can be useful. For...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Jacket flooding</h1>
+<time datetime="2021-03-23T18:51:00Z">23 Mar 2021</time>
+<p>For a jacket that requires certain buoyancy, assessing its flooding potential can be useful. For instance, it can be a good indicator for operations &mdash; not only in controlled conditions but also to assist in planning to overcome potentially adverse situations during installation, e.g., (a) severe weather forecast, (b) a systemic leak in the flooding system (or closure diaphragms, if used for maintaining buoyancy of components), which in turn may force operations to undertake emergency measures, etc.</p>
+<p>In 2012, I was working on a standard that was looking to review reserve buoyancy provisions. The recommended practice then was something like:</p>
+<blockquote>
+<p>Jacket reserve buoyancy in case of damage shall not drop below 5%.</p>
+</blockquote>
+<p>Comforting text? One that gives you, the client, warm and fuzzy feeling of being in control? You bet. But <em>are</em> you?</p>
+<p>The problem with a requirement like that is that it fails to account for the transient nature of the damage. Meaning, once the jacket is floating, you&rsquo;re on the clock, especially if you have either incurred damage or are oblivious to a pre-existing one. Worse still is if you cannot identify the leak, while your pressure indicator begins to dive left. </p>
+<p>Here&rsquo;s a nasty example<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>: Imagine you have a rubber diaphragm that has a leak area equivalent of few square millimetres in its initial state. Once hydrostatic pressure is in play, which is at once the jacket is in water, it would be hard to presume the initial leak area to be static. With a transient metacentre, you&rsquo;re in reactive mode. You want to know how much time you&rsquo;ve got before you lose control of the situation.</p>
+<p>As I was working to improve the standard, this idea of assessing the time it would take to flood compartments, as a way to assess floatation sensitivity, began twirling in my head. I began with the following:</p>
+<blockquote>
+<p>Improvements in the industry with regards to robust leg diaphragm design, in which they are tested for twice the design pressure, combined with adequate procedures in-place &mdash; viz., inspection, pressure checks, etc., prior to loadout &mdash; offer a degree of confidence that such an accidental damage can indeed be managed, and that it need not be designed for damage entirely. In support of such a premise, this section makes the case that the time taken to flood a damaged jacket leg, a commonly ignored factor, has the potential to render such a risk to as low as reasonably practicable.</p>
+<p>In order to apply this ALARP premise, the following considerations need to be satisfied: (a) a rigorous inspection and pressure tests of legs, flood valves, and diaphragms are carried out prior to loadout; (b) adequate care is taken to avoid any damage to diaphragms and flooding valves during tow; and (c) any damage that may yet incur, may not be obvious to visual inspections, otherwise it would still be possible to consider mitigation prior to lowering the jacket in water. Under such circumstances, the time taken to flood a damaged jacket may be calculated as a way to understand the residual risk.</p>
+</blockquote>
+<p>I then went on to offer a recipe to assess it, which is basic hydraulic theory in essence, and is as follows:</p>
+<p>The time taken (in seconds) to flood volume <em>V</em> is given by:</p>
+<p>$$ t = \frac{V}{Q} $$</p>
+<p>where, <em>Q</em> is the rate of water ingress of a given hole diameter, which is expressed as:</p>
+<p>$$ Q = vA_r $$</p>
+<p>where, \( A_r \) is the effective hole area (in \( m^2 \)), and <em>v</em> is the velocity of water ingress (in m/s), which is given by:</p>
+<p>$$ v = \mu \sqrt{2gh} $$</p>
+<p>where, \( \mu \) is the frictional coefficient of the orifice (hole) edge, <em>g</em> is the acceleration due to gravity (in m/s<sup>2</sup>), and <em>h</em> is the hydrostatic head (in m).</p>
+<p>Unbeknownst to me, it seems this was a problem that was explored by Naval Architects &mdash; bless this community of hard-working engineers, who unfailingly punch well above their weights &mdash; as far back in 1991 in the context of stability of sailing vessels. The theory,<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> underpinned by hydraulics, checks-out of course.</p>
+<p>An approach similar to this in managing risk was applied to <a href="https://www.bechtel.com/projects/liwan-3-1-deepwater-gas-development/" title="Liwan 3-1 Deepwater Gas Development - Bechtel">Liwan 3-1</a> the largest fixed jacket in the Asia-Pacific region,<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup> which together with the success of North Rankin B continues to inspire engineers like myself looking to overcome challenges similar or greater than the ones experienced by such projects.</p>
+<p>Here&rsquo;s an example of a problem I&rsquo;ve been working recently on.</p>
+<figure>
+  <img class="fig" loading="lazy" alt="Time taken to flood jacket components for a range of hole diameters." src="/img/Dvt.svg">
+  <figcaption>Time taken to flood jacket components for a range of hole diameters.</figcaption>
+</figure>
+
+<details>
+<summary>Plot code</summary>
+
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+&quot;&quot;&quot;
+jf.py -- Jacket flooding characteristics (viz., rate and time-taken)
+for a given buoyancy. This can either be considered either (a) as an
+engineered flooding through small bore orifices in, say, jacket legs,
+or (b) as a case of accidental flooding (e.g., due to pressure loss
+from, say, leaks, diaphragm rupture, faulty/damaged seal etc). 
+2021 ckunte
+&quot;&quot;&quot;
+import numpy as np
+import matplotlib.pyplot as plt
+
+&quot;&quot;&quot;
+Legend:
+  B -- Buoyancy of the jacket (N)
+  D -- Diameter of the (thin-walled) orifice (m)
+  Ap -- Projected area of the flood-able compartment (m^2)
+  Ar -- Area of orifice (= np.pi * D**2 / 4.0)
+  mu -- Frictional coefficient
+  V -- Volume of the flood-able compartment (m^3)
+&quot;&quot;&quot;
+
+# Velocity of water ingress
+def velo(h, mu):
+    return mu * np.sqrt(2.0 * g * h)
+
+
+# Hydrostatic head
+def head(Ap, B):
+    return (B / Ap) / (rho * g)
+
+
+# Rate of water ingress through orifice
+def flowrate(v, D):
+    Ar = np.pi * np.square(D) / 4.0
+    return Ar * v
+
+
+# Convert D from mm to m
+def conv(D):
+    return list(map(lambda x: x * 1e-3, D))
+
+
+# Main function: plot D (orifice dia.) versus Q (flow rate)
+def plot_DvQ(D, Q):
+    plt.plot(D, Q)
+    style()
+    plt.xlabel(&quot;Hole diameter, D (m)&quot;)
+    plt.ylabel(&quot;Rate of water ingress, Q (m$^3$/s)&quot;)
+    plt.savefig(&quot;DvQ.svg&quot;)
+    plt.close()
+    pass
+
+
+# Main function: plot D (orifice dia.) versus t (time taken to flood)
+def plot_Dvt(D, t, V, vol_lbl):
+    for i, j, k in zip(t, vol_lbl, V):
+        plt.semilogy(D, i, label=j + &quot; (%.0f$m^3$)&quot; % (k))
+        pass
+    style()
+    plt.legend(loc=0)
+    plt.xlabel(&quot;Hole diameter, D (m)&quot;)
+    plt.ylabel(&quot;Time taken to flood, t (hour)&quot;)
+    plt.savefig(&quot;Dvt.svg&quot;)
+    plt.close()
+    pass
+
+
+# Time to flood a volume from the list V (in hours)
+def time2flood(V, Q):
+    V_arr = np.array(V)
+    Q_arr = np.array(Q)
+    return (V_arr[:, None] / Q_arr) / 3600.0
+
+
+def style():
+    # plt.legend(loc=0)
+    plt.rcParams[&quot;grid.linestyle&quot;] = &quot;:&quot;
+    plt.rcParams[&quot;grid.linewidth&quot;] = 0.5
+    plt.grid(True)
+
+
+if __name__ == &quot;__main__&quot;:
+    # --- USER INPUTS ---
+    # Jacket buoyancy incl. 2 Nos. tanks (N)
+    B = 28000e3
+    # List of flood-able volumes (m^3)
+    V = [170, 190.0, 6000.0, 900.0] 
+    # Labels for volume (V) are in the order as below
+    vol_lbl = [
+        &quot;Pile sleeve&quot;,
+        &quot;Lower leg compartment&quot;, 
+        &quot;Buoyancy tank&quot;,
+        &quot;Outer leg -- full&quot;
+        ]
+    # Projected jacket area for calc. pressure head (m^2)
+    # (framing member projected area excluded conservatively)
+    Ap = 5400.0
+    # Hole diameter (mm)
+    D = np.arange(1.0, 100.0)
+    # Acceleration due to gravity (m/s^2)
+    g = 9.81
+    # Seawater density (kg/m^3)
+    rho = 1025.0
+    # Assumed, Table 1-9, Handbook of hydraulic resistance
+    mu = 0.75
+    # --- END of USER INPUTS ---
+    D = conv(D)
+    h = head(Ap, B)
+    v = velo(h, mu)
+    Q = flowrate(v, D)
+    t = time2flood(V, Q)
+    plot_DvQ(D, Q)
+    plot_Dvt(D, t, V, vol_lbl)
+</code></pre>
+
+</details>
+
+<p>This is a stop-gap assessment, of course, and by itself it is never sufficient. (Ideally, a full blown time-domain analysis is recommended to pre-determine the time available.) Aside from testing the flooding system, supplemented by control and auxiliary features, one needs to at least ensure that flood-able compartments are divided into controllable volumes to be able to limit accidental flooding exposure to have any degree of control.<sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup></p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Based on real events.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>B. Deakin, The development of stability standards for UK sailing vessels, The Naval Architect, The Royal Institution of Naval Architects, London, 1991.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>C. Yu, et al., Design and operation considerations for large jacket installations in South China Sea, Proceedings of the Twenty-third (2013) International Offshore and Polar Engineering Conference, Alaska, USA, 2013.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:4">
+<p>This may not be practical for pile through leg jackets.&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Release notes" href="/2021/rel">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Managing editor plug-ins" href="/2021/tep">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

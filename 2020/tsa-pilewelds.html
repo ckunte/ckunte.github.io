@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: TSA for pile welds?</title>
+<meta name="description" content="During a project schedule review a year ago, citing past experience, I was asked this following:...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>TSA for pile welds?</h1>
+<time datetime="2020-12-28T14:03:00Z">28 Dec 2020</time>
+<p>During a project schedule review a year ago, citing past experience, I was asked this following:</p>
+<blockquote>
+<p>Would the design for pile fatigue warrant applying TSA to pile welds? Any delay in realising this requirement, especially late in fabrication has the potential to adversely affect project schedule.</p>
+</blockquote>
+<p>Failing to comprehend, I sought clarification &mdash; for reasons I will get-to in a minute. But first some basics &mdash; to appreciate the complexity of this question, and the rationale behind the response I offered. </p>
+<p>To secure steel infrastructure to seabed, steel piles are commonly used. They are rolled from steel plates in 6m&ndash;12m segments and seam-welded longitudinally. For piles requiring lengths greater than stock-rolled lengths, segment ends are welded together.</p>
+<p>Submerged steel structures are cathodically protected to prevent them from corroding underwater, and it is common practice to extend this protection to piles either in part or in full, as site conditions demand.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> The most common cost-effective method of protecting submerged infrastructure below sea surface is by welding blocks of aluminium to steel parts and let saline seawater complete the electro-chemical circuit for ion exchange. This allows aluminium blocks to deplete sacrificially in lieu of corroding steel infrastructure in-place. </p>
+<p>Aluminium can also be used as surface coating by hot-spraying over steel substrate due to its lower melting temperature (about 660&deg;C). To be effective and long lasting, however, thermal sprayed aluminium (TSA) demands greater control over quality and climate during application.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
+<p>Going back to the question, my inability to grasp what was asked was simply this: what has surface coating, meant for protection against corrosion, got to do with fatigue? Upon asking I received this following feedback from engineers familiar with the case:</p>
+<blockquote>
+<p>We originally specified TSA coating for the piles so that non-seawater S-N curves could be used for the fatigue analysis of the pile girth welds, etc. (Welds are exposed to seawater with no CP during driving.) In the end this requirement was waived and no TSA coating was applied.</p>
+</blockquote>
+<p>This was so telling that it blew my mind. It suggested that here was a team years ago trying to hack together a solution for a problem they presumably faced, but perhaps without sufficiently understanding corrosion or fatigue (as a phenomenon) or TSA (as a potential solution). </p>
+<p>Let&rsquo;s dive into understanding the problem to see if this was a credible threat first, and then discuss if the solution considered was appropriate.</p>
+<p>Corrosion fatigue is a long term phenomenon, since both corrosion and fatigue are, and it is exacerbated by surface roughness and surface temperature, among other things. Metal loss from corrosion in tropical to subtropical seawater temperatures typically ranging 0.2&ndash;0.4mm/year.<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup> In other words, it takes years to eventuate. Whereas pile driving in soils (other than in calcarenite) can at worst take a couple of months to complete. The metal loss at the end of, say, three months can at worst be 0.1mm.</p>
+<pre><code># Corrosion rate
+r = [0.2mm/year, 0.4mm/year]
+
+# Metal loss
+mloss(t) = map((x * t) in mm, r)
+
+# For, say, a 3-month piling campaign
+mloss(3 month) =&gt; [0.05 mm, 0.1 mm]
+</code></pre>
+<p>Fearing lack of cathodic protection during driving, and without realising the insignificant threat to pile weld integrity from low metal loss, the team truly believed in the unsubstantiated and therefore unrealistic threat of corrosion fatigue. </p>
+<p>Alternatively, it may be that the performance of these girth welded joints in in-line fatigue were either never comforting to begin with or that it was realised too late &mdash; I am speculating here, since the received feedback does not say. So it is possible that corrosion fatigue was used as a justification. In other words, fatigue may have been a problem all along, just not realistically attributable to corrosion-fatigue. </p>
+<p>It is also possible that the team was looking for S-N curves for seawater without cathodic protection, i.e., for installation case only. Most standards do not offer this, since (a) it does not make sense to offer for such a short installation duration, and (b) there is insufficient specialist data to offer usable coefficients and factors for such a case.</p>
+<p>Either way, the team appeared to have a fatigue problem in pile girth welds, and the available stress-cycle curves were not helping in improving design life. This may have led the team to consider non-seawater S-N curves, if they could somehow insulate the joint from seawater &mdash; the surrounding medium.</p>
+<p>I am certain that the non-seawater S-N curves were never meant to be used this way, and that the authors of international standards would be suitably shocked if they were made aware of such a use case. But even if we consider this debatable in the vein that unusual circumstances demand unusual methods and therefore merit justification, I am here to say that there are technical reasons why this perceived solution offers neither value nor the desired outcome. To illustrate why, let me first plot S-N curves for tubular joints, since a foundation pile is essentially a tube. Here, I will use the <a href="/2014/sn-curves">recipe from the ISO 19902:2007</a> standard, but other standards can be considered too, if required.</p>
+<figure>
+  <img alt="S-N curves for tubular joints in air and in seawater" class="fig" src="/img/sncurves-tj.svg">
+  <figcaption>S-N curves for tubular joints in air and in seawater. Plot code is furnished at the end.</figcaption>
+</figure>
+
+<p>Comparing the two curves, it is clear that there is not a lot of value here (20MPa&ndash;40MPa relief in hotspot stresses) to take the trouble of insulating welds from seawater. I am also here to say that TSA can never offer the sort of insulation, which the team thought it would provide, for two reasons, (a) TSA is a thin-film surface coating whose thickness rarely exceeds 150&mu; &mdash; to be effective in adhesion. By virtue of its thickness (or lack thereof) and due to the method of application (i.e., hot metal spraying), the resulting coating is not only porous, but that it requires filler material to cover these pores for it to be effective, and (b) surface roughness is an issue as mentioned earlier. (Welded surfaces are rough unless ground smooth.)</p>
+<p>So if this solution isn&rsquo;t a solution at all, and fatigue concerns persisted but were realised very late, then what could be done? Well, there are at least a couple of solutions to improve fatigue life of joints. They are by (a) weld geometry improvement methods (e.g., grinding), and (b) residual stress methods (e.g., peening) with increasing effectiveness. UIT peening<sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup> for example is known to improve fatigue life by a factor of four (4). See Table 16.16-1, ISO 19902:2007, and Chapter 6 in <em>Fatigue Handbook</em>, A. Almar Naess. <em>Update (2025): See also <a href="/2025/weld-improv">Endurance gain from weld improvements</a>.</em></p>
+<p>In summary, (a) the threat of corrosion fatigue is one of longer term, and it is unlikely to eventuate during installation, since the duration of installation is too short compared to the rate of corrosion. Once the pile is in the ground, electro-chemical oxidation is significantly reduced from continuing at the aforementioned corrosion rates &mdash; due to limited dissolved oxygen available within the submerged soil. Piles are also CP protected once in the ground through metal to metal contact between substructure and pile(s) for which S-N curves in seawater with CP protection would be applicable; (b) a lot of data in standards is based on research and experimental results, and so using factors and coefficients, derived for one medium, for a completely different medium can have unintended consequences &mdash; depending upon the severity of the problem; (c) attempt to insulate welded joints subsea from seawater using TSA is not a good idea, because TSA is a thin-film porous surface coating whose quality and climate control demands are very high to be effective in cost, functionality, and be schedule-friendly.</p>
+<p>I was of course pleased that the story had a better ending, as the feedback suggests, which is that the originally-conceived method to improve fatigue performance was not implemented. </p>
+<p>But before I conclude, let me say this following: I was conflicted for months on whether or not to write this up for the fear of sounding disrespectful, despite best efforts. I deeply respect the candid sharing, and I am indeed grateful for the causal feedback from which we as a community can learn and benefit from. This note should be read in that spirit &mdash; of learning (and helping similarly challenged teams) to resist such temptations in future, and to help realise that there are least one or two solutions for managing fatigue,<sup id="fnref:5"><a class="footnote-ref" href="#fn:5">5</a></sup> but that TSA is not one of them.</p>
+<details>
+<summary>Plot code</summary>
+
+
+<pre><code class="language-python">#!/usr/bin/env python3
+# encoding: utf-8
+&quot;&quot;&quot;
+tj_curve.py -- 2016 ckunte
+May 7: Initial commit.
+Apr 29, 2020: Code simplified
+Dec 27, 2020: basex is now base (since matplotlib V3.3)
+Feb 17, 2021: A practical stress range is set for structural steel
+&quot;&quot;&quot;
+import numpy as np
+import matplotlib.pyplot as plt
+
+# a = log_10(k1)
+a = [12.48, 16.13, 12.18, 16.13]  # TJ (air [0-1] and seawater [1-2])
+m = [3.0, 5.0]  # Slope
+r = [1.0e7, 1.8e6]  # Range limit for curves
+
+
+def style():
+    plt.rcParams[&quot;grid.linestyle&quot;] = &quot;:&quot;
+    plt.rcParams[&quot;grid.linewidth&quot;] = 0.5
+    plt.grid(True)
+
+
+def sncurve(curve, r_start, r_mid, r_end, a1, m1, a2, m2, graphcolor):
+    # For slope 1 (m1)
+    n = np.arange(r_start, r_mid, 1.0e3)
+    s = (n / 10 ** a1) ** (-1 / m1)
+    plt.loglog(n, s, base=10, color=graphcolor, linewidth=1.0, 
+        label=curve,
+    )
+    # For slope 2 (m2)
+    n = np.arange(r_mid, r_end, 1.0e3)
+    s = (n / 10 ** a2) ** (-1 / m2)
+    plt.loglog(n, s, base=10, color=graphcolor, linewidth=1.0)
+    pass
+
+
+def main():
+    # Plot all
+    style()
+    sncurve(&quot;TJ curve (air)&quot;, 
+        1.0e3, r[0], 1.0e9, a[0], m[0], a[1], m[1], &quot;blue&quot;,
+    )
+    sncurve(
+        &quot;TJ curve (seawater w/ C.P.)&quot;, 
+        1.0e3, r[1], 1.0e9, a[2], m[0], a[3], m[1], &quot;red&quot;,
+    )
+    plt.legend(loc=0)
+    plt.xlabel(&quot;Number of cycles, N&quot;)
+    plt.ylabel(&quot;Hotspot stress, $\sigma$ (MPa)&quot;)
+    plt.savefig(&quot;sncurves-tj.svg&quot;)
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+
+</details>
+
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>This depends on the potential for electro-chemical oxidation (i.e., corrosion) below seabed, which further depends on many factors, viz., (a) soil particle size, (b) dissolved oxygen, (c) salinity, (d) pH value, (e) electrical resistance, (f) temperature, etc. The other type, i.e., microbial corrosion, is not discussed here.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>Humidity below 80%, thickness in microns thereby making this a porous application warranting filler material to cover the porosity resulting from spray, skilled labour, especially if done by hand, temperature controlled, dust-free, contamination-free environments, and stringent surface preparation requirements, etc.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>Heated surfaces amplify the rate of corrosion by up to ten times.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:4">
+<p>UIT Peening is a cold remoulding of steel / weld by applying uniform stress-relieving controlled blows over the entire welded surface with an ultrasonic hand held gun.&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:5">
+<p>Even if the asset is in the later stages of being fabricated.&#160;<a class="footnote-backref" href="#fnref:5" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Shell buckling" href="/2020/ebs">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Storm safety" href="/2021/storm-safety">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

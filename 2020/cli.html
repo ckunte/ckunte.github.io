@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: CLI</title>
+<meta name="description" content="For writing python scripts that are best served with user inputs at command line, docopt is like...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>CLI</h1>
+<time datetime="2020-08-08T17:15:00Z">8 Aug 2020</time>
+<p>For writing python scripts that are best served with user inputs at command line, <a href="http://docopt.org/" title="docopt—language for description of command-line interfaces">docopt</a> is like magic. It transforms a simple comment block describing a script&rsquo;s use into actual argument code, which developers don&rsquo;t need to write. To the point that those unfamiliar with docopt are likely to erroneously presume the script incomplete, when they realise it contains almost no code for processing arguments, e.g.,</p>
+<pre><code class="language-python">#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
+&quot;&quot;&quot;Wind speed plots based on ISO 19901-1:2005.
+2016 ckunte.
+
+Usage: isowind.py --speed=S [--height=H]
+       isowind.py --help
+       isowind.py --version
+
+Options:
+  -h, --help  Show this help.
+  --speed=S   1h mean wind speed at zr ref. height (m/s).
+  --height=H  Maximum height (m). [default: 140.0]
+
+&quot;&quot;&quot;
+from docopt import docopt
+
+def main():
+    args = docopt(__doc__, version='ISO 19901-1 wind speed plots, v0.1')
+    Uo = float(args['--speed']) # m/s 1h mean wind speed at zr
+    h = float(args['--height']) # m, max height (e.g., a flare tower)
+    ...
+</code></pre>
+<p>The script <code>isowind.py</code> takes a mandatory argument <code>--speed</code> (e.g. <code>--speed=30</code> for, say, 30m/s mean wind speed at reference height) like so:</p>
+<pre><code class="language-shell">python isowind.py --speed=30
+</code></pre>
+<p>But that&rsquo;s not all, there is another argument called <code>--height</code> in the block. These are enclosed in square brackets, indicating it&rsquo;s optional, for which a default value is provided in the block. So, for the above command line construct (without an explicit optional height input, the script uses 140m). Instead, if the user provides the height as an argument, like so, then the script uses the height as 120 instead of the default 140.</p>
+<pre><code class="language-shell">python isowind.py --speed=30 --height=120
+</code></pre>
+<p>The script defaults to show the help block in brief when the user fails to provide any arguments at the command line:</p>
+<pre><code class="language-shell">$ python isowind.py
+Usage: isowind.py --speed=S [--height=H]
+       isowind.py --help
+       isowind.py --version
+</code></pre>
+<p>With the <code>--help</code> argument, it produces the full help block like so:</p>
+<pre><code class="language-shell">$ python isowind.py --help
+Wind speed plots based on ISO 19901-1:2005.
+2016 ckunte.
+
+Usage: isowind.py --speed=S [--height=H]
+       isowind.py --help
+       isowind.py --version
+
+Options:
+  -h, --help  Show this help screen.
+  --speed=S   1h mean wind speed at zr ref. height (m/s).
+  --height=H  Maximum height (m). [default: 140.0]      
+</code></pre>
+<p>Not long ago, I discovered another such self documenting snippet, which I now use in my <a href="https://en.wikipedia.org/wiki/Make_(software)">makefiles</a>. Here&rsquo;s an example Makefile:</p>
+<pre><code class="language-make"># Makefile for t1 backup routine
+# 2018 ckunte
+# Source on Windows
+WSRC=/cygdrive/c/work/proj/t1
+# Source on Mac
+MSRC=/Users/ckunte/Desktop/t1
+# Using pre-configured hosts + ids in ~/.ssh/config
+SRV=$(IP)
+# Flags + port
+WFLAGS=-auz --exclude=&quot;.*&quot; --log-file=$(WSRC)/log.txt
+MFLAGS=-auz --exclude=&quot;.*&quot; --log-file=$(MSRC)/log.txt
+PORT=-e 'ssh -p 22'
+
+help: ## Show this help
+    @echo 'Makefile for backing-up t1'
+    @echo 'Usage: make &lt;opt&gt; IP=&lt;ipaddr&gt;'
+    @echo '&lt;opt&gt;:'
+    @rg -I '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = &quot;:.*?## &quot;}; {printf &quot; \033[36m%-6s\033[0m %s\n&quot;, $$1, $$2}'
+
+m2w: ## Mac -&gt; Win (run from Win)
+    @echo -n 'Syncing from Mac to Windows...'
+    @rsync $(WFLAGS) $(PORT) $(SRV):$(MSRC)/ $(WSRC)/
+    @echo 'done.'
+
+w2m: ## Win -&gt; Mac (run from Win)
+    @echo -n 'Syncing from Windows to Mac...'
+    @rsync $(WFLAGS) $(WSRC)/ $(PORT) $(SRV):$(MSRC)/
+    @echo 'done.'
+
+m2m: ## Mac -&gt; Mac (run from Mac)
+    @echo -n 'Syncing from Mac to Mac...'
+    @rsync $(MFLAGS) $(MSRC)/ $(PORT) $(SRV):$(MSRC)/
+    @echo 'done.'
+
+.PHONY: help
+</code></pre>
+<p>When this Makefile is run without an argument, predictably it produces this following neat help section:</p>
+<pre><code class="language-shell">$ make
+Makefile for backing-up t1
+Usage: make &lt;opt&gt; IP=&lt;ipaddr&gt;
+&lt;opt&gt;:
+ help   Show this help
+ m2m    Mac -&gt; Mac (run from Mac)
+ m2w    Mac -&gt; Win (run from Win)
+ w2m    Win -&gt; Mac (run from Win)
+</code></pre>
+<p>To backup from a Windows computer to a Mac in this example, I run the following command line:</p>
+<pre><code>$ make w2m IP=10.0.1.50
+</code></pre>
+<p>The part of interest in the above Makefile is again the help section, which uses a few lines of magic to pull commented line descriptions, sorts them as options, and presents them as part of the help screen. It can be used with either <code>egrep -h</code> or <code>rg -I</code>. (I like <a href="https://github.com/BurntSushi/ripgrep" title="GitHub - BurntSushi/ripgrep: ripgrep recursively searches directories for a regex pattern">ripgrep</a>.) </p>
+<p>Self documenting scripts are cool and they&rsquo;re a joy to use. Give these a try, if you haven&rsquo;t already.</p>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="USFOS syntax" href="/2020/ust">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Building a model" href="/2020/model">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

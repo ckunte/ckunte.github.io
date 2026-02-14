@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Release notes</title>
+<meta name="description" content="The publishing mechanism assembled to produce this website is a topic likely of little interest,...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Release notes</h1>
+<time datetime="2021-02-21T22:50:00Z">21 Feb 2021</time>
+<p>The publishing mechanism assembled to produce this website is a topic likely of little interest, nonetheless, I&rsquo;d like to, if only as release notes. But first, some trivia.</p>
+<p>By 2010, I was fed-up with a popular open source web publishing software I&rsquo;d been using since 2004. Its code base was changing so rapidly that I could not keep up. To quote <a href="https://tom.preston-werner.com/2008/11/17/blogging-like-a-hacker.html" title="Blogging Like a Hacker">Tom Preston-Werner</a> (2008):</p>
+<blockquote>
+<p>I already knew a lot about what I didn&rsquo;t want. I was tired of complicated blogging engines like WordPress and Mephisto. I wanted to write great posts, not style a zillion template pages, moderate comments all day long, and constantly lag behind the latest software release.</p>
+<p>On Sunday, October 19th, I sat down in my San Francisco apartment with a glass of apple cider and a clear mind. After a period of reflection, I had an idea. While I&rsquo;m not specifically trained as an author of prose, I am trained as an author of code. What would happen if I approached blogging from a software development perspective? What would that look like?</p>
+</blockquote>
+<p>Tom came up with <a href="https://jekyllrb.com/">Jekyll</a> from that deliberation. </p>
+<p>Fatigued by bloat and vulnerabilities in the open source web publishing software stack, by 2011, Tom&rsquo;s post had caught-on. It helped people realise that writing one was not some dark art that required an army of engineers and volunteers for it to be useful, thereby renewing interest in the development and use of fit-for-purpose <a href="https://jamstack.org/generators/">static site generators</a> (SSGs). With an SSG, one could also get rid of all the complexities of running and managing database instances, and keep them from corrupting over time &mdash; be they from upgrades or from encoding.</p>
+<p>These trends helped re-assess my needs too. For instance, questioning the need for traditional web service hosts, or the need for pre-requisites like <a href="https://en.wikipedia.org/wiki/LAMP_(software_bundle)" title="LAMP (software bundle) - Wikipedia">LAMP</a> stack to be able to a host simple website like this one. Having such software in the cloud and shared across users amplified attack vectors for the hapless publishers. And for what really? For the comfort of publishing on the road by accessing an archaic login system without multi-factor authentication? It is ridiculous in hindsight of course, but there was a time many of us thought that there really was no alternative.</p>
+<p>In 2012, after years of grappling with software bloat, security gaffes, and latency of various web publishing services, I decided to take control of my publishing set-up. My objectives were:</p>
+<ul>
+<li>To write and present code, math, and prose effortlessly</li>
+<li>Enable login-less cryptographically-secure publishing</li>
+<li>Ensure portability of notes together with track changes</li>
+<li>Maintain bare bones, readable, safe, and low-dependency code base</li>
+<li>Use a decent template engine to be able to do more with less code</li>
+</ul>
+<p>After some searching and evaluating, I found <a href="https://github.com/dz/chisel" title="GitHub - dz/chisel: a simple Python static blog generation utility">Chisel</a> &mdash; a simple python script to turn notes, written in <a href="https://en.wikipedia.org/wiki/Markdown" title="Markdown - Wikipedia">markdown</a>, into html pages, and auto-arrange them in a neatly linked structure. It employed <a href="https://jinja.palletsprojects.com/" title="Jinja">Jinja</a>, a minimal, performant template engine; <a href="https://git-scm.com/" title="Git">git</a> for tracking changes in both notes and code; and <a href="https://pages.github.com/" title="GitHub Pages | Websites for you and your projects, hosted directly from your GitHub repository. Just edit, push, and your changes are live.">GitHub</a> for hosting. I subsequently <a href="https://github.com/ckunte/chisel/tree/ck" title="GitHub - ckunte/chisel at ck">added a few features</a> to Chisel I wanted for myself.</p>
+<p>Both the model and the controller are local processes, having decided long ago that I would execute nothing in the cloud. Only the view produced (from a combination of model and controller processes) is pushed to the host via git. This eliminates the need for a feature-rich web server on the host, and is therefore ideal for hosting a locally-generated static site. Today I am able to say that after nine years of sustained use of this above set-up, it remains very usable. The code base has remained the same, with lines of code never exceeding more than a few overall, and it is as readable today as I had first found it. </p>
+<p>The only noteworthy maintenance I undertook was in 2019-20, when concerned by the need to <a href="https://www.python.org/doc/sunset-python-2/">phase out python2 code</a>, I sat down to re-factor Chisel to run on python3. I did so <a href="https://github.com/dz/chisel/pull/7/commits/13d3d3ee3b7ede6bd41b962f8abee0ba629578b9" title="2to3 by ckunte · Pull Request #7 · dz/chisel · GitHub">without discernible change</a> in code. </p>
+<p>This is a set of release notes, covering features or updates, from that exercise done a year ago, and split into MVC design pattern.</p>
+<h2>Controller</h2>
+<ul>
+<li>Date is ISO 8601 compliant (new)</li>
+<li>Fenced code markdown extension enabled (new)</li>
+<li>Generator specific config file (new)</li>
+<li>Re-factored to python 3 (new)</li>
+<li>Select contributions sent upstream via pull requests (update)</li>
+<li>Taxonomy (tag) feature added (new, Nov 2023)</li>
+</ul>
+<h2>Model</h2>
+<ul>
+<li>Feed templates now in JSON (new)</li>
+<li>Keyboard-only navigation <kbd>Alt</kbd> + (<kbd>&nbsp;/</kbd>, <kbd>&nbsp;j</kbd>, <kbd>&nbsp;k</kbd>) with circular return (update)</li>
+<li>Homepage is now also the archive page (update)</li>
+<li>Template parameters: single config file, selective imports (new)</li>
+<li>Templates modularised with child templates (new)</li>
+<li>Home template updated to support tags (new, Nov 2023) </li>
+</ul>
+<h2>View</h2>
+<ul>
+<li>Custom font calls eliminated (update)</li>
+<li>Dark mode honouring OS-set appearance (update)</li>
+<li>Numerous template snippets re-factored to be modular (update)</li>
+<li>Re-design, html5 and css3 compliant (new)</li>
+<li>Render math with KaTeX engine (new)</li>
+<li>Snippets re-formatted using black for improved readability (new)</li>
+<li>Highlight.js and KaTeX combined to only load on demand</li>
+<li>A clutter-free access to text-only web browsers like lynx, links</li>
+<li>UTF-8 encoding compliance in both HTML and JSON feed (new)</li>
+</ul>
+<hr />
+<p><em>Author&rsquo;s age:</em> In lieu of manually updating the age in the bio, I <a href="https://github.com/ckunte/chisel/commit/94a8416d0ffc79981c098ae691f922de046f7fff" title="Add a filter to display author's age">dropped a little filter</a> that computes it.</p>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Storm safety" href="/2021/storm-safety">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Jacket flooding" href="/2021/jf">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

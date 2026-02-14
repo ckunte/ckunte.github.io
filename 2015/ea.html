@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Chain stiffness</title>
+<meta name="description" content="Position Mooring (DnV-OS-E301), DnV’s Offshore Standard, has undergone three revisions in six...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Chain stiffness</h1>
+<time datetime="2015-05-30T20:45:00Z">30 May 2015</time>
+<p>Position Mooring (DnV-OS-E301), DnV&rsquo;s Offshore Standard, has undergone three revisions in six years &mdash; a sign of how busy things are w.r.t. mooring systems, and the urgent need for updates as the industry rapidly learns from experience and innovates on demand. The one of interest to me is the recipe it offers to calculate effective elastic modulus (E) for studless chains. These, the standard acknowledges, are courtesy of <a href="http://www.vicinaycadenas.net/">Vicinay Cadenas</a>, the world-renowned chain maker from Spain. </p>
+<p><em>Table: Effective elastic modulus E for studless chains (N/m<sup>2</sup>)</em></p>
+<table>
+ <tr>
+  <th>Grade</th><th>2000-8</th><th>2010-15</th>
+ </tr>
+ <tr>
+  <td>R3</td><td>(8.37 - 0.0305d) &sdot; 1E10</td><td>(5.40 - 0.0040d) &sdot; 1E10</td>
+ </tr>
+ <tr>
+  <td>R4</td><td>(7.776 - 0.01549d) &sdot; 1E10</td><td>(5.45 - 0.0025d) &sdot; 1E10</td>
+ </tr>
+ <tr>
+  <td>R5</td><td>- do -</td><td>(6.00 - 0.0033d) &sdot; 1E10</td>
+ </tr>
+</table>
+
+<p>where, chain link diameter, <em>d</em>, is in mm, and <em>A</em> would be the combined cross sectional area of two legs of a (common) chain link. So, here&rsquo;s the story of change in one graph that you do not get to see in standards or when comparing between revisions.</p>
+<p>As the table shows the recipe changed in the 2010 edition for all grades.</p>
+<figure>
+  <img alt="Effective elastic modulus (E) and axial stiffness (EA) for a range of studless chain sizes and grades" class="fig" src="https://user-images.githubusercontent.com/177423/30873971-959ca094-a30c-11e7-8d38-85fbf95de3af.png" loading=lazy>
+  <figcaption>Effective elastic modulus (E) and axial stiffness (EA) for a range of studless chain sizes and grades</figcaption>
+</figure>
+
+<p>A graph of chain diameter plotted against its corresponding axial stiffness is always handy for a mooring engineer, because anyone with an elementary understanding of structural mechanics would know that <a href="http://en.wikipedia.org/wiki/Stiffness">stiffness</a> is essential in controlling displacements (vessel excursions or offsets).</p>
+<p>The one that jumps right out is, of course, the R3 grade stud-less chain as it falls free from its previous value. It&rsquo;s good to remember that the R3 has been with us longer than the newer grades, which are essentially out of the demand from larger vessels in harsher environments like the FLNG. Seriously, what just happened there?</p>
+<details>
+<summary>Plot code</summary>
+
+
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+# ea.py -- 2015 ckunte
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def main(d):
+    # As per DNV-OS-E301 (From 2000 to 2015 editions):
+    E = [
+        (5.4 - 0.004 * d) * 1e10,  # R3 studless (2010-15)
+        (8.37 - 0.00305 * d) * 1e10,  # R3 studless (2000-8)
+        (5.45 - 0.0025 * d) * 1e10,  # R4 studless (2010-15)
+        (6.0 - 0.0033 * d) * 1e10,  # R5 studless (2010-15)
+        (7.776 - 0.01549 * d) * 1e10,  # R4, R5 studless (2000-8)
+    ]  # Effective elastic modulus (E) in N/m^2 for chain dia (d) in mm
+
+    lbl = [
+        &quot;Studless R3 (2010-15)&quot;,
+        &quot;Studless R3 (2000-8)&quot;,
+        &quot;Studless R4 (2010-15)&quot;,
+        &quot;Studless R5 (2010-15)&quot;,
+        &quot;Studless R4, R5 (2000-8)&quot;,
+    ]  # Label list for plots in the order of E list (above)
+
+    for i, j in zip(E, lbl):
+        # plot chain diameter (d) versus effective elastic modulus (E)
+        ax1 = plt.subplot(211)
+        plt.plot(d, (i * 1e-6), label=j, linewidth=2)
+        plt.setp(ax1.get_xticklabels(), visible=False)
+        # plot chain diameter (d) versus chain stiffness (EA)
+        # d is in mm, hence converting it to m (to calculate EA in N)
+        EA = i * 2.0 * np.pi * (d / 1e3) ** 2 / (4.0 * 1e6)  # (MN)
+        ax2 = plt.subplot(212)
+        plt.plot(d, EA, label=j, linewidth=2)
+        plt.setp(ax2.get_xticklabels(), fontsize=12)
+
+    ax1.legend(loc=0)
+    ax2.legend(loc=0)
+    plt.subplots_adjust(top=0.95, hspace=0.1, bottom=0.05)
+    ax1.set_ylabel(&quot;Effective elastic modulus, E (MN/m$^2$)&quot;)
+    plt.ylabel(&quot;Axial stiffness, EA (MN)&quot;)
+    plt.xlabel(&quot;Chain diameter, d (mm)&quot;)
+    ax1.grid(True)
+    ax2.grid(True)
+    fig = plt.gcf()
+    fig.set_size_inches(8.5, 11)
+    fig.savefig(&quot;studless-chain-ea.svg&quot;, dpi=100)
+    plt.close()
+
+
+if __name__ == &quot;__main__&quot;:
+    d = np.linspace(60, 200)  # chain diameter range to plot (mm)
+    main(d)
+</code></pre>
+
+</details>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Lighthouse tech." href="/2014/lighthouse">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Libraries" href="/2015/lib">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

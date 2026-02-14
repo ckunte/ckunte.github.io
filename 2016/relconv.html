@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: End releases</title>
+<meta name="description" content="Aerial view of a flare tower. STAAD has an odd way of coding end-releases for rod elements, in...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>End releases</h1>
+<time datetime="2016-11-27T22:03:00Z">27 Nov 2016</time>
+<figure>
+  <img alt="Aerial view of a flare tower" src="/img/2016-relconv.jpg" loading=lazy>
+  <figcaption>Aerial view of a flare tower.</figcaption>
+</figure>
+
+<p><a href="https://www.bentley.com/en/products/product-line/structural-analysis-software/staadpro" title="3D Structural Analysis and Design Software - STAAD.Pro">STAAD</a> has an odd way of coding end-releases for rod elements, in which start-sides and end-sides are defined as separate commands. Here is an example:</p>
+<pre><code>MEMBER RELEASE
+561 567 TO 570 573 694 TO 698 START MY MZ
+482 483 488 693 694 TO 696 END MY MZ
+</code></pre>
+<p>The conversion tool, <code>stadred</code> application included in <a href="http://usfos.com/" title="USFOS non-linear static and dynamic analysis of space frame structures">USFOS</a> does not convert member-end releases. And so, very quickly, this manual conversion can become time-consuming, say, for hundred odd elements and above. Here are the things to pay attention to:</p>
+<ol>
+<li>Elements: There are single elements, and then there are ranges.</li>
+<li>Command: Start and end explicit commands introduce the need to manually sift to segregate in three sets, viz., elements with releases at start only, end only, and at both ends.</li>
+</ol>
+<p>USFOS, on the other hand, uses a format of defining both start as well as end in one command like thus:</p>
+<pre><code>'        [- START SIDE --]  [-- END SIDE --]  
+'        X  Y  Z  MX MY MZ  X  Y  Z MX MY MZ  ELEM LIST
+BEAMHING 1  1  1   1  0  0  1  1  1  1  0  0  686 687 688 689 690 691 692
+</code></pre>
+<p>To convert end-releases from STAAD to USFOS, one needs to do the following:</p>
+<ol>
+<li>Pick out range elements and list them first.</li>
+<li>Convert ranges to full numerical list first, as USFOS does not recognise ranges like <code>686 TO 692</code>.</li>
+<li>Pick out single elements, and add them to the list above.</li>
+<li>Once you have a full list of elements per two explicit release commands with <code>START</code> and <code>END</code>, like <code>START MY MZ</code> and <code>END MY MZ</code>, segregate them in to start only, end only and both end release list of elements.</li>
+</ol>
+<p>I&rsquo;ve tried to automate all of the above. Here we go:</p>
+<p>Example of <code>start.txt</code> required by the script down below:</p>
+<pre><code>MEMBER RELEASE
+468 TO 489 522 TO 550 552 553 555 556 558 559 561 567 TO 570 -
+573 575 TO 578 598 TO 615 617 620 TO 623 625 627 628 631 TO 636 -
+651 TO 663 665 TO 679 693 694 TO 698 700 TO 702 704 705 -
+707 TO 728 743 TO 770 829 TO 831 833 834 836 838 TO 841 843 -
+845 TO 848 850 852 TO 855 857 859 TO 862 864 866 TO 869 872 -
+873 TO 876 878 880 TO 883 885 887 888 895 973 984 986 TO 988 -
+995 998 1003 1004 1009 1012 1014 TO 1019 1021 TO 1024 -
+1047 TO 1052 1054 1055 1057 1066 1071 TO 1073 1088 TO 1091 -
+1097 TO 1102 1104 TO 1108 1135 TO 1141 1143 1145 57 59 60 -
+423 TO 455 564 1146 TO 1151 1158 1165 TO 1167 1169 1171 1173 - 
+1402 START MY MZ
+</code></pre>
+<p>Example of <code>end.txt</code> required by the script down below:</p>
+<pre><code>482 483 488 TO 507 522 TO 550 552 553 555 556 558 559 561 -
+567 TO 570 573 575 576 TO 578 612 TO 615 620 TO 622 624 -
+626 TO 628 630 TO 663 665 TO 679 693 694 TO 695 699 TO 701 -
+704 TO 714 729 TO 770 829 830 832 TO 834 836 838 TO 841 843 -
+845 TO 848 850 852 TO 855 857 859 TO 862 864 866 TO 869 872 -
+873 TO 876 878 880 TO 883 885 887 895 984 986 TO 988 -
+999 TO 1001 1012 1014 1015 TO 1024 1027 1028 1047 TO 1057 -
+1062 1063 1066 1071 TO 1073 1084 TO 1086 1088 1092 1095 -
+1097 TO 1108 1122 TO 1124 1136 TO 1146 1148 1152 1153 1159 -
+1161 1162 1165 1166 1169 1171 TO 1173 1402 END MY MZ
+</code></pre>
+<pre><code class="language-python">#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+&quot;&quot;&quot;
+fltr.py: Member end release conversion from STAAD to USFOS
+ckunte, 2016-11-27
+&quot;&quot;&quot;
+
+import re
+
+# Use one file for START MY MZ and one file for END MY MZ
+fname1 = &quot;start.txt&quot; # required
+fname2 = &quot;end.txt&quot; # required
+
+
+# for searching for elements in ranges
+rdig = re.compile('\d+ TO \d+')
+# for searching all elements
+sdig = re.compile('\d+')
+
+
+def main():
+    with open(fname1, &quot;r&quot;) as f:
+        # empty container for all single elements
+        s_all = []
+        # empty container for all elements in ranges
+        r_all = []
+        for line in f:
+            sd = sdig.findall(line) # find single numbers
+            rd = rdig.findall(line) # find range numbers
+            for i in sd:
+                s_all.append(int(i))
+            for i in rd:
+                # format ranges
+                j = re.sub(&quot; TO &quot;, &quot;,&quot;, i)
+                k = re.findall(r'\d+', j) 
+                # expand ranges
+                h = range(int(k[0]), int(k[1]) + 1)
+                r_all.append(h)
+        # empty container for multiple lists in to one
+        r_merg = []
+        for i in r_all:
+            r_merg += i
+
+    s = list(set(s_all).union(r_merg))
+
+    with open(fname2, &quot;r&quot;) as f:
+        s_all = []
+        r_all = []
+        for line in f:
+            sd = sdig.findall(line)
+            rd = rdig.findall(line)
+            for i in sd:
+                s_all.append(int(i))
+            for i in rd:
+                j = re.sub(&quot; TO &quot;, &quot;,&quot;, i)
+                k = re.findall(r'\d+', j)
+                h = range(int(k[0]), int(k[1]) + 1)
+                r_all.append(h)
+        r_merg = []
+        for i in r_all:
+            r_merg += i
+
+    e = list(set(s_all).union(r_merg))
+    # for elements with both end releases
+    print &quot;Both: &quot;, set(s).intersection(e)
+    # for elements with start only end releases
+    print &quot;Start: &quot;, set(s).difference(e)
+    # for elements with end only end releases
+    print &quot;End: &quot;, set(e).difference(s)
+
+
+if __name__ == '__main__':
+    main()
+</code></pre>
+<p>The output looks like this:</p>
+<pre><code>Both:  set([1024, 1023, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 1047, 1048, 537, 1050, 1051, 1052, 541, 1054, 1055, 544, 1057, 546, 547, 548, 549, 550, 552, 553, 1066, 555, 556, 558, 1071, 1072, 561, 567, 568, 569, 570, 573, 575, 1088, 577, 578, 1097, 1098, 1099, 1100, 1101, 1102, 1104, 1105, 1106, 1107, 1108, 887, 612, 613, 614, 615, 620, 621, 622, 1136, 1137, 1138, 1139, 1140, 1141, 1143, 632, 1145, 1146, 635, 1148, 535, 652, 1165, 1166, 655, 656, 1169, 658, 1171, 660, 1173, 662, 1049, 665, 666, 667, 668, 538, 670, 671, 672, 673, 674, 539, 676, 677, 678, 679, 540, 711, 627, 542, 694, 695, 628, 543, 700, 701, 704, 705, 707, 708, 709, 710, 545, 712, 713, 714, 631, 633, 634, 536, 743, 744, 636, 746, 747, 748, 749, 750, 751, 752, 753, 754, 755, 756, 757, 758, 759, 760, 761, 762, 763, 764, 765, 766, 767, 768, 769, 770, 895, 559, 987, 1073, 829, 830, 833, 834, 651, 836, 838, 839, 840, 841, 843, 845, 846, 653, 848, 693, 850, 852, 654, 854, 855, 857, 859, 860, 861, 862, 864, 866, 867, 868, 869, 657, 872, 873, 874, 875, 876, 878, 880, 881, 882, 659, 885, 745, 1402, 661, 576, 663, 883, 669, 675, 984, 986, 847, 988, 482, 483, 488, 489, 1012, 1014, 1015, 1016, 1017, 1018, 1019, 1021, 1022, 853])
+Start:  set([564, 57, 59, 60, 1089, 1090, 1091, 598, 599, 600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 617, 1135, 625, 1147, 1149, 1150, 1151, 1158, 1167, 623, 696, 697, 698, 702, 715, 716, 717, 718, 719, 720, 721, 722, 723, 724, 725, 726, 727, 728, 831, 998, 888, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 973, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 995, 484, 485, 486, 487, 1003, 1004, 1009])
+End:  set([1027, 1028, 1053, 1056, 1062, 1063, 1084, 1085, 1086, 1092, 1095, 1103, 1122, 1123, 1124, 624, 626, 1142, 1144, 637, 638, 639, 1152, 1153, 642, 643, 644, 645, 646, 1159, 648, 1161, 1162, 1172, 699, 706, 630, 729, 730, 731, 732, 733, 734, 735, 736, 737, 738, 739, 740, 741, 742, 640, 641, 647, 649, 650, 832, 999, 1000, 1001, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 1020])
+</code></pre>
+<p><a id="v"></a>Here&rsquo;s a <a href="https://vimeo.com/227553287">video of the workflow</a>.</p>
+<p>I shared this code with Dr. Holm&aring;s of USFOS, and asked why <code>stadred</code> does not have the option of converting releases. He confirmed that release conversions were intentionally suppressed in <code>stadred</code>, as <mark>releases often cause problems in non-linear simulations</mark>. However, due to the uniqueness of the problem I was working on, he kindly sent me a working copy of <code>stadred</code> that also converts end-releases, for which I am indeed grateful. </p>
+<p>Now, I have two ways to convert. The code above generates a somewhat concise instruction, but the process is semi-automatic, whereas the updated <code>stadred</code> copy I was given is fully automatic, but generates a much bigger file, since end-release instructions are generated per member.</p>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Wind" href="/2016/wind">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Wave length" href="/2016/wavelength">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>

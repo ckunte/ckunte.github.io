@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Anatomy of a Typst template</title>
+<meta name="description" content="Developed by two graduate students from Technical University of Berlin, Typst is a computer...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+</header>	
+<article>
+<h1>Anatomy of a Typst template</h1>
+<time datetime="2025-03-30T22:17:00Z">30 Mar 2025</time>
+<p>Developed by two graduate students from Technical University of Berlin, <a href="https://typst.app">Typst</a> is a computer program for typesetting documents, thoughtfully designed to be fast, portable, feature-packed, and script-able. It would not be unfair to call it a spiritual successor to <a href="https://en.wikipedia.org/wiki/LaTeX">LaTeX</a>. With contributions from talented open-source enthusiasts, it is evolving well and blowing-up LaTeX&rsquo;s handicaps, viz.,</p>
+<ul>
+<li>compilation speed</li>
+<li>learning curve</li>
+<li>mark-up verbosity</li>
+<li>multi-run demand for referencing</li>
+<li>package size</li>
+<li>syntax highlighting</li>
+</ul>
+<p>With good defaults (font and paragraph properties, paper size, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned LaTeX user, then you&rsquo;d know how useful <a href="https://ctan.org/topic/class">document classes</a> are  &mdash; something Typst does not yet come pre-packaged with. And so, a little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for users, by users. If you&rsquo;re one of them, and your tastes are slightly different from those available there-in, then it would not hurt to know how to create a Typst template from scratch. Here is how.</p>
+<p>Rule one of publishing is to separate presentation + styling from content, be it offline or online. So we create two files:</p>
+<ul>
+<li><em>main.typ</em> &mdash; this file will have all the report&rsquo;s content</li>
+<li><em>template.typ</em> &mdash; this one&rsquo;s for the report&rsquo;s presentation + styling</li>
+</ul>
+<p><em>main.typ</em>: This requires only a few key user-inputs (which would be variables pre-defined in <em>template.typ</em>), e.g. document title, name of the author, and <a href="https://tex.stackexchange.com/questions/71172/why-are-default-latex-margins-so-big/71211#71211">paper size</a> (useful for me) other than the content itself. (Note that every element of the look and feel is my own; there&rsquo;s no default; it&rsquo;s like I&rsquo;m making my own document class.)</p>
+<pre><code>#import &quot;template.typ&quot;: *
+#show: note.with(
+  title: [On-bottom stability],
+  author: &quot;C Kunte&quot;,
+  paper: &quot;a4&quot;, // defaults don't need to be defined; I added paper option because I often use &quot;a5&quot;
+) // report content from here-on
+</code></pre>
+<p><em>template.typ</em>: Basic preamble is as follows. Defaults will be used when things like margins are undefined in either of the two files. </p>
+<pre><code>#let note(
+  title: none,
+  author: none,
+  paper: &quot;a4&quot;,
+  body,
+) = {
+  set document(
+    title: title, 
+    author: author
+  ) // set metadata (seen in document properties)
+
+  set page(
+    paper: paper, // enables user-definable in main.typ
+    numbering: &quot;1&quot;, // another example: &quot;1 of 1&quot;
+  ) // page properties
+
+  align(center)[
+    #text(1.8em)[*#title*]
+    #v(2em, weak: true)
+    #text(1em, author)
+    #v(1em, weak: true)
+    #datetime.today().display(&quot;[month repr:long] [day], [year]&quot;)
+    #v(5em, weak: true)
+  ] // title block
+
+  body
+}
+</code></pre>
+<p>If I were to automate setting margins based on paper size, then it would be like so, in which the <em>top</em> margin overrides the <em>y</em> parameter to make room for a custom header.</p>
+<pre><code>set page(
+  margin: if paper == &quot;a5&quot; {
+    (x: 0.75in, y: 0.75in, top: 0.9in)
+  } else {
+    (x: 1.0in, y: 1.0in, top: 1.25in)
+  },
+)
+</code></pre>
+<p>Strictly speaking the above is totally unnecessary. <a href="https://typst.app/docs/guides/page-setup-guide/" title="Typst - Page setup guide">Here&rsquo;s why</a>:</p>
+<blockquote>
+<p>By default, Typst will create margins proportional to the page size of your document. (The margins are set automatically to 2.5/21 times the smaller dimension of the page.) </p>
+</blockquote>
+<p>We can do something similar for font size:</p>
+<pre><code>set text(
+  size: if paper == &quot;a5&quot; { 11pt } else { 12pt },
+)
+</code></pre>
+<p>Typographical controls are covered too, e.g.,</p>
+<pre><code>set text(
+  font: &quot;Segoe UI&quot;, // e.g. &quot;STIX Two Text&quot; or &quot;erewhon&quot;,
+  top-edge: &quot;cap-height&quot;, 
+  bottom-edge: &quot;baseline&quot;,
+  number-type: &quot;old-style&quot;,
+  size: if paper == &quot;a5&quot; { 11pt } else { 12pt },
+)
+</code></pre>
+<p>Prefer indented classic look for paragraphs? You can do this:</p>
+<pre><code>set par(
+  spacing: 0.65em, 
+  leading: 0.65em, 
+  first-line-indent: 12pt, 
+  justify: true
+)
+</code></pre>
+<p>Here is a little complex header code to make the title of the note (paper) appear on every even page, and the active section name appear on every odd page other than the first. </p>
+<pre><code>set page(
+  header: context {
+    // set custom header: make title appear on even pages
+    if calc.even(counter(page).get().first()) { 
+      emph(title) 
+    } else { none }
+
+    // make section appear on odd pages other than the first
+    let page-num = counter(page).get().first()
+    if page-num &gt; 1 and calc.odd(page-num) {
+      let headings = query(heading)
+      let curr-heading = none
+      let found = false
+
+      for heading-elem in headings {
+        if heading-elem.location() != none and heading-elem.location().page() == page-num {
+          curr-heading = heading-elem.body
+          found = true
+        } else if heading-elem.location() != none and heading-elem.location().page() &lt; page-num {
+          curr-heading = heading-elem.body // keep track of the last heading on a prev page
+        } else if found { break } // stop once we have moved past the curr page
+      }
+      align(right, emph(curr-heading))
+    } else { none }
+  }, // context ends
+) // page ends
+</code></pre>
+<p>Put the template file together and then either run the following at command line, or use <a href="/2024/build">build</a> instructions to setup text editor to compile typ to pdf.</p>
+<pre><code>$ typst compile main.typ
+</code></pre>
+<figure>
+<img alt="View of a report compiled using Typst typesetting computer program" src="/img/2025-typst-first.png" loading=lazy>
+<img alt="View of a report headers compiled using Typst typesetting computer program" src="/img/2025-typst-header.png" loading=lazy>
+  <figcaption>View of the report (top-left); template (top-right); report headers (bott).</figcaption>
+</figure>
+
+<p>An example template is at my repository, <a href="https://github.com/ckunte/note">note</a>. For a Neovim user there is also a <a href="https://github.com/ckunte/typst-snippets-vim">snippet plug-in</a>.</p>
+<h2>Outline</h2>
+<p>Producing an outline (table of contents in Typst parlance) is simple like so (and can be seen in the view above):</p>
+<pre><code>#outline(
+  indent: 1em, 
+  depth: 4,
+) // toc
+
+#outline(
+  title: [List of figures],
+  target: figure.where(kind: image), 
+) // figures
+
+#outline(
+  title: [List of tables],
+  target: figure.where(kind: table),
+) // tables
+</code></pre>
+<p>However, even when there are no figures or tables, the headings &lsquo;List of figures&rsquo; and &lsquo;List of tables&rsquo; are produced. To tweak this to produce only when they exist, this code snippets seems to do the job &mdash; this will be in the <em>main.typ</em>:</p>
+<pre><code>#context {
+  // Count the number of figures of kind &quot;image&quot;
+  let fig-count = query(figure.where(kind: image)).len()
+  let tbl-count = query(figure.where(kind: table)).len()
+
+  // Only render the outline if there are figures
+  if fig-count &gt; 0 {
+    outline(
+      title: [List of figures],
+      target: figure.where(kind: image),
+    )
+  }
+  // Only render the outline if there are tables
+  if tbl-count &gt; 0 {
+    outline(
+      title: [List of tables],
+      target: figure.where(kind: table),
+    )
+  }
+}
+</code></pre>
+<p>The entire table of contents block can be placed in a separate file, if you like, say, <em>toc.typ</em> and called on demand: with the following:</p>
+<pre><code>#include(&quot;toc.typ&quot;)
+</code></pre>
+<p>with the contents of the <em>toc.typ</em> file, combining the above:</p>
+<pre><code>#outline(
+  indent: 1em, 
+  depth: 4,
+) // toc
+
+#context {
+  // Count the number of figures of kind &quot;image&quot;
+  let fig-count = query(figure.where(kind: image)).len()
+  let tbl-count = query(figure.where(kind: table)).len()
+
+  // Only render the outline if there are figures
+  if fig-count &gt; 0 {
+    outline(
+      title: [List of Figures],
+      target: figure.where(kind: image),
+    )
+  }
+  // Only render the outline if there are tables
+  if tbl-count &gt; 0 {
+    outline(
+      title: [List of Figures],
+      target: figure.where(kind: table),
+    )
+  }
+}
+</code></pre>
+<h2>Subtitle and logo</h2>
+<p>Same trick to produce these above.</p>
+<p><em>main.typ</em> to have this below. Notice the keys &ldquo;logo&rdquo; and &ldquo;subtitle&rdquo; in the block below.</p>
+<pre><code>#show: note.with(
+  logo: &quot;yes&quot;,
+  title: [Asset],
+  subtitle: [Execution Plan],
+  author: &quot;Execution Team&quot;,
+  paper: &quot;a4&quot;,
+)
+</code></pre>
+<p>Now in <em>template.typ</em>, we add legs to these keys, like so:</p>
+<pre><code>#let note(
+  // logo
+  logo: none,
+
+  // title
+  title: none,
+
+  // subtitle
+  subtitle: none,
+
+  // author of the note (or paper)
+  author: none,
+
+  // paper size:
+  paper: none,
+
+  // content of the note (or paper)
+  body,
+) = {
+  // ...
+  // ... [skipping other bits of template code for brevity]
+  // ...
+  // print title block (includes logo, title, subtitle, author, and date)
+  align(center)[
+    #if logo == &quot;yes&quot; {
+      image(&quot;logo.svg&quot;, height: 0.75in) // above the title
+      v(3em, weak: true)
+    }
+    #text(1.8em)[*#title*]
+    #if subtitle != none {
+      v(1em, weak: true)
+      text(1em)[_ #subtitle _]
+    }
+    #v(2em, weak: true)
+    #text(1em, author)
+    #v(1em, weak: true)
+    #datetime.today().display(&quot;[month repr:long] [day], [year]&quot;)
+    #v(5em, weak: true)
+  ]
+
+  //
+  body
+}
+</code></pre>
+<h2>Importing data into table</h2>
+<p>Creating a table by importing CSV data seems like a neat thing to do that avoids the verbose formatting needed in fitting the tabular data. Here&rsquo;s an example:</p>
+<pre><code class="language-rust">#let qty = csv(&quot;quantity.csv&quot;)
+
+#table(
+  columns: 2,
+  ..for (.., description, quantity) in qty {
+    (description, quantity)
+  }
+)
+</code></pre>
+<p>In the above, <code>..,</code> can be used to skip data from preceding columns.</p>
+<h2>Records</h2>
+<p>For a project I&rsquo;m on, there&rsquo;s a need to call a bunch of scope-specific records into scope documents, so rather than having this data per scope in each document file, I can place the records like so:</p>
+<pre><code>// data.typ
+#let records = (
+    &quot;co076&quot;: (
+        &quot;sco&quot;: &quot;CO-076&quot;,
+        &quot;loc&quot;: &quot;MCS&quot;,
+        &quot;nti&quot;: &quot;1000022092&quot;,
+        &quot;wor&quot;: &quot;100070489&quot;,
+        &quot;aut&quot;: &quot;C Kunte&quot;,
+        &quot;chk&quot;: &quot;&quot;,
+        &quot;app&quot;: &quot;&quot;,
+        &quot;poi&quot;: &quot; &quot;
+    ),
+    ...
+    [other records here]
+    ...
+    ),
+    &quot;st689&quot;: (
+        &quot;sco&quot;: &quot;ST-689&quot;,
+        &quot;loc&quot;: &quot;MBS&quot;,
+        &quot;nti&quot;: &quot;1000058228&quot;,
+        &quot;wor&quot;: &quot;100101333&quot;,
+        &quot;aut&quot;: &quot;C Kunte&quot;,
+        &quot;chk&quot;: &quot;&quot;,
+        &quot;app&quot;: &quot;&quot;,
+        &quot;poi&quot;: &quot; &quot;
+    )
+)
+</code></pre>
+<p><em>data.typ</em> becomes the single source of truth, and easy to update one file than having to open hundreds of files and edit, if the scope records change, or require updates. Using <em>data.typ</em>, I can call this in each document like so, say, in this case for a scope ID: co076:</p>
+<pre><code>#import &quot;tmpl.typ&quot;: scopesheet
+#import &quot;data.typ&quot;: records
+#let fm = records.at(&quot;co076&quot;)
+#show: scopesheet.with(..fm)
+</code></pre>
+<p>Using this, within the document, I can call the data like <code>#fm.sco</code>, which corresponds to calling the value of key <code>sco</code> (scope id), and other data from the structure in <code>data.typ</code> above. I find this handy and neat.</p>
+<p>For the above to work, the template file <em>tmpl.typ</em> needs to contain the following:</p>
+<pre><code>//  2025 C Kunte
+#let scopesheet(
+  sco: none,
+  loc: none,
+  wor: none,
+  nti: none,
+  aut: none,
+  poi: none,
+  chk: none,
+  app: none,
+  body,
+) = {
+  // metadata for the scopesheet (or paper)
+  set document(title: sco, author: aut)
+  ...
+  ... // other template specific instructions
+  ...
+  body
+}
+</code></pre>
+<h2>WSL specific</h2>
+<p>To make Windows fonts available for Typst via WSL in fish shell, set this once:</p>
+<pre><code>set -Ux TYPST_FONT_PATHS &quot;/mnt/c/Windows/Fonts&quot;
+</code></pre>
+<p>Alternatively, add this line to config.fish:</p>
+<pre><code>set -gx TYPST_FONT_PATHS &quot;/mnt/c/Windows/Fonts&quot;
+</code></pre>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Build" href="/2024/build">
+        Prev
+      </a>
+    </span>
+    <span>
+      <a accesskey="k" title="Wave" href="/2025/wave">
+        Next
+      </a> &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>
