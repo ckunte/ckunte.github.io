@@ -1,11 +1,11 @@
 @charset "utf-8";
 @import url("/inc/xcode.min.css");
 :root {
-  --cwidth: 36em;
+  --cwidth: 38em;
   --link-dark: #00BFFF;
   --lite-bc: #eee; 
-  --cfont: "PT Mono", Menlo, "TheSansMono Office", "Noto Sans Mono", Consolas, ui-monospace, monospace;
-  --bfont: system-ui, -apple-system, verdana, sans-serif;
+  --cfont: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --bfont: system-ui, -apple-system, sans-serif;
 }
 
 html {
@@ -13,7 +13,7 @@ html {
 }
 
 body {
-  font: 1.13rem/1.4 var(--bfont);
+  font: 1.3125rem/1.4 var(--bfont);
   padding: 2.0ch 0.5ch;
 }
 
@@ -228,6 +228,7 @@ pre {
 }
 code {
   font-size: 84%;
+  font-feature-settings: "ss01" 1;
 }
 
 hr::after,pre,pre>code {
