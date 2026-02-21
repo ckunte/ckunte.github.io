@@ -12,12 +12,12 @@
 <body>
 <main>
 <header>
-  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="26" height="26"></a>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="28" height="28"></a>
 </header>	
 <article>
 <h1>The daily driver</h1>
 <time datetime="2024-10-11T20:39:00Z">11 Oct 2024</time>
-<p>The mail order arrived on Monday with the box containing Raspberry Pi 5 + official power adapter, the official active cooler, and a micro-HDMI adapter. Assembly was straightforward. Next up was <a href="https://github.com/ckunte/ckunte/blob/master/uses.md" title="My personalised open source software setup">software</a>. </p>
+<p>The mail order arrived on Monday with the box containing Raspberry Pi 5 + official power adapter, the official active cooler, and a micro-HDMI adapter. Assembly was straightforward. Next up was <a href="/2024/essentials" title="My personalised open source software setup">software</a>. </p>
 <figure>
 <img alt="Raspberry Pi 5." src="/img/2024-pi5-1.jpg" loading=lazy>
 <figcaption>Raspberry Pi 5.</figcaption>
@@ -29,7 +29,7 @@
 <figcaption>Evince showing a link preview.</figcaption>
 </figure>
 
-<p>It&rsquo;s been running for days now, and needs some ventilation &mdash; to prevent increase in board temperature. The portability of this Pi I can get used to. There is also <a href="https://www.raspberrypi.com/news/raspberry-pi-connect/">Connect</a> as a service, which is interesting. The backup is as simple as copying the entire volume to an external one via the <em>SD Card Copier</em>, which has no trouble doing it from M.2 SSD to an external SSD either.</p>
+<p>It&rsquo;s been running for days now, and needs some ventilation. The portability of this Pi I can get used to. There is also <a href="https://www.raspberrypi.com/news/raspberry-pi-connect/">Connect</a> as a service, which is interesting. The backup is as simple as copying the entire volume to an external one via the <em>SD Card Copier</em>, which has no trouble doing it from M.2 SSD to an external SSD either.</p>
 <p>It is refreshing to have a simple, minimalist, usable interface without fluff, walled garden annoyances, with the freedom to setup, install, and have a system that is just sufficient and nothing more.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> </p>
 <h2>Custom keyboard shortcuts</h2>
 <p>There are a bunch of <a href="https://github.com/gnmearacaun/RasPiOS-labwc/blob/main/rc.xml">defaults in labwc</a>, which Raspberry Pi OS adopted late last year, and it took me a while to figure this out, and on how to add custom keyboard shortcuts for some basic things like starting an application, e.g., Chromium with, say, <kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>&nbsp;c&nbsp;</kbd>, and lock screen with, say, <kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>&nbsp;l&nbsp;</kbd>. (A couple of defaults I use the most is the window snapping to either left, right, or full screen. These can be done with <kbd>Meta</kbd><kbd>&larr;</kbd>, <kbd>Meta</kbd><kbd>&rarr;</kbd>, or <kbd>Meta</kbd><kbd>a</kbd>; where <kbd>Meta</kbd> is either <kbd>Win</kbd> or <kbd>Cmd</kbd> key depending on the keyboard.) Add the keyboard section and key binds to <code>$HOME/.config/labwc/rc.xml</code> within the <code>openbox_config</code> open and close tags. (Ensure they do not clash with the defaults.) </p>
@@ -83,7 +83,7 @@
 <p><em>2025-11-15:</em> The wait wasn&rsquo;t long. <a href="https://forums.raspberrypi.com/viewtopic.php?p=2347721&amp;hilit=scaling#p2347721">Setting for scaling is available in the beta channel</a> via <em>raspi-config</em>.<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup> I did, and my LG UltraFine 24-inch now scales well, and it is comfortable to use again.</p>
 <figure>
   <img alt="Raspberry Pi OS Trixie - scaling setting" src="/img/pi5-scaling-trixie-beta.png" loading=lazy>
-  <figcaption>Raspberry Pi OS now has scaling setting, which is useful for 4K monitors like mine e.g., LG UltraFine 4K 24-inch.</figcaption>
+  <figcaption>Raspberry Pi OS now has scaling setting, which is useful for 4K monitors like mine e.g., LG UltraFine 4K 24-in.</figcaption>
 </figure>
 
 <div class="footnote">
@@ -104,14 +104,11 @@
 <footer>
     <span>
       &lsaquo; 
-      <a accesskey="j" title="Build" href="/2024/build">
-        Prev
-      </a>
+      <a accesskey="j" title="Build" href="/2024/build">Prev</a>
     </span>
     <span>
-      <a accesskey="k" title="Essentials" href="/2024/essentials">
-        Next
-      </a> &rsaquo;
+      <a accesskey="k" title="Essentials" href="/2024/essentials">Next</a>
+	  &rsaquo;
     </span>
   </footer></main>
 </body>

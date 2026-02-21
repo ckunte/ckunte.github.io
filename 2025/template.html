@@ -27,7 +27,7 @@
 <li>syntax highlighting</li>
 </ul>
 <p>With good defaults (font and paragraph properties, paper size, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned LaTeX user, then you&rsquo;d know how useful <a href="https://ctan.org/topic/class">document classes</a> are  &mdash; something Typst does not yet come pre-packaged with. And so, a little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for users, by users. If you&rsquo;re one of them, and your tastes are slightly different from those available there-in, then it would not hurt to know how to create a Typst template from scratch. Here is how.</p>
-<p>Rule one of publishing is to separate presentation + styling from content, be it offline or online. So we create two files:</p>
+<p>Rule one of publishing: separate presentation + styling from content &mdash; offline or online. So we create two files:</p>
 <ul>
 <li><em>main.typ</em> &mdash; this file will have all the report&rsquo;s content</li>
 <li><em>template.typ</em> &mdash; this one&rsquo;s for the report&rsquo;s presentation + styling</li>
@@ -78,7 +78,7 @@
   },
 )
 </code></pre>
-<p>Strictly speaking the above is totally unnecessary. <a href="https://typst.app/docs/guides/page-setup-guide/" title="Typst - Page setup guide">Here&rsquo;s why</a>:</p>
+<p>Strictly speaking, the above is unnecessary. <a href="https://typst.app/docs/guides/page-setup-guide/" title="Typst - Page setup guide">Here&rsquo;s why</a>:</p>
 <blockquote>
 <p>By default, Typst will create margins proportional to the page size of your document. (The margins are set automatically to 2.5/21 times the smaller dimension of the page.) </p>
 </blockquote>
@@ -159,7 +159,7 @@
   target: figure.where(kind: table),
 ) // tables
 </code></pre>
-<p>However, even when there are no figures or tables, the headings &lsquo;List of figures&rsquo; and &lsquo;List of tables&rsquo; are produced. To tweak this to produce only when they exist, this code snippets seems to do the job &mdash; this will be in the <em>main.typ</em>:</p>
+<p>However, even when there are no figures or tables, the headings &lsquo;List of figures&rsquo; and &lsquo;List of tables&rsquo; are produced. To tweak this to produce only when they exist, a little code snippet for the job &mdash; this will be in the <em>main.typ</em>:</p>
 <pre><code>#context {
   // Count the number of figures of kind &quot;image&quot;
   let fig-count = query(figure.where(kind: image)).len()
@@ -278,7 +278,7 @@
   }
 )
 </code></pre>
-<p>In the above, <code>..,</code> can be used to skip data from preceding columns.</p>
+<p>In the above, <code>..,</code> can be used to skip data from preceding columns. And since it uses <code>csv</code>, no math or symbols will be translated into the table; instead what you get is literal text from the csv file. For text and numbers, this method is best.</p>
 <h2>Records</h2>
 <p>For a project I&rsquo;m on, there&rsquo;s a need to call a bunch of scope-specific records into scope documents, so rather than having this data per scope in each document file, I can place the records like so:</p>
 <pre><code>// data.typ
@@ -317,8 +317,7 @@
 </code></pre>
 <p>Using this, within the document, I can call the data like <code>#fm.sco</code>, which corresponds to calling the value of key <code>sco</code> (scope id), and other data from the structure in <code>data.typ</code> above. I find this handy and neat.</p>
 <p>For the above to work, the template file <em>tmpl.typ</em> needs to contain the following:</p>
-<pre><code>//  2025 C Kunte
-#let scopesheet(
+<pre><code>#let scopesheet(
   sco: none,
   loc: none,
   wor: none,
@@ -348,7 +347,7 @@
 <footer>
     <span>
       &lsaquo; 
-      <a accesskey="j" title="Build" href="/2024/build">Prev</a>
+      <a accesskey="j" title="Essentials" href="/2024/essentials">Prev</a>
     </span>
     <span>
       <a accesskey="k" title="Wave" href="/2025/wave">Next</a>
