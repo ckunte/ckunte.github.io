@@ -340,7 +340,7 @@
 <p>Here&rsquo;s an example where I have files containing location like this:</p>
 <pre><code>Location: MCS
 </code></pre>
-<p>MCS in the above corresponds to Module C (S), where (S) is Starboard. Similarly, MAP would be Module A (P), where (P) is Port. There are Modules A to F, and I would like to transform the location without having to manually edit five hundred entries. REGEX to rescue. Dropping this snippet in my template, which is already called in all these scope sheets, lets me do this with ease:</p>
+<p>MCS in the above corresponds to Module C (S), where (S) is Starboard. Similarly, MAP would be Module A (P), where (P) is Port. There are Modules A to F, and I would like to transform the location without having to manually edit five hundred entries. REGEX to the rescue. Dropping this snippet in my template, which is already called in all these scope sheets, lets me do this with ease:</p>
 <pre><code class="language-rust">// This e.g. turns `Location: MCS` into `Location: Module C (S)`
 show regex(&quot;Location:[\w, ]+&quot;): it =&gt; {
   it.text.replace(
