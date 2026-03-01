@@ -169,6 +169,16 @@ jobs:
             m1.pdf
 </code></pre>
 </li>
+<li>
+<p>Compile documents en-masse (2026):</p>
+<p>Taking a leaf <a href="/2022/csv2sacs">from my work</a> some years ago, and knowing Typst supports multi-core processing, I was able to write a simple fish script to take advantage of this and compile documents in a flash:</p>
+<pre><code>#!/usr/bin/env fish
+for FILE in *-FABM-076.typ *-STRU-{154,158,199,214,217,581,597}.typ
+    typst c $FILE &amp;
+end
+</code></pre>
+<p>The ampersand in line 3, does the heavy-lifting, as it relegates each job to a background task and is ready for the next file, enabling parallel execution. It&rsquo;s likely that if thousands of documents are compiled like this, then it may crash, but if in tens or hundreds, then it&rsquo;s no sweat.</p>
+</li>
 </ol>
 </article>
 <footer>
