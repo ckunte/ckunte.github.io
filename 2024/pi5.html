@@ -17,7 +17,7 @@
 <article>
 <h1>The daily driver</h1>
 <time datetime="2024-10-11T20:39:00Z">11 Oct 2024</time>
-<p>The mail order arrived on Monday with the box containing Raspberry Pi 5 + official power adapter, the official active cooler, and a micro-HDMI adapter. Assembly was straightforward. Next up was <a href="/2024/essentials" title="My personalised open source software setup">software</a>. </p>
+<p>The mail order arrived on Monday with the box containing Raspberry Pi 5 + official power adapter, the official active cooler, and a micro-HDMI adapter. Assembly was straightforward. Next up was <a href="/2024/essentials" title="My personalised open source software setup">software</a>.</p>
 <figure>
 <img alt="Raspberry Pi 5." src="/img/2024-pi5-1.jpg" loading=lazy>
 <figcaption>Raspberry Pi 5.</figcaption>
@@ -32,7 +32,7 @@
 <p>It&rsquo;s been running for days now, and needs some ventilation. The portability of this Pi I can get used to. There is also <a href="https://www.raspberrypi.com/news/raspberry-pi-connect/">Connect</a> as a service, which is interesting. The backup is as simple as copying the entire volume to an external one via the <em>SD Card Copier</em>, which has no trouble doing it from M.2 SSD to an external SSD either.</p>
 <p>It is refreshing to have a simple, minimalist, usable interface without fluff, walled garden annoyances, with the freedom to setup, install, and have a system that is just sufficient and nothing more.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> </p>
 <h2>Custom keyboard shortcuts</h2>
-<p>There are a bunch of <a href="https://github.com/gnmearacaun/RasPiOS-labwc/blob/main/rc.xml">defaults in labwc</a>, which Raspberry Pi OS adopted late last year, and it took me a while to figure this out, and on how to add custom keyboard shortcuts for some basic things like starting an application, e.g., Chromium with, say, <kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>&nbsp;c&nbsp;</kbd>, and lock screen with, say, <kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>&nbsp;l&nbsp;</kbd>. (A couple of defaults I use the most is the window snapping to either left, right, or full screen. These can be done with <kbd>Meta</kbd><kbd>&larr;</kbd>, <kbd>Meta</kbd><kbd>&rarr;</kbd>, or <kbd>Meta</kbd><kbd>a</kbd>; where <kbd>Meta</kbd> is either <kbd>Win</kbd> or <kbd>Cmd</kbd> key depending on the keyboard.) Add the keyboard section and key binds to <code>$HOME/.config/labwc/rc.xml</code> within the <code>openbox_config</code> open and close tags. (Ensure they do not clash with the defaults.) </p>
+<p>There are a bunch of <a href="https://github.com/gnmearacaun/RasPiOS-labwc/blob/main/rc.xml">defaults in labwc</a>, which Raspberry Pi OS adopted late last year, and it took me a while to figure this out, and on how to add custom keyboard shortcuts for some basic things like starting an application, e.g., Chromium with, say, <kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>&nbsp;c&nbsp;</kbd>, and lock screen with, say, <kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>&nbsp;l&nbsp;</kbd>. (A couple of defaults I use the most is the window snapping to either left, right, or full screen. These can be done with <kbd>Super</kbd><kbd>&larr;</kbd>, <kbd>Super</kbd><kbd>&rarr;</kbd>, or <kbd>Super</kbd><kbd>a</kbd>; where <kbd>Super</kbd> is either <kbd>Win</kbd> or <kbd>Cmd</kbd> key depending on the keyboard.) Add the keyboard section and key binds to <code>$HOME/.config/labwc/rc.xml</code> within the <code>openbox_config</code> open and close tags. (Ensure they do not clash with the defaults.) </p>
 <pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot;?&gt;
 &lt;openbox_config xmlns=&quot;http://openbox.org/3.4/rc&quot;&gt;
 &lt;!-- pre-populated defaults here (leave'em alone) --&gt;
@@ -76,6 +76,7 @@
 <li>Screen-saving is buggy; need exiting UI via right-click to get back</li>
 <li>MS Teams (web) won&rsquo;t pick up webcam or headset attached</li>
 </ul>
+<h2>HiDPI scaling</h2>
 <p><em>Debian Trixie (Oct 2025):</em> This version improves the desktop experience with a few nice touches to the UI. For the longest time since making Pi 5 my daily driver, I struggled with the grainy 1080p monitor that I had to pair it with, since I could not make my Thunderbolt only LG Ultrafine 24-inch 4K monitor. With Trixie and whatever Raspberry Pi team is doing in the background, it seems to work with this monitor. There&rsquo;s still no scaling-related GUI within the OS, but it seems to work with the following added to <code>~/.config/labwc/autostart</code>, where the HDMI-A-I port is the one nearest to USB-C power port,<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> I&rsquo;ve plugged the cable to: </p>
 <pre><code class="language-sh">wlr-randr --output HDMI-A-1 --scale 2.0 &amp;
 </code></pre>
@@ -86,6 +87,51 @@
   <figcaption>Raspberry Pi OS now has scaling setting, which is useful for 4K monitors like mine e.g., LG UltraFine 4K 24-in.</figcaption>
 </figure>
 
+<p>And on a 1080p monitor, the panel enables 1.5&times; setting option, thus making grainy screen text a thing of the past.</p>
+<h2>Workspaces</h2>
+<p>The Pi OS does not reveal setting-up Workspaces by default from within its GUI; that&rsquo;s not to say the feature does not exist. It needs setting-up via the rc.xml (labwc) configuration file. In rc.xml, e.g., I&rsquo;ve set up three workspaces, which can be navigated to via <kbd>Super</kbd><kbd>j</kbd> (left workspace), and <kbd>Super</kbd><kbd>k</kbd> (right workspace). I can also send a particular app to, e.g., workspace 1 with <kbd>Shift</kbd><kbd>Super</kbd><kbd>1</kbd>.</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;openbox_config xmlns=&quot;http://openbox.org/3.4/rc&quot;&gt;
+&lt;!-- pre-populated defaults here (leave'em alone) --&gt;
+
+&lt;desktops number=&quot;3&quot; /&gt;
+
+&lt;keyboard&gt;
+  &lt;!-- 
+    S - Shift key
+    C - Control key
+    A - Alt key
+    W - Super key
+    M - Meta key
+  --&gt;
+  &lt;!-- Other keybinds here --&gt;
+
+  &lt;!-- Workspaces --&gt;
+  &lt;keybind key=&quot;W-j&quot;&gt;
+    &lt;action name=&quot;GoToDesktop&quot; to=&quot;left&quot;/&gt;
+  &lt;/keybind&gt;
+
+  &lt;keybind key=&quot;W-k&quot;&gt;
+    &lt;action name=&quot;GoToDesktop&quot; to=&quot;right&quot;/&gt;
+  &lt;/keybind&gt;
+
+  &lt;!-- Send window to Workspace --&gt;
+  &lt;keybind key=&quot;S-W-1&quot;&gt;
+    &lt;action name=&quot;SendToDesktop&quot; to=&quot;1&quot;/&gt;
+  &lt;/keybind&gt;
+
+  &lt;keybind key=&quot;S-W-2&quot;&gt;
+    &lt;action name=&quot;SendToDesktop&quot; to=&quot;2&quot;/&gt;
+  &lt;/keybind&gt;
+
+  &lt;keybind key=&quot;S-W-3&quot;&gt;
+    &lt;action name=&quot;SendToDesktop&quot; to=&quot;3&quot;/&gt;
+  &lt;/keybind&gt;
+
+&lt;/keyboard&gt;
+
+&lt;/openbox_config&gt;
+</code></pre>
 <div class="footnote">
 <hr />
 <ol>
