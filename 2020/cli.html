@@ -18,7 +18,7 @@
 <h1>CLI</h1>
 <time datetime="2020-08-08T17:15:00Z">8 Aug 2020</time>
 <p>For writing python scripts that are best served with user inputs at command line, <a href="http://docopt.org/" title="docopt—language for description of command-line interfaces">docopt</a> is like magic. It transforms a simple comment block describing a script&rsquo;s use into actual argument code, which developers don&rsquo;t need to write. To the point that those unfamiliar with docopt are likely to erroneously presume the script incomplete, when they realise it contains almost no code for processing arguments, e.g.,</p>
-<pre><code class="language-python">#!/usr/bin/env python
+<pre><code class="language-py">#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
 &quot;&quot;&quot;Wind speed plots based on ISO 19901-1:2005.
@@ -43,19 +43,19 @@ def main():
     ...
 </code></pre>
 <p>The script <code>isowind.py</code> takes a mandatory argument <code>--speed</code> (e.g. <code>--speed=30</code> for, say, 30m/s mean wind speed at reference height) like so:</p>
-<pre><code class="language-shell">python isowind.py --speed=30
+<pre><code class="language-sh">python isowind.py --speed=30
 </code></pre>
 <p>But that&rsquo;s not all, there is another argument called <code>--height</code> in the block. These are enclosed in square brackets, indicating it&rsquo;s optional, for which a default value is provided in the block. So, for the above command line construct (without an explicit optional height input, the script uses 140m). Instead, if the user provides the height as an argument, like so, then the script uses the height as 120 instead of the default 140.</p>
-<pre><code class="language-shell">python isowind.py --speed=30 --height=120
+<pre><code class="language-sh">python isowind.py --speed=30 --height=120
 </code></pre>
 <p>The script defaults to show the help block in brief when the user fails to provide any arguments at the command line:</p>
-<pre><code class="language-shell">$ python isowind.py
+<pre><code class="language-sh">$ python isowind.py
 Usage: isowind.py --speed=S [--height=H]
        isowind.py --help
        isowind.py --version
 </code></pre>
 <p>With the <code>--help</code> argument, it produces the full help block like so:</p>
-<pre><code class="language-shell">$ python isowind.py --help
+<pre><code class="language-sh">$ python isowind.py --help
 Wind speed plots based on ISO 19901-1:2005.
 2016 ckunte.
 
@@ -106,7 +106,7 @@ m2m: ## Mac -&gt; Mac (run from Mac)
 .PHONY: help
 </code></pre>
 <p>When this Makefile is run without an argument, predictably it produces this following neat help section:</p>
-<pre><code class="language-shell">$ make
+<pre><code class="language-sh">$ make
 Makefile for backing-up t1
 Usage: make &lt;opt&gt; IP=&lt;ipaddr&gt;
 &lt;opt&gt;:

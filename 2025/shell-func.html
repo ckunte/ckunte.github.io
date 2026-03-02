@@ -40,29 +40,27 @@ squash c8fb9a8 # m:edit
 </code></pre>
 <h3>fish shell</h3>
 <p>The <a href="https://git-scm.com/docs/git-rebase" title="Reapply commits on top of another base tip">rebase</a> command feels a little tedious to type out at the prompt, and so this function (placed in <code>~/.config/fish/config.fish</code>) helps me do the job quickly by running the command <code>gr 4 master</code>, which translates to the first command above:</p>
-<pre><code class="language-sh"># fish function to rebase, e.g., gr 4 master
-function gr
-  git rebase -i origin/$argv[2]~$argv[1] $argv[2]
+<pre><code class="language-sh">function gr --description &quot;Rebase e.g. gr 4 master&quot;
+    git rebase -i origin/$argv[2]~$argv[1] $argv[2]
 end
 </code></pre>
 <p>Using two arguments for the freedom to define the number of commits, and the other being able to choose the branch. </p>
 <p>For the push, I could write a function to run <code>gpp master</code> like so:</p>
-<pre><code class="language-sh"># fish function for push following rebase, e.g., gpp master
-function gpp
-  git push -u origin +$argv[1]
+<pre><code class="language-sh">function gpp --description &quot;Rebased push e.g. gpp master&quot;
+    git push -u origin +$argv[1]
 end
 </code></pre>
 <h3>bash shell</h3>
 <p>Of course, I have machines where bash is still the default. For those, the function (placed in, e.g., <code>~/.bashrc</code>) becomes:</p>
 <pre><code class="language-sh"># bash function for rebase, e.g., gr 4 master
 gr() {
-  git rebase -i origin/&quot;${2}~${1}&quot; &quot;$2&quot;
+    git rebase -i origin/&quot;${2}~${1}&quot; &quot;$2&quot;
 }
 </code></pre>
 <p>And for the push in bash, the function would be:</p>
 <pre><code class="language-sh"># bash function for the push post rebase, e.g., gpp master
 gpp() {
-  git push -u origin +&quot;$1&quot;
+    git push -u origin +&quot;$1&quot;
 }
 </code></pre>
 <hr />
@@ -75,160 +73,148 @@ git reset --hard origin/master
 <ol>
 <li>
 <p>For system information: <em>sbcinf.fish</em></p>
-<pre><code># sbcinf.fish
-function sbcinf
-  set -l mem (free -h | awk '/Mem:/ {print $3 "/" $2}')
-  set -l dsk (df -h | awk '/\/$/ {print $3 "/" $2}')
-  set -l tem (vcgencmd measure_temp | grep -o -E '[[:digit:]].*')
-  set -l pow (vcgencmd measure_volts | sed 's/volt=//g')
-  set -l ipa (hostname -I | awk '{print $1}')
-  set -l upt (uptime -p | sed 's/^up //')
+<pre><code>function sbcinf --description "Print SBC vitals"
+    set -l mem (free -h | awk '/Mem:/ {print $3 "/" $2}')
+    set -l dsk (df -h | awk '/\/$/ {print $3 "/" $2}')
+    set -l tem (vcgencmd measure_temp | grep -o -E '[[:digit:]].*')
+    set -l pow (vcgencmd measure_volts | sed 's/volt=//g')
+    set -l ipa (hostname -I | awk '{print $1}')
+    set -l upt (uptime -p | sed 's/^up //')
 
-  echo "Board temp: $tem"
-  echo "Disk usage: $dsk"
-  echo "IP address: $ipa"
-  echo "Memory use: $mem"
-  echo "Power cons: $pow"
-  echo "Sys uptime: $upt"
+    echo "Board temp: $tem"
+    echo "Disk usage: $dsk"
+    echo "IP address: $ipa"
+    echo "Memory use: $mem"
+    echo "Power cons: $pow"
+    echo "Sys uptime: $upt"
 end
 </code></pre>
 </li>
 <li>
 <p>For downloading a file from GitHub repo. with <code>ghdl user/repo/file.ext</code>. If specific about a branch, then this works too: <code>ghdl user/repo@master/file.ext</code></p>
-<pre><code># ghdl.fish
-function ghdl
-  if test (count $argv) -ne 1
-    echo "Usage: ghdl user/repo[@branch]/path/to/file"
-    return 1
-  end
+<pre><code>function ghdl --description "Download a file from repo e.g. ghdl user/repo/file.ext"
+    if test (count $argv) -ne 1
+        echo "Usage: ghdl user/repo[@branch]/path/to/file"
+        return 1
+    end
 
-  set input $argv[1]
+    set input $argv[1]
 
-  # Split the input into repo and path
-  set repo_part (echo $input | cut -d'/' -f1-2)
-  set path_part (echo $input | cut -d'/' -f3-)
+    # Split the input into repo and path
+    set repo_part (echo $input | cut -d'/' -f1-2)
+    set path_part (echo $input | cut -d'/' -f3-)
 
-  # Extract user and repo (and optional branch)
-  set user (echo $repo_part | cut -d'/' -f1)
-  set repo_branch (echo $repo_part | cut -d'/' -f2)
+    # Extract user and repo (and optional branch)
+    set user (echo $repo_part | cut -d'/' -f1)
+    set repo_branch (echo $repo_part | cut -d'/' -f2)
 
-  if string match -q '*@*' $repo_branch
-    set repo (echo $repo_branch | cut -d'@' -f1)
-    set branch (echo $repo_branch | cut -d'@' -f2)
-  else
-    set repo $repo_branch
-    set branch "master"  # default fallback branch
-  end
+    if string match -q '*@*' $repo_branch
+        set repo (echo $repo_branch | cut -d'@' -f1)
+        set branch (echo $repo_branch | cut -d'@' -f2)
+    else
+        set repo $repo_branch
+        set branch "master"  # default fallback branch
+    end
 
-  if test -z "$user" -o -z "$repo" -o -z "$path_part"
-    echo "Error: Must be in the form user/repo[@branch]/path/to/file"
-    return 1
-  end
+    if test -z "$user" -o -z "$repo" -o -z "$path_part"
+        echo "Error: Must be in the form user/repo[@branch]/path/to/file"
+        return 1
+    end
 
-  # Construct modern raw.githubusercontent.com URL
-  set url "https://raw.githubusercontent.com/$user/$repo/refs/heads/$branch/$path_part"
+    # Construct modern raw.githubusercontent.com URL
+    set url "https://raw.githubusercontent.com/$user/$repo/refs/heads/$branch/$path_part"
 
-  echo "Downloading from: $url"
-  curl -LO $url
+    echo "Downloading from: $url"
+    curl -LO $url
 end
 </code></pre>
 </li>
 <li>
 <p>Push functions</p>
-<pre><code># push function
-#   gp master // normal push to master repo
-#   gpp bb    // rebased push to bb repo
-#
-function gp
-  git push -u origin $argv[1]
+<pre><code>function gp --description "Push to remote e.g. gp master"
+    git push -u origin $argv[1]
 end
-function gpp
-  git push -u origin +$argv[1]
+function gpp --description "Rebase push to remote e.g. gpp bb"
+    git push -u origin +$argv[1]
 end
 </code></pre>
 </li>
 <li>
 <p>Rebase function</p>
-<pre><code># gr.fish
-# examples:
-#   gr 4 master
-#   gr 3 bb
-#
-function gr
-  git rebase -i origin/$argv[2]~$argv[1] $argv[2]
+<pre><code>function gr --description "Rebase e.g. gr 4 master"
+    git rebase -i origin/$argv[2]~$argv[1] $argv[2]
 end
 </code></pre>
 </li>
 <li>
 <p>Get the latest release version of a GitHub repo.</p>
-<pre><code># glr.fish
-# e.g. glr "ckunte/tce"
-function glr \
-  --argument-names user_repo
-  curl \
-      --silent \
-      "https://api.github.com/repos/$user_repo/releases/latest" \
-  | string match --regex '"tag_name": "\K.*?(?=")'
+<pre><code>function glr --description 'Get latest release of a repo e.g. glr "ckunte/tce"' \
+    --argument-names user_repo
+    curl \
+        --silent \
+        "https://api.github.com/repos/$user_repo/releases/latest" \
+    | string match --regex '"tag_name": "\K.*?(?=")'
 end
 </code></pre>
 </li>
 <li>
 <p>Check file hash</p>
-<pre><code># check_hashes.fish
-function check_hashes
-  # Ensure the user provided a file argument
-  if test (count $argv) -ne 1
-    echo "Usage: check_hashes &lt;file&gt;"
-    return 1
-  end
-  # Store the file path
-  set file $argv[1]
-  # Check if the file exists
-  if not test -e $file
-    echo "Error: File '$file' does not exist."
-    return 1
-  end
-  # Calculate and display the RMD160 hash
-  echo "RMD160 hash:"
-  printf "%s" "$file" | openssl dgst -rmd160
-  # Calculate and display the SHA256 hash
-  echo "SHA256 hash:"
-  printf "%s" "$file" | openssl dgst -sha256
-end
-</code></pre>
-</li>
-<li>
-<p>Open folder from within WSL</p>
-<pre><code># open.fish
-function open
-  if test (count $argv) -eq 0
-    # No arguments: open current directory
-    explorer.exe .
-  else
-    for arg in $argv
-      # If it's a URL
-      if string match -qr '^https?://|^mailto:' $arg
-        explorer.exe $arg
-      # If it's a file or directory that exists
-      else if test -e $arg
-        explorer.exe (wslpath -w $arg)
-      # If it's a Windows-style path (C:\Users\...), try passing directly
-      else if string match -qr '^[A-Za-z]:\\' $arg
-        explorer.exe $arg
-      else
-        echo "open: '$arg' not found or invalid" &gt;&amp;2
-      end
+<pre><code>function check_hashes
+    # Ensure the user provided a file argument
+    if test (count $argv) -ne 1
+        echo "Usage: check_hashes &lt;file&gt;"
+        return 1
     end
-  end
+    # Store the file path
+    set file $argv[1]
+    # Check if the file exists
+    if not test -e $file
+        echo "Error: File '$file' does not exist."
+        return 1
+    end
+    echo "RMD160 hash:"
+    printf "%s" "$file" | openssl dgst -rmd160
+    echo "SHA256 hash:"
+    printf "%s" "$file" | openssl dgst -sha256
 end
 </code></pre>
 </li>
 <li>
 <p>Rename photos</p>
-<pre><code># renfoto.fish: rename photos e.g. renfoto ST-159
-function renfoto
-  set prefix $argv[1]
-  rename -N ...01 -X -e '$_ = $prefix . "-photo-$N"' *.png
+<pre><code>function renfoto --description "Rename photos e.g. renfoto ST-159"
+    set prefix $argv[1]
+    rename -N ...01 -X -e '$_ = $prefix . "-photo-$N"' *.png
+end
+</code></pre>
+</li>
+<li>
+<p>Toggle WiFi on/off using the command <code>beam</code>:</p>
+<pre><code>function beam --description "Toggles Wi-Fi on/off"
+    set wifi_status (nmcli radio wifi)
+
+    if test "$wifi_status" = "enabled"
+        printf "Turning Wi-Fi OFF... "
+        nmcli radio wifi off
+        printf "done.\n"
+    else
+        printf "Turning Wi-Fi ON... "
+        nmcli radio wifi on
+        printf "done.\n"
+    end
+end
+</code></pre>
+</li>
+<li>
+<p>Toggle ethernet on/off using the command <code>lan</code>:</p>
+<pre><code>function lan --description "Toggles Ethernet (eth0) on/off"
+    # Get the current state of eth0
+    set eth_status (nmcli -t -f DEVICE,STATE device | grep "^eth0:" | cut -d: -f2)
+
+    if test "$eth_status" = "connected"
+        nmcli device disconnect eth0
+    else
+        nmcli device connect eth0
+    end
 end
 </code></pre>
 </li>
