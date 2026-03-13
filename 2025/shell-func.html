@@ -232,6 +232,23 @@ function renfoto
 end
 </code></pre>
 </li>
+<li>
+<p>Toggle WiFi on/off using the command <code>beam</code>:</p>
+<pre><code>function beam --description "Toggles Wi-Fi on/off"
+    set wifi_status (nmcli radio wifi)
+
+    if test "$wifi_status" = "enabled"
+        printf "Turning Wi-Fi OFF... "
+        nmcli radio wifi off
+        printf "done.\n"
+    else
+        printf "Turning Wi-Fi ON... "
+        nmcli radio wifi on
+        printf "done.\n"
+    end
+end
+</code></pre>
+</li>
 </ol>
 <div class="footnote">
 <hr />
