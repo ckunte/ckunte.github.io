@@ -40,15 +40,13 @@ squash c8fb9a8 # m:edit
 </code></pre>
 <h3>fish shell</h3>
 <p>The <a href="https://git-scm.com/docs/git-rebase" title="Reapply commits on top of another base tip">rebase</a> command feels a little tedious to type out at the prompt, and so this function (placed in <code>~/.config/fish/config.fish</code>) helps me do the job quickly by running the command <code>gr 4 master</code>, which translates to the first command above:</p>
-<pre><code class="language-sh"># fish function to rebase, e.g., gr 4 master
-function gr
+<pre><code class="language-sh">function gr --description &quot;Rebase e.g. gr 4 master&quot;
   git rebase -i origin/$argv[2]~$argv[1] $argv[2]
 end
 </code></pre>
 <p>Using two arguments for the freedom to define the number of commits, and the other being able to choose the branch. </p>
 <p>For the push, I could write a function to run <code>gpp master</code> like so:</p>
-<pre><code class="language-sh"># fish function for push following rebase, e.g., gpp master
-function gpp
+<pre><code class="language-sh">function gpp --description &quot;Rebased push e.g. gpp master&quot;
   git push -u origin +$argv[1]
 end
 </code></pre>
@@ -75,8 +73,7 @@ git reset --hard origin/master
 <ol>
 <li>
 <p>For system information: <em>sbcinf.fish</em></p>
-<pre><code># sbcinf.fish
-function sbcinf
+<pre><code>function sbcinf --description "Print SBC vitals"
   set -l mem (free -h | awk '/Mem:/ {print $3 "/" $2}')
   set -l dsk (df -h | awk '/\/$/ {print $3 "/" $2}')
   set -l tem (vcgencmd measure_temp | grep -o -E '[[:digit:]].*')
@@ -95,8 +92,7 @@ end
 </li>
 <li>
 <p>For downloading a file from GitHub repo. with <code>ghdl user/repo/file.ext</code>. If specific about a branch, then this works too: <code>ghdl user/repo@master/file.ext</code></p>
-<pre><code># ghdl.fish
-function ghdl
+<pre><code>function ghdl --description "Download a file from repo e.g. ghdl user/repo/file.ext"
   if test (count $argv) -ne 1
     echo "Usage: ghdl user/repo[@branch]/path/to/file"
     return 1
@@ -135,35 +131,24 @@ end
 </li>
 <li>
 <p>Push functions</p>
-<pre><code># push function
-#   gp master // normal push to master repo
-#   gpp bb    // rebased push to bb repo
-#
-function gp
+<pre><code>function gp --description "Push to remote e.g. gp master"
   git push -u origin $argv[1]
 end
-function gpp
+function gpp --description "Rebase push to remote e.g. gpp bb"
   git push -u origin +$argv[1]
 end
 </code></pre>
 </li>
 <li>
 <p>Rebase function</p>
-<pre><code># gr.fish
-# examples:
-#   gr 4 master
-#   gr 3 bb
-#
-function gr
+<pre><code>function gr --description "Rebase e.g. gr 4 master"
   git rebase -i origin/$argv[2]~$argv[1] $argv[2]
 end
 </code></pre>
 </li>
 <li>
 <p>Get the latest release version of a GitHub repo.</p>
-<pre><code># glr.fish
-# e.g. glr "ckunte/tce"
-function glr \
+<pre><code>function glr --description 'Get latest release of a repo e.g. glr "ckunte/tce"' \
   --argument-names user_repo
   curl \
       --silent \
@@ -174,8 +159,7 @@ end
 </li>
 <li>
 <p>Check file hash</p>
-<pre><code># check_hashes.fish
-function check_hashes
+<pre><code>function check_hashes --description "Check file hashes in RMD160 and SHA256"
   # Ensure the user provided a file argument
   if test (count $argv) -ne 1
     echo "Usage: check_hashes &lt;file&gt;"
@@ -199,8 +183,7 @@ end
 </li>
 <li>
 <p>Open folder from within WSL</p>
-<pre><code># open.fish
-function open
+<pre><code>function open --description "Open file, folder, or link"
   if test (count $argv) -eq 0
     # No arguments: open current directory
     explorer.exe .
@@ -225,8 +208,7 @@ end
 </li>
 <li>
 <p>Rename photos</p>
-<pre><code># renfoto.fish: rename photos e.g. renfoto ST-159
-function renfoto
+<pre><code>function renfoto --description "Rename photos e.g. renfoto ST-159"
   set prefix $argv[1]
   rename -N ...01 -X -e '$_ = $prefix . "-photo-$N"' *.png
 end
@@ -235,17 +217,17 @@ end
 <li>
 <p>Toggle WiFi on/off using the command <code>beam</code>:</p>
 <pre><code>function beam --description "Toggles Wi-Fi on/off"
-    set wifi_status (nmcli radio wifi)
+  set wifi_status (nmcli radio wifi)
 
-    if test "$wifi_status" = "enabled"
-        printf "Turning Wi-Fi OFF... "
-        nmcli radio wifi off
-        printf "done.\n"
-    else
-        printf "Turning Wi-Fi ON... "
-        nmcli radio wifi on
-        printf "done.\n"
-    end
+  if test "$wifi_status" = "enabled"
+    printf "Turning Wi-Fi OFF... "
+    nmcli radio wifi off
+    printf "done.\n"
+  else
+    printf "Turning Wi-Fi ON... "
+    nmcli radio wifi on
+    printf "done.\n"
+  end
 end
 </code></pre>
 </li>
