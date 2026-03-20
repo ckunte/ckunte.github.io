@@ -211,13 +211,9 @@ end
     set eth_status (nmcli -t -f DEVICE,STATE device | grep "^eth0:" | cut -d: -f2)
 
     if test "$eth_status" = "connected"
-        printf "Disconnecting Ethernet (eth0)... "
-        sudo nmcli device disconnect eth0
-        printf "done.\n"
+        nmcli device disconnect eth0
     else
-        printf "Connecting Ethernet (eth0)... "
-        sudo nmcli device connect eth0
-        printf "done.\n"
+        nmcli device connect eth0
     end
 end
 </code></pre>
