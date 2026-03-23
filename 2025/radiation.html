@@ -40,8 +40,10 @@
 # -*- coding: utf-8 -*-
 # 2025 C Kunte
 
+
 import numpy as np
 import matplotlib.pyplot as plt
+
 
 # Constants
 sigma = 5.670e-8  # Stefan-Boltzmann constant in W/m²K⁴
@@ -59,7 +61,7 @@ E = np.linspace(E_min * 1000, E_max * 1000, num_points)
 
 # Calculate the corresponding temperature using the Stefan-Boltzmann
 # equation
-T = (E / sigma) ** (1 / 4)
+T = (E / sigma)**(1 / 4)
 
 # Convert temperature from Kelvin to Celsius
 T_Celsius = T - 273.15
@@ -75,8 +77,7 @@ plt.xlabel(&quot;Energy (kW/m²)&quot;)
 plt.ylabel(&quot;Temperature (°C)&quot;)
 plt.grid(True)
 plt.legend()
-plt.savefig(&quot;rad-temp.svg&quot;)
-plt.show()
+plt.savefig(&quot;rad-temp.svg&quot;, transparent=True)
 </code></pre>
 
 </details>

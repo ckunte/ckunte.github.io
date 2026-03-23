@@ -95,7 +95,6 @@ def sncurve(curve, r_start, r_mid, r_end, a1, m1, a2, m2, graphcolor):
     n = np.arange(r_mid, r_end, 1.0e3)
     s = (n / 10 ** a2) ** (-1 / m2)
     plt.loglog(n, s, base=10, color=graphcolor, linewidth=1.0)
-    pass
 
 
 def main():
@@ -110,9 +109,9 @@ def main():
     )
     plt.legend(loc=0)
     plt.xlabel(&quot;Number of cycles, N&quot;)
-    plt.ylabel(&quot;Hotspot stress, $\sigma$ (MPa)&quot;)
-    plt.savefig(&quot;sncurves-tj.svg&quot;)
-    pass
+    plt.ylabel(&quot;Hotspot stress, $\\sigma$ (MPa)&quot;)
+    plt.savefig(&quot;sncurves-tj.svg&quot;, transparent=True)
+    plt.close()
 
 
 if __name__ == &quot;__main__&quot;:

@@ -188,7 +188,7 @@ end
 </code></pre>
 </li>
 <li>
-<p>Toggle WiFi on/off using the command <code>beam</code>:</p>
+<p>Toggle WiFi on/off using the custom command <code>beam</code>:</p>
 <pre><code>function beam --description "Toggles Wi-Fi on/off"
     set wifi_status (nmcli radio wifi)
 
@@ -205,7 +205,7 @@ end
 </code></pre>
 </li>
 <li>
-<p>Toggle ethernet on/off using the command <code>lan</code>:</p>
+<p>Toggle ethernet on/off using the custom command <code>lan</code>:</p>
 <pre><code>function lan --description "Toggles Ethernet (eth0) on/off"
     # Get the current state of eth0
     set eth_status (nmcli -t -f DEVICE,STATE device | grep "^eth0:" | cut -d: -f2)

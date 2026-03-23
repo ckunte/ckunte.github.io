@@ -273,7 +273,7 @@ pre>code {
     color: #bbb;
     background-color: transparent
   }
-  table, hr, img.screen, img.fig, warn {
+  table, hr, warn, img.screen, img.fig {
     filter: invert(0.85)
   }
   pre {
@@ -321,6 +321,7 @@ kbd {
 }
 sup { vertical-align: text-top; font-size: 69% }
 /* awesome line numbers for code */
+/*
 article pre, article li pre {
     position: relative;
     padding-left: 3ch!important;
@@ -335,4 +336,5 @@ article pre code:before {
     text-align: right;
     color: #888;
 }
+*/
 span.desc { display: block; }
