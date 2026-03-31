@@ -349,6 +349,15 @@ show regex(&quot;Location:[\w, ]+&quot;): it =&gt; {
   )
 }
 </code></pre>
+<hr />
+<h2>Insert pages from a PDF document</h2>
+<p>Documents are often a collection of multi-format artefacts. I often find the need to add pdf pages, especially as appendices, and often as a range of pages (say, pages 1 to 6 in the example below). The way I am able to do this is with a little snippet of code like so. (Note this should be directly in the document and not in the template.)</p>
+<pre><code class="language-rust">#set page(margin:0pt) // remove margins for the PDF section
+#for p in range(1, 6) {
+  image(&quot;some_document.pdf&quot;, page: p, width:100%)
+}
+</code></pre>
+<hr />
 <h2>WSL specific</h2>
 <p>To make Windows fonts available for Typst via WSL in fish shell, set this once:</p>
 <pre><code>set -Ux TYPST_FONT_PATHS &quot;/mnt/c/Windows/Fonts&quot;

@@ -14,6 +14,13 @@
   ],
   "items" : [
     {
+      "id" : "https://ckunte.net/2026/bom-diff",
+      "title" : "Bill of materials and git-diff",
+      "url" : "https://ckunte.net/2026/bom-diff",
+      "content_text" : "Last year, I was assigned to a dry-dock campaign, and tasked with developing structural remediation scopes in an FPSO. Early on in the process, I made a decision to keep the content of work scope (SOW) separate from its associated bill of materials...",
+      "date_published" : "2026-03-31T06:29:00Z"
+    },
+    {
       "id" : "https://ckunte.net/2025/weld-improv",
       "title" : "Endurance gain from weld improvements",
       "url" : "https://ckunte.net/2025/weld-improv",
@@ -26,13 +33,6 @@
       "url" : "https://ckunte.net/2025/python-on-windows",
       "content_text" : "Beginners cannot go wrong with Thonny (portable) and can ignore the following \u2014 meant for those familiar with CLI, and \u003ca...",
       "date_published" : "2025-11-08T17:19:00Z"
-    },
-    {
-      "id" : "https://ckunte.net/2025/shell-func",
-      "title" : "shell functions",
-      "url" : "https://ckunte.net/2025/shell-func",
-      "content_text" : "For rebase Often I find the need to squash commits, especially those that don\u2019t need to stand-alone. And so little a function, which is more an alias with...",
-      "date_published" : "2025-10-05T15:40:00Z"
     }    
   ]
 }
