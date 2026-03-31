@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Bill of materials and git-diff</title>
+<meta name="description" content="Last year, I was assigned to a dry-dock campaign, and tasked with developing structural...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="28" height="28"></a>
+</header>	
+<article>
+<h1>Bill of materials and git-diff</h1>
+<time datetime="2026-03-31T06:29:00Z">31 Mar 2026</time>
+<p>Last year, I was assigned to a dry-dock campaign, and tasked with developing structural remediation scopes in an FPSO. Early on in the process, I made a decision to keep the content of work scope (SOW) separate from its associated bill of materials (BOM) list, imagining that it would some day be handy to concatenate for all scopes easily.</p>
+<p><a href="/2025/template" title="Anatomy of a Typst template">Using Typst</a>, I was able to call the associated BOM as an immutable block of code within the SOW document like so:</p>
+<pre><code class="language-rust">#let qty = csv(scope.num + &quot;-bom.csv&quot;)
+
+#table(
+  columns: 3,
+  ..for (sl, description, quantity) in qty {
+    (sl, description, quantity)
+  }
+)
+</code></pre>
+<p>With both SOW and BOM (in CSV) being plain text files meant I could track changes with <a href="https://git-scm.com" title="A state-of-the-art distributed version control system">git</a>, of course. </p>
+<p>Both these decisions, i.e., (a) separating BOM from SOW content, and (b) tracking changes with git, have served me well. </p>
+<p>Recently, I was asked for a list of changes to the BOM between a previous revision and the latest.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> Since BOM was version-controlled with git, I could just run these following commands and get the diffs between, say, <code>RevB</code> (tag) and the latest update (<code>HEAD</code>).</p>
+<p>View commit history:</p>
+<pre><code>git log RevB..HEAD -- '*.csv'
+</code></pre>
+<p>List filenames only:</p>
+<pre><code>git diff --name-only RevB..HEAD -- '*.csv'
+</code></pre>
+<p>View impact (stats):</p>
+<pre><code>git diff --stat RevB..HEAD -- '*.csv'
+</code></pre>
+<p>View line changes:</p>
+<pre><code>git diff -w --word-diff=plain RevB..HEAD -- '*.csv'
+</code></pre>
+<p>I could then generate a nice output (post a little clean-up), like below, for the interested parties to review and take account of.</p>
+<pre><code class="language-diff">// Legend:
+// - [-x-]: deletions
+// - {+y+}: additions 
+
+ST-163
+1, PLT 10 THK (JIS G 3192 or equiv.), [-2-]{+4+} sq.m 
+2, Coatings as per COMPANY spec. TGEN-S75-1001, [-2-]{+4+} sq.m
+</code></pre>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Imagine doing this in Word, which comes with no-control kind of version control!&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Endurance gain from weld improvements" href="/2025/weld-improv">Prev</a>
+    </span>
+    <span>
+      <a accesskey="k" title="Home" href="/">Home</a>
+	  &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>
