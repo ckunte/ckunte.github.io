@@ -192,7 +192,7 @@ hr {
 .footnote hr {
   margin:1.5rem auto 0.75rem 0;
   width:36%;
-  border-color: var(--lite-hr);
+  border-color: lightslategray; /* var(--lite-hr); */
   border-style:solid;
   border-width:1px 0 0
 }

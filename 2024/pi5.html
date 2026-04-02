@@ -33,6 +33,9 @@
 <p>It is refreshing to have a simple, minimalist, usable interface without fluff, walled garden annoyances, with the freedom to setup, install, and have a system that is just sufficient and nothing more.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> </p>
 <h2>Custom keyboard shortcuts</h2>
 <p>There are a bunch of <a href="https://github.com/gnmearacaun/RasPiOS-labwc/blob/main/rc.xml">defaults in labwc</a>, which Raspberry Pi OS adopted late last year, and it took me a while to figure this out, and on how to add custom keyboard shortcuts for some basic things like starting an application, e.g., Chromium with, say, <kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>&nbsp;c&nbsp;</kbd>, and lock screen with, say, <kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>&nbsp;l&nbsp;</kbd>. (A couple of defaults I use the most is the window snapping to either left, right, or full screen. These can be done with <kbd>Super</kbd><kbd>&larr;</kbd>, <kbd>Super</kbd><kbd>&rarr;</kbd>, or <kbd>Super</kbd><kbd>a</kbd>; where <kbd>Super</kbd> is either <kbd>Win</kbd> or <kbd>Cmd</kbd> key depending on the keyboard.) Add the keyboard section and key binds to <code>$HOME/.config/labwc/rc.xml</code> within the <code>openbox_config</code> open and close tags. (Ensure they do not clash with the defaults.) </p>
+<details>
+<summary>Custom keyboard shortcuts setup</summary>
+
 <pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot;?&gt;
 &lt;openbox_config xmlns=&quot;http://openbox.org/3.4/rc&quot;&gt;
 &lt;!-- pre-populated defaults here (leave'em alone) --&gt;
@@ -58,6 +61,9 @@
 
 &lt;/openbox_config&gt;
 </code></pre>
+
+</details>
+
 <p>If this file is edited, then it should be followed-up by running the following for the settings to reload.</p>
 <pre><code class="language-shell">labwc --reconfigure
 </code></pre>
@@ -90,6 +96,14 @@
 <p>And on a 1080p monitor, the panel enables 1.5&times; setting option, thus making grainy screen text a thing of the past.</p>
 <h2>Workspaces</h2>
 <p>The Pi OS does not reveal setting-up Workspaces by default from within its GUI; that&rsquo;s not to say the feature does not exist. It needs setting-up via the rc.xml (labwc) configuration file. In rc.xml, e.g., I&rsquo;ve set up three workspaces, which can be navigated to via <kbd>Super</kbd><kbd>j</kbd> (left workspace), and <kbd>Super</kbd><kbd>k</kbd> (right workspace). I can also send a particular app to, e.g., workspace 1 with <kbd>Shift</kbd><kbd>Super</kbd><kbd>1</kbd>.</p>
+<figure>
+  <img alt="Screenshot of workspaces" src="/img/workspaces.png" loading=lazy />
+  <figcaption>Workspaces (Navigate with <kbd>Super</kbd><kbd>j</kbd> and <kbd>Super</kbd><kbd>k</kbd>).</figcaption>
+</figure>
+
+<details>
+<summary>Workspace setup</summary>
+
 <pre><code>&lt;?xml version=&quot;1.0&quot;?&gt;
 &lt;openbox_config xmlns=&quot;http://openbox.org/3.4/rc&quot;&gt;
 &lt;!-- pre-populated defaults here (leave'em alone) --&gt;
@@ -132,6 +146,9 @@
 
 &lt;/openbox_config&gt;
 </code></pre>
+
+</details>
+
 <h2>TTY to GUI</h2>
 <p>If I lock-screen and turn-off the monitor, and get back to it after a while, the monitor refuses to load Pi OS GUI and instead shows a blank screen, I&rsquo;ve had to right-click and select Terminal (same as <kbd>Ctr</kbd><kbd>Alt</kbd><kbd>F2</kbd>), and it drops you straight into a TTY terminal login. I&rsquo;ve had to login at this terminal, and then invoke GUI with <code>labwc-pi</code>.<sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup></p>
 <div class="footnote">
