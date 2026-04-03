@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Keyboard</title>
+<meta name="description" content="Update (2026): I’ve now re-mapped keys directly on the keyboard for consistency across OSes, and...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg" width="28" height="28"></a>
+</header>	
+<article>
+<h1>Keyboard</h1>
+<time datetime="2025-10-05T13:17:00Z">5 Oct 2025</time>
+<p><em>Update (2026): I&rsquo;ve now re-mapped keys directly on the keyboard for consistency across OSes, and reduce software overhead.</em></p>
+<hr />
+<p><img alt="My keyboards" src="/img/keyboard.jpg" /></p>
+<p>My oft-used at home is a <a href="https://caniusevia.com/">VIA</a> enabled, mechanical keyboard featuring 60-key hot-swappable, low-profile wisteria switches. I like the form factor, and it&rsquo;s definitely an upgrade from my previous 49-key with full-sized switches.</p>
+<p>The problem with mechanical keyboards in these sizes is that they have odd layouts, and they  omit some important keys. My biggest gripe is that the <kbd>Fn</kbd> key is often located inconveniently on the right hand side (instead of being on the left hand side), and it is further pre-mapped (i.e. locked) to back lighting and other such cosmetic nonsense I have no interest in.</p>
+<p>At the time of purchase, I did not realise how much of a handicap such layouts posed. For instance, mine has no function key row &mdash; not an issue per se, but has no navigation keys either (viz., <kbd>Home</kbd>, <kbd>PgDn</kbd>, <kbd>PgUp</kbd>, <kbd>End</kbd>). This is a solved problem in the membrane-types, in which there is a <kbd>Fn</kbd> key on the left hand side, which can be combined with arrow keys to get this functionality.</p>
+<p>While I could map <kbd>Cmd</kbd> and arrow keys to get me the above functionality, it conflicts with Raspberry Pi OS&rsquo;s (and Windows&rsquo;) own key mappings for window placement, and since I use window placements quite extensively, I have to resort to the following.</p>
+<p>For sanity on my <a href="/2024/pi5">primary computer</a>, I have begun to use <a href="https://github.com/rvaiya/keyd" title="A key remapping daemon for linux">keyd</a>, which is a key remapping daemon for linux. While I could use VIA to remap keys at the hardware level, I struggle with the cognitive load of layers.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> </p>
+<p>keyd takes this following setup, in which I employ the sparingly used <kbd>Caps</kbd> key as the modifier for other home row keys <kbd>h</kbd>, <kbd>j</kbd>, <kbd>k</kbd>, <kbd>l</kbd> to get <kbd>Home</kbd>, <kbd>PgDn</kbd>, <kbd>PgUp</kbd>, <kbd>End</kbd>. The keyd config file (<code>/etc/keyd/default.conf</code>) is as follows.</p>
+<pre><code>[ids]
+
+*
+
+[main]
+
+rightshift = ~
+capslock = layer(nav)
+
+[nav]
+
+h = home
+j = pagedown
+k = pageup
+l = end
+</code></pre>
+<p>In the above, <kbd>Caps</kbd> key is assigned to activate a layer called &lsquo;nav&rsquo; when held down, and keys defined in the &lsquo;nav&rsquo; layer are used in combination to get the desired input.</p>
+<p>Another handicap overcome with the above remap for the 60-key keyboard is the simpler way to get to <code>~</code>, a crucial key that represents <code>$HOME</code> for use in terminal. Now hitting <code>~/</code> is like one-two, no modifier needed.</p>
+<p>The shell commands for getting keyd working:</p>
+<pre><code class="language-sh"># download and compile keyd from source
+git clone https://github.com/rvaiya/keyd
+
+# change directory and run make, make install
+cd keyd &amp;&amp; make
+sudo make install
+
+# stop keyd service and update config., restart service
+sudo systemctl stop keyd
+vim sudo systemctl stop keyd
+sudo systemctl enable --now keyd
+
+# if config is updated, be sure to reload
+sudo keyd reload
+
+# restart service if required
+sudo systemctl restart keyd
+</code></pre>
+<p>Here&rsquo;s my wish list for a mechanical keyboard for office use:</p>
+<ul>
+<li>Standard uncompressed layout for any preferred type</li>
+<li>A <kbd>Fn</kbd> key on the LHS for use with arrow keys for navigation</li>
+<li>Tactile but silent key switches</li>
+</ul>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>It&rsquo;s made worse as I work at three different places and use three different sets of input devices; and then I have multiples for use at home. Yes, this is self-inflicted. I could stick to one &mdash; buy three pieces of the same hardware to use at all locations. It is still the plan, and slowly finding my feet to overcome all possible edge cases one at a time so when I switch over, there are no regrets.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="My father" href="/2025/my-father">Prev</a>
+    </span>
+    <span>
+      <a accesskey="k" title="shell functions" href="/2025/shell-func">Next</a>
+	  &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>
