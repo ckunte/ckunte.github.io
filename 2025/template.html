@@ -17,7 +17,7 @@
 <article>
 <h1>Anatomy of a Typst template</h1>
 <time datetime="2025-03-30T22:17:00Z">30 Mar 2025</time>
-<p>Developed by two graduate students from Technical University of Berlin, <a href="https://typst.app">Typst</a> is a computer program for typesetting documents, thoughtfully designed to be fast, portable, feature-packed, and script-able. It would not be unfair to call it a spiritual successor to <a href="https://en.wikipedia.org/wiki/LaTeX">LaTeX</a>. With contributions from talented open-source enthusiasts, it is evolving well and blowing-up LaTeX&rsquo;s handicaps, viz.,</p>
+<p>Developed by two graduate students from Technical University of Berlin, <a href="https://typst.app">Typst</a> is a computer program for typesetting documents, thoughtfully designed to be fast, portable, feature-packed, and script-able. It would not be unfair to call it a spiritual successor to <a href="https://en.wikipedia.org/wiki/LaTeX">$\LaTeX$</a>. With contributions from talented open-source enthusiasts, it is evolving well and blowing-up $\LaTeX$&rsquo;s handicaps, viz.,</p>
 <ul>
 <li>compilation speed</li>
 <li>learning curve</li>
@@ -26,7 +26,7 @@
 <li>package size</li>
 <li>syntax highlighting</li>
 </ul>
-<p>With good defaults (font and paragraph properties, paper size, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned LaTeX user, then you&rsquo;d know how useful <a href="https://ctan.org/topic/class">document classes</a> are  &mdash; something Typst does not yet come pre-packaged with. And so, a little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for users, by users. If you&rsquo;re one of them, and your tastes are slightly different from those available there-in, then it would not hurt to know how to create a Typst template from scratch. Here is how.</p>
+<p>With good defaults (font and paragraph properties, paper size, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned $\LaTeX$ user, then you&rsquo;d know how useful <a href="https://ctan.org/topic/class">document classes</a> are  &mdash; something Typst does not yet come pre-packaged with. And so, a little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for users, by users. If you&rsquo;re one of them, and your tastes are slightly different from those available there-in, then it would not hurt to know how to create a Typst template from scratch. Here is how.</p>
 <p>Rule one of publishing: separate presentation + styling from content &mdash; offline or online. So we create two files:</p>
 <ul>
 <li><em>main.typ</em> &mdash; this file will have all the report&rsquo;s content</li>
@@ -105,7 +105,10 @@
 )
 </code></pre>
 <p>Here is a little complex header code to make the title of the note (paper) appear on every even page, and the active section name appear on every odd page other than the first. </p>
-<pre><code>set page(
+<details>
+<summary>Header code</summary>
+
+<pre><code class="language-rust">set page(
   header: context {
     // set custom header: make title appear on even pages
     if calc.even(counter(page).get().first()) { 
@@ -132,6 +135,9 @@
   }, // context ends
 ) // page ends
 </code></pre>
+
+</details>
+
 <p>Put the template file together and then either run the following at command line, or use <a href="/2024/build">build</a> instructions to setup text editor to compile typ to pdf.</p>
 <pre><code>$ typst compile main.typ
 </code></pre>
@@ -159,33 +165,12 @@
   target: figure.where(kind: table),
 ) // tables
 </code></pre>
-<p>However, even when there are no figures or tables, the headings &lsquo;List of figures&rsquo; and &lsquo;List of tables&rsquo; are produced. To tweak this to produce only when they exist, a little code snippet for the job &mdash; this will be in the <em>main.typ</em>:</p>
-<pre><code>#context {
-  // Count the number of figures of kind &quot;image&quot;
-  let fig-count = query(figure.where(kind: image)).len()
-  let tbl-count = query(figure.where(kind: table)).len()
+<p>However, even when there are no figures or tables, the headings &lsquo;List of figures&rsquo; and &lsquo;List of tables&rsquo; are produced. To tweak this to produce only when they exist, a little code snippet for the job &mdash; this will be in the <em>main.typ</em>, but can also be included in a separate file like <em>toc.typ</em> like <code>#include("toc.typ")</code>.</p>
+<details>
+<summary>TOC code</summary>
 
-  // Only render the outline if there are figures
-  if fig-count &gt; 0 {
-    outline(
-      title: [List of figures],
-      target: figure.where(kind: image),
-    )
-  }
-  // Only render the outline if there are tables
-  if tbl-count &gt; 0 {
-    outline(
-      title: [List of tables],
-      target: figure.where(kind: table),
-    )
-  }
-}
-</code></pre>
-<p>The entire table of contents block can be placed in a separate file, if you like, say, <em>toc.typ</em> and called on demand: with the following:</p>
-<pre><code>#include(&quot;toc.typ&quot;)
-</code></pre>
-<p>with the contents of the <em>toc.typ</em> file, combining the above:</p>
-<pre><code>#outline(
+<pre><code class="language-rust">// Contents of toc.typ
+#outline(
   indent: 1em, 
   depth: 4,
 ) // toc
@@ -211,6 +196,9 @@
   }
 }
 </code></pre>
+
+</details>
+
 <h2>Subtitle and logo</h2>
 <p>Same trick to produce these above.</p>
 <p><em>main.typ</em> to have this below. Notice the keys &ldquo;logo&rdquo; and &ldquo;subtitle&rdquo; in the block below.</p>
@@ -365,6 +353,65 @@ show regex(&quot;Location:[\w, ]+&quot;): it =&gt; {
 <p>Alternatively, add this line to config.fish:</p>
 <pre><code>set -gx TYPST_FONT_PATHS &quot;/mnt/c/Windows/Fonts&quot;
 </code></pre>
+<h2>Printing matter on a DL envelope</h2>
+<p>When sending paper correspondence, I like sending it printed. For printing sender and recipient address on a standard DL sized envelope (220&times;99), I cooked this little template up. It only needs sender and recipient&rsquo;s address, and a compile. Here&rsquo;s how it looks when printed, followed by the template code below.</p>
+<figure>
+  <img alt="Screenshot of a DL envelope showing sender and recipient addresses" src="/img/dl-envelope.png" loading=lazy />
+  <figcaption>DL envelope showing sender's and recipient's addresses respectively.</figcaption>
+</figure>
+
+<details>
+<summary>DL envelope template code</summary>
+
+<pre><code class="language-rust">// template to print address on a DL envelope size
+// -- BEGIN INPUTS --
+#let sender = [
+  C Kunte, 1 Stadium Drive, Floreat, WA 6014, Australia
+]
+#let recipient = [
+  SBC Bank Berhad \
+  No. 33 Jalan Sultan Ismail \
+  50250 Kuala Lumpur \
+  MALAYSIA \
+  \
+  Attn: Mr John Doe
+]
+// -- END INPUTS
+//
+#set page(
+  width: 23cm,  // measure the envelope size
+  height: 10cm, // adjust width and height
+  margin: (
+    top: 1.5cm, 
+    left: 1.5cm,
+  ),
+)
+// text characteristics
+#set text(
+  font: &quot;Segoe UI&quot;, 
+  top-edge: &quot;cap-height&quot;, 
+  bottom-edge: &quot;baseline&quot;,
+  number-type: &quot;old-style&quot;,
+)
+// Apply small caps
+#let sc(content) = text(features: (&quot;c2sc&quot;,))[#content]
+#show regex(&quot;[A-Z]{2,}|[A-Z]{1}[0-9]{1,}|\([A-Z]{1,}\)&quot;): match =&gt; { sc(match) }
+// address to print
+#box(
+  text(size:9pt)[#sender]
+)
+//
+#v(1cm)
+//
+#h(2.5cm) #box(
+  inset: 1em,
+  text(size: 12pt)[#recipient]
+)
+</code></pre>
+
+</details>
+
+<p>Then put the envelope in the tray (face-up for my printer) and hit print.</p>
 </article>
 <footer>
     <span>

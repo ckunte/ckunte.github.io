@@ -17,7 +17,7 @@
 <article>
 <h1>Bill of materials and git-diff</h1>
 <time datetime="2026-03-31T06:29:00Z">31 Mar 2026</time>
-<p>Last year, I was assigned to a dry-dock campaign, and tasked with developing structural remediation scopes in an FPSO. Early on in the process, I made a decision to keep the content of work scope (SOW) separate from its associated bill of materials (BOM) list, imagining that it would some day be handy to concatenate for all scopes easily.</p>
+<p>Last year, I was assigned to a dry-dock campaign, and tasked with developing structural remediation scopes in an FPSO. Early on in the process, I made a decision to keep work scope (SOW) content separate from its associated bill of materials (BOM), imagining it would be handy to concatenate some day.</p>
 <p><a href="/2025/template" title="Anatomy of a Typst template">Using Typst</a>, I was able to call the associated BOM as an immutable block of code within the SOW document like so:</p>
 <pre><code class="language-rust">#let qty = csv(scope.num + &quot;-bom.csv&quot;)
 
@@ -29,8 +29,13 @@
 )
 </code></pre>
 <p>With both SOW and BOM (in CSV) being plain text files meant I could track changes with <a href="https://git-scm.com" title="A state-of-the-art distributed version control system">git</a>, of course. </p>
+<figure>
+  <img alt="Screenshot of scopes and BOM in a git tree" src="/img/bom-on-git.png" loading=lazy />
+  <figcaption>Scopes and BOM in a git tree.</figcaption>
+</figure>
+
 <p>Both these decisions, i.e., (a) separating BOM from SOW content, and (b) tracking changes with git, have served me well. </p>
-<p>Recently, I was asked for a list of changes to the BOM between a previous revision and the latest.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> Since BOM was version-controlled with git, I could just run these following commands and get the diffs between, say, <code>RevB</code> (tag) and the latest update (<code>HEAD</code>).</p>
+<p>Recently, I was asked for a list of changes to the BOM between a previous revision and the latest. Since BOM was version-controlled with git, I could just run these following commands and get the diffs between, say, <code>RevB</code> (tag) and the latest update (<code>HEAD</code>).</p>
 <p>View commit history:</p>
 <pre><code>git log RevB..HEAD -- '*.csv'
 </code></pre>
@@ -43,7 +48,7 @@
 <p>View line changes:</p>
 <pre><code>git diff -w --word-diff=plain RevB..HEAD -- '*.csv'
 </code></pre>
-<p>I could then generate a nice output (post a little clean-up), like below, for the interested parties to review and take account of.</p>
+<p>I could then generate a nice output (post a little clean-up), like below, for the shipyard to review and take account of.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
 <pre><code class="language-diff">// Legend:
 // - [-x-]: deletions
 // - {+y+}: additions 
