@@ -340,8 +340,8 @@ show regex(&quot;Location:[\w, ]+&quot;): it =&gt; {
 <hr />
 <h2>Insert pages from a PDF document</h2>
 <p>Documents are often a collection of multi-format artefacts. I often find the need to add pdf pages, especially as appendices, and often as a range of pages (say, pages 1 to 6 in the example below). The way I am able to do this is with a little snippet of code like so. (Note this should be directly in the document and not in the template.)</p>
-<pre><code class="language-rust">#set page(margin:0pt) // remove margins for the PDF section
-#for p in range(1, 6) {
+<pre><code class="language-rust">#set page(margin:0pt) // optional: remove margins
+#for p in range(1, 7) { // last page + 1 to get last page
   image(&quot;some_document.pdf&quot;, page: p, width:100%)
 }
 </code></pre>
