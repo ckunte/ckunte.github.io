@@ -188,6 +188,51 @@ end
 </code></pre>
 </li>
 <li>
+<p>Rename, compress and move screenshots</p>
+<p>This script assumes that the first two screenshots are location related, and the rest are photos.</p>
+<pre><code>function renshots --argument ID
+    # Check if ID was provided (e.g. renshots MCS-STRU-400)
+    if test -z "$ID"
+        echo "Usage: rename_shots &lt;ID&gt;"
+        return 1
+    end
+
+    set -l COUNT 1
+
+    # Glob everything starting with "Screenshot"
+    for file in Screenshot*.png
+
+        # Safety check if no files match
+        if not test -e "$file"
+            echo "No files starting with 'Screenshot' found in this directory."
+            return 1
+        end
+
+        if test $COUNT -eq 1
+            set new_name "$ID-loc1.png"
+        else if test $COUNT -eq 2
+            set new_name "$ID-loc2.png"
+        else
+            set photo_num (math $COUNT - 2)
+            set new_name "$ID-photo-$photo_num.png"
+        end
+
+        mv "$file" "$new_name"
+        printf "Renamed: %s -&gt; %s \n" "$file" "$new_name"
+
+        set COUNT (math $COUNT + 1)
+    end
+    # Compress images using house-keeping script
+    make --file=~/scripts/hkp/hkp.make cpng
+    #  Move screenshots to jt/img folder
+    printf "Moving screenshots from compressed folder to jimg folder..."
+    mv -f compressed/* .
+    mv -f *.png ./jimg/.
+    printf " done\n"
+end
+</code></pre>
+</li>
+<li>
 <p>Toggle WiFi on/off using the custom command <code>beam</code>:</p>
 <pre><code>function beam --description "Toggles Wi-Fi on/off"
     set wifi_status (nmcli radio wifi)
