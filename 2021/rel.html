@@ -46,6 +46,7 @@
 <li>Re-factored to python 3 (new)</li>
 <li>Select contributions sent upstream via pull requests (update)</li>
 <li>Taxonomy (tag) feature added (new, Nov 2023)</li>
+<li>Author&rsquo;s age is now via a <a href="https://github.com/ckunte/chisel/commit/94a8416d0ffc79981c098ae691f922de046f7fff" title="Add a filter to display author's age">filter</a></li>
 </ul>
 <h2>Model</h2>
 <ul>
@@ -73,8 +74,51 @@
   <figcaption>Homepage as seen when viewed via a terminal based browser Links (2026).</figcaption>
 </figure>
 
-<hr />
-<p><em>Author&rsquo;s age:</em> In lieu of manually updating the age in the bio, I <a href="https://github.com/ckunte/chisel/commit/94a8416d0ffc79981c098ae691f922de046f7fff" title="Add a filter to display author's age">dropped a little filter</a> that computes it.</p>
+<h2>Publishing workflow</h2>
+<p>Basically it&rsquo;s a 3-step process:</p>
+<ol>
+<li>Draft note in a plain text editor</li>
+<li>Run chisel</li>
+<li>Publish, when the note is ready</li>
+</ol>
+<p>I write in Neovim. Every time I save (<code>:w</code>) causes it to run a script in another terminal window that runs chisel, and syncs to a raspberry pi on my LAN that hosts my web site locally, which offers a live preview of what I&rsquo;ve written. The script is a Makefile, which has the following menu:</p>
+<pre><code>ckunte@rd ~&gt; sp
+Usage: make --file=~/Sites/sp.make &lt;opt&gt;
+&lt;opt&gt; available:
+hlp    show this help
+hom    gen. notes + push -&gt; z        
+ckunte@rd ~&gt;
+</code></pre>
+<p>The <code>hom</code> is two sets of commands as defined in the Makefile:</p>
+<pre><code>hom: not h2pi ## gen. notes + push -&gt; z
+
+not:
+    @echo "Running mc + publishing locally..."
+    @git -C "${HOME}/Sites/chisel" checkout bb;
+    @uv run --directory ${HOME}/Sites/chisel mc.py;
+
+h2pi:
+    @echo -n "Uploading ${S3} to ${HOST}..."
+    @rsync ${FLAGS} ${SITES}/${S3}/ $(PORT) ${USER}@${HOST}:${W3ONPI}/.
+    @echo "done."
+</code></pre>
+<p>I have a fish function that automates this process using <code>entr</code>:</p>
+<pre><code>function chisel
+    ls ~/Sites/notes/*.md | entr make --file=~/Sites/sp.make hom
+end
+</code></pre>
+<p>Chisel runs automatically in the background when I save, as can be seen above.</p>
+<p>When I think my draft is ready, and looks good in preview, I am ready to publish. This is done from the root of my site folder:</p>
+<pre><code>git commit -am "Add '&lt;note name here&gt;'"       
+git push -u origin master
+</code></pre>
+<p>Here&rsquo;s a view of the screen layout as I write.</p>
+<figure>
+  <img alt="Screenshot of my publishing workflow" src="/img/pubflow.png" loading=lazy />
+  <figcaption>My publishing workflow.</figcaption>
+</figure>
+
+<p>That&rsquo;s my frictionless writing and publishing workflow.</p>
 </article>
 <footer>
     <span>
