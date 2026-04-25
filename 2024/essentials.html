@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: Essentials</title>
-<meta name="description" content="This is the 2024 edition (updated for 2025-). Here we go. hardware Raspberry Pi 5 – the daily...">
+<meta name="description" content="This is the 2024 edition (updated for 2025-). Here we go. Hardware Raspberry Pi 5 – the daily...">
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -18,22 +18,11 @@
 <h1>Essentials</h1>
 <time datetime="2024-10-19T20:43:00Z">19 Oct 2024</time>
 <p>This is the 2024 edition (updated for 2025-). Here we go.</p>
-<h2>hardware</h2>
+<h2>Hardware</h2>
 <ul>
 <li><a href="https://www.raspberrypi.com/products/raspberry-pi-5/">Raspberry Pi 5</a> &ndash; <a href="/2024/pi5">the daily driver</a></li>
 </ul>
-<h2>software (2025-)</h2>
-<ul>
-<li><a href="https://packages.debian.org/trixie/fonts-jetbrains-mono">fonts-jetbrains-mono</a> &ndash; terminal font</li>
-<li><a href="https://packages.debian.org/trixie/fonts-quicksand">fonts-quicksand</a> &ndash; UI font for Raspberry Pi OS</li>
-<li><a href="https://codeberg.org/dnkl/foot">foot</a> &ndash; a fast, and minimalistic terminal emulator</li>
-<li><a href="https://gnome.pages.gitlab.gnome.org/gnumeric-web/">gnumeric</a> &ndash; a free, open-source spreadsheet application</li>
-<li><a href="https://pngquant.org/">pngquant</a> &ndash; lossy PNG image compression</li>
-<li><a href="https://thonny.org/">thonny</a> &ndash; python IDE for beginners [and pros alike]</li>
-<li><a href="https://zellij.dev/">zellij</a> &ndash; terminal workspace with batteries included</li>
-</ul>
-<p>plus everything from the list below.</p>
-<h2>software (2024)</h2>
+<h2>Software</h2>
 <ul>
 <li><a href="https://www.raspberrypi.com/software/">Raspberry Pi OS Desktop</a> + bundled software</li>
 <li><a href="https://packages.debian.org/trixie/anacron">anacron</a> &ndash; run commands periodically</li>
@@ -44,7 +33,11 @@
 <li><a href="https://github.com/sharkdp/fd">fd</a> &ndash; a simple, fast, user-friendly alternative to find</li>
 <li><a href="https://fishshell.com">fish</a> &ndash; a smart and user-friendly command line shell</li>
 <li><a href="https://github.com/junegunn/fzf">fzf</a> &ndash; a command line fuzzy finder</li>
+<li><a href="https://packages.debian.org/trixie/fonts-jetbrains-mono">fonts-jetbrains-mono</a> &ndash; terminal font</li>
+<li><a href="https://packages.debian.org/trixie/fonts-quicksand">fonts-quicksand</a> &ndash; UI font for Raspberry Pi OS</li>
+<li><a href="https://codeberg.org/dnkl/foot">foot</a> &ndash; a fast, and minimalistic terminal emulator</li>
 <li><a href="https://www.gimp.org">gimp</a> &ndash; GNU image manipulation program</li>
+<li><a href="https://gnome.pages.gitlab.gnome.org/gnumeric-web/">gnumeric</a> &ndash; a free, open-source spreadsheet application</li>
 <li><a href="https://git-scm.com/">git</a> &ndash; distributed version control system</li>
 <li><a href="https://gparted.org/">gparted</a> &ndash; disk partition manager</li>
 <li><a href="https://gnupg.org/">gpg</a> &ndash; GNU privacy guard</li>
@@ -66,6 +59,7 @@
 </li>
 <li><a href="https://nginx.org/en/">nginx</a> &ndash; http web server</li>
 <li><a href="https://www.passwordstore.org/">pass</a> &ndash; the standard unix password manager</li>
+<li><a href="https://pngquant.org/">pngquant</a> &ndash; lossy PNG image compression</li>
 <li><a href="https://www.python.org/">python</a> &ndash; programming language<ul>
 <li><a href="https://pypi.org/project/Jinja2/">jinja2</a> &ndash; designer friendly templating engine</li>
 <li><a href="https://pypi.org/project/Markdown/">markdown</a> &ndash; simple markup language</li>
@@ -79,10 +73,18 @@
 <li><a href="https://github.com/ap/rename">rename</a> &ndash; perl rename script</li>
 <li><a href="https://github.com/BurntSushi/ripgrep">ripgrep</a> &ndash; recursive search tool</li>
 <li><a href="https://rsync.samba.org/">rsync</a> &ndash; utility for incremental file transfer</li>
+<li><a href="https://www.sublimetext.com/">Sublime Text</a> &ndash; great text editor</li>
+<li><a href="https://www.sublimemerge.com/">Sublime Merge</a> &ndash; great git client</li>
+<li><a href="https://thonny.org/">thonny</a> &ndash; python IDE for beginners (and pros alike)</li>
 <li><a href="https://typst.app/">typst</a> &ndash; modern typesetting system</li>
 <li><a href="https://packages.debian.org/trixie/ufw">ufw</a> &ndash; uncomplicated firewall</li>
 <li><a href="https://www.videolan.org/vlc/">vlc</a> &ndash; a free and open source cross-platform multimedia player</li>
+<li><a href="https://zellij.dev/">zellij</a> &ndash; terminal workspace with batteries included</li>
 </ul>
+<h2>Backup</h2>
+<p>I only backup my home folder, because it&rsquo;s enough. The command <code>backup</code> is an alias using <code>rsync</code> to an SSD drive.</p>
+<pre><code>rsync -auv --delete --exclude-from=$HOME/excl.txt $HOME/ /media/ckunte/pi5b/ckunte/
+</code></pre>
 </article>
 <footer>
     <span>
