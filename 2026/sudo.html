@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: sudo with yubikey</title>
+<meta name="description" content="Yubikeys offer one of the strongest, enterprise-grade, practical account security tools to...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>	
+<article>
+<h1>sudo with yubikey</h1>
+<time datetime="2026-05-16T13:28:00Z">16 May 2026</time>
+<p><a href="https://www.yubico.com/">Yubikeys</a> offer one of the strongest, enterprise-grade, practical account security tools to end-users without the cognitive overhead. Cost-effective, portable, and robust; I&rsquo;ve been using them for over a decade now.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>It&rsquo;s handy to pair it with <code>sudo</code><sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>; here&rsquo;s a how-to. </p>
+<ol>
+<li>
+<p>Install pre-requisite software</p>
+<pre><code>sudo apt install libpam-u2f
+</code></pre>
+</li>
+<li>
+<p>Create a config folder</p>
+<pre><code>mkdir -p ~/.config/Yubico
+</code></pre>
+</li>
+<li>
+<p>Generate key mapping</p>
+<pre><code>pamu2fcfg &gt; ~/.config/Yubico/u2f_keys
+</code></pre>
+<ul>
+<li>Enter key PIN when prompted</li>
+<li>Touch the flashing Yubikey (to complete key registration)</li>
+</ul>
+<p>To register another key, use the following command, followed by entering PIN and touching the key when prompted:</p>
+<pre><code>pamu2fcfg &gt;&gt; ~/.config/Yubico/u2f_keys
+</code></pre>
+<p>Using <code>&gt;&gt;</code> in the above command appends <code>u2f_keys</code> file &mdash; registering the new key, without removing previously registered keys.</p>
+</li>
+<li>
+<p>Configure <a href="https://en.wikipedia.org/wiki/Privileged_access_management">PAM</a> for <code>sudo</code></p>
+<pre><code>sudo nvim /etc/pam.do/sudo
+</code></pre>
+<p>Add one of the following line above the <code>@include common-auth</code> line &mdash; depending upon your convenience-to-security preference:</p>
+<ul>
+<li>
+<p>Option 1 (good): For passwordless sudo:</p>
+<pre><code>auth sufficient pam_u2f.so cue [cue=Tap security key]
+</code></pre>
+</li>
+<li>
+<p>Option 2 (better): For 2FA (password + Yubikey):</p>
+<pre><code>auth required pam_u2f.so cue [cue=Tap security key]
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>For Raspberry Pi OS, under <em>1. System Options &gt; S10 Admin Password &gt; Enable</em> </p>
+</li>
+<li>
+<p>Test with the following:</p>
+<pre><code>sudo echo "Success"
+</code></pre>
+</li>
+</ol>
+<p>Common sense recommends registering multiple keys, if in case you lose a key (or two). Unregister lost key(s) from your account using a backup key.<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup></p>
+<hr />
+<p>I&rsquo;ve got a 14-year old MacBook that&rsquo;s now just a dumb terminal and the process for this was nearly same as above. I installed <code>pam-u2f</code> using MacPorts, and added the following at the top of the file <code>/etc/pam.d/sudo</code>:</p>
+<pre><code>auth  sufficient  /opt/local/bin/pam/pam_u2f.so cue
+</code></pre>
+<p>Be sure to check if the file in the path above exists before saving; could be different if installed via brew. <code>sudo</code> command prompts to tap the key, if found in the USB port; if not, it will ask for the password.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>For a bunch of <a href="https://www.youtube.com/watch?v=PeF0Y8pT7UQ">services</a> from commercial entities and Government, privately owned computers, and servers, etc.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>To temporarily run commands with admin privileges.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>The beauty of hardware keys is (a) something you know (like a password), (b) something you have (like a yubikey), and/or (c) something you are (e.g. biometry). Without the appropriate combination, access becomes impracticable.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="Web plate connection in direct tension" href="/2026/web-yieldline">Prev</a>
+    </span>
+    <span>
+      <a accesskey="k" title="Home" href="/">Home</a>
+	  &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>
