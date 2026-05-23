@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: PC</title>
+<meta name="description" content="On eBay, I found a HP 800 G2 mini1 for A$209. It arrived promptly. The last time I set Windows...">
+<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>	
+<article>
+<h1>PC</h1>
+<time datetime="2026-05-23T12:40:00Z">23 May 2026</time>
+<p>On eBay, I found a HP 800 G2 mini<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> for A$209. It arrived promptly. The last time I set Windows up was in 2005. So I needed a plan for a clean-install, and then purge the unwanted off of it. It turned out to be surprisingly easy:  </p>
+<ol>
+<li><a href="https://support.microsoft.com/en-au/windows/create-installation-media-for-windows-99a58364-8c02-206f-aa6f-40c3b507420d">Create installation media for Windows</a></li>
+<li>Power it up (staying offline), set USB drive to boot first in BIOS</li>
+<li>Nuke all partitions</li>
+<li>Install Windows 11 Pro with the USB<ul>
+<li>Skip setting up a Microsoft account</li>
+<li>Hit <kbd>Shift</kbd><kbd>F10</kbd> and run <code>OOBE\BYPASSNRO</code> in the console</li>
+<li>The computer will reboot; the process restarts. Set up local account</li>
+</ul>
+</li>
+<li>Login to your local account, and connect Ethernet cable</li>
+<li>Run WinUtil with <code>irm "https://christitus.com/win" | iex</code> in a console   <ul>
+<li>From Winutil&rsquo;s <em>Tweaks</em> (tab), select <em>Standard</em></li>
+<li>Click on <em>Add and Activate Ultimate Performance Profile</em></li>
+<li>Hit <em>Run Tweaks</em>. This should make it snappy, and crud-free</li>
+</ul>
+</li>
+<li>Run Windows update to get security patches + updates</li>
+<li>Set-up some login security options, incl. PIN, security key, etc.</li>
+</ol>
+<p>And so after turning on a few switches in the BIOS &mdash; for Hyper-V + Virtualisation, I installed WSL with <code>wsl --install</code>. Post a reboot, I ran:</p>
+<pre><code>wsl --install -d Debian
+</code></pre>
+<p>And followed it up by installing some <a href="/2024/essentials">more tools</a>, and a few Windows specific software. The PC also has an M.2 NVMe slot, which I could turn it into a linux PC with one switch.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>With 6 gen. i7 intel CPU, 16 GB, 500 GB SSD, and Windows 11 Pro pre-loaded.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<footer>
+    <span>
+      &lsaquo; 
+      <a accesskey="j" title="sudo with yubikey" href="/2026/sudo">Prev</a>
+    </span>
+    <span>
+      <a accesskey="k" title="Home" href="/">Home</a>
+	  &rsaquo;
+    </span>
+  </footer></main>
+</body>
+</html>
