@@ -29,13 +29,13 @@
 </li>
 <li>
 <p>Install python</p>
-<pre><code>uv python install
+<pre><code>uv python install --system-certs
 </code></pre>
 </li>
 <li>
-<p>Initialise project folder and install modules required by the project</p>
+<p>Initialise project folder and install modules<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> required by the project</p>
 <pre><code>uv init
-uv add numpy matplotlib pandas
+uv add numpy matplotlib pandas --system-certs
 </code></pre>
 <p>uv project manages python version and the packages required for the project.</p>
 </li>
@@ -51,11 +51,11 @@ uv add numpy matplotlib pandas
 <pre><code>{
     "shell_cmd" : "uv run \"$file_name\"",
     "selector" : "source.python",
-    "path" : "C\\Users\\ckun\\.local\\bin;$path",
+    "path" : "C\\Users\\%USERNAME%\\.local\\bin;$path",
     "working_dir" : "$file_path"
 }
 </code></pre>
-<p>Be sure to change the <code>path</code> in the above to reflect <em>your own Windows username</em> in lieu of <code>ckun</code>. Save the file as <code>Python-uv.sublime-build</code>. Now with a python script in the editor, select <em>Python-uv</em> from <em>Tools &gt; Build System</em>, and hit <kbd>Ctrl</kbd><kbd>B</kbd> to run the script.</p>
+<p>Save the file as <code>Python-uv.sublime-build</code>. Now with a python script in the editor, select <em>Python-uv</em> from <em>Tools &gt; Build System</em>, and hit <kbd>Ctrl</kbd><kbd>B</kbd> to run the script.</p>
 </li>
 </ol>
 <p>And for every new project, you will have to use steps 3 and 4 from above, i.e.,  (a) initialise, (b) add the required modules, and (c) run.</p>
@@ -64,6 +64,9 @@ uv add numpy matplotlib pandas
 <ol>
 <li id="fn:1">
 <p>The wheels come off when you try setting-up Visual Studio Code editor along with it, especially when making it play nice with uv and installing modules.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>In places where a man-in-the-middle monitor (like in a corp. environ.) breaks the trust causing SSL failures, one may resort to using <code>--system-certs</code> switch to overcome this nuisance.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
