@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: python on Windows</title>
-<meta name="description" content="Beginners cannot go wrong with Thonny (portable) and can ignore the following — meant for those...">
+<meta name="description" content="Took another stab at this, esp. for a corp. environ., where SSL certificate checks break due to...">
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -17,7 +17,7 @@
 <article>
 <h1>python on Windows</h1>
 <time datetime="2025-11-08T17:19:00Z">8 Nov 2025</time>
-<p><em>Beginners cannot go wrong with <a href="https://thonny.org/" title="Python IDE for beginners">Thonny</a> (portable) and can ignore the following &mdash; meant for those familiar with CLI, and <a href="https://docs.python.org/3/library/venv.html">virtual environs</a>.</em> </p>
+<p><em>Took another stab at this, esp. for a corp. environ., where SSL certificate checks break due to the deployed packet inspection monitoring software (man-in-the-middle). There&rsquo;s now a short guide in pdf at my repo. <a href="https://github.com/ckunte/py-on-win11/releases">py-on-win11</a>.</em></p>
 <hr />
 <p>Setting <a href="https://www.python.org/">python</a> up on Windows 11 is needlessly complex, but it does not have to be, <a href="https://learn.microsoft.com/en-us/windows/python/beginners">Microsoft&rsquo;s own guide</a> notwithstanding.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> For its part, python has been a <a href="https://xkcd.com/1987/">victim of its own success</a>. The best way to overcome system-wide conflicts and other teething issues is by setting-up and managing project-specific versions and modules via virtual environments. The absolute best tool for this job is <a href="https://docs.astral.sh/uv/">uv</a> from the boutique start-up, <a href="https://astral.sh/">Astral</a>. It gets you off the ground like nothing ever has before. Here&rsquo;s how.</p>
 <ol>
@@ -29,13 +29,13 @@
 </li>
 <li>
 <p>Install python</p>
-<pre><code>uv python install
+<pre><code>uv python install --system-certs
 </code></pre>
 </li>
 <li>
-<p>Initialise project folder and install modules required by the project</p>
+<p>Initialise project folder and install modules<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> required by the project</p>
 <pre><code>uv init
-uv add numpy matplotlib pandas
+uv add numpy matplotlib pandas --system-certs
 </code></pre>
 <p>uv project manages python version and the packages required for the project.</p>
 </li>
@@ -51,11 +51,11 @@ uv add numpy matplotlib pandas
 <pre><code>{
     "shell_cmd" : "uv run \"$file_name\"",
     "selector" : "source.python",
-    "path" : "C\\Users\\ckun\\.local\\bin;$path",
+    "path" : "C\\Users\\%USERNAME%\\.local\\bin;$path",
     "working_dir" : "$file_path"
 }
 </code></pre>
-<p>Be sure to change the <code>path</code> in the above to reflect <em>your own Windows username</em> in lieu of <code>ckun</code>. Save the file as <code>Python-uv.sublime-build</code>. Now with a python script in the editor, select <em>Python-uv</em> from <em>Tools &gt; Build System</em>, and hit <kbd>Ctrl</kbd><kbd>B</kbd> to run the script.</p>
+<p>Save the file as <code>Python-uv.sublime-build</code>. Now with a python script in the editor, select <em>Python-uv</em> from <em>Tools &gt; Build System</em>, and hit <kbd>Ctrl</kbd><kbd>B</kbd> to run the script.</p>
 </li>
 </ol>
 <p>And for every new project, you will have to use steps 3 and 4 from above, i.e.,  (a) initialise, (b) add the required modules, and (c) run.</p>
@@ -64,6 +64,9 @@ uv add numpy matplotlib pandas
 <ol>
 <li id="fn:1">
 <p>The wheels come off when you try setting-up Visual Studio Code editor along with it, especially when making it play nice with uv and installing modules.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>In places where a man-in-the-middle monitor (like in a corp. environ.) breaks the trust causing SSL failures, one may resort to using <code>--system-certs</code> switch to overcome this nuisance.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
