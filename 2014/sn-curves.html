@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: S-N curves</title>
-<meta name="description" content="Update (2021): Comparing S-N curves between standards ISO 19902 and DNV-RP-C203 (DOI:...">
+<meta name="description" content="Update (2021): Comparing S-N curves between standards ISO 19902 and DNV-RP-C203 (DOI:…">
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -24,32 +24,21 @@
 </ol>
 <hr />
 <p>In order to set a suitable design criteria, I am looking to compare two classes of S-N curves for a fatigue design, viz., E and F2, and I cannot find a handy plot to refer to, and it is frustrating when standards fail to include. So, I channel it to write some code to roll my own:</p>
-<figure>
-  <img alt="S-N curves in seawater with cathodic protection based on ISO 19902:2007." class="fig" src="/img/sncurves.svg">
-  <figcaption>S-N curves in seawater with cathodic protection based on ISO 19902:2007.</figcaption>
-</figure>
-
+<p><img src="/img/sncurves.svg" alt="S-N curves in seawater with cathodic protection based on ISO 19902:2007." /></p>
 <p>The basic S-N curve equation is as follows, which one may know is from Paris-Erdogan law (fracture mechanics):</p>
 <p>$$ N = k_1 \cdot S^{-m} $$</p>
 <p>The standard does describe it in its logarithmic form, which is as follows:</p>
 <p>$$ \log N = \log k_1 - m \cdot \log S $$</p>
-<p>and then it goes on to furnish its two sets of key components that form parts of the equation &mdash; highlighted below.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> </p>
+<p>and then it goes on to furnish its two sets of key components that form parts of the equation — highlighted below.<sup class="footnote-ref"><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup></p>
 <p>For graphing purposes, the above can also be written as:</p>
 <p>$$ S = \left(\frac{N}{k_1}\right)^{-\frac{1}{m}} $$</p>
 <p>For example, and I am writing this for myself since I struggle with logarithms, if</p>
 <p>$$ log_{10}k_1 = 12.18 $$</p>
 <p>then,</p>
 <p>$$ k_1 = (10)^{12.18} $$</p>
-<figure>
-  <img alt="Table 16.11-1 Basic representative S-N curves for air and seawater, ISO 19902:2007." class="fig" src="/img/sncurves1.jpg" loading="lazy">
-  <figcaption>Table 16.11-1 Basic representative S-N curves for air and seawater, ISO 19902:2007.</figcaption>
-</figure>
-
-<details>
-<summary>Plot code</summary>
-
-
-<pre><code class="language-python">#!/usr/bin/env python3
+<p><img src="/img/sncurves1.jpg" alt="Table 16.11-1 Basic representative S-N curves for air and seawater, ISO 19902:2007." /></p>
+<p>Plot code:</p>
+<pre><code class="language-py">#!/usr/bin/env python3
 # encoding: utf-8
 &quot;&quot;&quot;
 sncurves.py -- 2016 ckunte
@@ -115,26 +104,27 @@ def main():
 if __name__ == &quot;__main__&quot;:
     main()
 </code></pre>
-
-</details>
-
-<div class="footnote">
-<hr />
+<section class="footnotes" data-footnotes>
 <ol>
-<li id="fn:1">
-<p>Playing with logarithms is fraught with error, as they are not the same as plain algebra &mdash; Leonhard Euler&rsquo;s gift to the world, which reminds me I should jog my memory from high-school. There is a <a href="http://downloads.bbc.co.uk/podcasts/radio4/iot/iot_20140925-1205a.mp3" title="Euler's e">very nice podcast recording</a> on Euler&rsquo;s e that also discusses the history of logarithms, which was in ancient days allowed to transform &ldquo;complicated&rdquo; multiplication into simple addition, which makes perfect sense in a world that had no computers, no calculators, and no slide rules.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<li id="fn-1">
+<p>Playing with logarithms is fraught with error, as they are not the same as plain algebra — Leonhard Euler’s gift to the world, which reminds me I should jog my memory from high-school. There is a <a href="http://downloads.bbc.co.uk/podcasts/radio4/iot/iot_20140925-1205a.mp3" title="Euler's e">very nice podcast recording</a> on Euler’s e that also discusses the history of logarithms, which was in ancient days allowed to transform “complicated” multiplication into simple addition, which makes perfect sense in a world that had no computers, no calculators, and no slide rules. <a href="#fnref-1" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="1" aria-label="Back to reference 1">↩</a></p>
 </li>
 </ol>
-</div>
+</section>
+
 </article>
 <footer>
     <span>
-      &lsaquo; 
-      <a accesskey="j" title="Tow" href="/2013/tow">Prev</a>
+      &lsaquo;
+      <a accesskey="j"
+         title="Tow"
+         href="/2013/tow">Prev</a>
     </span>
     <span>
-      <a accesskey="k" title="Fram and Vasa" href="/2014/fram-vasa">Next</a>
-	  &rsaquo;
+      <a accesskey="k"
+         title="Fram and Vasa"
+         href="/2014/fram-vasa">Next</a>
+      &rsaquo;
     </span>
   </footer></main>
 </body>

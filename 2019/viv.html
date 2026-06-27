@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: VIV</title>
-<meta name="description" content="Effects of vortex shedding can be problematic for slender structural members. Shedding...">
+<meta name="description" content="Effects of vortex shedding can be problematic for slender structural members. Shedding frequencies…">
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -17,47 +17,43 @@
 <article>
 <h1>VIV</h1>
 <time datetime="2019-07-19T21:23:00Z">19 Jul 2019</time>
-<p>Effects of vortex shedding can be problematic for slender structural members. Shedding frequencies and their interactions, together with other hydrodynamic quantities (e.g. (a) added mass and damping, (b) Reynolds number, (c) lift coefficient and (d) correlation of force components) have the potential to impair. </p>
+<p>Effects of vortex shedding can be problematic for slender structural members. Shedding frequencies and their interactions, together with other hydrodynamic quantities (e.g. (a) added mass and damping, (b) Reynolds number, (c) lift coefficient and (d) correlation of force components) have the potential to impair.</p>
 <p>Given that vortex induced vibration (VIV) continues to be an area of contemporary research, the slender elements are commonly engineered to prevent VIV, and where unavoidable, countermeasures (VIV suppression devices e.g. strakes) are introduced.</p>
-<p>Following the industry recognised recommended practice, <em>DNVGL-RP-C205 &ndash; Environmental conditions and environmental loads</em>, the <em>viv.py</em> script below checks for the occurrence of VIV for a range of user-specified pipe sizes subjected to current(s) in the water column.</p>
+<p>Following the industry recognised recommended practice, <em>DNVGL-RP-C205 – Environmental conditions and environmental loads</em>, the <em>viv.py</em> script below checks for the occurrence of VIV for a range of user-specified pipe sizes subjected to current(s) in the water column.</p>
 <table>
-  <tr>
-    <th>Excitation</th>
-    <th>Vortex shedding resonance (lock-in)</th>
-  </tr>
-  <tr>
-    <td>Inline</td>
-    <td>1.0 &le; Vr &le; 4.5, and Ks &le; 1.8</td>
-  </tr>
-  <tr>
-    <td>Crossflow</td>
-    <td>3.0 &le; Vr &le; 16.0</td>
-  </tr>
+<thead>
+<tr>
+<th>Excitation</th>
+<th>Vortex shedding resonance (lock-in)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inline</td>
+<td>1.0 ≤ Vr ≤ 4.5, and Ks ≤ 1.8</td>
+</tr>
+<tr>
+<td>Crossflow</td>
+<td>3.0 ≤ Vr ≤ 16.0</td>
+</tr>
+</tbody>
 </table>
-
 <p>The script requires the following inputs (together with consistent units). These are to be provided by the user by editing the <code>viv.py</code> and updating input parameters marked under <em>User inputs</em> section:</p>
 <ol>
-<li>Current velocity, V (m/s) &mdash; typically for a 1-year environment</li>
+<li>Current velocity, V (m/s) — typically for a 1-year environment</li>
 <li>Marine growth thickness, tm (m)</li>
 <li>Flooding condition, f (<code>1</code> for flooded; <code>0</code> for buoyant)</li>
 <li>End (boundary) conditions of the pipe (fixed: <code>22.2</code>; clamped: <code>15.4</code>; simply-supported: <code>9.87</code>; cantilevered: <code>3.52</code>)</li>
 </ol>
-<figure>
-  <img class="fig" alt="Vortex induced vibration check for a range of pipe diameters and span lengths." src="/img/vivc.svg" loading="lazy">
-  <figcaption>Vortex induced vibration check for a range of pipe diameters and span lengths.</figcaption>
-</figure>
-
+<p><img src="/img/vivc.svg" alt="Vortex induced vibration check for a range of pipe diameters and span lengths." /></p>
 <p>The way to read the above graph is pretty simple:</p>
 <ol>
 <li>Unshaded area (or area in white background) is the safe area.</li>
-<li>The intersection of the curve (for each pipe size of D &times; t) with the upper boundary of the non-shaded area (i.e., Vr = 1.0) indicates the max. possible pipe length (span) that is unlikely to experience VIV from (ocean) current. For example, 762OD &times; 22WT pipe can span up to 40m, while a 406OD &times; 22WT only up to 22m before VIV occurs.</li>
+<li>The intersection of the curve (for each pipe size of D × t) with the upper boundary of the non-shaded area (i.e., Vr = 1.0) indicates the max. possible pipe length (span) that is unlikely to experience VIV from (ocean) current. For example, 762OD × 22WT pipe can span up to 40m, while a 406OD × 22WT only up to 22m before VIV occurs.</li>
 <li>The shaded overlap is a zone in which both inline as well as cross-flow VIV excitations occur. (See range of occurrences in the Table above.)</li>
 </ol>
-<details>
-<summary>Plot code</summary>
-
-
-<pre><code class="language-python">#!/usr/bin/env python3
+<p>Plot code:</p>
+<pre><code class="language-py">#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 &quot;&quot;&quot;
 Check for vortex-induced vibration occurrence in drill casing 
@@ -113,7 +109,7 @@ def vivc(*args):
     plt.legend(loc=0)
     plt.xlabel(&quot;Length of pipe, L (m)&quot;)
     plt.ylabel(&quot;Reduced velocity, $v_r$&quot;)
-    plt.savefig(&quot;vivc.svg&quot;, transparent=True)
+    plt.savefig(&quot;vivc.svg&quot;, transparent=False)
     plt.close()
 
 
@@ -153,10 +149,7 @@ if __name__ == &quot;__main__&quot;:
     # Plot pipe length versus reduced velocity
     vivc(D, t, l, f, c, E, ys, rho, beta, v, tm, ym, cm)
 </code></pre>
-
-</details>
-
-<p>While the upper limit for cross-flow VIV lock-in is 16 (according to RP-C205), the plot may be set to a lower max.value of say 5.0 &mdash; (e.g. as done in the plot above) to keep the curvatures of plots more readable (in <code>plt.axhspan()</code> in the script) as so. Change the following line:</p>
+<p>While the upper limit for cross-flow VIV lock-in is 16 (according to RP-C205), the plot may be set to a lower max.value of say 5.0 — (e.g. as done in the plot above) to keep the curvatures of plots more readable (in <code>plt.axhspan()</code> in the script) as so. Change the following line:</p>
 <pre><code>plt.axhspan(3.0, 16.0, facecolor='orange', alpha=0.18)
 </code></pre>
 <p>to:</p>
@@ -175,15 +168,20 @@ if __name__ == &quot;__main__&quot;:
 0.7112
 0.762
 </code></pre>
+
 </article>
 <footer>
     <span>
-      &lsaquo; 
-      <a accesskey="j" title="Reliability" href="/2018/reliability">Prev</a>
+      &lsaquo;
+      <a accesskey="j"
+         title="Reliability"
+         href="/2018/reliability">Prev</a>
     </span>
     <span>
-      <a accesskey="k" title="Dark sky" href="/2020/darksky">Next</a>
-	  &rsaquo;
+      <a accesskey="k"
+         title="Dark sky"
+         href="/2020/darksky">Next</a>
+      &rsaquo;
     </span>
   </footer></main>
 </body>

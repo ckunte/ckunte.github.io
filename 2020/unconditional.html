@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: Unconditional</title>
-<meta name="description" content="Some years ago, while fixing an UnboundLocalError in my code, I realised that I tint my scripts...">
+<meta name="description" content="Some years ago, while fixing an UnboundLocalError in my code, I realised that I tint my scripts…">
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -17,25 +17,14 @@
 <article>
 <h1>Unconditional</h1>
 <time datetime="2020-10-14T22:18:00Z">14 Oct 2020</time>
-<p>Some years ago, while fixing an <code>UnboundLocalError</code> in my code, I realised that I tint my scripts unconsciously with cyclomatic complexity &mdash; an avoidable habit I picked up as a young engineer. Back then, time-sharing was still very much a necessity, and so I&rsquo;d spend much of my time buckling down and performing hand-calculations instead. Conditional problems worsened this, like for instance, referring to a table to pick an option, and then use its data to perform specific calculations. Also, results for ten options, when I needed for one or two, at the time felt both repetitive as well as unnecessary.</p>
-<p>Scripts produced from thinking linearly tend to grow verbose is what I&rsquo;ve come to realize. Whereas knowing results for the cases (or ranges) that I may not readily be interested-in offers new insights, sans extra labour. And so, <a href="/2015/lib">running</a> with an entire dataset instead of one value contained within, gives me a high now. To echo the words of Dr Richard Hamming, &ldquo;The purpose of computing is insight, not numbers.&rdquo;  </p>
-<p>Here in examples below, I am trying to calculate bending stresses in piles hung over the aft of a transport vessel. In the first example, I front-load a range of motions for each of which I get to map corresponding bending stresses in a pile section with a certain fixed pile length. </p>
-<figure>
-  <img class="fig" alt="Generating bending stress in overhung pile for a range of vessel motions (left:from pitch; right:from roll). Shaded area indicates exceeding strength limits." src="/img/unconditional-1.png">
-  <figcaption>Example 1: Generating bending stress in overhung pile for a range of vessel motions (left:from pitch; right:from roll). Shaded area indicates exceeding strength limits.</figcaption>
-</figure>
-
+<p>Some years ago, while fixing an <code>UnboundLocalError</code> in my code, I realised that I tint my scripts unconsciously with cyclomatic complexity — an avoidable habit I picked up as a young engineer. Back then, time-sharing was still very much a necessity, and so I’d spend much of my time buckling down and performing hand-calculations instead. Conditional problems worsened this, like for instance, referring to a table to pick an option, and then use its data to perform specific calculations. Also, results for ten options, when I needed for one or two, at the time felt both repetitive as well as unnecessary.</p>
+<p>Scripts produced from thinking linearly tend to grow verbose is what I’ve come to realize. Whereas knowing results for the cases (or ranges) that I may not readily be interested-in offers new insights, sans extra labour. And so, <a href="/2015/lib">running</a> with an entire dataset instead of one value contained within, gives me a high now. To echo the words of Dr Richard Hamming, “The purpose of computing is insight, not numbers.”</p>
+<p>Here in examples below, I am trying to calculate bending stresses in piles hung over the aft of a transport vessel. In the first example, I front-load a range of motions for each of which I get to map corresponding bending stresses in a pile section with a certain fixed pile length.</p>
+<p><img src="/img/unconditional-1.png" alt="Generating bending stress in overhung pile for a range of vessel motions (left:from pitch; right:from roll). Shaded area indicates exceeding strength limits." /></p>
 <p>In the second, I nail down a motion set (e.g., large barge criteria, but can be anything specific), and map acceptable length of overhang.</p>
-<figure>
-  <img class="fig" alt="Generating bending stress for a range of pile overhang for specific vessel motions (left:from pitch; right:from roll). Shaded area indicates exceeding strength limits." src="/img/unconditional-2.png">
-  <figcaption>Example 2: Generating bending stress for a range of pile overhang for specific vessel motions (left:from pitch; right:from roll). Shaded area indicates exceeding strength limits.</figcaption>
-</figure>
-
-<details>
-<summary>Code for example 1</summary> 
-
-
-<pre><code class="language-python">#!/usr/bin/env python3
+<p><img src="/img/unconditional-2.png" alt="Generating bending stress for a range of pile overhang for specific vessel motions (left:from pitch; right:from roll). Shaded area indicates exceeding strength limits." /></p>
+<p>Code for example 1:</p>
+<pre><code class="language-py">#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 &quot;&quot;&quot;Influence of vessel motions on transported piles in terms
 of inertia forces, bending and shear stresses. 
@@ -334,14 +323,8 @@ def main():
 if __name__ == &quot;__main__&quot;:
     main()
 </code></pre>
-
-</details>
-
-<details>
-<summary>Code for example 2</summary>
-
-
-<pre><code class="language-python">#!/usr/bin/env python3
+<p>Code for example 2:</p>
+<pre><code class="language-py">#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 &quot;&quot;&quot;Influence of pile length overhang for a set of motions in terms
 of inertia forces, bending and shear stresses. 
@@ -587,16 +570,19 @@ if __name__ == &quot;__main__&quot;:
     main()
 </code></pre>
 
-</details>
 </article>
 <footer>
     <span>
-      &lsaquo; 
-      <a accesskey="j" title="Building a model" href="/2020/model">Prev</a>
+      &lsaquo;
+      <a accesskey="j"
+         title="Building a model"
+         href="/2020/model">Prev</a>
     </span>
     <span>
-      <a accesskey="k" title="Dropped pipe" href="/2020/impact">Next</a>
-	  &rsaquo;
+      <a accesskey="k"
+         title="Dropped pipe"
+         href="/2020/impact">Next</a>
+      &rsaquo;
     </span>
   </footer></main>
 </body>

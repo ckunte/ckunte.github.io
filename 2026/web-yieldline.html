@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: Web plate connection in direct tension</title>
-<meta name="description" content="Not long ago, a colleague asked me to assist in checking some calcs concerning a base plate...">
+<meta name="description" content="Not long ago, a colleague asked me to assist in checking some calcs concerning a base plate yield…">
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -17,8 +17,8 @@
 <article>
 <h1>Web plate connection in direct tension</h1>
 <time datetime="2026-05-16T10:01:00Z">16 May 2026</time>
-<p>Not long ago, a colleague asked me to assist in checking some calcs concerning a base plate yield line. To do this, I thought a readable script would be helpful.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> The check was supposed to be specific about the plate thickness, its yield strength, and applied load, but I got carried away, and made it also address a bunch of plate thicknesses and a range of yield strengths.</p>
-<p>The relationship between the total ultimate tension $P_u$ and thickness &mdash; for a web plate with <em>fixed</em> ends is given by (RH Kapp <sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>):</p>
+<p>Not long ago, a colleague asked me to assist in checking some calcs concerning a base plate yield line. To do this, I thought a readable script would be helpful.<sup class="footnote-ref"><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup> The check was supposed to be specific about the plate thickness, its yield strength, and applied load, but I got carried away, and made it also address a bunch of plate thicknesses and a range of yield strengths.</p>
+<p>The relationship between the total ultimate tension $P_u$ and thickness — for a web plate with <em>fixed</em> ends is given by RH Kapp<sup class="footnote-ref"><a href="#fn-2" id="fnref-2" data-footnote-ref>2</a></sup> :</p>
 <p>$$
 P_{u,\text{fixed}} =
 \frac{F_y t_w^2}{e b}
@@ -30,26 +30,12 @@ P_{u,\text{supported}} =
 \frac{F_y t_w^2}{e b}
 \left( 2b^2 + e^2 + cb + \frac{Le}{2} \right)
 $$</p>
-<figure>
-  <img class="fig" alt="Web plate parameters (courtesy: RH Kapp)" src="/img/ylt-legend.png" loading=lazy />
-  <figcaption>Web plate parameters (courtesy: RH Kapp)</figcaption>
-</figure>
-
+<p><img src="/img/ylt-legend.png" alt="Web plate parameters (courtesy: RH Kapp)" /></p>
 <p>Sample problem: b = 64 mm, c = 0 mm, e = 64 mm, and L = 110 mm</p>
-<figure>
-  <img class="fig" alt="Pu versus t (fixed ends)" src="/img/Pvt_fixed_ends.svg" loading=lazy />
-  <figcaption>Pu versus t (fixed ends)</figcaption>
-</figure>
-
-<figure>
-  <img class="fig" alt="Pu versus t (supported ends)" src="/img/Pvt_supported_ends.svg" loading=lazy />
-  <figcaption>Pu versus t (supported ends)</figcaption>
-</figure>
-
+<p><img src="/img/Pvt_fixed_ends.svg" alt="Pu versus t (fixed ends)" />
+<img src="/img/Pvt_supported_ends.svg" alt="Pu versus t (supported ends)" /></p>
 <p>It is interesting that up to, say, 8 mm, the separation between $P_u$ is not that pronounced between yield strengths, and becomes marked as plate thickness increases. Of course, the use of mild steel in structural applications has dropped off, and may even be slightly expensive today than the standard grade high strength steel.</p>
-<details>
-<summary>Plot code</summary>
-
+<p>Plot code:</p>
 <pre><code class="language-py">#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 &quot;&quot;&quot;
@@ -87,7 +73,7 @@ def plot_plate_capacity(title, filename, coeffs, t, b, c, e, L, fy_values):
     plt.legend()
     plt.grid(True)
 
-    plt.savefig(filename, transparent=True)
+    plt.savefig(filename, transparent=False)
     plt.close()
 
 
@@ -131,29 +117,30 @@ if __name__ == &quot;__main__&quot;:
         fy_values=fy_values,
     )
 </code></pre>
-
-</details>
-
-<div class="footnote">
-<hr />
+<section class="footnotes" data-footnotes>
 <ol>
-<li id="fn:1">
-<p>And because Excel is as opaque as it gets with formulae hidden in cells.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<li id="fn-1">
+<p>And because Excel is as opaque as it gets with formulae hidden in cells. <a href="#fnref-1" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="1" aria-label="Back to reference 1">↩</a></p>
 </li>
-<li id="fn:2">
-<p>RH Kapp, &ldquo;Yield line analysis of a web connection in direct tension&rdquo;, <a href="https://ej.aisc.org/index.php/engj/article/view/1288">AISC Engineering Journal, Vol. 11, No. 2</a>, pp. 38-41, 1974.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+<li id="fn-2">
+<p>RH Kapp, “Yield line analysis of a web connection in direct tension”, <a href="https://ej.aisc.org/index.php/engj/article/view/1288">AISC Engineering Journal, Vol. 11, No. 2</a>, pp. 38-41, 1974. <a href="#fnref-2" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="2" aria-label="Back to reference 2">↩</a></p>
 </li>
 </ol>
-</div>
+</section>
+
 </article>
 <footer>
     <span>
-      &lsaquo; 
-      <a accesskey="j" title="Bill of materials and git-diff" href="/2026/bom-diff">Prev</a>
+      &lsaquo;
+      <a accesskey="j"
+         title="Bill of materials and git-diff"
+         href="/2026/bom-diff">Prev</a>
     </span>
     <span>
-      <a accesskey="k" title="sudo with yubikey" href="/2026/sudo">Next</a>
-	  &rsaquo;
+      <a accesskey="k"
+         title="sudo with yubikey"
+         href="/2026/sudo">Next</a>
+      &rsaquo;
     </span>
   </footer></main>
 </body>

@@ -1,34 +1,39 @@
 @charset "utf-8";
 @import url("/inc/xcode.min.css");
+
+/* ── Custom properties ───────────────────────────────────────── */
 :root {
-  --fsize: 1.13em;
-  --cwidth: 36em;
+  --fsize:     1.13em;
+  --cwidth:    36em;
   --link-dark: #00BFFF;
-  --lite-bc: #eee; 
-  --cfont: "JetBrains Mono", ui-monospace, Consolas, monospace;
-  --bfont: system-ui, -apple-system, sans-serif;
+  --lite-bc:   #eee;
+  --muted:     lightslategray;
+  --cfont:     "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --bfont:     system-ui, -apple-system, sans-serif;
 }
 
+/* ── Base ────────────────────────────────────────────────────── */
 body {
   font: var(--fsize)/1.4 var(--bfont);
-  padding: 2.0ch 0.5ch;
+  padding: 2ch 0.5ch;
   scrollbar-gutter: stable;
 }
 
-footer,main {
+footer, main {
   margin: auto;
-  max-width: var(--cwidth)
+  max-width: var(--cwidth);
 }
 
-aside, footer, footer > p {
-  color: lightslategray;
-}
-
+/* ── Layout ──────────────────────────────────────────────────── */
 footer {
   display: flex;
   justify-content: space-between;
-  margin: 2ch auto; 
+  margin: 2ch auto;
   font-style: italic;
+}
+
+aside, footer, footer > p {
+  color: var(--muted);
 }
 
 .logo {
@@ -36,194 +41,157 @@ footer {
   height: calc(1.15 * var(--fsize));
   width: auto;
   vertical-align: middle;
-  flex-shrink:0;
+  flex-shrink: 0;
 }
 
+figure {
+  min-width: 100%;
+  max-width: var(--cwidth);
+  margin-left: 0;
+}
+
+/* ── Section toggles ─────────────────────────────────────────── */
+#notes, #proj, #about          { display: none; }
+#notes:target, #proj:target,
+#about:target                  { display: inline; }
+
+/* ── Typography ──────────────────────────────────────────────── */
 h1, h2, h3 {
   font-family: var(--bfont);
   line-height: 1.05;
   margin-bottom: 0;
-  padding-bottom: 0
+  padding-bottom: 0;
 }
 
-h1 {
-  font-size: 136%;
-  margin-top: 0;
-}
+h1 { font-size: 136%; margin-top: 0; }
+h2 { font-size: 120%; }
+h3 { font-size: 113%; }
 
-h2 {
-  font-size: 120%
-}
-
-h3 {
-  font-size: 113%
-}
-
-ul>li {
-  margin-left: 0
-}
-
-ul {
-  padding-left: 2.5ch
-}
-
-#notes,#proj,#about { display: none }
-#notes:target, #proj:target, #about:target { display: inline }
-
-li,p {
+li, p {
   word-wrap: break-word;
   overflow-wrap: break-word;
   hyphens: auto;
   hyphenate-limit-chars: 6 3 3;
   hyphenate-limit-lines: 2;
   hyphenate-limit-last: always;
-  hyphenate-limit-zone: 8%
+  hyphenate-limit-zone: 8%;
 }
 
-figure {
-  min-width: 100%;
-  max-width: var(--cwidth);
-  margin-left: 0
-}
+ul             { padding-left: 2.5ch; }
+ul > li        { margin-left: 0; }
 
-figure>img,p>img,video,table {
-  width: 100%;
-  max-width: var(--cwidth)
-}
+time, small, i, span.desc { color: var(--muted); }
+time, span.desc            { font-style: italic; }
+span.desc                  { display: block; }
+small                      { font-size: 72%; }
+sup                        { vertical-align: text-top; font-size: 69%; }
+mark                       { background-color: #fffdaf; }
 
-figure>img,p>img {
-  min-width: 100%;
-  margin: 0;
-  border-radius: .5ch
-}
-
-video {
-  border-radius: .6ch
-}
-
-figure img+img,figure img+video,figure video+img,figure video+video {
-  margin-top: 0
-}
-
-figcaption {
-  font: 90%/130% var(--bfont);
-  color: lightslategray;
-  font-style: italic;
-  max-width: 100%;
-  margin: .5ch 1.5ch
-}
-
-time, small, i, span.desc {
-  color: lightslategray;
-}
-
-small { font-size: 72% }
-
-time, span.desc {
-  font-style: italic;
-}
-
-table {
-  border-spacing:0;
-  text-align:left;
-  border-collapse:collapse;
-  margin:2ch 0!important
-}
-tr:nth-child(n) {
-  border-top: 1px solid var(--lite-bc);
-  border-bottom: 1px solid var(--lite-bc)
-}
-
-th {
-  font-style: italic;
-  font-weight: normal  
-}
-
-th, td {
-  text-align:left;
-  vertical-align:text-top;
-  padding:0.5ch
-}
-/*
-p+p {
-  text-indent: 2ch;
-  margin-top: -1.5ch
-}
-*/
-mark {
-  background-color: #fffdaf
-}
-
-article.frontpage {
-  margin: 0;
-}
-
-blockquote {
-  margin: 0
-}
-
-blockquote p, blockquote li {
-  margin: 0 3ch;
-  font-style: italic
-}
-
-article.frontpage > p + p, blockquote > p + p { text-indent: 2ch }
-article.frontpage > p + p { margin-top:-1.5ch }
-
-blockquote>p:first-of-type::before {
-  content: open-quote;
-  margin-left: -1ch
-}
-
-blockquote>p:last-of-type::after {
-  content: close-quote
-}
-
+/* ── Horizontal rule (ornamental) ───────────────────────────── */
 hr {
   margin-top: 1lh;
-}
-
-.footnote hr {
-  margin:1.5rem auto 0.75rem 0;
-  width:36%;
-  border-color: lightslategray!important;
-  border-style:solid;
-  border-width:1px 0 0
-}
-
-.footnote hr:after {
-  content: none!important
-}
-
-.footnote li {
-  font-size: 87%
-}
-
-.footnote li + li {
-  margin-top: -1ch;
-}
-
-hr {
   border: none;
-  text-align: center
-}
-
-hr:after {
-  content: "* * *";
-  position: relative
+  text-align: center;
+  color: var(--muted);
 }
 
 hr::after {
   content: "* * *";
+  display: block;
   text-align: center;
 }
 
+/* ── Blockquote ──────────────────────────────────────────────── */
+blockquote          { margin: 0; }
+blockquote p,
+blockquote li       { margin: 0 3ch; font-style: italic; }
+
+blockquote > p + p                  { text-indent: 2ch; }
+blockquote > p:first-of-type::before { content: open-quote; margin-left: -1ch; }
+blockquote > p:last-of-type::after   { content: close-quote; }
+
+/* ── Articles ────────────────────────────────────────────────── */
+article.frontpage               { margin: 0; }
+article.frontpage > p + p       { text-indent: 2ch; margin-top: -1.5ch; }
+
+/* ── Media ───────────────────────────────────────────────────── */
+figure > img, p > img, video, table {
+  width: 100%;
+  max-width: var(--cwidth);
+}
+
+figure > img, p > img {
+  min-width: 100%;
+  margin: 0;
+  border-radius: .5ch;
+}
+
+video { border-radius: .6ch; }
+
+figure img + img,
+figure img + video,
+figure video + img,
+figure video + video { margin-top: 0; }
+
+figcaption {
+  font: 90%/130% var(--bfont);
+  color: var(--muted);
+  font-style: italic;
+  max-width: 100%;
+  margin: .5ch 1.5ch;
+}
+
+/* ── Tables ──────────────────────────────────────────────────── */
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  text-align: left;
+  margin: 2ch 0 !important;
+}
+
+tr:nth-child(n) {
+  border-top: 1px solid var(--lite-bc);
+  border-bottom: 1px solid var(--lite-bc);
+}
+
+th {
+  font-style: italic;
+  font-weight: normal;
+}
+
+th, td {
+  text-align: left;
+  vertical-align: text-top;
+  padding: 0.5ch;
+}
+
+/* ── Footnotes ───────────────────────────────────────────────── */
+section.footnotes {
+  padding-top: 1rem;
+}
+
+/* Draws the separator line; the native <hr> is suppressed below  */
+section.footnotes::before {
+  content: "";
+  display: block;
+  width: 36%;
+  border-top: 1px solid var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+section.footnotes hr  { display: none; }
+.footnotes li         { font-size: 87%; }
+.footnotes li + li    { margin-top: -1ch; }
+
+/* ── Code ────────────────────────────────────────────────────── */
 pre, code {
   font-family: var(--cfont);
+  background-color: #f4f4f4;
 }
 
 pre {
-  border-radius: .4em
+  display: block;
+  border-radius: .4em;
 }
 
 code {
@@ -232,101 +200,81 @@ code {
   margin: 0 1px;
 }
 
-hr::after,pre,pre>code {
-  display: block
-}
-
-code,pre,pre>code {
-  background-color: #f4f4f4;
-}
-
-:not(pre)>code {
+:not(pre) > code {
   padding: 0 3px;
   border-radius: 0.2ch;
-  background-color: #f4f4f4
 }
 
-pre>code {
+pre > code {
+  display: block;
   overflow-x: auto;
+  -ms-overflow-style: none;
   border-radius: 1ch;
-  padding: 1ch 1.5ch
+  padding: 1ch 1.5ch;
 }
 
-pre, code {
-  font-family: var(--cfont);
-}
-
-pre>code {
-  -ms-overflow-style:none
-}
-
-@media (prefers-color-scheme: dark) {
-
-  body, header, article, aside {
-    background-color: rgb(48,56,65)
-  }
-
-  h1, h2, h3, p, li, dl, details, summary, math > * {
-    color: #bbb;
-    background-color: transparent
-  }
-
-  table, hr, warn, img.screen, img.fig {
-    filter: invert(0.85)
-  }
-
-  pre {
-    filter: invert(0.9)
-  }
-
-  p > code, li > code {
-    background-color: #222
-  }
-
-  mark {
-    color: #FFD700;
-    background-color: #222
-  }
-
-  hr, hr::after {
-    color: lightslategray;
-  }
-
-  a {
-    color: var(--link-dark);
-  }
-
-  a:visited {
-    color: #FF85FF;
-  }
-
-}
-kbd {
-  /* text-transform: uppercase; */
-  font-size: 60%;
-  line-height: 0.75rem;
-  padding: 4px 8px 2px 8px;
-  margin: 2px;
-  border-radius: 5px;
-  border: 1px solid lightslategray;
-  border-bottom: 2px solid lightslategray;
-  vertical-align: middle;
-}
-/* KaTeX overflow */
+/* ── KaTeX ───────────────────────────────────────────────────── */
 .katex-display > .katex {
   display: inline-block;
   white-space: nowrap;
   max-width: 100%;
   overflow-x: auto;
-  overflow-y:hidden;
-  text-align: initial
+  overflow-y: hidden;
+  text-align: initial;
 }
+
 .katex {
-  font: normal 1.13rem KaTeX_Main, Times New Roman, serif;
+  font: normal 1.13rem KaTeX_Main, "Times New Roman", serif;
   line-height: 1.4;
   white-space: normal;
-  text-indent: 0
+  text-indent: 0;
 }
-sup { vertical-align: text-top; font-size: 69% }
-span.desc { display: block; }
-hr { color: lightslategray; border-color: lightslategray }
+
+/* ── Keyboard ────────────────────────────────────────────────── */
+kbd {
+  font-size: 60%;
+  line-height: 0.75rem;
+  padding: 4px 8px 2px;
+  margin: 2px;
+  border-radius: 5px;
+  border: 1px solid var(--muted);
+  border-bottom-width: 2px;
+  vertical-align: middle;
+}
+
+/* ── Dark mode ───────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+
+  body, header, article, aside {
+    background-color: rgb(48, 56, 65);
+  }
+
+  h1, h2, h3, p, li, dl, details, summary, math > * {
+    color: #bbb;
+    background-color: transparent;
+  }
+
+  /* hr is now ornamental only; table/images still benefit from invert */
+  table, hr, warn, img.screen, img.fig {
+    filter: invert(0.85);
+  }
+
+  pre { filter: invert(0.9); }
+
+  p > code, li > code { background-color: #222; }
+
+  mark {
+    color: #FFD700;
+    background-color: #222;
+  }
+
+  /* Tone down the footnote separator on dark backgrounds */
+  section.footnotes::before {
+    border-color: #666;
+  }
+
+  hr, hr::after { color: var(--muted); }
+
+  a         { color: var(--link-dark); }
+  a:visited { color: #FF85FF; }
+}

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: Wave length</title>
-<meta name="description" content="This is a script I have had to write at different times and in different tools in the past —...">
+<meta name="description" content="This is a script I have had to write at different times and in different tools in the past —…">
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -17,22 +17,19 @@
 <article>
 <h1>Wave length</h1>
 <time datetime="2016-12-04T07:24:00Z">4 Dec 2016</time>
-<p>This is a script I have had to write at different times and in different tools in the past &mdash; either to figure out the depth type or when requiring appropriate wave length(s) to calculate hydrostatic pressure. Here&rsquo;s hoping this will be the last.</p>
-<p>For background, dispersion relation<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, which expresses wave length (&lambda;)<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> in terms of wave number (\( \kappa = \frac{2\pi}{\lambda} \)) and angular wave frequency (\( \omega = \frac{2\pi}{T} \)) is as follows:</p>
+<p>This is a script I have had to write at different times and in different tools in the past — either to figure out the depth type or when requiring appropriate wave length(s) to calculate hydrostatic pressure. Here’s hoping this will be the last.</p>
+<p>For background, dispersion relation<sup class="footnote-ref"><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup>, which expresses wave length (λ)<sup class="footnote-ref"><a href="#fn-2" id="fnref-2" data-footnote-ref>2</a></sup> in terms of wave number (\( \kappa = \frac{2\pi}{\lambda} \)) and angular wave frequency (\( \omega = \frac{2\pi}{T} \)) is as follows:</p>
 <p>$$ \frac{\omega^2}{g} = \kappa \tanh(\kappa d) $$</p>
 <p>When \( \lim_{d\to\infty} \tanh(\kappa d) \approx 1 \), it reduces the expression to:</p>
 <p>$$ \lambda = \frac{2\pi g}{\omega^2} $$</p>
-<p>For practical purposes, water depth (d) is considered deep when d/&lambda; &ge; 0.5. In other words,</p>
+<p>For practical purposes, water depth (d) is considered deep when d/λ ≥ 0.5. In other words,</p>
 <p>$$ \lambda_d = \frac{2 \pi g}{\omega^2} = \frac{gT^2}{2\pi} $$</p>
-<p>For shallow water depth (i.e., d/&lambda; &le; 0.05), wave length is expressed as:</p>
+<p>For shallow water depth (i.e., d/λ ≤ 0.05), wave length is expressed as:</p>
 <p>$$ \lambda_s = T \sqrt{gd} $$</p>
-<p>This is because \( \lim_{d\to 0} \tanh(\kappa d) \approx \kappa d \). For intermediate water depth (i.e., 0.05 &lt; d/&lambda; &lt; 0.5), wave length can be expressed as:</p>
+<p>This is because \( \lim_{d\to 0} \tanh(\kappa d) \approx \kappa d \). For intermediate water depth (i.e., 0.05 &lt; d/λ &lt; 0.5), wave length can be expressed as:</p>
 <p>$$ \lambda_{i} = \lambda_d \sqrt{\tanh\left({\frac{2 \pi d}{\lambda_d}}\right)} $$</p>
-<details>
-<summary>Code for wave periods</summary>
-
-
-<pre><code class="language-python">#!/usr/bin/env python3
+<p>Code for wave periods:</p>
+<pre><code class="language-py">#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 &quot;&quot;&quot;Determine water depth type and corresponding wave length
 wavelength.py -- 2020 ckunte
@@ -114,9 +111,6 @@ def main():
 if __name__ == &quot;__main__&quot;:
     main()
 </code></pre>
-
-</details>
-
 <p>When run, it produces this:</p>
 <pre><code class="language-bash">$ python3 wavelength.py
 Water depth: 171.18
@@ -125,26 +119,30 @@ Water depth type (by majority): Deep
 Wave length, Ld: [137.9573508693948, 206.48324640649003, 224.82863880933505]
 </code></pre>
 <p>I may not have said this before but the other reason I write any of these is (a) to force myself to think in <a href="https://en.wikipedia.org/wiki/Abstraction_principle_(computer_programming)" title="Abstraction principle (computer programming) - Wikipedia">abstractions</a>, and (b) to try and capture good known programming practice(s) (to me) at any moment in time, which a cursory view may not necessarily reveal. Note for instance, this script contains functional programming bits <a href="/2015/lib" title="Libraries">discussed earlier</a>, and a succinct snippet to collapse sublists into one.</p>
-<div class="footnote">
-<hr />
+<section class="footnotes" data-footnotes>
 <ol>
-<li id="fn:1">
-<p>Dispersion relation (eq. 24), Wave and Wave Effects (pp. 240&ndash;246), J.N. Newman, Marine Hydrodynamics, The MIT Press, 1977.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<li id="fn-1">
+<p>Dispersion relation (eq. 24), Wave and Wave Effects (pp. 240–246), J.N. Newman, Marine Hydrodynamics, The MIT Press, 1977. <a href="#fnref-1" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="1" aria-label="Back to reference 1">↩</a></p>
 </li>
-<li id="fn:2">
-<p>&lambda; is not to be confused with <em>lambda</em> <a href="https://en.wikipedia.org/wiki/Anonymous_function#Python" title="Anonymous function - Wikipedia">the anonymous function</a> in python programming language.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+<li id="fn-2">
+<p>λ is not to be confused with <em>lambda</em> <a href="https://en.wikipedia.org/wiki/Anonymous_function#Python" title="Anonymous function - Wikipedia">the anonymous function</a> in python programming language. <a href="#fnref-2" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="2" aria-label="Back to reference 2">↩</a></p>
 </li>
 </ol>
-</div>
+</section>
+
 </article>
 <footer>
     <span>
-      &lsaquo; 
-      <a accesskey="j" title="End releases" href="/2016/relconv">Prev</a>
+      &lsaquo;
+      <a accesskey="j"
+         title="End releases"
+         href="/2016/relconv">Prev</a>
     </span>
     <span>
-      <a accesskey="k" title="Reliability" href="/2018/reliability">Next</a>
-	  &rsaquo;
+      <a accesskey="k"
+         title="Reliability"
+         href="/2018/reliability">Next</a>
+      &rsaquo;
     </span>
   </footer></main>
 </body>
