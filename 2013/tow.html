@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: Tow</title>
-<meta name="description" content="This note was eventually expanded into a paper in 2015. When asked to compare the severity of...">
+<meta name="description" content="This note was eventually expanded into a paper in 2015. When asked to compare the severity of…">
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -18,7 +18,7 @@
 <h1>Tow</h1>
 <time datetime="2013-10-26T21:55:00Z">26 Oct 2013</time>
 <p><em>This note was eventually expanded into a <a href="https://www.researchgate.net/publication/275656639" title="Barge motion responses in South China Sea">paper</a> in 2015.</em></p>
-<p>When asked to compare the severity of sea-transportation between the North Sea<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> and the South China Sea, most engineers side with the former, which they deduce from comparing sea-states. So, it&rsquo;s rare to not get a blank stare from people when I say they may not be right.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> Here&rsquo;s why. Let&rsquo;s take a look at practised barge motion design criteria in each.</p>
+<p>When asked to compare the severity of sea-transportation between the North Sea<sup class="footnote-ref"><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup> and the South China Sea, most engineers side with the former, which they deduce from comparing sea-states. So, it’s rare to not get a blank stare from people when I say they may not be right.<sup class="footnote-ref"><a href="#fn-2" id="fnref-2" data-footnote-ref>2</a></sup> Here’s why. Let’s take a look at practised barge motion design criteria in each.</p>
 <p><em>Table 1: Barge motion criteria for medium sized barges</em></p>
 <table>
 <thead>
@@ -31,18 +31,18 @@
 <tbody>
 <tr>
 <td>Barge size (m)</td>
-<td>&gt;76 &times; &gt;23</td>
-<td>91.4 &times; 27.4</td>
+<td>&gt;76 × &gt;23</td>
+<td>91.4 × 27.4</td>
 </tr>
 <tr>
 <td>Roll (<code>α</code>, <code>Tr</code>)</td>
-<td>20&deg;, 10s</td>
-<td>12.5&deg;, 5s</td>
+<td>20°, 10s</td>
+<td>12.5°, 5s</td>
 </tr>
 <tr>
 <td>Pitch (<code>β</code>, <code>Tp</code>)</td>
-<td>12.5&deg;, 10s</td>
-<td>8&deg;, 5.5s</td>
+<td>12.5°, 10s</td>
+<td>8°, 5.5s</td>
 </tr>
 <tr>
 <td>Heave, <code>gh</code></td>
@@ -52,7 +52,7 @@
 </tbody>
 </table>
 <p>where, <code>α</code> and <code>β</code> are roll and pitch single amplitude of angular accelerations respectively (in degrees), together with corresponding full cycle periods (in seconds); and <code>h</code> is heave single amplitude of linear acceleration (either in terms of <code>g</code>, or in meters).</p>
-<p>At first look, with all motion parameters greater, this may still look like the North Sea is governing over the South China Sea. But is it really? To be sure, let&rsquo;s convert these into accelerations and resulting inertial forces.</p>
+<p>At first look, with all motion parameters greater, this may still look like the North Sea is governing over the South China Sea. But is it really? To be sure, let’s convert these into accelerations and resulting inertial forces.</p>
 <p>Maximum acceleration, in a simple harmonic motion without phase info., may be computed as follows:</p>
 <p>$$ \theta_r = \omega^2 \cdot a $$</p>
 <p>From the above, roll acceleration takes the form:</p>
@@ -72,26 +72,26 @@
 </thead>
 <tbody>
 <tr>
-<td><code>θr</code> (rad/s<sup>2</sup>)</td>
+<td><code>θr</code> (rad/s<!-- raw HTML omitted -->2<!-- raw HTML omitted -->)</td>
 <td>0.14</td>
 <td>0.34</td>
 <td>143%</td>
 </tr>
 <tr>
-<td><code>θp</code> (rad/s<sup>2</sup>)</td>
+<td><code>θp</code> (rad/s<!-- raw HTML omitted -->2<!-- raw HTML omitted -->)</td>
 <td>0.09</td>
 <td>0.22</td>
 <td>144%</td>
 </tr>
 <tr>
-<td><code>gh</code> (m/s<sup>2</sup>)</td>
+<td><code>gh</code> (m/s<!-- raw HTML omitted -->2<!-- raw HTML omitted -->)</td>
 <td>1.96</td>
 <td>1.96</td>
-<td>&ndash;</td>
+<td>–</td>
 </tr>
 </tbody>
 </table>
-<p>What? How? Well, it is due to the full cycle period associated with motions, the proverbial elephant in the room, because most people read or regard full cycle periods as some sort of meta information. In the case of the South China Sea, however, non-linearly lower full cycle periods in the denominator drive accelerations up. In turn, inertial forces increase as a consequence of higher accelerations (Newton&rsquo;s second law of motion).<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup></p>
+<p>What? How? Well, it is due to the full cycle period associated with motions, the proverbial elephant in the room, because most people read or regard full cycle periods as some sort of meta information. In the case of the South China Sea, however, non-linearly lower full cycle periods in the denominator drive accelerations up. In turn, inertial forces increase as a consequence of higher accelerations (Newton’s second law of motion).<sup class="footnote-ref"><a href="#fn-3" id="fnref-3" data-footnote-ref>3</a></sup></p>
 <p>Full cycle (motion) periods are given by:</p>
 <p>$$ T_r = 2\pi \left( \frac{r_x^2 + m_{a_{roll}}}{\overline{GM_T} \cdot g} \right)^\frac{1}{2} $$</p>
 <p>$$ T_p = 2\pi \left( \frac{r_y^2 + m_{a_{pitch}}}{\overline{GM_L} \cdot g} \right)^\frac{1}{2} $$</p>
@@ -101,31 +101,28 @@
 <p>$$ T_p = 2\pi \frac{r_y}{\sqrt{\overline{GM_L} \cdot g}} $$</p>
 <p>where,</p>
 <ul>
-<li>r<sub>x</sub> and r<sub>y</sub> are radii of gyration along head and beam directions respectively, and </li>
-<li>GM<sub>T</sub> and GM<sub>L</sub> are metacentric height in transverse and longitudinal directions respectively</li>
+<li>r<!-- raw HTML omitted -->x<!-- raw HTML omitted --> and r<!-- raw HTML omitted -->y<!-- raw HTML omitted --> are radii of gyration along head and beam directions respectively, and</li>
+<li>GM<!-- raw HTML omitted -->T<!-- raw HTML omitted --> and GM<!-- raw HTML omitted -->L<!-- raw HTML omitted --> are metacentric height in transverse and longitudinal directions respectively</li>
 </ul>
-<p>There is a reason full (motion) periods are engineered for manned vessels, which is to make motions humanely tolerable as the graph below shows.<sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup></p>
-<p><img class="fig" src="/img/tow_hra.png" alt="Human response to vessel motion" loading="lazy"></p>
+<p>There is a reason full (motion) periods are engineered for manned vessels, which is to make motions humanely tolerable as the graph below shows.<sup class="footnote-ref"><a href="#fn-4" id="fnref-4" data-footnote-ref>4</a></sup></p>
+<p><img src="/img/tow_hra.png" alt="Human response to vessel motion" /></p>
 <p>Boundary of depression and intolerable ranges can occur for very low accelerations, if periods are too low. Whereas a combination of acceleration and its corresponding average frequency of oscillation determines the level of comfort aboard.</p>
 <p>However, marine cargo transports often involve unmanned dummy barges, for which human response is not seen as a governing requirement, and are therefore OK to operate at lower periods of motion. High dynamic acceleration is often a result of small period of motion, as seen in the case of South China Sea pertaining to unmanned cargo barges.</p>
-<p>One way to manage this is by optimising (static) metacentric height, GM, by keeping it sufficiently high from greater initial stability considerations &mdash; but not excessively high, to warrant low periods of motion. This would not only reduce dynamic accelerations, but also help improve human response, where essential.</p>
+<p>One way to manage this is by optimising (static) metacentric height, GM, by keeping it sufficiently high from greater initial stability considerations — but not excessively high, to warrant low periods of motion. This would not only reduce dynamic accelerations, but also help improve human response, where essential.</p>
 <hr />
 <h2>Effect of cargo position on inertia forces (Oct 22, 17)</h2>
 <p>While working on a project recently, I took the opportunity to develop the effect of cargo position on sea-transport forces in unrestricted open-seas (in terms of <em>W</em>, which is the dry weight of cargo), and extend it to profile all vessel types described in <a href="https://www.dnvgl.com/rules-standards/noble-denton-maa-rules-and-guidelines.html" title="Noble Denton marine services rules and guidelines - DNV GL">0030/ND</a>.</p>
 <h2>Large vessels</h2>
-<p><img alt="Large vessels" class="fig" src="/img/tow_lvessels.png" loading="lazy"></p>
+<p><img src="/img/tow_lvessels.png" alt="Large vessels" /></p>
 <h2>Medium vessels and large cargo barges</h2>
-<p><img alt="Medium vessels and large cargo barges" class="fig" src="/img/tow_mvessels.png" loading="lazy"></p>
+<p><img src="/img/tow_mvessels.png" alt="Medium vessels and large cargo barges" /></p>
 <h2>Small barges</h2>
-<p><img alt="Small barges" class="fig" src="/img/tow_sbarges.png" loading="lazy"></p>
+<p><img src="/img/tow_sbarges.png" alt="Small barges" /></p>
 <h2>Small vessels</h2>
-<p><img alt="Small vessels" class="fig" src="/img/tow_svessels.png" loading="lazy"></p>
+<p><img src="/img/tow_svessels.png" alt="Small vessels" /></p>
 <p>where, Lx, Ly, and Lz are are distances between barge center of rotation and cargo center of gravity in x (along barge length), y (along barge width), and z (vertical) respectively.</p>
-<details>
-<summary>Plot code for all standard vessel types described in 0030/ND</summary>
-
-
-<pre><code class="language-python">#!/usr/bin/env python
+<p>Plot code for all standard vessel types described in 0030/ND:</p>
+<pre><code class="language-py">#!/usr/bin/env python
 # encoding: utf-8
 
 &quot;&quot;&quot;Influence of cargo eccentricity on sea-transport forces.
@@ -231,15 +228,9 @@ def main():
 if __name__ == '__main__':
     main()
 </code></pre>
-
-</details>
-
 <p>For non-standard motion responses, particularly in benign environments that exhibit lower single amplitude motion and lower full cycle period, the following code could be used. It requires all values to be input.</p>
-<details>
-<summary>Plot code for non-standard motion responses</summary>
-
-
-<pre><code class="language-python">#!/usr/bin/env python
+<p>Plot code for non-standard motion responses:</p>
+<pre><code class="language-py">#!/usr/bin/env python
 # encoding: utf-8
 
 &quot;&quot;&quot;Influence of cargo eccentricity on sea-transport forces.
@@ -324,35 +315,36 @@ def main():
 if __name__ == '__main__':
     main()
 </code></pre>
-
-</details>
-
-<div class="footnote">
-<hr />
+<section class="footnotes" data-footnotes>
 <ol>
-<li id="fn:1">
-<p>GL Noble Denton, Technical Policy Board &mdash; Table 7-2 (Unrestricted, Case 2), Default Motion Criteria, Guidelines for Marine Transportations, Document No. 0030/ND.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<li id="fn-1">
+<p>GL Noble Denton, Technical Policy Board — Table 7-2 (Unrestricted, Case 2), Default Motion Criteria, Guidelines for Marine Transportations, Document No. 0030/ND. <a href="#fnref-1" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="1" aria-label="Back to reference 1">↩</a></p>
 </li>
-<li id="fn:2">
-<p>I&rsquo;ve found not Mechanical, Metocean, or Structural engineers, but only Naval architects are usually quick to recover from their stagger as they are able to quickly bring in other factors into perspective.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+<li id="fn-2">
+<p>I’ve found not Mechanical, Metocean, or Structural engineers, but only Naval architects are usually quick to recover from their stagger as they are able to quickly bring in other factors into perspective. <a href="#fnref-2" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="2" aria-label="Back to reference 2">↩</a></p>
 </li>
-<li id="fn:3">
-<p>See also <a href="/2015/lib">libraries</a> for processing motion response datasets.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+<li id="fn-3">
+<p>See also <a href="/2015/lib">libraries</a> for processing motion response datasets. <a href="#fnref-3" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="3" aria-label="Back to reference 3">↩</a></p>
 </li>
-<li id="fn:4">
-<p>Journ&eacute;e and Pinkster, Introduction to Ship Hydromechanics.&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+<li id="fn-4">
+<p>Journée and Pinkster, Introduction to Ship Hydromechanics. <a href="#fnref-4" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="4" aria-label="Back to reference 4">↩</a></p>
 </li>
 </ol>
-</div>
+</section>
+
 </article>
 <footer>
     <span>
-      &lsaquo; 
-      <a accesskey="j" title="China" href="/2012/china">Prev</a>
+      &lsaquo;
+      <a accesskey="j"
+         title="China"
+         href="/2012/china">Prev</a>
     </span>
     <span>
-      <a accesskey="k" title="S-N curves" href="/2014/sn-curves">Next</a>
-	  &rsaquo;
+      <a accesskey="k"
+         title="S-N curves"
+         href="/2014/sn-curves">Next</a>
+      &rsaquo;
     </span>
   </footer></main>
 </body>

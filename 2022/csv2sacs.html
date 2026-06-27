@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: CSV to SACS seastate</title>
-<meta name="description" content="At work, we’ve been looking to determine cyclic axial capacity of a fixed platform’s drilled and...">
+<meta name="description" content="At work, we’ve been looking to determine cyclic axial capacity of a fixed platform’s drilled and…">
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -17,33 +17,33 @@
 <article>
 <h1>CSV to SACS seastate</h1>
 <time datetime="2022-11-10T22:20:00Z">10 Nov 2022</time>
-<p>At work, we&rsquo;ve been looking to determine cyclic axial capacity of a fixed platform&rsquo;s drilled and grouted foundations in calcareous soils from storm time-history sets. The approach is described in a paper titled <a href="https://research-repository.uwa.edu.au/en/publications/axial-and-lateral-pile-design-in-carbonate-soils" title="C.T. Erbrich, et al., UWA, 2010.">Axial and lateral pile design in carbonate soils</a> by C.T. Erbrich, et al. (2010). The team is looking to generate pile loads from this using Bentley&rsquo;s SACS analysis suite. When totalled it adds to upwards of 30,000 discreet load cases.</p>
+<p>At work, we’ve been looking to determine cyclic axial capacity of a fixed platform’s drilled and grouted foundations in calcareous soils from storm time-history sets. The approach is described in a paper titled <a href="https://research-repository.uwa.edu.au/en/publications/axial-and-lateral-pile-design-in-carbonate-soils" title="C.T. Erbrich, et al., UWA, 2010.">Axial and lateral pile design in carbonate soils</a> by C.T. Erbrich, et al. (2010). The team is looking to generate pile loads from this using Bentley’s SACS analysis suite. When totalled it adds to upwards of 30,000 discreet load cases.</p>
 <p>With the archaic fixed-format, reminiscent of FORTRAN, SACS is unfriendly when it comes to developing user input files by hand, and in our case a seastate load input file. With 8,000 load cases, this requires generating about 127,000 unique lines of input, per history, error-free. Manually this is impractical.</p>
 <p>I volunteered to find a way to automate this, if storm history were made available in comma separated value (CSV) files, which our Metocean team kindly did make. Last weekend, I rolled up sleeves and began coding in earnest in python, using <a href="https://pandas.pydata.org" title="A fast, powerful, flexible and easy to use open source data analysis and manipulation tool, built on top of the Python programming language.">pandas</a> dataframe structure, to turn thousands of lines of Metocean data into hundreds of thousands of ungodly SACS input. I am glad that I now have a working script that does this in a couple of seconds. The approach to generating input file is done in two steps:</p>
 <ol>
 <li>
 <p>The Metocean data file structure (e.g. <code>TS001.000040TS.csv</code>) is as follows:</p>
-<pre><code>H (m), T(s), ThetaP PlatformNth(Deg), WS (m/s), CS5(m/s),  CS20(m/s),  CS30(m/s),  CS50(m/s),    CS70(m/s),  CS90(m/s), CS110(m/s), CS130(m/s), CS150(m/s), CS170(m/s),
-  4.48,  14.56,290.00,  13.84,  0.75,   0.68,  0.60,   0.50,  0.44,   0.41,  0.35,   0.30,  0.25,   0.15,
-  4.81,  14.67,290.00,  13.84,  0.75,   0.68,  0.60,   0.50,  0.44,   0.41,  0.35,   0.30,  0.25,   0.15,
-  4.40,  14.21,290.00,  13.84,  0.75,   0.68,  0.60,   0.50,  0.44,   0.41,  0.35,   0.30,  0.25,   0.15,
-  4.18,  12.34,290.00,  13.84,  0.75,   0.68,  0.60,   0.50,  0.44,   0.41,  0.35,   0.30,  0.25,   0.15,
-  2.83,   8.32,290.00,  13.84,  0.75,   0.68,  0.60,   0.50,  0.44,   0.41,  0.35,   0.30,  0.25,   0.15,
-  3.76,  14.89,290.00,  13.84,  0.75,   0.68,  0.60,   0.50,  0.44,   0.41,  0.35,   0.30,  0.25,   0.15,
-  6.07,  14.04,290.00,  13.84,  0.75,   0.68,  0.60,   0.50,  0.44,   0.41,  0.35,   0.30,  0.25,   0.15,
-...
+<pre><code> H (m), T(s), ThetaP PlatformNth(Deg), WS (m/s), CS5(m/s),  CS20(m/s),  CS30(m/s),  CS50(m/s),    CS70(m/s),  CS90(m/s), CS110(m/s), CS130(m/s), CS150(m/s), CS170(m/s),
+   4.48,  14.56,290.00,  13.84,  0.75,   0.68,  0.60,   0.50,  0.44,   0.41,  0.35,   0.30,  0.25,   0.15,
+   4.81,  14.67,290.00,  13.84,  0.75,   0.68,  0.60,   0.50,  0.44,   0.41,  0.35,   0.30,  0.25,   0.15,
+   4.40,  14.21,290.00,  13.84,  0.75,   0.68,  0.60,   0.50,  0.44,   0.41,  0.35,   0.30,  0.25,   0.15,
+   4.18,  12.34,290.00,  13.84,  0.75,   0.68,  0.60,   0.50,  0.44,   0.41,  0.35,   0.30,  0.25,   0.15,
+   2.83,   8.32,290.00,  13.84,  0.75,   0.68,  0.60,   0.50,  0.44,   0.41,  0.35,   0.30,  0.25,   0.15,
+   3.76,  14.89,290.00,  13.84,  0.75,   0.68,  0.60,   0.50,  0.44,   0.41,  0.35,   0.30,  0.25,   0.15,
+   6.07,  14.04,290.00,  13.84,  0.75,   0.68,  0.60,   0.50,  0.44,   0.41,  0.35,   0.30,  0.25,   0.15,
+ ...
 </code></pre>
 <p>Read Metocean data file in CSV, and save it as a formatted CSV file using Pandas. This streamlines the CSV file:</p>
-<pre><code>python3 fdf.py -f &lt;metocean data file&gt;
+<pre><code> python3 fdf.py -f &lt;metocean data file&gt;
 </code></pre>
 </li>
 <li>
 <p>Step 1 above generates a formatted Metocean data file, which is used to generate SACS seastate input file:</p>
-<pre><code>python3 slc.py -f &lt;formatted metocean data file&gt; &gt; seastate1.inp
+<pre><code> python3 slc.py -f &lt;formatted metocean data file&gt; &gt; seastate1.inp
 </code></pre>
 </li>
 </ol>
-<p>The script generates this <code>seastate1.inp</code> file &mdash; listed for brevity:</p>
+<p>The script generates this <code>seastate1.inp</code> file — listed for brevity:</p>
 <pre><code># Reading FTS001.000040TS.csv file...done.
 FILE B
 LOADCN   1
@@ -90,10 +90,7 @@ CURR      166.18    0.83   185.0
 <p><strong>Requirements:</strong> Both the scripts listed below require python3 with pandas and docopt modules. The modules can be installed with the following at command line:</p>
 <pre><code class="language-bash">python3 -m pip install --upgrade pandas docopt
 </code></pre>
-<details>
-<summary>Script to format Metocean data</summary>
-
-
+<p>Script to format Metocean data:</p>
 <pre><code class="language-python">#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -131,10 +128,7 @@ if __name__ == &quot;__main__&quot;:
     main(datfile)
     print(&quot;Formatted file:&quot;, &quot;F&quot; + datfile)
 </code></pre>
-
-</details>
-
-<p>Here&rsquo;s how <code>fdf.py</code> script works:</p>
+<p>Here’s how <code>fdf.py</code> script works:</p>
 <ol>
 <li>Reads the CSV file (given at command line) into dataframe (<code>df</code>)</li>
 <li>Returns a CSV file from dataframe with and <code>F</code> prefixed to the filename</li>
@@ -142,11 +136,8 @@ if __name__ == &quot;__main__&quot;:
 <p>If one has many files that need formatting with the above script, then this can be done in one go with the following command:</p>
 <pre><code class="language-bash">for FILE in *.csv; do python3 ./fdf.py -f $FILE; done
 </code></pre>
-<details>
-<summary>Script to convert Metocean data (in CSV) into SACS seastate input</summary>
-
-
-<pre><code class="language-python">#!/usr/bin/env python3
+<p>Script to convert Metocean data (in CSV) into SACS seastate input</p>
+<pre><code class="language-py">#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 &quot;&quot;&quot;Generate SACS storm load cards from a CSV file
@@ -289,13 +280,10 @@ if __name__ == &quot;__main__&quot;:
 
     main(datfile, W, F, C)
 </code></pre>
-
-</details>
-
 <p>For a bunch of formatted files, SACS seastate input files can be generated in one go like so:</p>
 <pre><code class="language-bash">for FILE in F*.csv; do python3 ./slc.py -f $FILE &gt; $FILE.inp; done
 </code></pre>
-<p>This script is specific to the structure of the CSV file and the order in which data parameters occur. The first three columns represent wave data (height, period, and direction), and the last ten columns (to be aligned with <code>eam</code> list) represent current speed at ten intervals from water surface to seabed in decreasing order. However, SACS requires this to be input in the increasing order, and therefore the ranges are reversed (aligned with <code>eam</code>) and in negative increments to get appropriate column indices. Other than that, this script just re-prints data from the dataframe in a fixed format that SACS requires. Here&rsquo;s how it works:</p>
+<p>This script is specific to the structure of the CSV file and the order in which data parameters occur. The first three columns represent wave data (height, period, and direction), and the last ten columns (to be aligned with <code>eam</code> list) represent current speed at ten intervals from water surface to seabed in decreasing order. However, SACS requires this to be input in the increasing order, and therefore the ranges are reversed (aligned with <code>eam</code>) and in negative increments to get appropriate column indices. Other than that, this script just re-prints data from the dataframe in a fixed format that SACS requires. Here’s how it works:</p>
 <ol>
 <li>Loads data from CSV file into a dataframe</li>
 <li>Prints a line <code>FILE B</code> for a stand-alone seastate file</li>
@@ -303,16 +291,21 @@ if __name__ == &quot;__main__&quot;:
 <li>Prints <code>WAVE</code> cards from wave data in the first 3 columns</li>
 <li>Prints <code>CURR</code> cards (incl. multiline loop) from current data</li>
 </ol>
-<p>There is of course an opportunity to make this script generic (e.g., by updating it to automatically count columns from either side and generate column index accordingly for further use) so that there is no need to re-factor the code &mdash; should the data structure change, but this code solved our immediate problem.</p>
+<p>There is of course an opportunity to make this script generic (e.g., by updating it to automatically count columns from either side and generate column index accordingly for further use) so that there is no need to re-factor the code — should the data structure change, but this code solved our immediate problem.</p>
+
 </article>
 <footer>
     <span>
-      &lsaquo; 
-      <a accesskey="j" title="Slice lists" href="/2022/slice">Prev</a>
+      &lsaquo;
+      <a accesskey="j"
+         title="Slice lists"
+         href="/2022/slice">Prev</a>
     </span>
     <span>
-      <a accesskey="k" title="Offline" href="/2024/offline">Next</a>
-	  &rsaquo;
+      <a accesskey="k"
+         title="Offline"
+         href="/2024/offline">Next</a>
+      &rsaquo;
     </span>
   </footer></main>
 </body>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: End releases</title>
-<meta name="description" content="Aerial view of a flare tower. STAAD has an odd way of coding end-releases for rod elements, in...">
+<meta name="description" content="STAAD has an odd way of coding end-releases for rod elements, in which start-sides and end-sides…">
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -17,11 +17,7 @@
 <article>
 <h1>End releases</h1>
 <time datetime="2016-11-27T22:03:00Z">27 Nov 2016</time>
-<figure>
-  <img alt="Aerial view of a flare tower" src="/img/2016-relconv.jpg" loading=lazy>
-  <figcaption>Aerial view of a flare tower.</figcaption>
-</figure>
-
+<p><img src="/img/2016-relconv.jpg" alt="Aerial view of a flare tower." /></p>
 <p><a href="https://www.bentley.com/en/products/product-line/structural-analysis-software/staadpro" title="3D Structural Analysis and Design Software - STAAD.Pro">STAAD</a> has an odd way of coding end-releases for rod elements, in which start-sides and end-sides are defined as separate commands. Here is an example:</p>
 <pre><code>MEMBER RELEASE
 561 567 TO 570 573 694 TO 698 START MY MZ
@@ -44,7 +40,7 @@ BEAMHING 1  1  1   1  0  0  1  1  1  1  0  0  686 687 688 689 690 691 692
 <li>Pick out single elements, and add them to the list above.</li>
 <li>Once you have a full list of elements per two explicit release commands with <code>START</code> and <code>END</code>, like <code>START MY MZ</code> and <code>END MY MZ</code>, segregate them in to start only, end only and both end release list of elements.</li>
 </ol>
-<p>I&rsquo;ve tried to automate all of the above. Here we go:</p>
+<p>I’ve tried to automate all of the above. Here we go:</p>
 <p>Example of <code>start.txt</code> required by the script down below:</p>
 <pre><code>MEMBER RELEASE
 468 TO 489 522 TO 550 552 553 555 556 558 559 561 567 TO 570 -
@@ -71,7 +67,7 @@ BEAMHING 1  1  1   1  0  0  1  1  1  1  0  0  686 687 688 689 690 691 692
 1097 TO 1108 1122 TO 1124 1136 TO 1146 1148 1152 1153 1159 -
 1161 1162 1165 1166 1169 1171 TO 1173 1402 END MY MZ
 </code></pre>
-<pre><code class="language-python">#!/usr/bin/env python
+<pre><code class="language-py">#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 &quot;&quot;&quot;
 fltr.py: Member end release conversion from STAAD to USFOS
@@ -150,18 +146,23 @@ if __name__ == '__main__':
 Start:  set([564, 57, 59, 60, 1089, 1090, 1091, 598, 599, 600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 617, 1135, 625, 1147, 1149, 1150, 1151, 1158, 1167, 623, 696, 697, 698, 702, 715, 716, 717, 718, 719, 720, 721, 722, 723, 724, 725, 726, 727, 728, 831, 998, 888, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 973, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 995, 484, 485, 486, 487, 1003, 1004, 1009])
 End:  set([1027, 1028, 1053, 1056, 1062, 1063, 1084, 1085, 1086, 1092, 1095, 1103, 1122, 1123, 1124, 624, 626, 1142, 1144, 637, 638, 639, 1152, 1153, 642, 643, 644, 645, 646, 1159, 648, 1161, 1162, 1172, 699, 706, 630, 729, 730, 731, 732, 733, 734, 735, 736, 737, 738, 739, 740, 741, 742, 640, 641, 647, 649, 650, 832, 999, 1000, 1001, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 1020])
 </code></pre>
-<p><a id="v"></a>Here&rsquo;s a <a href="https://vimeo.com/227553287">video of the workflow</a>.</p>
-<p>I shared this code with Dr. Holm&aring;s of USFOS, and asked why <code>stadred</code> does not have the option of converting releases. He confirmed that release conversions were intentionally suppressed in <code>stadred</code>, as <mark>releases often cause problems in non-linear simulations</mark>. However, due to the uniqueness of the problem I was working on, he kindly sent me a working copy of <code>stadred</code> that also converts end-releases, for which I am indeed grateful. </p>
+<p>Here’s a <a href="https://vimeo.com/227553287">video of the workflow</a>.</p>
+<p>I shared this code with Dr. Holmås of USFOS, and asked why <code>stadred</code> does not have the option of converting releases. He confirmed that release conversions were intentionally suppressed in <code>stadred</code>, as releases often cause problems in non-linear simulations. However, due to the uniqueness of the problem I was working on, he kindly sent me a working copy of <code>stadred</code> that also converts end-releases, for which I am indeed grateful.</p>
 <p>Now, I have two ways to convert. The code above generates a somewhat concise instruction, but the process is semi-automatic, whereas the updated <code>stadred</code> copy I was given is fully automatic, but generates a much bigger file, since end-release instructions are generated per member.</p>
+
 </article>
 <footer>
     <span>
-      &lsaquo; 
-      <a accesskey="j" title="Wind" href="/2016/wind">Prev</a>
+      &lsaquo;
+      <a accesskey="j"
+         title="Wind"
+         href="/2016/wind">Prev</a>
     </span>
     <span>
-      <a accesskey="k" title="Wave length" href="/2016/wavelength">Next</a>
-	  &rsaquo;
+      <a accesskey="k"
+         title="Wave length"
+         href="/2016/wavelength">Next</a>
+      &rsaquo;
     </span>
   </footer></main>
 </body>

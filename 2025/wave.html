@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: Wave</title>
-<meta name="description" content="The energy industry uses highly specialised software — written, refined, and perfected over...">
+<meta name="description" content="The energy industry uses highly specialised software — written, refined, and perfected over…">
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -17,9 +17,9 @@
 <article>
 <h1>Wave</h1>
 <time datetime="2025-04-18T13:02:00Z">18 Apr 2025</time>
-<p>The energy industry uses highly specialised software &mdash; written, refined, and perfected over decades. Little scripts are no match against their sophistication. Instead, the idea is to not feel challenged when they are either inaccessible or too time-consuming to reproduce results using them, before offering feedback on the work done.</p>
-<p>Recently while reviewing a young colleague&rsquo;s work, I realised my handicap was tooling. </p>
-<p>To avoid getting into the annals of specific software, my request to engineers &mdash; I assist and guide typically &mdash; is simple: a print / screenshot of output from analyses, which I can look at, and ask reasonable questions. I do some simple calculations on the side, if required, to assist in the review.</p>
+<p>The energy industry uses highly specialised software — written, refined, and perfected over decades. Little scripts are no match against their sophistication. Instead, the idea is to not feel challenged when they are either inaccessible or too time-consuming to reproduce results using them, before offering feedback on the work done.</p>
+<p>Recently while reviewing a young colleague’s work, I realised my handicap was tooling.</p>
+<p>To avoid getting into the annals of specific software, my request to engineers — I assist and guide typically — is simple: a print / screenshot of output from analyses, which I can look at, and ask reasonable questions. I do some simple calculations on the side, if required, to assist in the review.</p>
 <p>In my role, I consciously choose to guide and lead, but not necessarily roll-up sleeves and work it myself. This has its benefits:</p>
 <ul>
 <li>Working the state-of-the-art software myself is inefficient</li>
@@ -31,8 +31,8 @@
 <li>Use simpler techniques, where practicable</li>
 </ul>
 <p>But some things are beyond the realm of the back-of-the-envelope, and demand a bit of rigour. If iteration is involved, then it quickly gets out of hand. In such cases, if I have to write some code on the side, then the attempt is to get some ROI, i.e. not only to get reasonably approximate answers, but also some insights.</p>
-<p>Back to the problem, I needed to generate hydrodynamic forces on a slender caisson to review the force profile in segments of the water column I was interested-in &mdash; for different hydrodynamic coefficients. Previously, I&rsquo;d do this by simply building a stick model and run a wave through it. In this case, without the software pre-installed on my work machine, the only option was to write some code from first principles, and calculate hydrodynamic forces in close approximation to what an expensive software suite would produce.</p>
-<p>The conventional way to generate hydrodynamic forces is by employing <a href="https://en.wikipedia.org/wiki/Morison_equation">Morison&rsquo;s equation</a>:</p>
+<p>Back to the problem, I needed to generate hydrodynamic forces on a slender caisson to review the force profile in segments of the water column I was interested-in — for different hydrodynamic coefficients. Previously, I’d do this by simply building a stick model and run a wave through it. In this case, without the software pre-installed on my work machine, the only option was to write some code from first principles, and calculate hydrodynamic forces in close approximation to what an expensive software suite would produce.</p>
+<p>The conventional way to generate hydrodynamic forces is by employing <a href="https://en.wikipedia.org/wiki/Morison_equation">Morison’s equation</a>:</p>
 <p>$$
 F = F_{drag} + F_{inertia}
 $$</p>
@@ -44,32 +44,25 @@ F_{inertia} = C_m \ \rho V \ \frac{\partial U}{\partial t}
 $$</p>
 <p>where,</p>
 <ul>
-<li>F &ndash; local action vector per unit length normal to the tube</li>
-<li>$C_d$, $C_m$ &ndash; drag and inertia hydrodynamic coefficients respectively</li>
-<li>$\rho$ &ndash; mass density of seawater</li>
-<li>D &ndash; effective width of tube (incl. marine fouling)</li>
-<li>V &ndash; displaced volume of tube per unit length respectively</li>
-<li>U, |U| &ndash; component of local water particle velocity vector normal to the tube, and its absolute value respectively</li>
-<li>$\frac{\partial U}{\partial t}$ &ndash; component of the local water particle acceleration vector normal to the tube</li>
+<li>F – local action vector per unit length normal to the tube</li>
+<li>$C_d$, $C_m$ – drag and inertia hydrodynamic coefficients respectively</li>
+<li>$\rho$ – mass density of seawater</li>
+<li>D – effective width of tube (incl. marine fouling)</li>
+<li>V – displaced volume of tube per unit length respectively</li>
+<li>U, |U| – component of local water particle velocity vector normal to the tube, and its absolute value respectively</li>
+<li>$\frac{\partial U}{\partial t}$ – component of the local water particle acceleration vector normal to the tube</li>
 </ul>
-<p>See <a href="/2016/wavelength">wave length</a> for calculating wave number ($\kappa$). The orbital velocity $U$ can be taken as the sum of $U_{wave}$ and $U_{current}$ (from the profile); where the angular frequency, $\omega = \frac{2\pi}{T}$, and where $H$ and $T$ are wave height and associated period respectively. </p>
+<p>See <a href="/2016/wavelength">wave length</a> for calculating wave number ($\kappa$). The orbital velocity $U$ can be taken as the sum of $U_{wave}$ and $U_{current}$ (from the profile); where the angular frequency, $\omega = \frac{2\pi}{T}$, and where $H$ and $T$ are wave height and associated period respectively.</p>
 <p>$$
 U_{wave} = H \omega \frac{\cosh(\kappa z)}{2\sinh(\kappa d)} \cos(\omega t)
 $$</p>
 <p>The wave orbital acceleration can be expressed as:</p>
 <p>$$
-\frac{\partial U}{\partial t} = -H \omega^2 \frac{\cosh(\kappa z)}{2\sinh(\kappa d)} \sin(\omega t) 
+\frac{\partial U}{\partial t} = -H \omega^2 \frac{\cosh(\kappa z)}{2\sinh(\kappa d)} \sin(\omega t)
 $$</p>
 <p>The simplification here is that it does not account for marine-fouling, which would further expand the problem and the resulting code into an array of tube diameters. For a sense-check though, this seems sufficient.</p>
-<figure>
-  <img class="fig" alt="Hydrodynamic force" src="/img/hydforce.svg" loading=lazy>
-  <figcaption>Hydrodynamic force profile in seawater column.</figcaption>
-</figure>
-
-<details>
-<summary>Plot code</summary> 
-
-
+<p><img src="/img/hydforce.svg" alt="Hydrodynamic force profile in seawater column." /></p>
+<p>Plot code:</p>
 <pre><code class="language-py">#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Hydrodynamic force on a tube
@@ -261,7 +254,7 @@ def plot_force_profile(
     )
     plt.grid(True)
     plt.legend()
-    plt.savefig(&quot;hydforce.svg&quot;, transparent=True)
+    plt.savefig(&quot;hydforce.svg&quot;, transparent=False)
     plt.show()
 
 
@@ -346,16 +339,19 @@ if __name__ == &quot;__main__&quot;:
     )
 </code></pre>
 
-</details>
 </article>
 <footer>
     <span>
-      &lsaquo; 
-      <a accesskey="j" title="Anatomy of a Typst template" href="/2025/template">Prev</a>
+      &lsaquo;
+      <a accesskey="j"
+         title="Anatomy of a Typst template"
+         href="/2025/template">Prev</a>
     </span>
     <span>
-      <a accesskey="k" title="Flare radiation" href="/2025/radiation">Next</a>
-	  &rsaquo;
+      <a accesskey="k"
+         title="Flare radiation"
+         href="/2025/radiation">Next</a>
+      &rsaquo;
     </span>
   </footer></main>
 </body>

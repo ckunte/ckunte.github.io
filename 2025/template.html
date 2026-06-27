@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: Anatomy of a Typst template</title>
-<meta name="description" content="Developed by two graduate students from Technical University of Berlin, Typst is a computer...">
+<meta name="description" content="Developed by two graduate students from Technical University of Berlin, Typst is a computer…">
 <script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -17,7 +17,7 @@
 <article>
 <h1>Anatomy of a Typst template</h1>
 <time datetime="2025-03-30T22:17:00Z">30 Mar 2025</time>
-<p>Developed by two graduate students from Technical University of Berlin, <a href="https://typst.app">Typst</a> is a computer program for typesetting documents, thoughtfully designed to be fast, portable, feature-packed, and script-able. It would not be unfair to call it a spiritual successor to <a href="https://en.wikipedia.org/wiki/LaTeX">$\LaTeX$</a>. With contributions from talented open-source enthusiasts, it is evolving well and blowing-up $\LaTeX$&rsquo;s handicaps, viz.,</p>
+<p>Developed by two graduate students from Technical University of Berlin, <a href="https://typst.app">Typst</a> is a computer program for typesetting documents, thoughtfully designed to be fast, portable, feature-packed, and script-able. It would not be unfair to call it a spiritual successor to <a href="https://en.wikipedia.org/wiki/LaTeX">$\LaTeX$</a>. With contributions from talented open-source enthusiasts, it is evolving well and blowing-up $\LaTeX$’s handicaps, viz.,</p>
 <ul>
 <li>compilation speed</li>
 <li>learning curve</li>
@@ -26,13 +26,13 @@
 <li>package size</li>
 <li>syntax highlighting</li>
 </ul>
-<p>With good defaults (font and paragraph properties, paper size, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned $\LaTeX$ user, then you&rsquo;d know how useful <a href="https://ctan.org/topic/class">document classes</a> are  &mdash; something Typst does not yet come pre-packaged with. And so, a little <a href="https://typst.app/universe/">universe</a> is starting to form &mdash; for users, by users. If you&rsquo;re one of them, and your tastes are slightly different from those available there-in, then it would not hurt to know how to create a Typst template from scratch. Here is how.</p>
-<p>Rule one of publishing: separate presentation + styling from content &mdash; offline or online. So we create two files:</p>
+<p>With good defaults (font and paragraph properties, paper size, margins, etc.), one can get going without needing a single line of preamble code. But if you are a seasoned $\LaTeX$ user, then you’d know how useful <a href="https://ctan.org/topic/class">document classes</a> are  — something Typst does not yet come pre-packaged with. And so, a little <a href="https://typst.app/universe/">universe</a> is starting to form — for users, by users. If you’re one of them, and your tastes are slightly different from those available there-in, then it would not hurt to know how to create a Typst template from scratch. Here is how.</p>
+<p>Rule one of publishing: separate presentation + styling from content — offline or online. So we create two files:</p>
 <ul>
-<li><em>main.typ</em> &mdash; this file will have all the report&rsquo;s content</li>
-<li><em>template.typ</em> &mdash; this one&rsquo;s for the report&rsquo;s presentation + styling</li>
+<li><em>main.typ</em> — this file will have all the report’s content</li>
+<li><em>template.typ</em> — this one’s for the report’s presentation + styling</li>
 </ul>
-<p><em>main.typ</em>: This requires only a few key user-inputs (which would be variables pre-defined in <em>template.typ</em>), e.g. document title, name of the author, and <a href="https://tex.stackexchange.com/questions/71172/why-are-default-latex-margins-so-big/71211#71211">paper size</a> (useful for me) other than the content itself. (Note that every element of the look and feel is my own; there&rsquo;s no default; it&rsquo;s like I&rsquo;m making my own document class.)</p>
+<p><em>main.typ</em>: This requires only a few key user-inputs (which would be variables pre-defined in <em>template.typ</em>), e.g. document title, name of the author, and <a href="https://tex.stackexchange.com/questions/71172/why-are-default-latex-margins-so-big/71211#71211">paper size</a> (useful for me) other than the content itself. (Note that every element of the look and feel is my own; there’s no default; it’s like I’m making my own document class.)</p>
 <pre><code>#import &quot;template.typ&quot;: *
 #show: note.with(
   title: [On-bottom stability],
@@ -40,7 +40,7 @@
   paper: &quot;a4&quot;, // defaults don't need to be defined; I added paper option because I often use &quot;a5&quot;
 ) // report content from here-on
 </code></pre>
-<p><em>template.typ</em>: Basic preamble is as follows. Defaults will be used when things like margins are undefined in either of the two files. </p>
+<p><em>template.typ</em>: Basic preamble is as follows. Defaults will be used when things like margins are undefined in either of the two files.</p>
 <pre><code>#let note(
   title: none,
   author: none,
@@ -51,7 +51,7 @@
     title: title, 
     author: author
   ) // set metadata (seen in document properties)
-
+  
   set page(
     paper: paper, // enables user-definable in main.typ
     numbering: &quot;1&quot;, // another example: &quot;1 of 1&quot;
@@ -78,9 +78,9 @@
   },
 )
 </code></pre>
-<p>Strictly speaking, the above is unnecessary. <a href="https://typst.app/docs/guides/page-setup-guide/" title="Typst - Page setup guide">Here&rsquo;s why</a>:</p>
+<p>Strictly speaking, the above is unnecessary. <a href="https://typst.app/docs/guides/page-setup-guide/" title="Typst - Page setup guide">Here’s why</a>:</p>
 <blockquote>
-<p>By default, Typst will create margins proportional to the page size of your document. (The margins are set automatically to 2.5/21 times the smaller dimension of the page.) </p>
+<p>By default, Typst will create margins proportional to the page size of your document. (The margins are set automatically to 2.5/21 times the smaller dimension of the page.)</p>
 </blockquote>
 <p>We can do something similar for font size:</p>
 <pre><code>set text(
@@ -104,10 +104,8 @@
   justify: true
 )
 </code></pre>
-<p>Here is a little complex header code to make the title of the note (paper) appear on every even page, and the active section name appear on every odd page other than the first. </p>
-<details>
-<summary>Header code</summary>
-
+<p>Here is a little complex header code to make the title of the note (paper) appear on every even page, and the active section name appear on every odd page other than the first.</p>
+<p>Header code:</p>
 <pre><code class="language-rust">set page(
   header: context {
     // set custom header: make title appear on even pages
@@ -135,18 +133,11 @@
   }, // context ends
 ) // page ends
 </code></pre>
-
-</details>
-
 <p>Put the template file together and then either run the following at command line, or use <a href="/2024/build">build</a> instructions to setup text editor to compile typ to pdf.</p>
 <pre><code>$ typst compile main.typ
 </code></pre>
-<figure>
-<img alt="View of a report compiled using Typst typesetting computer program" src="/img/2025-typst-first.png" loading=lazy>
-<img alt="View of a report headers compiled using Typst typesetting computer program" src="/img/2025-typst-header.png" loading=lazy>
-  <figcaption>View of the report (top-left); template (top-right); report headers (bott).</figcaption>
-</figure>
-
+<p><img src="/img/2025-typst-first.png" alt="View of a report compiled using Typst typesetting computer program." />
+<img src="/img/2025-typst-header.png" alt="View of a report headers compiled using Typst typesetting computer program." /></p>
 <p>An example template is at my repository, <a href="https://github.com/ckunte/note">note</a>. For a Neovim user there is also a <a href="https://github.com/ckunte/typst-snippets-vim">snippet plug-in</a>.</p>
 <h2>Outline</h2>
 <p>Producing an outline (table of contents in Typst parlance) is simple like so (and can be seen in the view above):</p>
@@ -165,10 +156,8 @@
   target: figure.where(kind: table),
 ) // tables
 </code></pre>
-<p>However, even when there are no figures or tables, the headings &lsquo;List of figures&rsquo; and &lsquo;List of tables&rsquo; are produced. To tweak this to produce only when they exist, a little code snippet for the job &mdash; this will be in the <em>main.typ</em>, but can also be included in a separate file like <em>toc.typ</em> like <code>#include("toc.typ")</code>.</p>
-<details>
-<summary>TOC code</summary>
-
+<p>However, even when there are no figures or tables, the headings ‘List of figures’ and ‘List of tables’ are produced. To tweak this to produce only when they exist, a little code snippet for the job — this will be in the <em>main.typ</em>, but can also be included in a separate file like <em>toc.typ</em> like <code>#include(&quot;toc.typ&quot;)</code>.</p>
+<p>TOC code:</p>
 <pre><code class="language-rust">// Contents of toc.typ
 #outline(
   indent: 1em, 
@@ -196,12 +185,9 @@
   }
 }
 </code></pre>
-
-</details>
-
 <h2>Subtitle and logo</h2>
 <p>Same trick to produce these above.</p>
-<p><em>main.typ</em> to have this below. Notice the keys &ldquo;logo&rdquo; and &ldquo;subtitle&rdquo; in the block below.</p>
+<p><em>main.typ</em> to have this below. Notice the keys “logo” and “subtitle” in the block below.</p>
 <pre><code>#show: note.with(
   logo: &quot;yes&quot;,
   title: [Asset],
@@ -256,7 +242,7 @@
 }
 </code></pre>
 <h2>Importing data into table</h2>
-<p>Creating a table by importing CSV data seems like a neat thing to do that avoids the verbose formatting needed in fitting the tabular data. Here&rsquo;s an example:</p>
+<p>Creating a table by importing CSV data seems like a neat thing to do that avoids the verbose formatting needed in fitting the tabular data. Here’s an example:</p>
 <pre><code class="language-rust">#let qty = csv(&quot;quantity.csv&quot;)
 
 #table(
@@ -268,7 +254,7 @@
 </code></pre>
 <p>In the above, <code>..,</code> can be used to skip data from preceding columns. And since it uses <code>csv</code>, no math or symbols will be translated into the table; instead what you get is literal text from the csv file. For text and numbers, this method is best.</p>
 <h2>Records</h2>
-<p>For a project I&rsquo;m on, there&rsquo;s a need to call a bunch of scope-specific records into scope documents, so rather than having this data per scope in each document file, I can place the records like so:</p>
+<p>For a project I’m on, there’s a need to call a bunch of scope-specific records into scope documents, so rather than having this data per scope in each document file, I can place the records like so:</p>
 <pre><code>// data.typ
 #let records = (
     &quot;co076&quot;: (
@@ -325,7 +311,7 @@
 }
 </code></pre>
 <h2>Regular expressions</h2>
-<p>Here&rsquo;s an example where I have files containing location like this:</p>
+<p>Here’s an example where I have files containing location like this:</p>
 <pre><code>Location: MCS
 </code></pre>
 <p>MCS in the above corresponds to Module C (S), where (S) is Starboard. Similarly, MAP would be Module A (P), where (P) is Port. There are Modules A to F, and I would like to transform the location without having to manually edit five hundred entries. REGEX to the rescue. Dropping this snippet in my template, which is already called in all these scope sheets, lets me do this with ease:</p>
@@ -354,15 +340,9 @@ show regex(&quot;Location:[\w, ]+&quot;): it =&gt; {
 <pre><code>set -gx TYPST_FONT_PATHS &quot;/mnt/c/Windows/Fonts&quot;
 </code></pre>
 <h2>Printing matter on a DL envelope</h2>
-<p>When sending paper correspondence, I like sending it printed. For printing sender and recipient address on a standard DL sized envelope (220&times;99), I cooked this little template up. It only needs sender and recipient&rsquo;s address, and a compile. Here&rsquo;s how it looks when printed, followed by the template code below.</p>
-<figure>
-  <img alt="Screenshot of a DL envelope showing sender and recipient addresses" src="/img/dl-envelope.png" loading=lazy />
-  <figcaption>DL envelope showing sender's and recipient's addresses respectively.</figcaption>
-</figure>
-
-<details>
-<summary>DL envelope template code</summary>
-
+<p>When sending paper correspondence, I like sending it printed. For printing sender and recipient address on a standard DL sized envelope (220×99), I cooked this little template up. It only needs sender and recipient’s address, and a compile. Here’s how it looks when printed, followed by the template code below.</p>
+<p><img src="/img/dl-envelope.png" alt="DL envelope showing sender’s and recipient’s addresses respectively." /></p>
+<p>DL envelope template code:</p>
 <pre><code class="language-rust">// template to print address on a DL envelope size
 // -- BEGIN INPUTS --
 #let sender = [
@@ -408,19 +388,21 @@ show regex(&quot;Location:[\w, ]+&quot;): it =&gt; {
   text(size: 12pt)[#recipient]
 )
 </code></pre>
-
-</details>
-
 <p>Then put the envelope in the tray (face-up for my printer) and hit print.</p>
+
 </article>
 <footer>
     <span>
-      &lsaquo; 
-      <a accesskey="j" title="Essentials" href="/2024/essentials">Prev</a>
+      &lsaquo;
+      <a accesskey="j"
+         title="Essentials"
+         href="/2024/essentials">Prev</a>
     </span>
     <span>
-      <a accesskey="k" title="Wave" href="/2025/wave">Next</a>
-	  &rsaquo;
+      <a accesskey="k"
+         title="Wave"
+         href="/2025/wave">Next</a>
+      &rsaquo;
     </span>
   </footer></main>
 </body>

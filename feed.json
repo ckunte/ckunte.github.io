@@ -1,14 +1,14 @@
 {
   "version" : "https://jsonfeed.org/version/1.1",
   "user_comment" : "This feed lets you know when a new note is published. Copy the following URL -- https://ckunte.net/feed.json -- and add it to your feed reader.",
-  "title" : "Chetan Kunt\u00e9",
+  "title" : "Chetan Kunté",
   "home_page_url" : "https://ckunte.net",
   "feed_url" : "https://ckunte.net/feed.json",
   "favicon" : "https://ckunte.net/inc/favicon.svg",
   "description" : "Offshore Structures Engineer, Chartered Naval Architect",
   "authors" : [
     {
-      "name" : "Chetan Kunt\u00e9",
+      "name" : "Chetan Kunté",
       "url" : "https://ckunte.net"
     }
   ],
@@ -17,21 +17,21 @@
       "id" : "https://ckunte.net/2026/pc",
       "title" : "PC",
       "url" : "https://ckunte.net/2026/pc",
-      "content_text" : "On eBay, I found a HP 800 G2 mini1 for A$209. It arrived promptly. The last time I set Windows up was in 2005. So I needed a plan for a clean-install, and then purge the unwanted off...",
+      "content_text" : "On eBay, I found a HP 800 G2 mini 1 for A$209. It arrived promptly. The last time I set Windows up was in 2005. So I needed a plan for a clean-install, and then purge…",
       "date_published" : "2026-05-23T12:40:00Z"
     },
     {
       "id" : "https://ckunte.net/2026/sudo",
       "title" : "sudo with yubikey",
       "url" : "https://ckunte.net/2026/sudo",
-      "content_text" : "Yubikeys offer one of the strongest, enterprise-grade, practical account security tools to end-users without the cognitive overhead. Cost-effective, portable, and robust; I\u2019ve been using them for over a...",
+      "content_text" : "Yubikeys offer one of the strongest, enterprise-grade, practical account security tools to end-users without the cognitive overhead. Cost-effective, portable, and robust; I’ve been using them for over a decade…",
       "date_published" : "2026-05-16T13:28:00Z"
     },
     {
       "id" : "https://ckunte.net/2026/web-yieldline",
       "title" : "Web plate connection in direct tension",
       "url" : "https://ckunte.net/2026/web-yieldline",
-      "content_text" : "Not long ago, a colleague asked me to assist in checking some calcs concerning a base plate yield line. To do this, I thought a readable script would be helpful.1 The check was...",
+      "content_text" : "Not long ago, a colleague asked me to assist in checking some calcs concerning a base plate yield line. To do this, I thought a readable script would be helpful. 1 The…",
       "date_published" : "2026-05-16T10:01:00Z"
     }    
   ]
