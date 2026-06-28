@@ -1,65 +1,46 @@
-function loadSyntaxAndMathOnDemand() {
-  let needsHighlight = false;
-  let needsKatex = false;
+const KATEX_VERSION = '0.17.0';
+const HLJS_VERSION = '11.11.1';
 
-  // Check for code blocks for highlight.js
-  const codeBlocks = document.querySelectorAll('pre code');
-  if (codeBlocks.length > 0) {
-    needsHighlight = true;
-  }
-
-  // Check for math delimiters for KaTeX
-  const bodyText = document.body.textContent;
-  if (bodyText.includes('$') || bodyText.includes('$$')) {
-    needsKatex = true;
-  }
-
-  if (needsHighlight && needsKatex) {
-    // Load both highlight.js and KaTeX
-    loadCSS('https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css'); // Optional: for better code block styling
-    loadCSS('https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css');
-    loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js', () => {
-      loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js', () => {
-        renderMath();
-      });
-    });
-    loadScript('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js', () => {
-      hljs.highlightAll();
-    });
-  } else if (needsHighlight) {
-    // Load only highlight.js
-    loadCSS('https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css');
-    loadScript('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js', () => {
-      hljs.highlightAll();
-    });
-  } else if (needsKatex) {
-    // Load only KaTeX
-    loadCSS('https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css');
-    loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js', () => {
-      loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js', () => {
-        renderMath();
-      });
-    });
-  }
-}
+const KATEX_CSS = `https://cdn.jsdelivr.net/npm/katex@${KATEX_VERSION}/dist/katex.min.css`;
+const KATEX_JS = `https://cdn.jsdelivr.net/npm/katex@${KATEX_VERSION}/dist/katex.min.js`;
+const KATEX_AUTORENDER_JS = `https://cdn.jsdelivr.net/npm/katex@${KATEX_VERSION}/dist/contrib/auto-render.min.js`;
+const HLJS_JS = `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HLJS_VERSION}/highlight.min.js`;
+const MARKDOWN_CSS = 'https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css';
 
 function loadCSS(url) {
+  if (document.querySelector(`link[href="${url}"]`)) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = url;
   document.head.appendChild(link);
 }
 
-function loadScript(url, callback) {
-  const script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.src = url;
-  script.defer = true; // Add the defer attribute
-  script.onload = callback;
-  document.head.appendChild(script);
+function loadScript(url) {
+  const existing = document.querySelector(`script[src="${url}"]`);
+  if (existing) {
+    return existing.dataset.loaded === 'true'
+      ? Promise.resolve()
+      : new Promise((resolve, reject) => {
+          existing.addEventListener('load', () => resolve());
+          existing.addEventListener('error', () => reject(new Error(`Failed to load ${url}`)));
+        });
+  }
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = url;
+    script.defer = true;
+    script.onload = () => {
+      script.dataset.loaded = 'true';
+      resolve();
+    };
+    script.onerror = () => reject(new Error(`Failed to load ${url}`));
+    document.head.appendChild(script);
+  });
 }
 
 function renderMath() {
+  if (typeof renderMathInElement !== 'function') return;
   renderMathInElement(document.body, {
     delimiters: [
       { left: '$$', right: '$$', display: true },
@@ -71,5 +52,32 @@ function renderMath() {
   });
 }
 
-// Call the function when the DOM is loaded
+async function loadHighlightJS() {
+  loadCSS(MARKDOWN_CSS);
+  await loadScript(HLJS_JS);
+  if (typeof hljs !== 'undefined') hljs.highlightAll();
+}
+
+async function loadKaTeX() {
+  loadCSS(KATEX_CSS);
+  await loadScript(KATEX_JS);
+  await loadScript(KATEX_AUTORENDER_JS);
+  renderMath();
+}
+
+async function loadSyntaxAndMathOnDemand() {
+  const needsHighlight = document.querySelector('pre code') !== null;
+  const bodyText = document.body.textContent;
+  const needsKatex = bodyText.includes('$') || /\\\(|\\\[/.test(bodyText);
+
+  const tasks = [];
+  if (needsHighlight) tasks.push(loadHighlightJS());
+  if (needsKatex) tasks.push(loadKaTeX());
+
+  const results = await Promise.allSettled(tasks);
+  results.forEach(r => {
+    if (r.status === 'rejected') console.error(r.reason);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', loadSyntaxAndMathOnDemand);

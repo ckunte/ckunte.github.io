@@ -6,7 +6,8 @@
   --fsize:     1.13em;
   --cwidth:    36em;
   --link-dark: #00BFFF;
-  --lite-bc:   #eee;
+  --link:      #0645AD;
+  --link-visited: #551A8B;
   --muted:     lightslategray;
   --cfont:     "JetBrains Mono", ui-monospace, Consolas, monospace;
   --bfont:     system-ui, -apple-system, sans-serif;
@@ -32,7 +33,7 @@ footer {
   font-style: italic;
 }
 
-aside, footer, footer > p {
+aside, footer, footer > p, time, small, i, span.desc {
   color: var(--muted);
 }
 
@@ -80,12 +81,14 @@ li, p {
 ul             { padding-left: 2.5ch; }
 ul > li        { margin-left: 0; }
 
-time, small, i, span.desc { color: var(--muted); }
-time, span.desc            { font-style: italic; }
-span.desc                  { display: block; }
-small                      { font-size: 72%; }
-sup                        { vertical-align: text-top; font-size: 69%; }
-mark                       { background-color: #fffdaf; }
+time, span.desc { font-style: italic; }
+span.desc       { display: block; }
+small           { font-size: 72%; }
+sup             { vertical-align: text-top; font-size: 69%; }
+mark            { background-color: #fffdaf; }
+
+a         { color: var(--link); }
+a:visited { color: var(--link-visited); }
 
 /* ── Horizontal rule (ornamental) ───────────────────────────── */
 hr {
@@ -106,13 +109,13 @@ blockquote          { margin: 0; }
 blockquote p,
 blockquote li       { margin: 0 3ch; font-style: italic; }
 
-blockquote > p + p                  { text-indent: 2ch; }
+blockquote > p + p                   { text-indent: 2ch; }
 blockquote > p:first-of-type::before { content: open-quote; margin-left: -1ch; }
 blockquote > p:last-of-type::after   { content: close-quote; }
 
 /* ── Articles ────────────────────────────────────────────────── */
-article.frontpage               { margin: 0; }
-article.frontpage > p + p       { text-indent: 2ch; margin-top: -1.5ch; }
+article.frontpage         { margin: 0; }
+article.frontpage > p + p { text-indent: 2ch; margin-top: -1.5ch; }
 
 /* ── Media ───────────────────────────────────────────────────── */
 figure > img, p > img, video, table {
@@ -150,8 +153,8 @@ table {
 }
 
 tr:nth-child(n) {
-  border-top: 1px solid var(--lite-bc);
-  border-bottom: 1px solid var(--lite-bc);
+  border-top: 1px solid var(--muted);
+  border-bottom: 1px solid var(--muted);
 }
 
 th {
@@ -166,11 +169,11 @@ th, td {
 }
 
 /* ── Footnotes ───────────────────────────────────────────────── */
+/* ::before draws the separator line; the native <hr> is suppressed below */
 section.footnotes {
   padding-top: 1rem;
 }
 
-/* Draws the separator line; the native <hr> is suppressed below  */
 section.footnotes::before {
   content: "";
   display: block;
@@ -249,13 +252,13 @@ kbd {
     background-color: rgb(48, 56, 65);
   }
 
-  h1, h2, h3, p, li, dl, details, summary, math > * {
+  h1, h2, h3, p, li, dl, th, td, math > * {
     color: #bbb;
     background-color: transparent;
   }
 
-  /* hr is now ornamental only; table/images still benefit from invert */
-  table, hr, warn, img.screen, img.fig {
+  /* hr/table have their own explicit colors above; images still benefit from invert */
+  warn, img.screen, img.fig {
     filter: invert(0.85);
   }
 

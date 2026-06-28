@@ -14,25 +14,25 @@
   ],
   "items" : [
     {
+      "id" : "https://ckunte.net/2026/chisel",
+      "title" : "Chisel ported to Rust",
+      "url" : "https://ckunte.net/2026/chisel",
+      "content_text" : "I write when I either have something to note. When I do, I want to get it off my head and onto a note quickly. Given the pace, I’m unlikely to write a thousand posts in my lifetime. And even if I did, Chisel — my static site generator in python — is…",
+      "date_published" : "2026-06-28T22:52:00Z"
+    },
+    {
       "id" : "https://ckunte.net/2026/pc",
       "title" : "PC",
       "url" : "https://ckunte.net/2026/pc",
-      "content_text" : "On eBay, I found a HP 800 G2 mini 1 for A$209. It arrived promptly. The last time I set Windows up was in 2005. So I needed a plan for a clean-install, and then purge…",
+      "content_text" : "On eBay, I found a HP 800 G2 mini 1 for A$209. It arrived promptly. The last time I set Windows up was in 2005. So I needed a plan for a clean-install, and then purge the unwanted off of it. It turned out to be surprisingly easy: Create installation…",
       "date_published" : "2026-05-23T12:40:00Z"
     },
     {
       "id" : "https://ckunte.net/2026/sudo",
       "title" : "sudo with yubikey",
       "url" : "https://ckunte.net/2026/sudo",
-      "content_text" : "Yubikeys offer one of the strongest, enterprise-grade, practical account security tools to end-users without the cognitive overhead. Cost-effective, portable, and robust; I’ve been using them for over a decade…",
+      "content_text" : "Yubikeys offer one of the strongest, enterprise-grade, practical account security tools to end-users without the cognitive overhead. Cost-effective, portable, and robust; I’ve been using them for over a decade now. 1 It’s handy to pair it with sudo 2 ;…",
       "date_published" : "2026-05-16T13:28:00Z"
-    },
-    {
-      "id" : "https://ckunte.net/2026/web-yieldline",
-      "title" : "Web plate connection in direct tension",
-      "url" : "https://ckunte.net/2026/web-yieldline",
-      "content_text" : "Not long ago, a colleague asked me to assist in checking some calcs concerning a base plate yield line. To do this, I thought a readable script would be helpful. 1 The…",
-      "date_published" : "2026-05-16T10:01:00Z"
     }    
   ]
 }

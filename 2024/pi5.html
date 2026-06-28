@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: The daily driver</title>
 <meta name="description" content="The mail order arrived on Monday with the box containing Raspberry Pi 5, power adapter, active…">
-<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<script src="/inc/code-math.js" integrity="sha384-NFLjCDSMepND2hEDd2j0TbUXnDYrOFZW3m7c0y2NpqcIPpHacBPY+I7rHiU/pS14"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
 </head>
@@ -13,7 +13,7 @@
 <main>
 <header>
   <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
-</header>	
+</header>
 <article>
 <h1>The daily driver</h1>
 <time datetime="2024-10-11T20:39:00Z">11 Oct 2024</time>
@@ -24,7 +24,7 @@
 <p>It’s been running for days now, and needs some ventilation. The portability of this Pi I can get used to. There is also <a href="https://www.raspberrypi.com/news/raspberry-pi-connect/">Connect</a> as a service, which is interesting. The backup is as simple as copying the entire volume to an external one via the <em>SD Card Copier</em>, which has no trouble doing it from M.2 SSD to an external SSD either.</p>
 <p>It is refreshing to have a simple, minimalist, usable interface without fluff, walled garden annoyances, with the freedom to setup, install, and have a system that is just sufficient and nothing more.<sup class="footnote-ref"><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup></p>
 <h2>Custom keyboard shortcuts</h2>
-<p>There are a bunch of <a href="https://github.com/gnmearacaun/RasPiOS-labwc/blob/main/rc.xml">defaults in labwc</a>, which Raspberry Pi OS adopted late last year, and it took me a while to figure this out, and on how to add custom keyboard shortcuts for some basic things like starting an application, e.g., Chromium with, say, <!-- raw HTML omitted -->Ctr<!-- raw HTML omitted --><!-- raw HTML omitted -->Alt<!-- raw HTML omitted --><!-- raw HTML omitted --> c <!-- raw HTML omitted -->, and lock screen with, say, <!-- raw HTML omitted -->Ctr<!-- raw HTML omitted --><!-- raw HTML omitted -->Alt<!-- raw HTML omitted --><!-- raw HTML omitted --> l <!-- raw HTML omitted -->. (A couple of defaults I use the most is the window snapping to either left, right, or full screen. These can be done with <!-- raw HTML omitted -->Super<!-- raw HTML omitted --><!-- raw HTML omitted -->←<!-- raw HTML omitted -->, <!-- raw HTML omitted -->Super<!-- raw HTML omitted --><!-- raw HTML omitted -->→<!-- raw HTML omitted -->, or <!-- raw HTML omitted -->Super<!-- raw HTML omitted --><!-- raw HTML omitted -->a<!-- raw HTML omitted -->; where <!-- raw HTML omitted -->Super<!-- raw HTML omitted --> is either <!-- raw HTML omitted -->Win<!-- raw HTML omitted --> or <!-- raw HTML omitted -->Cmd<!-- raw HTML omitted --> key depending on the keyboard.) Add the keyboard section and key binds to <code>$HOME/.config/labwc/rc.xml</code> within the <code>openbox_config</code> open and close tags. (Ensure they do not clash with the defaults.)</p>
+<p>There are a bunch of <a href="https://github.com/gnmearacaun/RasPiOS-labwc/blob/main/rc.xml">defaults in labwc</a>, which Raspberry Pi OS adopted late last year, and it took me a while to figure this out, and on how to add custom keyboard shortcuts for some basic things like starting an application, e.g., Chromium with, say, <code>Ctrl</code> <code>Alt</code> <code>c</code>, and lock screen with, say, <code>Ctrl</code> <code>Alt</code> <code>l</code>. (A couple of defaults I use the most is the window snapping to either left, right, or full screen. These can be done with <code>Super</code> <code>&lt;-</code>, <code>Super</code> <code>-&gt;</code>, or <code>Super</code> <code>a</code>; where <code>Super</code> is either <code>Win</code> or <code>Cmd</code> key depending on the keyboard.) Add the keyboard section and key binds to <code>$HOME/.config/labwc/rc.xml</code> within the <code>openbox_config</code> open and close tags. (Ensure they do not clash with the defaults.)</p>
 <p>Custom keyboard shortcuts setup:</p>
 <pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot;?&gt;
 &lt;openbox_config xmlns=&quot;http://openbox.org/3.4/rc&quot;&gt;
@@ -78,7 +78,7 @@
 <p><img src="/img/pi5-scaling-trixie-beta.png" alt="Raspberry Pi OS now has scaling setting, which is useful for 4K monitors like mine e.g., LG UltraFine 4K 24-in." /></p>
 <p>And on a 1080p monitor, the panel enables 1.5× setting option, thus making grainy screen text a thing of the past.</p>
 <h2>Workspaces</h2>
-<p>The Pi OS does not reveal setting-up Workspaces by default from within its GUI; that’s not to say the feature does not exist. It needs setting-up via the rc.xml (labwc) configuration file. In rc.xml, e.g., I’ve set up three workspaces, which can be navigated to via <!-- raw HTML omitted -->Super<!-- raw HTML omitted --><!-- raw HTML omitted -->j<!-- raw HTML omitted --> (left workspace), and <!-- raw HTML omitted -->Super<!-- raw HTML omitted --><!-- raw HTML omitted -->k<!-- raw HTML omitted --> (right workspace). I can also send a particular app to, e.g., workspace 1 with <!-- raw HTML omitted -->Shift<!-- raw HTML omitted --><!-- raw HTML omitted -->Super<!-- raw HTML omitted --><!-- raw HTML omitted -->1<!-- raw HTML omitted -->.</p>
+<p>The Pi OS does not reveal setting-up Workspaces by default from within its GUI; that’s not to say the feature does not exist. It needs setting-up via the rc.xml (labwc) configuration file. In rc.xml, e.g., I’ve set up three workspaces, which can be navigated to via <code>Super</code> <code>j</code> (left workspace), and <code>Super</code> <code>k</code> (right workspace). I can also send a particular app to, e.g., workspace 1 with <code>Shift</code> <code>Super</code> <code>1</code>.</p>
 <p><img src="/img/workspaces.png" alt="Screenshot of workspaces" /></p>
 <p>Workspace setup:</p>
 <pre><code>&lt;?xml version=&quot;1.0&quot;?&gt;
@@ -124,7 +124,7 @@
 &lt;/openbox_config&gt;
 </code></pre>
 <h2>TTY to GUI</h2>
-<p>If I lock-screen and turn-off the monitor, and get back to it after a while, the monitor refuses to load Pi OS GUI and instead shows a blank screen, I’ve had to right-click and select Terminal (same as <!-- raw HTML omitted -->Ctr<!-- raw HTML omitted --><!-- raw HTML omitted -->Alt<!-- raw HTML omitted --><!-- raw HTML omitted -->F2<!-- raw HTML omitted -->), and it drops you straight into a TTY terminal login. I’ve had to login at this terminal, and then invoke GUI with <code>labwc-pi</code>.<sup class="footnote-ref"><a href="#fn-4" id="fnref-4" data-footnote-ref>4</a></sup></p>
+<p>If I lock-screen and turn-off the monitor, and get back to it after a while, the monitor refuses to load Pi OS GUI and instead shows a blank screen, I’ve had to right-click and select Terminal (same as <code>Ctrl</code> <code>Alt</code> <code>F2</code>), and it drops you straight into a TTY terminal login. I’ve had to login at this terminal, and then invoke GUI with <code>labwc-pi</code>.<sup class="footnote-ref"><a href="#fn-4" id="fnref-4" data-footnote-ref>4</a></sup></p>
 <section class="footnotes" data-footnotes>
 <ol>
 <li id="fn-1">
@@ -143,19 +143,21 @@
 </section>
 
 </article>
+
 <footer>
-    <span>
-      &lsaquo;
-      <a accesskey="j"
-         title="Build"
-         href="/2024/build">Prev</a>
-    </span>
-    <span>
-      <a accesskey="k"
-         title="Essentials"
-         href="/2024/essentials">Next</a>
-      &rsaquo;
-    </span>
-  </footer></main>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="Build"
+       href="/2024/build">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="Essentials"
+       href="/2024/essentials">Next</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
 </body>
 </html>

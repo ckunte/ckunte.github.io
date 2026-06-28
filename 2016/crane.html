@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: Offshore crane</title>
 <meta name="description" content="API spec 2C and EN 13852-1 are two well known standards that offer guidance in developing minimum…">
-<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<script src="/inc/code-math.js" integrity="sha384-NFLjCDSMepND2hEDd2j0TbUXnDYrOFZW3m7c0y2NpqcIPpHacBPY+I7rHiU/pS14"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
 </head>
@@ -13,7 +13,7 @@
 <main>
 <header>
   <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
-</header>	
+</header>
 <article>
 <h1>Offshore crane</h1>
 <time datetime="2016-02-02T23:21:00Z">2 Feb 2016</time>
@@ -33,21 +33,21 @@
 <p>$$ V_H = K_H \cdot \sqrt{V_D^2 + V_C^2} $$</p>
 <p>where,</p>
 <ul>
-<li>V<!-- raw HTML omitted -->D<!-- raw HTML omitted --> – vertical velocity of load’s supporting deck for lifting to or from a supply vessel (m/s), from Table B.2</li>
-<li>V<!-- raw HTML omitted -->C<!-- raw HTML omitted --> – vertical velocity of the crane boom tip due to the movement of the crane base (m/s), from Table B.3</li>
-<li>K<!-- raw HTML omitted -->H<!-- raw HTML omitted --> – velocity factor coving (single fall, multiple fall) reeving and for both no-hook load as well as at rated capacity</li>
+<li>$V_D$ – vertical velocity of load’s supporting deck for lifting to or from a supply vessel (m/s), from Table B.2</li>
+<li>$V_C$ – vertical velocity of the crane boom tip due to the movement of the crane base (m/s), from Table B.3</li>
+<li>$K_H$ – velocity factor coving (single fall, multiple fall) reeving and for both no-hook load as well as at rated capacity</li>
 </ul>
 <p>$$ V_D = \left(\frac{6.0 \cdot H_{sig}}{H_{sig} + 8.0} \right) $$</p>
-<p>For crane on bottom-founded structures, there is no movement of the crane base, and therefore, V<!-- raw HTML omitted -->C<!-- raw HTML omitted --> = 0.</p>
+<p>For crane on bottom-founded structures, there is no movement of the crane base, and therefore, $V_C$ = 0.</p>
 <p>I wrote a little code to compare the two standards over the weekend (see below) to produce the following graph.</p>
 <p><img src="/img/vhmin.svg" alt="Comparing minimum hoisting velocities between API spec 2C and EN 13852-1." /></p>
 <p>A couple of observations:</p>
 <ol>
-<li>API prescription for <em>V<!-- raw HTML omitted -->hmin<!-- raw HTML omitted --></em> covers supply vessels, while EN offers two additional options, viz., barge, and sea surface. (Graphs for barge or sea surface are not shown in the above, but can be separately generated, if desired, using the <a href="https://gist.github.com/ckunte/4ba581c85bcfd50976ef">code</a> I’ve shared.)</li>
-<li>EN is explicit about reeving efficiency — note the reduced velocity requirements in the case of multi-fall reeving. Looking at the two graphs above, i.e., for API and for EN, the multi-part reeving option appears to be somewhat close to API prescription in terms of <em>V<!-- raw HTML omitted -->hmin<!-- raw HTML omitted --></em>. It could be that API considers multi-part reeving efficiency in its prescription, even though it does not mention in §5.4.5.2.</li>
+<li>API prescription for $V_{hmin}$ covers supply vessels, while EN offers two additional options, viz., barge, and sea surface. (Graphs for barge or sea surface are not shown in the above, but can be separately generated, if desired, using the <a href="https://gist.github.com/ckunte/4ba581c85bcfd50976ef">code</a> I’ve shared.)</li>
+<li>EN is explicit about reeving efficiency — note the reduced velocity requirements in the case of multi-fall reeving. Looking at the two graphs above, i.e., for API and for EN, the multi-part reeving option appears to be somewhat close to API prescription in terms of $V_{hmin}$. It could be that API considers multi-part reeving efficiency in its prescription, even though it does not mention in §5.4.5.2.</li>
 </ol>
 <p><img src="/img/crane-hoist.png" alt="An illustration showing the position of a supply vessel carrying a package, which is hooked-up and ready to be hoisted-up by the platform crane, w.r.t. the oncoming wave." /></p>
-<p>Now to the crux of the matter on whether or not a standard’s recipe enables safe-clearing of the package lifted before the next wave crest appears. The package travel can be calculated, for a given significant wave height (H<!-- raw HTML omitted -->sig<!-- raw HTML omitted -->) and corresponding period (T), as follows:</p>
+<p>Now to the crux of the matter on whether or not a standard’s recipe enables safe-clearing of the package lifted before the next wave crest appears. The package travel can be calculated, for a given significant wave height ($H{sig}$) and corresponding period (T), as follows:</p>
 <p>$$ h = V_{hmin} \cdot T $$</p>
 <p>Testing API spec 2C recipe for the Australian Northwest Shelf environment:</p>
 <table>
@@ -228,19 +228,21 @@ if __name__ == &quot;__main__&quot;:
 </section>
 
 </article>
+
 <footer>
-    <span>
-      &lsaquo;
-      <a accesskey="j"
-         title="Typhoon Melor"
-         href="/2015/melor">Prev</a>
-    </span>
-    <span>
-      <a accesskey="k"
-         title="Berthing fenders"
-         href="/2016/fenders">Next</a>
-      &rsaquo;
-    </span>
-  </footer></main>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="Typhoon Melor"
+       href="/2015/melor">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="Berthing fenders"
+       href="/2016/fenders">Next</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
 </body>
 </html>

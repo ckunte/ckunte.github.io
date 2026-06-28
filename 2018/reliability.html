@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: Reliability</title>
 <meta name="description" content="The application of reliability concepts to offshore structures began as an American story. In…">
-<script src="/inc/code-math.js" integrity="sha384-xT8wN8NCeuamUQtBjQWvwc7dCGAT89VKkZR5MVAcr18p99euBN7VZVb0NH07+lYA"></script>
+<script src="/inc/code-math.js" integrity="sha384-NFLjCDSMepND2hEDd2j0TbUXnDYrOFZW3m7c0y2NpqcIPpHacBPY+I7rHiU/pS14"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
 </head>
@@ -13,7 +13,7 @@
 <main>
 <header>
   <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
-</header>	
+</header>
 <article>
 <h1>Reliability</h1>
 <time datetime="2018-04-24T21:30:00Z">24 Apr 2018</time>
@@ -46,18 +46,18 @@
 <p>$$     = \Phi(-\beta) $$</p>
 <p>where,</p>
 <p>$$ \Phi(x) = \int_{-\infty}^{\infty} {\frac{1}{2\pi}}e^{\left({\frac{-1}{2}}z^2\right)dz} $$</p>
-<p>However, normal distributions are not always applicable to both load and strength variables, and both <em>R</em> and <em>E</em> in turn depend on several other random variables, such as load type (gravity, wave), beam-column stability, combined hydrostatic, axial and bending strengths, etc. Therefore, a generalisation is needed to carry out realistic reliability analyses. These results are often described in terms of a safety index, β = <!-- raw HTML omitted -->β<!-- raw HTML omitted --> / σ<!-- raw HTML omitted -->g<!-- raw HTML omitted -->, i.e., the ratio of mean safety margin to uncertainty level. In other words, β is the distance in terms of standard deviations (σ<!-- raw HTML omitted -->g<!-- raw HTML omitted -->) from the mean (<!-- raw HTML omitted -->β<!-- raw HTML omitted -->) of the safety margin to the failure region (g &lt; 0). When expanded, the expression becomes:</p>
+<p>However, normal distributions are not always applicable to both load and strength variables, and both <em>R</em> and <em>E</em> in turn depend on several other random variables, such as load type (gravity, wave), beam-column stability, combined hydrostatic, axial and bending strengths, etc. Therefore, a generalisation is needed to carry out realistic reliability analyses. These results are often described in terms of a safety index, $\beta = \frac{\overline{\beta}}{\sigma_g}$, i.e., the ratio of mean safety margin to uncertainty level. In other words, $\beta$ is the distance in terms of standard deviations ($\sigma_g$) from the mean ($\overline{\beta}$) of the safety margin to the failure region (g &lt; 0). When expanded, the expression becomes:</p>
 <p>$$\beta = \frac{\ln\left({\frac{R_m}{E_m} \cdot \sqrt{\frac{1 + V_E^2}{1 + V_R^2}} } \right)}{\sqrt{\ln\left[ (1 + V_R^2) \cdot (1 + V_E^2) \right]}} $$</p>
 <p>The LRFD method caught-on. Shell engineers extended the concept to numerous geographical areas<sup class="footnote-ref"><a href="#fn-2" id="fnref-2" data-footnote-ref>2</a></sup> to develop the following table.</p>
-<p><em>Table 1: Parameters of lognormal distribution of extreme 20-year load in various geographical areas (E=1.0 corresponds to E<!-- raw HTML omitted -->100<!-- raw HTML omitted -->)</em></p>
+<p><em>Table 1: Parameters of lognormal distribution of extreme 20-year load in various geographical areas (E=1.0 corresponds to $E</em>{100}$)_</p>
 <table>
 <thead>
 <tr>
 <th>Area</th>
 <th>MPM</th>
 <th>Mean</th>
-<th>COV (σ<!-- raw HTML omitted -->E<!-- raw HTML omitted -->)</th>
-<th>(V<!-- raw HTML omitted -->E<!-- raw HTML omitted -->)</th>
+<th>COV ($\sigma_E$)</th>
+<th>($V_E$)</th>
 </tr>
 </thead>
 <tbody>
@@ -96,7 +96,7 @@
 <p>$$ R_m = 1.85 $$</p>
 <p>$$ \gamma_E = 1.35 $$</p>
 <p>$$ cov_R = 0.05 $$</p>
-<p>Using these above together with $E_m$ and $V_E$ $=(0.32^2 + 0.08^2)^0.5$, the safety index, β (GOM) was computed to be 2.77, for a reference period of 20 years — based on a characteristic 100-y design event. (From β, <em>Pf</em> could be determined as 4E-4/y for the GoM database.)</p>
+<p>Using these above together with $E_m$ and $V_E$ $=(0.32^2 + 0.08^2)^0.5$, the safety index, $\beta$ (GOM) was computed to be 2.77, for a reference period of 20 years — based on a characteristic 100-y design event. (From $\beta$, <em>Pf</em> could be determined as 4E-4/y for the GoM database.)</p>
 <p>Further, it was noted that the mean RSR is proportional to $\gamma_E$, which resulted in the expression:</p>
 <p>$$ R_m = \frac{1.85}{1.35} \cdot \gamma_E = 1.37 \cdot \gamma_E $$</p>
 <p>Once this was done, calibrating other locations to Gulf of Mexico safety level <a href="/img/gom-beta-to-others.pdf" title="Extending Gulf of Mexico's safety index (beta) to other regions for determining regional Rm and y">became easier</a>. To extend this to a target probability of failure, first a target needed to be defined for the platform type. The industry now generally recognises it to be 3E-5/y for a manned new installation, which would be 6E-4 for 20 years (= 20 * 3E-5/y).</p>
@@ -129,7 +129,7 @@
 <tr>
 <th>Env</th>
 <th>A</th>
-<th>E<!-- raw HTML omitted -->0<!-- raw HTML omitted --></th>
+<th>$E_0$</th>
 </tr>
 </thead>
 <tbody>
@@ -168,15 +168,15 @@
 <thead>
 <tr>
 <th></th>
-<th>R<!-- raw HTML omitted -->m<!-- raw HTML omitted --></th>
-<th>γ<!-- raw HTML omitted -->E<!-- raw HTML omitted --></th>
-<th>R<!-- raw HTML omitted -->m<!-- raw HTML omitted --></th>
-<th>γ<!-- raw HTML omitted -->E<!-- raw HTML omitted --></th>
+<th>$Rm$</th>
+<th>$\gamma_E$</th>
+<th>$R_m$</th>
+<th>$\gamma_E$</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>P<!-- raw HTML omitted -->f<!-- raw HTML omitted --></td>
+<td>Pf</td>
 <td>3E-5/y</td>
 <td>3E-5/y</td>
 <td>5E-4/y</td>
@@ -408,19 +408,21 @@ if __name__ == &quot;__main__&quot;:
 </section>
 
 </article>
+
 <footer>
-    <span>
-      &lsaquo;
-      <a accesskey="j"
-         title="Wave length"
-         href="/2016/wavelength">Prev</a>
-    </span>
-    <span>
-      <a accesskey="k"
-         title="VIV"
-         href="/2019/viv">Next</a>
-      &rsaquo;
-    </span>
-  </footer></main>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="Wave length"
+       href="/2016/wavelength">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="VIV"
+       href="/2019/viv">Next</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
 </body>
 </html>
