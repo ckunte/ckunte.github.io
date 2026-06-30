@@ -118,31 +118,18 @@ article.frontpage         { margin: 0; }
 article.frontpage > p + p { text-indent: 2ch; margin-top: -1.5ch; }
 
 /* ── Media ───────────────────────────────────────────────────── */
-figure > img, p > img, video, table {
+p > img, table {
   width: 100%;
   max-width: var(--cwidth);
 }
 
-figure > img, p > img {
+p > img {
   min-width: 100%;
   margin: 0;
   border-radius: .5ch;
 }
 
-video { border-radius: .6ch; }
-
-figure img + img,
-figure img + video,
-figure video + img,
-figure video + video { margin-top: 0; }
-
-figcaption {
-  font: 90%/130% var(--bfont);
-  color: var(--muted);
-  font-style: italic;
-  max-width: 100%;
-  margin: .5ch 1.5ch;
-}
+img + img { margin-top: 0; }
 
 /* ── Tables ──────────────────────────────────────────────────── */
 table {
@@ -231,18 +218,6 @@ pre > code {
   line-height: 1.4;
   white-space: normal;
   text-indent: 0;
-}
-
-/* ── Keyboard ────────────────────────────────────────────────── */
-kbd {
-  font-size: 60%;
-  line-height: 0.75rem;
-  padding: 4px 8px 2px;
-  margin: 2px;
-  border-radius: 5px;
-  border: 1px solid var(--muted);
-  border-bottom-width: 2px;
-  vertical-align: middle;
 }
 
 /* ── Dark mode ───────────────────────────────────────────────── */
