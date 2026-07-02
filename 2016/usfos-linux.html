@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: USFOS on linux</title>
+<meta name="description" content="As a commercial (engineering) software, USFOS needs to be manually installed. I tried this today…">
+<script src="/inc/code-math.js" integrity="sha384-NFLjCDSMepND2hEDd2j0TbUXnDYrOFZW3m7c0y2NpqcIPpHacBPY+I7rHiU/pS14"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>USFOS on linux</h1>
+<time datetime="2016-07-06T22:05:00Z">6 Jul 2016</time>
+<p>As a commercial (engineering) software, <a href="http://usfos.com/" title="Computer program for performing non-linear static and dynamic analysis of space frame structures">USFOS</a> needs to be manually installed. I tried this today on <a href="https://elementary.io/" title="elementary OS">elementary OS</a>, powered by frugal hardware, and USFOS runs just fine. At minimum, the following are needed:</p>
+<ol>
+<li><code>usfos</code>, <code>xact</code> binary, and <code>usfos_etc</code> files</li>
+<li>A valid license <code>usfos.key</code> file</li>
+<li>A computer with Linux 64-bit OS to run on</li>
+</ol>
+<p>As each binary needs to be separately downloaded from USFOS site, I have automated this with a script:</p>
+<pre><code class="language-sh">#!/usr/bin/env bash
+#
+# USFOS on (debian) linux: Installation script
+# 2016 ckunte (optimised)
+#
+# Changes vs original:
+#   - fail fast on errors (set -euo pipefail)
+#   - verify downloads before acting on them
+#   - idempotent PATH / USFOS_HOME setup (no duplicate rc entries on rerun)
+#   - only chmod the files we actually downloaded, not everything in bin/
+#   - dependency check for wget/tar
+#   - clean up temporary archive
+#   - clearer progress/error messages
+
+set -euo pipefail
+
+USFOS_DIR=&quot;$HOME/usfos&quot;
+BIN_DIR=&quot;$USFOS_DIR/bin&quot;
+ETC_TGZ_URL=&quot;http://www.usfos.no/download/Linux/files/usfos_etc.tgz&quot;
+DOWNLOAD_LIST_URL=&quot;https://gist.githubusercontent.com/ckunte/7836a10f5d418799a8ea/raw/a84df4d072683aa6bd3d513400f2d54aadefe363/downloadlist.txt&quot;
+
+log()  { printf '[install-usfos] %s\n' &quot;$*&quot;; }
+die()  { printf '[install-usfos] ERROR: %s\n' &quot;$*&quot; &gt;&amp;2; exit 1; }
+
+# --- Step 0: Check dependencies -------------------------------------------
+
+for cmd in wget tar gunzip; do
+    command -v &quot;$cmd&quot; &gt;/dev/null 2&gt;&amp;1 || die &quot;required command '$cmd' not found. Please install it and re-run.&quot;
+done
+
+# --- Step 1: Create folders -------------------------------------------------
+
+mkdir -p &quot;$BIN_DIR&quot;
+
+# --- Step 2: Download usfos_etc files ---------------------------------------
+
+cd &quot;$USFOS_DIR&quot; || die &quot;could not cd into $USFOS_DIR&quot;
+
+log &quot;Downloading usfos_etc files...&quot;
+wget -q --show-progress -O usfos_etc.tgz &quot;$ETC_TGZ_URL&quot; \
+    || die &quot;failed to download usfos_etc.tgz from $ETC_TGZ_URL&quot;
+
+[[ -s usfos_etc.tgz ]] || die &quot;downloaded usfos_etc.tgz is empty&quot;
+
+tar -zxvf usfos_etc.tgz || die &quot;failed to extract usfos_etc.tgz&quot;
+rm -f usfos_etc.tgz
+
+# --- Step 3: Download usfos and additional modules --------------------------
+
+cd &quot;$BIN_DIR&quot; || die &quot;could not cd into $BIN_DIR&quot;
+
+log &quot;Downloading usfos and additional modules...&quot;
+# Record what's here before downloading, so we only touch new files below.
+before_download=$(mktemp)
+find . -maxdepth 1 -type f -printf '%f\n' &gt; &quot;$before_download&quot;
+
+wget -q --show-progress -i &quot;$DOWNLOAD_LIST_URL&quot; \
+    || die &quot;failed to download one or more files from the download list&quot;
+
+# --- Unzip newly downloaded files -------------------------------------------
+
+shopt -s nullglob
+gz_files=(*.gz)
+if [[ ${#gz_files[@]} -gt 0 ]]; then
+    log &quot;Extracting ${#gz_files[@]} gzipped file(s)...&quot;
+    gunzip -f &quot;${gz_files[@]}&quot;
+else
+    log &quot;No .gz files found to extract (they may already be uncompressed).&quot;
+fi
+shopt -u nullglob
+
+# --- Make only the newly-downloaded binaries executable ---------------------
+
+after_download=$(mktemp)
+find . -maxdepth 1 -type f -printf '%f\n' &gt; &quot;$after_download&quot;
+new_files=$(comm -13 &lt;(sort &quot;$before_download&quot;) &lt;(sort &quot;$after_download&quot;))
+rm -f &quot;$before_download&quot; &quot;$after_download&quot;
+
+if [[ -n &quot;$new_files&quot; ]]; then
+    log &quot;Marking new binaries as executable...&quot;
+    while IFS= read -r f; do
+        chmod +x -- &quot;$f&quot;
+    done &lt;&lt;&lt; &quot;$new_files&quot;
+else
+    log &quot;No new files detected; skipping chmod.&quot;
+fi
+
+# --- Step 4: Add USFOS to $PATH (idempotent) --------------------------------
+
+add_env_lines() {
+    local rc_file=&quot;$1&quot;
+    [[ -f &quot;$rc_file&quot; ]] || return 0
+
+    if ! grep -qF &quot;USFOS_HOME=$USFOS_DIR&quot; &quot;$rc_file&quot;; then
+        {
+            echo &quot;export PATH=\&quot;$BIN_DIR:\$PATH\&quot;&quot;
+            echo &quot;export USFOS_HOME=\&quot;$USFOS_DIR\&quot;&quot;
+        } &gt;&gt; &quot;$rc_file&quot;
+        log &quot;Updated $rc_file with USFOS PATH/USFOS_HOME.&quot;
+    else
+        log &quot;$rc_file already configured for USFOS; skipping.&quot;
+    fi
+}
+
+add_env_lines &quot;$HOME/.zshrc&quot;
+add_env_lines &quot;$HOME/.bashrc&quot;
+
+# --- Step 5: Final instructions ---------------------------------------------
+
+log &quot;All done.&quot;
+log &quot;Remember to add a valid usfos.key in the folder: $USFOS_DIR/etc/&quot;
+log &quot;Restart your shell (or run 'source ~/.bashrc' / 'source ~/.zshrc') to pick up the new PATH.&quot;
+log &quot;To run the USFOS UI, type the following in a terminal: xact &amp;&quot;
+</code></pre>
+<p>Run <code>xact &amp;</code> from terminal to load the USFOS’s familiar UI.</p>
+<p>Place a valid license key, <code>usfos.key</code>, in <code>~/usfos/etc</code> folder — this is required to perform analysis. (USFOS team is kind enough to make model and results viewer <em>not</em> depend on the license key.) <a href="http://www.usfos.no/manuals/">Docs</a> and <a href="http://www.usfos.no/examples/usfos/">examples</a> may be separately downloaded — as required.</p>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="Berthing fenders"
+       href="/2016/fenders">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="Wind"
+       href="/2016/wind">Next</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>

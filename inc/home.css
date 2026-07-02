@@ -248,7 +248,7 @@ pre > code {
 
   /* Tone down the footnote separator on dark backgrounds */
   section.footnotes::before {
-    border-color: #666;
+    border-color: var(--muted);
   }
 
   hr, hr::after { color: var(--muted); }
