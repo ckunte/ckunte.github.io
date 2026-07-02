@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: The daily driver</title>
+<meta name="description" content="The mail order arrived on Monday with the box containing Raspberry Pi 5, power adapter, active…">
+<script src="/inc/code-math.js" integrity="sha384-NFLjCDSMepND2hEDd2j0TbUXnDYrOFZW3m7c0y2NpqcIPpHacBPY+I7rHiU/pS14"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>The daily driver</h1>
+<time datetime="2024-10-11T20:39:00Z">11 Oct 2024</time>
+<p>The mail order arrived on Monday with the box containing Raspberry Pi 5, power adapter, active cooler, and micro-HDMI adapter. Assembly was straightforward. Next up: <a href="/2024/essentials" title="My personalised open source software setup">software</a>.</p>
+<p><img src="/img/2024-pi5-1.jpg" alt="Raspberry Pi 5." /></p>
+<p>The Raspberry Pi OS Desktop also comes pre-installed with Chromium browser and <a href="https://wiki.gnome.org/Apps/Evince">Evince</a> document viewer, which are both excellent. I also installed <a href="https://www.gimp.org/">Gimp</a> and considered installing <a href="https://inkscape.org/">Inkscape</a>.</p>
+<p><img src="/img/2024-pi5-2.png" alt="Evince showing a link preview." /></p>
+<p>It’s been running for days now, and needs some ventilation. The portability of this Pi I can get used to. There is also <a href="https://www.raspberrypi.com/news/raspberry-pi-connect/">Connect</a> as a service, which is interesting. The backup is as simple as copying the entire volume to an external one via the <em>SD Card Copier</em>, which has no trouble doing it from M.2 SSD to an external SSD either.</p>
+<p>It is refreshing to have a simple, minimalist, usable interface without fluff, walled garden annoyances, with the freedom to setup, install, and have a system that is just sufficient and nothing more.<sup class="footnote-ref"><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup></p>
+<h2>Custom keyboard shortcuts</h2>
+<p>There are a bunch of <a href="https://github.com/gnmearacaun/RasPiOS-labwc/blob/main/rc.xml">defaults in labwc</a>, which Raspberry Pi OS adopted late last year, and it took me a while to figure this out, and on how to add custom keyboard shortcuts for some basic things like starting an application, e.g., Chromium with, say, <code>Ctrl</code> <code>Alt</code> <code>c</code>, and lock screen with, say, <code>Ctrl</code> <code>Alt</code> <code>l</code>. (A couple of defaults I use the most is the window snapping to either left, right, or full screen. These can be done with <code>Super</code> <code>&lt;-</code>, <code>Super</code> <code>-&gt;</code>, or <code>Super</code> <code>a</code>; where <code>Super</code> is either <code>Win</code> or <code>Cmd</code> key depending on the keyboard.) Add the keyboard section and key binds to <code>$HOME/.config/labwc/rc.xml</code> within the <code>openbox_config</code> open and close tags. (Ensure they do not clash with the defaults.)</p>
+<p>Custom keyboard shortcuts setup:</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;openbox_config xmlns=&quot;http://openbox.org/3.4/rc&quot;&gt;
+&lt;!-- pre-populated defaults here (leave'em alone) --&gt;
+
+&lt;keyboard&gt;
+
+  &lt;!-- Launch Chromium --&gt;
+  &lt;keybind key=&quot;C-A-c&quot;&gt;
+    &lt;action name=&quot;Execute&quot; command=&quot;chromium&quot;/&gt;
+  &lt;/keybind&gt;
+
+  &lt;!-- Launch File Explorer --&gt;
+  &lt;keybind key=&quot;W-e&quot;&gt;
+    &lt;action name=&quot;Execute&quot; command=&quot;pcmanfm&quot;/&gt;
+  &lt;/keybind&gt;
+
+  &lt;!-- Lock screen --&gt;
+  &lt;keybind key=&quot;C-A-l&quot;&gt;
+    &lt;action name=&quot;Execute&quot; command=&quot;dm-tool lock&quot;/&gt;
+  &lt;/keybind&gt;
+
+&lt;/keyboard&gt;
+
+&lt;/openbox_config&gt;
+</code></pre>
+<p>If this file is edited, then it should be followed-up by running the following for the settings to reload.</p>
+<pre><code class="language-shell">labwc --reconfigure
+</code></pre>
+<p><em>Update (2025-03):</em> I heard <a href="https://atp.fm/630">ATP.fm</a> complaining about the state of MacOS’s UI in their episode this week. So I am not alone in this after all. The excess padding, the big radii of window corners, the oddities of controls, the overzealous security, along with a large portion of the little SSD locked-up for system software is all annoying! In contrast, when I fire up Pi, it feels like sanity.</p>
+<p>At SCALE 2023, someone asked <a href="https://en.wikipedia.org/wiki/Ken_Thompson">Ken Thompson</a> what OS does he use today. <a href="https://www.youtube.com/live/kaandEt_pKw" title="Ken Thompson - Closing Keynote - SCaLE 20x">He said</a>:</p>
+<blockquote>
+<p>I have for most of my life, because I was sort of born into it, run Apple alright? Now recently, meaning within in the last five years, I have become more and more depressed, and what Apple is doing to something that should allow you to work is just atrocious but they are taking a lot of space and time to do it, so it’s OK. And I have come, within the last month or two, to say even though I have invested, you know, zillion years in Apple, I am throwing it away, and I am going to Linux — to <a href="https://en.wikipedia.org/wiki/Raspberry_Pi_OS">Raspbian</a> in particular.</p>
+</blockquote>
+<p>Everything is a trade-off these days; that applies to Raspberry Pi and the OS too. Here are the things that annoy me:</p>
+<ul>
+<li>The non-standard 5A charger; can’t use chargers you already own</li>
+<li>The official case is not designed for active cooler + M.2 SSD HAT</li>
+<li>With active-cooling + the charger, it’s no longer inexpensive</li>
+<li>Raspberry Pi OS’s 4K scaling issues; see below for a solution</li>
+<li>Underpowered GPU. Applications that require it won’t run well</li>
+<li>Screen-saving is buggy; need exiting UI via right-click to get back</li>
+<li>MS Teams (web) won’t pick up webcam or headset attached</li>
+</ul>
+<h2>HiDPI scaling</h2>
+<p><em>Debian Trixie (Oct 2025):</em> This version improves the desktop experience with a few nice touches to the UI. For the longest time since making Pi 5 my daily driver, I struggled with the grainy 1080p monitor that I had to pair it with, since I could not make my Thunderbolt only LG Ultrafine 24-inch 4K monitor. With Trixie and whatever Raspberry Pi team is doing in the background, it seems to work with this monitor. There’s still no scaling-related GUI within the OS, but it seems to work with the following added to <code>~/.config/labwc/autostart</code>, where the HDMI-A-I port is the one nearest to USB-C power port,<sup class="footnote-ref"><a href="#fn-2" id="fnref-2" data-footnote-ref>2</a></sup> I’ve plugged the cable to:</p>
+<pre><code class="language-sh">wlr-randr --output HDMI-A-1 --scale 2.0 &amp;
+</code></pre>
+<p>It does not help with the login screen; remains too small at full 4K resolution and at scale 1.0. But for now, it’s a much smaller annoyance. The type of connector between the monitor and Pi 5 is key. You’ll need <a href="https://www.amazon.com.au/dp/B0F3XC8LS3">a display adapter</a> that carries HDMI signal from the Pi 5, and takes it to the USB-C monitor. The adapter needs external power, since it can’t draw from the HDMI source. It would be fantastic when the Raspberry team includes settings to do this from within the GUI to have both the login and user interface to scale.</p>
+<p><em>2025-11-15:</em> The wait wasn’t long. <a href="https://forums.raspberrypi.com/viewtopic.php?p=2347721&amp;hilit=scaling#p2347721">Setting for scaling is available in the beta channel</a> via <em>raspi-config</em>.<sup class="footnote-ref"><a href="#fn-3" id="fnref-3" data-footnote-ref>3</a></sup> I did, and my LG UltraFine 24-inch now scales well, and it is comfortable to use again.</p>
+<p><img src="/img/pi5-scaling-trixie-beta.png" alt="Raspberry Pi OS now has scaling setting, which is useful for 4K monitors like mine e.g., LG UltraFine 4K 24-in." /></p>
+<p>And on a 1080p monitor, the panel enables 1.5× setting option, thus making grainy screen text a thing of the past.</p>
+<h2>Workspaces</h2>
+<p>The Pi OS does not reveal setting-up Workspaces by default from within its GUI; that’s not to say the feature does not exist. It needs setting-up via the rc.xml (labwc) configuration file. In rc.xml, e.g., I’ve set up three workspaces, which can be navigated to via <code>Super</code> <code>j</code> (left workspace), and <code>Super</code> <code>k</code> (right workspace). I can also send a particular app to, e.g., workspace 1 with <code>Shift</code> <code>Super</code> <code>1</code>.</p>
+<p><img src="/img/workspaces.png" alt="Screenshot of workspaces" /></p>
+<p>Workspace setup:</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;openbox_config xmlns=&quot;http://openbox.org/3.4/rc&quot;&gt;
+&lt;!-- pre-populated defaults here (leave'em alone) --&gt;
+
+&lt;desktops number=&quot;3&quot; /&gt;
+
+&lt;keyboard&gt;
+  &lt;!-- 
+    S - Shift key
+    C - Control key
+    A - Alt key
+    W - Super key
+    M - Meta key
+  --&gt;
+  &lt;!-- Other keybinds here --&gt;
+
+  &lt;!-- Workspaces --&gt;
+  &lt;keybind key=&quot;W-j&quot;&gt;
+    &lt;action name=&quot;GoToDesktop&quot; to=&quot;left&quot;/&gt;
+  &lt;/keybind&gt;
+  
+  &lt;keybind key=&quot;W-k&quot;&gt;
+    &lt;action name=&quot;GoToDesktop&quot; to=&quot;right&quot;/&gt;
+  &lt;/keybind&gt;
+
+  &lt;!-- Send window to Workspace --&gt;
+  &lt;keybind key=&quot;S-W-1&quot;&gt;
+    &lt;action name=&quot;SendToDesktop&quot; to=&quot;1&quot;/&gt;
+  &lt;/keybind&gt;
+
+  &lt;keybind key=&quot;S-W-2&quot;&gt;
+    &lt;action name=&quot;SendToDesktop&quot; to=&quot;2&quot;/&gt;
+  &lt;/keybind&gt;
+
+  &lt;keybind key=&quot;S-W-3&quot;&gt;
+    &lt;action name=&quot;SendToDesktop&quot; to=&quot;3&quot;/&gt;
+  &lt;/keybind&gt;
+
+&lt;/keyboard&gt;
+
+&lt;/openbox_config&gt;
+</code></pre>
+<h2>TTY to GUI</h2>
+<p>If I lock-screen and turn-off the monitor, and get back to it after a while, the monitor refuses to load Pi OS GUI and instead shows a blank screen, I’ve had to right-click and select Terminal (same as <code>Ctrl</code> <code>Alt</code> <code>F2</code>), and it drops you straight into a TTY terminal login. I’ve had to login at this terminal, and then invoke GUI with <code>labwc-pi</code>.<sup class="footnote-ref"><a href="#fn-4" id="fnref-4" data-footnote-ref>4</a></sup></p>
+<section class="footnotes" data-footnotes>
+<ol>
+<li id="fn-1">
+<p>Think of it as a form of constrained computing (sort of like constrained writing), using limited resources to get everyday tasks done. <a href="#fnref-1" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="1" aria-label="Back to reference 1">↩</a></p>
+</li>
+<li id="fn-2">
+<p>If you connect to the other, then be sure to change it to HDMI-A-2. <a href="#fnref-2" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="2" aria-label="Back to reference 2">↩</a></p>
+</li>
+<li id="fn-3">
+<p>From <em>raspi-config &gt; Advanced Options &gt; Beta Access</em>, select <em>Beta Software</em>, then run <em>apt update</em> and <em>apt full-upgrade</em> to get beta features. <a href="#fnref-3" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="3" aria-label="Back to reference 3">↩</a></p>
+</li>
+<li id="fn-4">
+<p>This is in-lieu of running <code>startx</code>, which only works on a system running X-Windows; Pi OS since 2024 has been on Wayland. <a href="#fnref-4" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="4" aria-label="Back to reference 4">↩</a></p>
+</li>
+</ol>
+</section>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="Build"
+       href="/2024/build">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="Essentials"
+       href="/2024/essentials">Next</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>

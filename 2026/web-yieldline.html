@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Web plate connection in direct tension</title>
+<meta name="description" content="Not long ago, a colleague asked me to assist in checking some calcs concerning a base plate yield…">
+<script src="/inc/code-math.js" integrity="sha384-NFLjCDSMepND2hEDd2j0TbUXnDYrOFZW3m7c0y2NpqcIPpHacBPY+I7rHiU/pS14"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>Web plate connection in direct tension</h1>
+<time datetime="2026-05-16T10:01:00Z">16 May 2026</time>
+<p>Not long ago, a colleague asked me to assist in checking some calcs concerning a base plate yield line. To do this, I thought a readable script would be helpful.<sup class="footnote-ref"><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup> The check was supposed to be specific about the plate thickness, its yield strength, and applied load, but I got carried away, and made it also address a bunch of plate thicknesses and a range of yield strengths.</p>
+<p>The relationship between the total ultimate tension $P_u$ and thickness — for a web plate with <em>fixed</em> ends is given by RH Kapp<sup class="footnote-ref"><a href="#fn-2" id="fnref-2" data-footnote-ref>2</a></sup> :</p>
+<p>$$
+P_{u,\text{fixed}} =
+\frac{F_y t_w^2}{e b}
+\left( 2b^2 + 2e^2 + cb + Le \right)
+$$</p>
+<p>And for a web plate with <em>supported</em> (but not fixed) ends, it is given by:</p>
+<p>$$
+P_{u,\text{supported}} =
+\frac{F_y t_w^2}{e b}
+\left( 2b^2 + e^2 + cb + \frac{Le}{2} \right)
+$$</p>
+<p><img src="/img/ylt-legend.png" alt="Web plate parameters (courtesy: RH Kapp)" /></p>
+<p>Sample problem: b = 64 mm, c = 0 mm, e = 64 mm, and L = 110 mm</p>
+<p><img src="/img/Pvt_fixed_ends.svg" alt="Pu versus t (fixed ends)" />
+<img src="/img/Pvt_supported_ends.svg" alt="Pu versus t (supported ends)" /></p>
+<p>It is interesting that up to, say, 8 mm, the separation between $P_u$ is not that pronounced between yield strengths, and becomes marked as plate thickness increases. Of course, the use of mild steel in structural applications has dropped off, and may even be slightly expensive today than the standard grade high strength steel.</p>
+<p>Plot code:</p>
+<pre><code class="language-py">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+&quot;&quot;&quot;
+Plate size check using yield line theory
+2024 ckunte
+&quot;&quot;&quot;
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def plot_plate_capacity(title, filename, coeffs, t, b, c, e, L, fy_values):
+    &quot;&quot;&quot;
+    Plot Pu versus plate thickness t.
+
+    coeffs = (a, d, l)
+    Formula (where Pu is in metric tonne):
+        Pu = ((Fy * t²) / (e * b)) *
+             (2*b² + a*e² + c*b + l*L*e) / (1000 * 9.81)
+    &quot;&quot;&quot;
+    a, l = coeffs
+
+    for fy in fy_values:
+        pu = (
+            (fy * t**2) / (e * b)
+            * (2 * b**2 + a * e**2 + c * b + l * L * e)
+            / (1000 * 9.81)
+        )
+
+        plt.plot(t, pu, label=f&quot;Fy = {fy:.0f} MPa&quot;)
+
+    plt.xlabel(&quot;t (mm)&quot;)
+    plt.ylabel(&quot;Pu (tonne)&quot;)
+    plt.title(f&quot;{title}\n(b={b:.0f} mm, c={c:.0f} mm, e={e:.0f} mm, L={L:.0f} mm)&quot;)
+    plt.legend()
+    plt.grid(True)
+
+    plt.savefig(filename, transparent=False)
+    plt.close()
+
+
+if __name__ == &quot;__main__&quot;:
+
+    # Plate thickness range (mm)
+    t = np.arange(4.0, 20.0, 0.1)
+
+    # Plate dimensions (mm)
+    b = 64.0
+    c = 0.0
+    e = 64.0
+    L = 110.0
+
+    # Steel yield strengths (MPa)
+    fy_values = [240.0, 275.0, 320.0, 345.0]
+
+    # Fixed edges
+    plot_plate_capacity(
+        title=&quot;Min. web plate size for fixed edges&quot;,
+        filename=&quot;Pvt_fixed_ends.svg&quot;,
+        coeffs=(2, 1),   # e² multiplier, Le multiplier
+        t=t,
+        b=b,
+        c=c,
+        e=e,
+        L=L,
+        fy_values=fy_values,
+    )
+
+    # Supported edges
+    plot_plate_capacity(
+        title=&quot;Min. web plate size for supported edges&quot;,
+        filename=&quot;Pvt_supported_ends.svg&quot;,
+        coeffs=(1, 0.5),
+        t=t,
+        b=b,
+        c=c,
+        e=e,
+        L=L,
+        fy_values=fy_values,
+    )
+</code></pre>
+<section class="footnotes" data-footnotes>
+<ol>
+<li id="fn-1">
+<p>And because Excel is as opaque as it gets with formulae hidden in cells. <a href="#fnref-1" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="1" aria-label="Back to reference 1">↩</a></p>
+</li>
+<li id="fn-2">
+<p>RH Kapp, “Yield line analysis of a web connection in direct tension”, <a href="https://ej.aisc.org/index.php/engj/article/view/1288">AISC Engineering Journal, Vol. 11, No. 2</a>, pp. 38-41, 1974. <a href="#fnref-2" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="2" aria-label="Back to reference 2">↩</a></p>
+</li>
+</ol>
+</section>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="Bill of materials and git-diff"
+       href="/2026/bom-diff">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="sudo with yubikey"
+       href="/2026/sudo">Next</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>

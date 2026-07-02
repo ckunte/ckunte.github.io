@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Chisel ported to Rust</title>
+<meta name="description" content="I’ve been using Chisel for over 14 years now (2012-26). I control the source; it has everything I…">
+<script src="/inc/code-math.js" integrity="sha384-NFLjCDSMepND2hEDd2j0TbUXnDYrOFZW3m7c0y2NpqcIPpHacBPY+I7rHiU/pS14"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>Chisel ported to Rust</h1>
+<time datetime="2026-06-28T22:52:00Z">28 Jun 2026</time>
+<p>I’ve been using <a href="/2021/rel">Chisel</a> for over 14 years now (2012-26). I control the source; it has everything I want, and nothing I do not need. And it’s reliable, and predicable. And given the cadence here, I’m unlikely to ever write a thousand notes. Even if I did, Chisel is capable of producing them in seconds. So I certainly have no need for another publishing tool.</p>
+<p>But idle mind decided yesterday to port Chisel to <a href="https://rust-lang.org">Rust</a> just to see if it could be done; and if successful, to see how fast. I dropped <em>chisel.py</em>, a bunch of templates, and a brief on what I wanted Claude to do. My instructions were to:</p>
+<ul>
+<li>use existing jinja2 templates</li>
+<li>render markdown in templates within delimiters</li>
+<li>use <a href="https://docs.rs/minijinja/latest/minijinja/">minijinja</a> templating engine</li>
+<li>build missing filters in minijinja (<code>age</code>, <code>striptags</code>, <code>wordcount</code>, <code>tojson</code>)</li>
+<li>use borrow-checker — Rust’s memory safety feature</li>
+<li>use <a href="https://docs.rs/rayon/latest/rayon/">rayon</a> to enable multicore and parallel processing</li>
+</ul>
+<p>The first run was already great; we missed the filters and picked up a few  errors. By noon, code was successfully compiling. The result: a rocket ship 8× faster than its python-based sibling. I’ve since re-compiled for the native CPU with:</p>
+<pre><code class="language-sh">RUSTFLAGS=&quot;-C target-cpu=native&quot; cargo build --release
+</code></pre>
+<p>I realise this is the only publishing tool I’ll ever need, no matter how many thousand notes I may or may not write. With this now flying, I will probably retire my trusty old friend. What a run it’s been.</p>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="PC"
+       href="/2026/pc">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="Home"
+       href="/">Home</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>
