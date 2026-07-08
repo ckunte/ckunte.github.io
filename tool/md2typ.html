@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Markdown → Typst</title>
+<style>
+  :root{
+    color-scheme: light dark;
+
+    /* Light theme (default) */
+    --bg:#ffffff;
+    --surface:#f4f4f5;
+    --surface-2:#ececee;
+    --text:#1c2129;
+    --text-muted:#6b7280;
+    --border:#dcdfe4;
+    --accent-md:#9a5f22;     /* amber ochre - informal */
+    --accent-ts:#187569;     /* teal - precise */
+    --focus:#187569;
+
+    --mono: "SFMono-Regular", "JetBrains Mono", Consolas, Menlo, monospace;
+    --ui: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#14161a;
+      --surface:#1b1e24;
+      --surface-2:#22262d;
+      --text:#e7e9ec;
+      --text-muted:#9aa3b2;
+      --border:#31353d;
+      --accent-md:#d99a53;
+      --accent-ts:#4fb3a3;
+      --focus:#4fb3a3;
+    }
+  }
+
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--ui);
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+  }
+
+  header{
+    padding:22px 28px 16px;
+    color:var(--text);
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+    border-bottom:1px solid var(--border);
+  }
+  header h1{
+    margin:0;
+    font-size:1.25rem;
+    font-weight:600;
+    letter-spacing:0.02em;
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  header h1 .from{color:var(--accent-md);}
+  header h1 .arrow{color:var(--text-muted); font-family:var(--mono); font-size:1rem;}
+  header h1 .to{color:var(--accent-ts);}
+  header p{
+    margin:4px 0 0;
+    color:var(--text-muted);
+    font-size:0.82rem;
+    font-family:var(--mono);
+  }
+  .toolbar{display:flex; gap:8px; align-items:center;}
+  .toolbar button{
+    font-family:var(--mono);
+    font-size:0.78rem;
+    letter-spacing:0.02em;
+    border:1px solid var(--border);
+    background:transparent;
+    color:var(--text);
+    padding:7px 12px;
+    border-radius:3px;
+    cursor:pointer;
+    transition:background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .toolbar button:hover{background:var(--surface-2);}
+  .toolbar button.primary{
+    border-color:var(--accent-ts);
+    color:var(--accent-ts);
+  }
+  .toolbar button.primary:hover{background:var(--accent-ts); color:var(--bg);}
+
+  main{
+    flex:1;
+    display:grid;
+    grid-template-columns:1fr 44px 1fr;
+    min-height:0;
+  }
+  @media (max-width: 860px){
+    main{grid-template-columns:1fr; grid-template-rows:1fr auto 1fr;}
+    .divider{writing-mode:horizontal-tb; padding:6px 0;}
+    .divider .arrow-glyph{transform:rotate(90deg);}
+  }
+
+  .pane{
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+  }
+  .pane-label{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:10px 20px;
+    display:flex;
+    justify-content:space-between;
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+  }
+  #md-pane .pane-label{color:var(--accent-md);}
+  #ts-pane .pane-label{color:var(--accent-ts);}
+  .pane-label .count{color:var(--text-muted); font-weight:400;}
+
+  textarea, .output{
+    flex:1;
+    width:100%;
+    border:none;
+    outline:none;
+    resize:none;
+    font-family:var(--mono);
+    font-size:0.92rem;
+    line-height:1.65;
+    padding:20px 24px;
+    margin:0;
+    overflow:auto;
+    white-space:pre-wrap;
+    word-break:break-word;
+    background:var(--bg);
+    color:var(--text);
+  }
+
+  #md-input::placeholder{color:var(--text-muted);}
+
+  .divider{
+    background:var(--surface);
+    border-left:1px solid var(--border);
+    border-right:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--text-muted);
+    font-family:var(--mono);
+  }
+  .divider .arrow-glyph{font-size:1.3rem;}
+
+  footer{
+    padding:10px 28px;
+    color:var(--text-muted);
+    font-family:var(--mono);
+    font-size:0.74rem;
+    border-top:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  footer a{color:var(--text-muted);}
+
+  .toast{
+    position:fixed;
+    bottom:22px;
+    left:50%;
+    transform:translateX(-50%) translateY(20px);
+    background:var(--surface-2);
+    color:var(--text);
+    border:1px solid var(--accent-ts);
+    padding:9px 18px;
+    border-radius:4px;
+    font-family:var(--mono);
+    font-size:0.8rem;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.2s ease, transform 0.2s ease;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  textarea:focus-visible, .output:focus-visible, button:focus-visible{
+    outline:2px solid var(--focus);
+    outline-offset:2px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1><span class="from">Markdown</span><span class="arrow">-&gt;</span><span class="to">Typst</span></h1>
+    <p>type on the left, read the typeset markup on the right</p>
+  </div>
+  <div class="toolbar">
+    <button id="sample-btn">Load sample</button>
+    <button id="clear-btn">Clear</button>
+    <button id="copy-btn" class="primary">Copy .typ</button>
+    <button id="download-btn" class="primary">Download</button>
+  </div>
+</header>
+
+<main>
+  <div class="pane" id="md-pane">
+    <div class="pane-label"><span>Markdown</span><span class="count" id="md-count">0 lines</span></div>
+    <textarea id="md-input" spellcheck="false" placeholder="# Start typing markdown here...
+
+- supports headings, lists, bold/italic
+- links, images, code, blockquotes
+- tables and horizontal rules"></textarea>
+  </div>
+
+  <div class="divider"><span class="arrow-glyph">→</span></div>
+
+  <div class="pane" id="ts-pane">
+    <div class="pane-label"><span>Typst</span><span class="count" id="ts-count">0 lines</span></div>
+    <div class="output" id="ts-output" tabindex="0"></div>
+  </div>
+</main>
+
+<footer>
+  <span>Converts common CommonMark constructs — headings, emphasis, lists, links, images, code, blockquotes, tables, rules.</span>
+  <span>Nested/edge-case markdown may need manual touch-ups in Typst.</span>
+</footer>
+
+<div class="toast" id="toast">Copied to clipboard</div>
+
+<script>
+(function(){
+  const mdInput = document.getElementById('md-input');
+  const tsOutput = document.getElementById('ts-output');
+  const mdCount = document.getElementById('md-count');
+  const tsCount = document.getElementById('ts-count');
+  const toast = document.getElementById('toast');
+
+  const SAMPLE = `# Project Notes
+
+A short demo of **bold**, *italic*, and \`inline code\`.
+
+## Goals
+
+- Convert headings and lists
+- Preserve [links](https://typst.app) and images
+- Handle code blocks and tables
+
+1. First step
+2. Second step
+3. Third step
+
+> Typst is a modern alternative to LaTeX.
+
+---
+
+| Tool | Language |
+| --- | --- |
+| Markdown | Text-based |
+| Typst | Markup + scripting |
+
+\`\`\`python
+def hello():
+    print("hello, typst")
+\`\`\`
+
+![A diagram](diagram.png)
+`;
+
+  function escapeForTypst(text){
+    // Escape Typst special characters in plain text runs.
+    return text.replace(/([\\#\$\*_@`<>~])/g, '\\$1');
+  }
+
+  function convertInline(line){
+    // Protect inline code spans first so we don't mangle their contents.
+    const codeSpans = [];
+    line = line.replace(/`([^`]+)`/g, (m, code) => {
+      codeSpans.push(code);
+      return `\u0000CODE${codeSpans.length - 1}\u0000`;
+    });
+
+    // Images: ![alt](url)
+    line = line.replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g,
+      (m, alt, url) => `#image("${url}")`);
+
+    // Links: [text](url)
+    line = line.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g,
+      (m, text, url) => `#link("${url}")[${text}]`);
+
+    // Bold+italic: ***text*** or ___text___
+    line = line.replace(/\*\*\*([^*]+)\*\*\*/g, (m, t) => `*_${t}_*`);
+    line = line.replace(/___([^_]+)___/g, (m, t) => `*_${t}_*`);
+
+    // Bold: **text** or __text__
+    line = line.replace(/\*\*([^*]+)\*\*/g, (m, t) => `*${t}*`);
+    line = line.replace(/__([^_]+)__/g, (m, t) => `*${t}*`);
+
+    // Italic: *text* or _text_
+    line = line.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, (m, pre, t) => `${pre}_${t}_`);
+    line = line.replace(/(^|[^_])_([^_\n]+)_(?!_)/g, (m, pre, t) => `${pre}_${t}_`);
+
+    // Strikethrough: ~~text~~
+    line = line.replace(/~~([^~]+)~~/g, (m, t) => `#strike[${t}]`);
+
+    // Restore code spans as Typst raw text
+    line = line.replace(/\u0000CODE(\d+)\u0000/g, (m, i) => '`' + codeSpans[Number(i)] + '`');
+
+    return line;
+  }
+
+  function convert(markdown){
+    const lines = markdown.replace(/\r\n/g, '\n').split('\n');
+    const out = [];
+    let inCodeBlock = false;
+    let codeLang = '';
+    let inTable = false;
+    let tableRows = [];
+    let listStack = []; // track ordered/unordered state, not strictly needed since typst mirrors markers
+
+    function flushTable(){
+      if (tableRows.length === 0) return;
+      // First row = header, second row (---|---) already filtered out upstream
+      const colCount = tableRows[0].length;
+      out.push(`#table(`);
+      out.push(`  columns: ${colCount},`);
+      tableRows.forEach(row => {
+        const cells = row.map(c => `[${convertInline(c.trim())}]`).join(', ');
+        out.push(`  ${cells},`);
+      });
+      out.push(`)`);
+      tableRows = [];
+      inTable = false;
+    }
+
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i];
+
+      // Fenced code blocks
+      const fenceMatch = line.match(/^```(\w*)\s*$/);
+      if (fenceMatch) {
+        if (!inCodeBlock) {
+          inCodeBlock = true;
+          codeLang = fenceMatch[1] || '';
+          out.push('```' + codeLang);
+        } else {
+          inCodeBlock = false;
+          out.push('```');
+        }
+        continue;
+      }
+      if (inCodeBlock) {
+        out.push(line);
+        continue;
+      }
+
+      // Tables: detect header row followed by a separator row
+      const tableRowMatch = line.match(/^\s*\|?(.+\|.+?)\|?\s*$/);
+      const isSeparator = /^\s*\|?(\s*:?-{2,}:?\s*\|)+\s*:?-{2,}:?\s*\|?\s*$/.test(line);
+      if (!inTable && tableRowMatch && i + 1 < lines.length && /^\s*\|?(\s*:?-{2,}:?\s*\|?)+\s*$/.test(lines[i + 1])) {
+        inTable = true;
+        tableRows = [];
+        const cells = tableRowMatch[1].split('|').map(c => c.trim());
+        tableRows.push(cells);
+        i++; // skip separator row
+        continue;
+      }
+      if (inTable) {
+        if (tableRowMatch && line.trim() !== '') {
+          const cells = tableRowMatch[1].split('|').map(c => c.trim());
+          tableRows.push(cells);
+          continue;
+        } else {
+          flushTable();
+          // fall through to process current line normally
+        }
+      }
+
+      // Horizontal rule
+      if (/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(line)) {
+        out.push('#line(length: 100%)');
+        continue;
+      }
+
+      // Headings
+      const headingMatch = line.match(/^(#{1,6})\s+(.*)$/);
+      if (headingMatch) {
+        const level = headingMatch[1].length;
+        out.push('='.repeat(level) + ' ' + convertInline(headingMatch[2].trim()));
+        continue;
+      }
+
+      // Blockquote
+      const quoteMatch = line.match(/^>\s?(.*)$/);
+      if (quoteMatch) {
+        out.push('#quote(block: true)[' + convertInline(quoteMatch[1]) + ']');
+        continue;
+      }
+
+      // Unordered list
+      const ulMatch = line.match(/^(\s*)[-*+]\s+(.*)$/);
+      if (ulMatch) {
+        const indent = Math.floor(ulMatch[1].length / 2);
+        out.push('  '.repeat(indent) + '- ' + convertInline(ulMatch[2]));
+        continue;
+      }
+
+      // Ordered list
+      const olMatch = line.match(/^(\s*)\d+\.\s+(.*)$/);
+      if (olMatch) {
+        const indent = Math.floor(olMatch[1].length / 2);
+        out.push('  '.repeat(indent) + '+ ' + convertInline(olMatch[2]));
+        continue;
+      }
+
+      // Blank line
+      if (line.trim() === '') {
+        out.push('');
+        continue;
+      }
+
+      // Paragraph text
+      out.push(convertInline(line));
+    }
+
+    if (inTable) flushTable();
+
+    return out.join('\n').replace(/\n{3,}/g, '\n\n').trim() + '\n';
+  }
+
+  function render(){
+    const md = mdInput.value;
+    const typst = md.trim() === '' ? '' : convert(md);
+    tsOutput.textContent = typst;
+    mdCount.textContent = `${md.split('\n').length} lines`;
+    tsCount.textContent = `${(typst ? typst.split('\n').length : 0)} lines`;
+  }
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove('show'), 1600);
+  }
+
+  mdInput.addEventListener('input', render);
+
+  document.getElementById('sample-btn').addEventListener('click', () => {
+    mdInput.value = SAMPLE;
+    render();
+  });
+
+  document.getElementById('clear-btn').addEventListener('click', () => {
+    mdInput.value = '';
+    render();
+    mdInput.focus();
+  });
+
+  document.getElementById('copy-btn').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(tsOutput.textContent);
+      showToast('Copied to clipboard');
+    } catch (e) {
+      showToast('Could not copy — select manually');
+    }
+  });
+
+  document.getElementById('download-btn').addEventListener('click', () => {
+    const blob = new Blob([tsOutput.textContent], {type: 'text/plain'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'document.typ';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
