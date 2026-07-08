@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: Release notes</title>
-<meta name="description" content="2026: I used Claude to port Chisel to Rust , and it’s gone supersonic. Wow! The publishing…">
+<meta name="description" content="This site is powered by the work of extraordinary people. My thanks to Armin Ronacher for…">
 <script src="/inc/code-math.js" integrity="sha384-NFLjCDSMepND2hEDd2j0TbUXnDYrOFZW3m7c0y2NpqcIPpHacBPY+I7rHiU/pS14"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -17,7 +17,9 @@
 <article>
 <h1>Release notes</h1>
 <time datetime="2021-02-21T22:50:00Z">21 Feb 2021</time>
-<p><em>2026: I used Claude to port <a href="/2026/chisel">Chisel to Rust</a>, and it’s gone supersonic. Wow!</em></p>
+<p><em>This site is powered by the work of extraordinary people. My thanks to Armin Ronacher for <a href="https://docs.rs/minijinja/latest/minijinja/">minijinja</a>, Asherah Connor for <a href="https://github.com/kivikakk/comrak">Comrak</a>, Emily Eisenberg and Sophie Alpert for <a href="https://katex.org/">KaTeX</a>, David Zhou for <a href="https://github.com/dz/chisel">Chisel</a>, Graydon Hoare for <a href="https://rust-lang.org/">Rust</a>, Guido van Rossum for <a href="http://www.python.org/">Python</a>, Ivan Sagalaev for <a href="https://highlightjs.org/">hl.js</a>, Linus Torvalds and Junio Hamano for <a href="http://git-scm.com/">git</a>, and Niko Matsakis for <a href="https://docs.rs/rayon/latest/rayon/">rayon</a>.</em></p>
+<hr />
+<p><em>2026: I used Claude to port <a href="/2026/chisel">Chisel to Rust</a>, and it’s gone supersonic.</em></p>
 <hr />
 <p>The publishing mechanism assembled to produce this website is a topic likely of little interest, nonetheless, I’d like to, if only as release notes. But first, some trivia.</p>
 <p>By 2010, I was fed-up with a popular open source web publishing software I’d been using since 2004. Its code base was changing so rapidly that I could not keep up. To quote <a href="https://tom.preston-werner.com/2008/11/17/blogging-like-a-hacker.html" title="Blogging Like a Hacker">Tom Preston-Werner</a> (2008):</p>
@@ -36,7 +38,7 @@
 <li>Maintain bare bones, readable, safe, and low-dependency code base</li>
 <li>Use a decent template engine to be able to do more with less code</li>
 </ul>
-<p>After some searching and evaluating, I found <a href="https://github.com/dz/chisel" title="GitHub - dz/chisel: a simple Python static blog generation utility">Chisel</a> — a simple python script to turn notes, written in <a href="https://en.wikipedia.org/wiki/Markdown" title="Markdown - Wikipedia">markdown</a>, into html pages, and auto-arrange them in a neatly linked structure. It employed <a href="https://jinja.palletsprojects.com/" title="Jinja">Jinja</a>, a minimal, performant template engine; <a href="https://git-scm.com/" title="Git">git</a> for tracking changes in both notes and code; and <a href="https://pages.github.com/" title="GitHub Pages | Websites for you and your projects, hosted directly from your GitHub repository. Just edit, push, and your changes are live.">GitHub</a> for hosting. I subsequently <a href="https://github.com/ckunte/chisel/tree/ck" title="GitHub - ckunte/chisel at ck">added a few features</a> to Chisel I wanted for myself.</p>
+<p>After some searching and evaluating, I found <a href="https://github.com/dz/chisel">Chisel</a> — a simple python script to turn notes, written in <a href="https://en.wikipedia.org/wiki/Markdown" title="Markdown - Wikipedia">markdown</a>, into html pages, and auto-arrange them in a neatly linked structure. It employed <a href="https://jinja.palletsprojects.com/" title="Jinja">Jinja</a>, a minimal, performant template engine; <a href="http://git-scm.com/">git</a> for tracking changes in both notes and code; and <a href="https://pages.github.com/" title="GitHub Pages | Websites for you and your projects, hosted directly from your GitHub repository. Just edit, push, and your changes are live.">GitHub</a> for hosting. I subsequently <a href="https://github.com/ckunte/chisel/tree/ck" title="GitHub - ckunte/chisel at ck">added a few features</a> to Chisel I wanted for myself.</p>
 <p>Both the model and the controller are local processes, having decided long ago that I would execute nothing in the cloud. Only the view produced (from a combination of model and controller processes) is pushed to the host via git. This eliminates the need for a feature-rich web server on the host, and is therefore ideal for hosting a locally-generated static site. Today I am able to say that after nine years of sustained use of this above set-up, it remains very usable. The code base has remained the same, with lines of code never exceeding more than a few overall, and it is as readable today as I had first found it.</p>
 <p>The only noteworthy maintenance I undertook was in 2019-20, when concerned by the need to <a href="https://www.python.org/doc/sunset-python-2/">phase out python2 code</a>, I sat down to re-factor Chisel to run on python3. I did so <a href="https://github.com/dz/chisel/pull/7/commits/13d3d3ee3b7ede6bd41b962f8abee0ba629578b9" title="2to3 by ckunte · Pull Request #7 · dz/chisel · GitHub">without discernible change</a> in code.</p>
 <p>This is a set of release notes, covering features or updates, from that exercise done a year ago, and split into MVC design pattern.</p>
