@@ -14,6 +14,13 @@
   ],
   "items" : [
     {
+      "id" : "https://ckunte.net/2026/bursts",
+      "title" : "Bursts",
+      "url" : "https://ckunte.net/2026/bursts",
+      "content_text" : "Excursions on my own into some of these in the past resulted in trashing the entire weekend, left me unfinished, exhausted, and irritated without the outcomes I wanted out of the time I invested in researching, testing, failing, and building cycles —…",
+      "date_published" : "2026-07-11T11:43:00Z"
+    },
+    {
       "id" : "https://ckunte.net/2026/chisel",
       "title" : "Chisel ported to Rust",
       "url" : "https://ckunte.net/2026/chisel",
@@ -26,13 +33,6 @@
       "url" : "https://ckunte.net/2026/pc",
       "content_text" : "On eBay, I found a HP 800 G2 mini 1 for A$209. It arrived promptly. The last time I set Windows up was in 2005. So I needed a plan for a clean-install, and then purge the unwanted off of it. It turned out to be surprisingly easy: Create installation…",
       "date_published" : "2026-05-23T12:40:00Z"
-    },
-    {
-      "id" : "https://ckunte.net/2026/sudo",
-      "title" : "sudo with yubikey",
-      "url" : "https://ckunte.net/2026/sudo",
-      "content_text" : "Yubikeys offer one of the strongest, enterprise-grade, practical account security tools to end-users without the cognitive overhead. Cost-effective, portable, and robust; I’ve been using them for over a decade now. 1 It’s handy to pair it with sudo 2 ;…",
-      "date_published" : "2026-05-16T13:28:00Z"
     }    
   ]
 }
