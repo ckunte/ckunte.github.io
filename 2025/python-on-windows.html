@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: python on Windows</title>
-<meta name="description" content="Took another stab at this, esp. for a corp. environ., where SSL certificate checks break due to…">
+<meta name="description" content="There’s now a short guide in pdf at my repository, python-setup . Setting python up on Windows 11…">
 <script src="/inc/code-math.js" integrity="sha384-NFLjCDSMepND2hEDd2j0TbUXnDYrOFZW3m7c0y2NpqcIPpHacBPY+I7rHiU/pS14"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -17,7 +17,7 @@
 <article>
 <h1>python on Windows</h1>
 <time datetime="2025-11-08T17:19:00Z">8 Nov 2025</time>
-<p><em>Took another stab at this, esp. for a corp. environ., where SSL certificate checks break due to the deployed packet inspection monitoring software (man-in-the-middle). There’s now a short guide in pdf at my repo. <a href="https://github.com/ckunte/python-setup/releases">python-setup</a>.</em></p>
+<p><em>There’s now a short guide in pdf at my repository, <a href="https://github.com/ckunte/python-setup/releases">python-setup</a>.</em></p>
 <hr />
 <p>Setting <a href="https://www.python.org/">python</a> up on Windows 11 is needlessly complex, but it does not have to be, <a href="https://learn.microsoft.com/en-us/windows/python/beginners">Microsoft’s own guide</a> notwithstanding.<sup class="footnote-ref"><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup> For its part, python has been a <a href="https://xkcd.com/1987/">victim of its own success</a>. The best way to overcome system-wide conflicts and other teething issues is by setting-up and managing project-specific versions and modules via virtual environments. The absolute best tool for this job is <a href="https://docs.astral.sh/uv/">uv</a> from the boutique start-up, <a href="https://astral.sh/">Astral</a>. It gets you off the ground like nothing ever has before. Here’s how.</p>
 <ol>
