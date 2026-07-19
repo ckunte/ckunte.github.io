@@ -38,8 +38,8 @@ aside, footer, footer > p, time, small, i, span.desc {
 }
 
 .logo {
-  margin: 1.25ch 1ch;
-  height: calc(1.15 * var(--fsize));
+  margin: 1ch;
+  height: calc(1.3 * var(--fsize));
   width: auto;
   vertical-align: middle;
   flex-shrink: 0;
