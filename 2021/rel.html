@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: Release notes</title>
 <meta name="description" content="This site is powered by the work of extraordinary people. My thanks to Armin Ronacher for…">
-<script src="/inc/code-math.js" integrity="sha384-NFLjCDSMepND2hEDd2j0TbUXnDYrOFZW3m7c0y2NpqcIPpHacBPY+I7rHiU/pS14"></script>
+<script src="/inc/code-math.js" integrity="sha384-Clpj+vj9ss+NOxTEo2muVaYwLx1ayGc1t2O5P7pM1+2upkj+X2YDA4RGm+f3PvD7"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
 </head>
@@ -113,6 +113,48 @@ git push -u origin master
 <p>Here’s a view of the screen layout as I write.</p>
 <p><img src="/img/pubflow.png" alt="My publishing workflow." /></p>
 <p>That’s my frictionless writing and publishing workflow.</p>
+<hr />
+<p>Build (2026): Sometime this year, GitHub Pages began requiring an Action workflow to get it to turn the wheels of publishing. This was not needed in the past. I realised this when push-after-pushes were not showing up as updates on the website, and builds were failing. Which was odd, because the site is pre-built (I build it offline, and Pages only needs to serve.) This following workflow now auto runs for every push (<code>.github/workflows/static.yml</code>):</p>
+<pre><code class="language-yml"># Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: [&quot;master&quot;]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: &quot;pages&quot;
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+</code></pre>
 
 </article>
 
