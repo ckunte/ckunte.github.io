@@ -389,6 +389,41 @@ show regex(&quot;Location:[\w, ]+&quot;): it =&gt; {
 )
 </code></pre>
 <p>Then put the envelope in the tray (face-up for my printer) and hit print.</p>
+<h2>Local package</h2>
+<p>To avoid littering copies of <code>template.typ</code> across user’s folders, a local package can be created, see Typst’s documentation re: local <a href="https://github.com/typst/packages/blob/main/README.md">packages</a>. The local package, say, <code>note</code> in this example (with say <code>v0.1.0</code>), must contain at least two files: (a) <code>typst.toml</code>, and (b) <code>lib.typ</code>. They must be parked in a folder structure as below (shown for different OSes):</p>
+<ul>
+<li>Linux: <code>~/.local/share/typst/packages/note/0.1.0</code></li>
+<li>MacOS: <code>~/Library/Application Support/typst/packages/note/0.1.0</code></li>
+<li>Windows: <code>%APPDATA%\typst\packages\note\0.1.0</code></li>
+</ul>
+<p>An example of the <code>typst.toml</code> file is as follows:</p>
+<pre><code class="language-toml">[package]
+name = &quot;note&quot;
+version = &quot;0.1.0&quot;
+entrypoint = &quot;lib.typ&quot;
+authors = [&quot;C Kunte&quot;]
+description = &quot;My custom local layout package.&quot;
+</code></pre>
+<p>and the contents of <code>lib.typ</code><sup class="footnote-ref"><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup> would be, say, that of <a href="https://github.com/ckunte/note/blob/master/template.typ">template.typ</a>.</p>
+<p>With a local package now available across user’s account, the template can be called into any document as below:</p>
+<pre><code class="language-rust">#import &quot;@local/note:0.1.0&quot;: note
+#show: note.with(
+  title: [title],
+  author: &quot;author&quot;,
+  paper: &quot;a4&quot;,
+) // content from here-on
+</code></pre>
+<p>A snippet, say, <code>note</code>,<sup class="footnote-ref"><a href="#fn-2" id="fnref-2" data-footnote-ref>2</a></sup> can be created (for the respective text editor, say, Sublime Text or Vim) to add the above block.</p>
+<section class="footnotes" data-footnotes>
+<ol>
+<li id="fn-1">
+<p>Typst recommends using the file name <code>lib.typ</code>. <a href="#fnref-1" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="1" aria-label="Back to reference 1">↩</a></p>
+</li>
+<li id="fn-2">
+<p>Type <code>note</code> and hit tab to get the associated block. <a href="#fnref-2" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="2" aria-label="Back to reference 2">↩</a></p>
+</li>
+</ol>
+</section>
 
 </article>
 
