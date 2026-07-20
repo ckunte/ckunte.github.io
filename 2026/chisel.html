@@ -23,14 +23,14 @@
 <li>use existing jinja2 templates</li>
 <li>render markdown in templates within delimiters</li>
 <li>use <a href="https://docs.rs/minijinja/latest/minijinja/">minijinja</a> templating engine</li>
-<li>build missing filters in minijinja (<code>age</code>, <code>striptags</code>, <code>wordcount</code>, <code>tojson</code>)</li>
+<li>build some filters (<code>age</code>, <code>striptags</code>, <code>wordcount</code>, <code>tojson</code>)</li>
 <li>use borrow-checker — Rust’s memory safety feature</li>
 <li>use <a href="https://docs.rs/rayon/latest/rayon/">rayon</a> to enable multicore and parallel processing</li>
 </ul>
 <p>The first run was great; we missed the filters and picked up a few errors. By noon, code was successfully compiling. The result: a rocket ship — 8× faster than its python-based sibling. I’ve since re-compiled for the native CPU with:</p>
 <pre><code class="language-sh">RUSTFLAGS=&quot;-C target-cpu=native&quot; cargo build --release
 </code></pre>
-<p>I realise this is the only <a href="https://github.com/ckunte/chisel.rs">publishing tool</a> I’ll ever need, no matter how many thousand notes I may or may not write. With this now flying, I will retire my trusty old friend. What a run it has been.</p>
+<p>I realise this is the only <a href="https://github.com/ckunte/chisel.rs">publishing tool</a> I’ll ever need, no matter how many thousand notes I may or may not write. (Chisel has been stress-tested for 100k synthetic notes; it takes 6s.) With this now flying, I will retire my trusty old friend. What a run it has been.</p>
 
 </article>
 
