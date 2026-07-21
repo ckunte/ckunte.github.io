@@ -1,4 +1,4 @@
-const KATEX_VERSION = '0.17.0';
+const KATEX_VERSION = '0.18.1';
 const HLJS_VERSION = '11.11.1';
 
 const KATEX_CSS = `https://cdn.jsdelivr.net/npm/katex@${KATEX_VERSION}/dist/katex.min.css`;
