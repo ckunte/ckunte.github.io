@@ -13,6 +13,11 @@
   --bfont:     system-ui, -apple-system, sans-serif;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust:100%;
+}
+
 /* ── Base ────────────────────────────────────────────────────── */
 body {
   font: var(--fsize)/1.4 var(--bfont);
@@ -33,7 +38,7 @@ footer {
   font-style: italic;
 }
 
-aside, footer, footer > p, time, small, i, span.desc {
+aside, footer, footer > p, time, small, i, span.desc, #notes > p {
   color: var(--muted);
 }
 
