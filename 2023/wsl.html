@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: WSL</title>
+<meta name="description" content="Here’s how to access linux environment from within Windows via Windows Subsystem for Linux (WSL):…">
+<script src="/inc/code-math.js" integrity="sha384-Clpj+vj9ss+NOxTEo2muVaYwLx1ayGc1t2O5P7pM1+2upkj+X2YDA4RGm+f3PvD7"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>WSL</h1>
+<time datetime="2023-04-28T20:59:00Z">28 Apr 2023</time>
+<p>Here’s how to access linux environment from within Windows via Windows Subsystem for Linux (WSL):</p>
+<p><img src="https://user-images.githubusercontent.com/177423/235031855-c00df098-3a2c-4777-b897-9871bfea0421.png" alt="Ubuntu (a debian linux distribution) in Windows Terminal powered by WSL" /></p>
+<h2>Purpose</h2>
+<p>The purpose of this brief is to enable technical <em>and</em> non-technical users interested in accessing a linux environment for the purposes of automation, data-science, engineering, productivity, etc.</p>
+<h2>How to access linux from within Windows</h2>
+<p>With Windows subsystem for linux (WSL) — a virtualisation technology developed and bundled with Windows operating system by Microsoft — this is now possible. It enables Windows users to have native, unmodified access to a linux distribution via the command-line shell.</p>
+<p>It does not require leaving the comfort of Windows, the need for a disk partition and dual-boot, the complications of setting-up a linux-specific computer (server, blade, or instance), or the challenges of exchanging data between Windows and non-Windows computers, even within sanitised corporate environments.</p>
+<p>With bilateral access to disk drives and files, and with speeds as fast as running linux bare metal, WSL offers seamless inter-operability between Windows and Linux — on Windows. Files created in Windows for instance can be generated, read, edited, and processed in WSL and vice versa, see WSL documentation by <a href="https://docs.microsoft.com/en-us/windows/wsl/" title="Windows Subsystem for Linux Documentation">Microsoft</a> and <a href="https://ubuntu.com/wsl" title="Ubuntu on WSL">Canonical</a> for more information.</p>
+<h2>Install</h2>
+<h3>WSL and Ubuntu</h3>
+<p>WSL is an optional feature that can be enabled on demand from within Windows. It requires either Windows 10 version 2004 and higher (Build 19041 and higher), or Windows 11. The process to get a linux environment via WSL up and running on a Windows computer is as follows.</p>
+<ol>
+<li>Install WSL from either Microsoft Store or the Software Center.<sup class="footnote-ref"><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup> Microsoft Update Windows Subsystem for Linux 2.0. Version 2.0 is recommended, as this is fast, runs linux utils like a native, and without requiring either emulation, translation, or pre-compiled binaries.</li>
+<li>Check for availability in Windows PowerShell with <code>wsl --help</code>.</li>
+<li>Get IT Support to run as admin., if appropriate<sup class="footnote-ref"><a href="#fn-2" id="fnref-2" data-footnote-ref>2</a></sup>: <code>wsl --install -d Ubuntu</code></li>
+<li>Set username and password when prompted at the end of step 4.<sup class="footnote-ref"><a href="#fn-3" id="fnref-3" data-footnote-ref>3</a></sup></li>
+<li>Restart Windows.</li>
+</ol>
+<h3>python, numpy, matplotlib, and pandas</h3>
+<p>To install these, the terminal needs access to open source repositories on the internet.</p>
+<pre><code class="language-bash"># Check and update the system
+sudo apt update -y &amp;&amp; sudo apt full-upgrade -y
+# Install pandas and matplotlib (this also installs numpy)
+python3 -m pip install --upgrade pandas matplotlib
+</code></pre>
+<p>For access to internet via proxy, advanced terminal users can set proxy servers by adding the following to <code>~/.bashrc</code> file. (In the snippet below, replace the placeholder <code>url:port</code> with the actual url and port information.)</p>
+<pre><code class="language-bash"># Set Proxy
+function setproxy() {
+    export {http,https,ftp}_proxy=&quot;url:port&quot;
+}
+# Unset Proxy
+function unsetproxy() {
+    unset {http,https,ftp}_proxy
+}
+# Activate proxy
+setproxy
+</code></pre>
+<h3>Optional tools</h3>
+<p>For a pleasant linux command-line experience, one can optionally install the following:</p>
+<ul>
+<li>Windows Terminal via Microsoft Store</li>
+<li>Visual Studio Code via user or portable install</li>
+<li>Remote Development Extension Pack in Visual Studio Code</li>
+</ul>
+<h2>Disk access</h2>
+<p>WSL Ubuntu home drive, for example, is virtually mounted at the following address, which is accessible from Windows Explorer:</p>
+<pre><code># WSL path from Windows Explorer
+\\wsl$\Ubuntu\home\&lt;wsl_username&gt;
+</code></pre>
+<p>Windows file-system is mounted in WSL as follows, which is accessible from Bourne-Again SHell (bash):</p>
+<pre><code># Windows path from WSL
+/mnt/c/Users/&lt;windows_username&gt;
+</code></pre>
+<p>where, <code>&lt;wsl_username&gt;</code> is the username set during WSL installation (step 5), while <code>&lt;windows_username&gt;</code> is the username in Windows system. They need not be the same.</p>
+<p>This makes it trivial to then map files and folders, e.g., using the symbolic linking tool, <code>ln</code>. To map Windows Documents folder in WSL, this can be set once like so, which creates a shortcut (i.e., soft-link using the <code>-s</code> switch) to Windows Documents folder from WSL home folder. Documents folder can then be accessed easily with <code>cd</code> command like so:</p>
+<pre><code class="language-bash"># Create a symlink to Windows Documents folder (only once)
+ln -s /mnt/c/Users/&lt;windows_username&gt;/Documents ~/Documents
+# Change directory to Windows Documents folder from WSL
+cd ~/Documents
+</code></pre>
+<h2>Next</h2>
+<p>New to command-line experience? Don’t sweat. Take MIT’s <a href="https://missing.csail.mit.edu" title="The Missing Semester of Your CS Education">The Missing Semester of Your CS Education</a>.</p>
+<section class="footnotes" data-footnotes>
+<ol>
+<li id="fn-1">
+<p>Managed (corporate) software service, if appropriate. <a href="#fnref-1" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="1" aria-label="Back to reference 1">↩</a></p>
+</li>
+<li id="fn-2">
+<p>This will begin installing the default linux distribution <em>Ubuntu</em>. (<em>Important Note:</em> Do not click within the window or interrupt the process until complete.) From here-on, there is no further need for any Windows Admin intervention. <a href="#fnref-2" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="2" aria-label="Back to reference 2">↩</a></p>
+</li>
+<li id="fn-3">
+<p>This user account will be set as the linux administrator account, which can use <code>sudo</code> for elevating permissions when required (see <a href="https://docs.microsoft.com/en-us/windows/wsl/setup/environment">documentation</a>). Note that this does not conflict with Windows Administrator account(s), and it has no admin access on Windows side of things. <a href="#fnref-3" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="3" aria-label="Back to reference 3">↩</a></p>
+</li>
+</ol>
+</section>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="CSV to SACS seastate"
+       href="/2022/csv2sacs">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="Date stamp"
+       href="/2024/datestamp">Next</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>
