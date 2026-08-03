@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Make Vim</title>
+<meta name="description" content="Compiling Vim from source with python3 interpreter enabled: #!/usr/bin/env bash if ! [ -d…">
+<script src="/inc/code-math.js" integrity="sha384-Clpj+vj9ss+NOxTEo2muVaYwLx1ayGc1t2O5P7pM1+2upkj+X2YDA4RGm+f3PvD7"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>Make Vim</h1>
+<time datetime="2021-12-26T20:43:00Z">26 Dec 2021</time>
+<p>Compiling Vim from source with python3 interpreter enabled:</p>
+<pre><code class="language-sh">#!/usr/bin/env bash
+if ! [ -d &quot;./vim&quot; ] ; then
+    git clone --depth=1 https://github.com/vim/vim.git
+fi
+if [ -d &quot;./vim&quot; ] ; then
+    cd './vim/src' || return
+    git pull --ff-only
+    make distclean
+    ./configure --enable-python3interp
+    make
+    echo &quot;Run sudo make install in './vim/src' for a good compile.&quot;
+fi
+</code></pre>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="Tube slenderness"
+       href="/2021/slenderness">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="Home-grown password manager"
+       href="/2022/spm">Next</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>

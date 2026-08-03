@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Auto pair underscores and backticks</title>
+<meta name="description" content="Auto pair underscores and backticks in Sublime Text (2) for Markdown editing. Save the following…">
+<script src="/inc/code-math.js" integrity="sha384-Clpj+vj9ss+NOxTEo2muVaYwLx1ayGc1t2O5P7pM1+2upkj+X2YDA4RGm+f3PvD7"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>Auto pair underscores and backticks</h1>
+<time datetime="2013-02-03T22:21:00Z">3 Feb 2013</time>
+<p>Auto pair underscores and backticks in Sublime Text (2) for Markdown editing. Save the following under <em>Preferences → Keybindings → User:</em></p>
+<pre><code>[ // Auto-pair underscores
+{ &quot;keys&quot;: [&quot;_&quot;], &quot;command&quot;: &quot;insert_snippet&quot;, &quot;args&quot;: {&quot;contents&quot;: &quot;_$0_&quot;}, &quot;context&quot;:
+    [
+        { &quot;key&quot;: &quot;setting.auto_match_enabled&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: true },
+        { &quot;key&quot;: &quot;selection_empty&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: true, &quot;match_all&quot;: true },
+        { &quot;key&quot;: &quot;following_text&quot;, &quot;operator&quot;: &quot;regex_contains&quot;, &quot;operand&quot;: &quot;^(?:\t| |\\)|]|\\}|&gt;|$)&quot;, &quot;match_all&quot;: true },
+        { &quot;key&quot;: &quot;preceding_text&quot;, &quot;operator&quot;: &quot;not_regex_contains&quot;, &quot;operand&quot;: &quot;[_a-zA-Z0-9_]$&quot;, &quot;match_all&quot;: true },
+        { &quot;key&quot;: &quot;eol_selector&quot;, &quot;operator&quot;: &quot;not_equal&quot;, &quot;operand&quot;: &quot;string.quoted.underscore&quot;, &quot;match_all&quot;: true }
+    ]
+},
+{ &quot;keys&quot;: [&quot;_&quot;], &quot;command&quot;: &quot;insert_snippet&quot;, &quot;args&quot;: {&quot;contents&quot;: &quot;_${0:$SELECTION}_&quot;}, &quot;context&quot;:
+    [
+        { &quot;key&quot;: &quot;setting.auto_match_enabled&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: true },
+        { &quot;key&quot;: &quot;selection_empty&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: false, &quot;match_all&quot;: true }
+    ]
+},
+{ &quot;keys&quot;: [&quot;_&quot;], &quot;command&quot;: &quot;move&quot;, &quot;args&quot;: {&quot;by&quot;: &quot;characters&quot;, &quot;forward&quot;: true}, &quot;context&quot;:
+    [
+        { &quot;key&quot;: &quot;setting.auto_match_enabled&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: true },
+        { &quot;key&quot;: &quot;selection_empty&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: true, &quot;match_all&quot;: true },
+        { &quot;key&quot;: &quot;following_text&quot;, &quot;operator&quot;: &quot;regex_contains&quot;, &quot;operand&quot;: &quot;^_&quot;, &quot;match_all&quot;: true }
+    ]
+},
+{ &quot;keys&quot;: [&quot;backspace&quot;], &quot;command&quot;: &quot;run_macro_file&quot;, &quot;args&quot;: {&quot;file&quot;: &quot;Packages/Default/Delete Left Right.sublime-macro&quot;}, &quot;context&quot;:
+    [
+        { &quot;key&quot;: &quot;setting.auto_match_enabled&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: true },
+        { &quot;key&quot;: &quot;selection_empty&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: true, &quot;match_all&quot;: true },
+        { &quot;key&quot;: &quot;preceding_text&quot;, &quot;operator&quot;: &quot;regex_contains&quot;, &quot;operand&quot;: &quot;_$&quot;, &quot;match_all&quot;: true },
+        { &quot;key&quot;: &quot;following_text&quot;, &quot;operator&quot;: &quot;regex_contains&quot;, &quot;operand&quot;: &quot;^_&quot;, &quot;match_all&quot;: true }
+    ]
+},
+// Auto-pair backticks
+{ &quot;keys&quot;: [&quot;`&quot;], &quot;command&quot;: &quot;insert_snippet&quot;, &quot;args&quot;: {&quot;contents&quot;: &quot;`$0`&quot;}, &quot;context&quot;:
+    [
+        { &quot;key&quot;: &quot;setting.auto_match_enabled&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: true },
+        { &quot;key&quot;: &quot;selection_empty&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: true, &quot;match_all&quot;: true },
+        { &quot;key&quot;: &quot;following_text&quot;, &quot;operator&quot;: &quot;regex_contains&quot;, &quot;operand&quot;: &quot;^(?:\t| |\\)|]|\\}|&gt;|$)&quot;, &quot;match_all&quot;: true },
+        { &quot;key&quot;: &quot;preceding_text&quot;, &quot;operator&quot;: &quot;not_regex_contains&quot;, &quot;operand&quot;: &quot;[`a-zA-Z0-9`]$&quot;, &quot;match_all&quot;: true },
+        { &quot;key&quot;: &quot;eol_selector&quot;, &quot;operator&quot;: &quot;not_equal&quot;, &quot;operand&quot;: &quot;string.quoted.backtick&quot;, &quot;match_all&quot;: true }
+    ]
+},
+{ &quot;keys&quot;: [&quot;`&quot;], &quot;command&quot;: &quot;insert_snippet&quot;, &quot;args&quot;: {&quot;contents&quot;: &quot;`${0:$SELECTION}`&quot;}, &quot;context&quot;:
+    [
+        { &quot;key&quot;: &quot;setting.auto_match_enabled&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: true },
+        { &quot;key&quot;: &quot;selection_empty&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: false, &quot;match_all&quot;: true }
+    ]
+},
+{ &quot;keys&quot;: [&quot;`&quot;], &quot;command&quot;: &quot;move&quot;, &quot;args&quot;: {&quot;by&quot;: &quot;characters&quot;, &quot;forward&quot;: true}, &quot;context&quot;:
+    [
+        { &quot;key&quot;: &quot;setting.auto_match_enabled&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: true },
+        { &quot;key&quot;: &quot;selection_empty&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: true, &quot;match_all&quot;: true },
+        { &quot;key&quot;: &quot;following_text&quot;, &quot;operator&quot;: &quot;regex_contains&quot;, &quot;operand&quot;: &quot;^`&quot;, &quot;match_all&quot;: true }
+    ]
+},
+{ &quot;keys&quot;: [&quot;backspace&quot;], &quot;command&quot;: &quot;run_macro_file&quot;, &quot;args&quot;: {&quot;file&quot;: &quot;Packages/Default/Delete Left Right.sublime-macro&quot;}, &quot;context&quot;:
+    [
+        { &quot;key&quot;: &quot;setting.auto_match_enabled&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: true },
+        { &quot;key&quot;: &quot;selection_empty&quot;, &quot;operator&quot;: &quot;equal&quot;, &quot;operand&quot;: true, &quot;match_all&quot;: true },
+        { &quot;key&quot;: &quot;preceding_text&quot;, &quot;operator&quot;: &quot;regex_contains&quot;, &quot;operand&quot;: &quot;`$&quot;, &quot;match_all&quot;: true },
+        { &quot;key&quot;: &quot;following_text&quot;, &quot;operator&quot;: &quot;regex_contains&quot;, &quot;operand&quot;: &quot;^`&quot;, &quot;match_all&quot;: true }
+    ]
+}]
+</code></pre>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="China"
+       href="/2012/china">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="Tow"
+       href="/2013/tow">Next</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>

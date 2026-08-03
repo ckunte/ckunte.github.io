@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: DDNS</title>
+<meta name="description" content="DDNS setup for IP refresh using DNSimple: #!/bin/bash # # setup in /etc/anacrontab: # 1 5…">
+<script src="/inc/code-math.js" integrity="sha384-Clpj+vj9ss+NOxTEo2muVaYwLx1ayGc1t2O5P7pM1+2upkj+X2YDA4RGm+f3PvD7"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>DDNS</h1>
+<time datetime="2019-06-19T20:50:00Z">19 Jun 2019</time>
+<p>DDNS setup for IP refresh using DNSimple:</p>
+<pre><code class="language-sh">#!/bin/bash
+#
+#  setup in /etc/anacrontab:
+#  1   5  ping.daily  /home/ckunte/.ddns/ddns.sh
+# 
+TOKEN=&quot;&lt;add token here&gt;&quot;  # The API v2 OAuth token
+ACCOUNT_ID=&quot;&lt;add id here&gt;&quot;       # Replace with your account ID
+ZONE_ID=&quot;&lt;add domain name here&gt;&quot;  # The zone ID is the name of the zone (or domain)
+RECORD_ID=&quot;&lt;add record id here&gt;&quot;     # Replace with the DNS Record ID (corresponds to A record)
+IP=`curl -s http://icanhazip.com/`
+
+curl -H &quot;Authorization: Bearer $TOKEN&quot; \
+     -H &quot;Content-Type: application/json&quot; \
+     -H &quot;Accept: application/json&quot; \
+     -X &quot;PATCH&quot; \
+     -i &quot;https://api.dnsimple.com/v2/$ACCOUNT_ID/zones/$ZONE_ID/records/$RECORD_ID&quot; \
+     -d &quot;{\&quot;content\&quot;:\&quot;$IP\&quot;}&quot;
+</code></pre>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="Reliability"
+       href="/2018/reliability">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="VIV"
+       href="/2019/viv">Next</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>
