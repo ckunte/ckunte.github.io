@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vim quick manual</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap');
+
+  :root{
+    --bg:        #14151f;
+    --bg-raised: #1b1d2b;
+    --line:      #2a2d40;
+    --text:      #c7cbe0;
+    --text-dim:  #6b7089;
+    --accent:    #7fe0b8;   /* green — matches / normal mode */
+    --accent-2:  #f0b35f;   /* amber — search / highlight */
+    --accent-3:  #7aa2f7;   /* blue  — mode badge */
+    --danger:    #e17b8f;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'JetBrains Mono', 'SF Mono', Consolas, monospace;
+    font-size:14px;
+    line-height:1.5;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- fake vim tabline ---------- */
+  .tabline{
+    background:var(--bg-raised);
+    border-bottom:1px solid var(--line);
+    padding:6px 16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:12px;
+    color:var(--text-dim);
+    flex-wrap:wrap;
+  }
+  .tabline .tab{
+    background:var(--bg);
+    color:var(--accent);
+    padding:3px 10px;
+    border-radius:3px;
+    border:1px solid var(--line);
+  }
+  .tabline .path{color:var(--text-dim);}
+  .tabline .sep{color:var(--line);}
+
+  /* ---------- header / title ---------- */
+  header{
+    padding:28px 24px 18px;
+    max-width:900px;
+    width:100%;
+    margin:0 auto;
+  }
+  header h1{
+    margin:0 0 4px;
+    font-size:22px;
+    font-weight:700;
+    color:var(--text);
+    letter-spacing:-0.02em;
+  }
+  header h1 .dim{color:var(--text-dim); font-weight:400;}
+  header p.sub{
+    margin:0;
+    color:var(--text-dim);
+    font-size:12.5px;
+  }
+  header p.sub a{ color: var(--accent-3); text-decoration:none; }
+  header p.sub a:hover{ text-decoration:underline; }
+
+  /* ---------- search bar styled like vim's "/" command line ---------- */
+  .search-wrap{
+    max-width:900px;
+    width:calc(100% - 48px);
+    margin:0 auto 18px;
+    position:sticky;
+    top:0;
+    z-index:5;
+    padding-top:10px;
+    background:linear-gradient(var(--bg) 65%, transparent);
+  }
+  .search-bar{
+    display:flex;
+    align-items:center;
+    background:var(--bg-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:0 12px;
+    height:42px;
+    transition:border-color .15s ease;
+  }
+  .search-bar:focus-within{
+    border-color:var(--accent);
+  }
+  .search-bar .slash{
+    color:var(--accent-2);
+    font-weight:700;
+    margin-right:8px;
+    user-select:none;
+  }
+  .search-bar input{
+    flex:1;
+    background:transparent;
+    border:none;
+    outline:none;
+    color:var(--text);
+    font-family:inherit;
+    font-size:14px;
+    caret-color:var(--accent-2);
+  }
+  .search-bar input::placeholder{color:var(--text-dim);}
+  .search-bar .count{
+    color:var(--text-dim);
+    font-size:12px;
+    white-space:nowrap;
+    padding-left:10px;
+    border-left:1px solid var(--line);
+    margin-left:8px;
+  }
+  .search-bar .count b{color:var(--accent);}
+
+  /* ---------- category filter chips ---------- */
+  .chips{
+    max-width:900px;
+    width:calc(100% - 48px);
+    margin:10px auto 0;
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+  }
+  .chip{
+    background:var(--bg-raised);
+    border:1px solid var(--line);
+    color:var(--text-dim);
+    font-size:11.5px;
+    padding:4px 9px;
+    border-radius:3px;
+    cursor:pointer;
+    font-family:inherit;
+    user-select:none;
+    transition:all .12s ease;
+  }
+  .chip:hover{color:var(--text);}
+  .chip.active{
+    color:var(--bg);
+    background:var(--accent);
+    border-color:var(--accent);
+  }
+
+  /* ---------- main table area ---------- */
+  main{
+    flex:1;
+    max-width:900px;
+    width:100%;
+    margin:0 auto;
+    padding:8px 24px 40px;
+  }
+
+  .group{ margin-top:22px; }
+  .group-label{
+    color:var(--accent-3);
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    margin:0 0 6px 2px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .group-label::after{
+    content:'';
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+  }
+  tbody tr{
+    border-bottom:1px solid var(--line);
+    transition:background .1s ease;
+  }
+  tbody tr:hover{
+    background:var(--bg-raised);
+  }
+  td{
+    padding:8px 8px;
+    vertical-align:top;
+  }
+  td.shortcut{
+    width:230px;
+    white-space:nowrap;
+  }
+  td.desc{
+    color:var(--text);
+  }
+
+  kbd{
+    display:inline-block;
+    background:var(--bg-raised);
+    border:1px solid var(--line);
+    border-bottom-width:2px;
+    border-radius:3px;
+    padding:2px 7px;
+    font-family:inherit;
+    font-size:12.5px;
+    color:var(--accent);
+    white-space:pre;
+  }
+
+  mark{
+    background:var(--accent-2);
+    color:var(--bg);
+    border-radius:2px;
+    padding:0 1px;
+  }
+
+  .empty{
+    text-align:center;
+    color:var(--text-dim);
+    padding:50px 20px;
+    display:none;
+  }
+  .empty.show{display:block;}
+  .empty .big{
+    color:var(--danger);
+    font-size:13px;
+    margin-bottom:4px;
+  }
+
+  /* ---------- fake vim status line, fixed at bottom ---------- */
+  .statusline{
+    position:sticky;
+    bottom:0;
+    background:var(--accent);
+    color:var(--bg);
+    font-size:11.5px;
+    padding:5px 16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-weight:700;
+    letter-spacing:.02em;
+  }
+  .statusline .mode{
+    background:var(--bg);
+    color:var(--accent);
+    padding:1px 10px;
+    border-radius:2px;
+    margin-right:10px;
+  }
+  .statusline .right{
+    display:flex;
+    gap:16px;
+    font-weight:500;
+  }
+
+  @media (max-width:600px){
+    td.shortcut{width:140px;}
+    .search-wrap, .chips, main{width:calc(100% - 24px);}
+    header{padding:22px 12px 14px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="tabline">
+    <span class="tab">VQM</span>
+    <span class="path">~/tool/vqm <span class="sep">·</span> filetype=csv <span class="sep">·</span> utf-8</span>
+  </div>
+
+  <header>
+    <h1>vim quick manual <span class="dim">// vqm.csv</span></h1>
+    <p class="sub">A searchable cheat sheet of Vim commands · original data by <a href="https://github.com/lilibasousa" target="_blank" rel="noopener">@lilibasousa</a></p>
+  </header>
+
+  <div class="search-wrap">
+    <div class="search-bar">
+      <span class="slash">/</span>
+      <input id="search" type="text" placeholder="type to filter commands…" autocomplete="off" spellcheck="false" autofocus>
+      <span class="count" id="count">44 matches</span>
+    </div>
+  </div>
+
+  <div class="chips" id="chips"></div>
+
+  <main>
+    <div id="results"></div>
+    <div class="empty" id="empty">
+      <div class="big">E486: Pattern not found</div>
+      <div>No commands match your search.</div>
+    </div>
+  </main>
+
+  <div class="statusline">
+    <div><span class="mode">NORMAL</span><span id="status-left">vqm.csv</span></div>
+    <div class="right">
+      <span id="status-count">44/44</span>
+      <span>All</span>
+    </div>
+  </div>
+
+<script>
+  const DATA = [
+    ["Change mode","Esc","Exit edit mode"],
+    ["Change mode","i","Enter edit mode, inserting at the cursor"],
+    ["Change mode","I","Enter edit mode, inserting at the start of the line"],
+    ["Change mode","a","Enter edit mode, inserting after the cursor"],
+    ["Change mode","A","Enter edit mode, inserting at the end of the line"],
+    ["Change mode","o","Enter edit mode, inserting on a new line below"],
+    ["Change mode","O","Enter edit mode, inserting on a new line above"],
+
+    ["Navigation",":[0-9]+","Go to a line number (e.g. :9 goes to line 9)"],
+    ["Navigation","G","Go to the last line of the file"],
+    ["Navigation","Ctrl-u","Page up"],
+    ["Navigation","Ctrl-f","Page down"],
+    ["Navigation","^ or 0","Go to the beginning of the line"],
+    ["Navigation","$","Go to the end of the line"],
+    ["Navigation","w","Go to the next word"],
+    ["Navigation","b","Go to the previous word"],
+    ["Navigation",")","Go to the next sentence"],
+
+    ["Edit","cw","Substitute a word"],
+    ["Edit","c$","Change everything until the end of the line"],
+    ["Edit","ct&lt;char&gt;","Change everything until a character"],
+    ["Edit","yy","Copy the line"],
+    ["Edit","yw","Copy the word"],
+    ["Edit","p","Paste after the cursor"],
+    ["Edit","P","Paste before the cursor"],
+    ["Edit","x","Delete a character"],
+    ["Edit","dd","Delete the line"],
+    ["Edit","dw","Delete the word"],
+    ["Edit","d$","Delete until the end of the line"],
+    ["Edit","dG","Delete until the end of the file"],
+    ["Edit",":g/term/replace/g","Global substitute"],
+    ["Edit",":g/term/d","Delete all lines matching a search term"],
+
+    ["Search","/term","Find text after the cursor"],
+    ["Search","?term","Find text before the cursor"],
+    ["Search","n or :/","Find next"],
+    ["Search","N or :?","Find previous"],
+
+    ["Other",".","Repeat the last operation"],
+    ["Other","u","Undo an operation"],
+    ["Other",":! cmd","Run a shell command and return to vim"],
+    ["Other",":%! cmd","Pipe the buffer through a command (e.g. :%! sort -u)"],
+
+    ["Exit",":q","Quit (nothing to save)"],
+    ["Exit",":q!","Quit without saving"],
+    ["Exit",":x or :wq","Save and exit"],
+    ["Exit",":n","Jump to the next file"],
+    ["Exit",":e","Open another file without exiting"],
+    ["Exit",": L1,L2 w file","Save a range of lines to another file"],
+  ];
+
+  const TOTAL = DATA.length;
+  const categories = [...new Set(DATA.map(r => r[0]))];
+
+  const searchEl  = document.getElementById('search');
+  const resultsEl = document.getElementById('results');
+  const emptyEl   = document.getElementById('empty');
+  const countEl   = document.getElementById('count');
+  const statusCountEl = document.getElementById('status-count');
+  const statusLeftEl  = document.getElementById('status-left');
+  const chipsEl = document.getElementById('chips');
+
+  let activeCategory = null;
+
+  function renderChips(){
+    chipsEl.innerHTML = '';
+    const allChip = makeChip('all', null);
+    chipsEl.appendChild(allChip);
+    categories.forEach(c => chipsEl.appendChild(makeChip(c.toLowerCase(), c)));
+  }
+
+  function makeChip(label, value){
+    const el = document.createElement('button');
+    el.className = 'chip' + (activeCategory === value ? ' active' : '');
+    el.textContent = label;
+    el.type = 'button';
+    el.addEventListener('click', () => {
+      activeCategory = value;
+      renderChips();
+      render();
+    });
+    return el;
+  }
+
+  function escapeHtml(s){
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function highlight(text, query){
+    const safe = escapeHtml(text);
+    if(!query) return safe;
+    try{
+      const re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'ig');
+      return safe.replace(re, '<mark>$1</mark>');
+    }catch(e){ return safe; }
+  }
+
+  function render(){
+    const q = searchEl.value.trim().toLowerCase();
+
+    const filtered = DATA.filter(([cat, key, desc]) => {
+      if(activeCategory && cat !== activeCategory) return false;
+      if(!q) return true;
+      return cat.toLowerCase().includes(q) ||
+             key.toLowerCase().includes(q) ||
+             desc.toLowerCase().includes(q);
+    });
+
+    // group by category, preserving first-seen order
+    const groups = [];
+    const groupMap = {};
+    filtered.forEach(row => {
+      const cat = row[0];
+      if(!groupMap[cat]){
+        groupMap[cat] = [];
+        groups.push([cat, groupMap[cat]]);
+      }
+      groupMap[cat].push(row);
+    });
+
+    resultsEl.innerHTML = '';
+    groups.forEach(([cat, rows]) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'group';
+
+      const label = document.createElement('div');
+      label.className = 'group-label';
+      label.textContent = cat;
+      wrap.appendChild(label);
+
+      const table = document.createElement('table');
+      const tbody = document.createElement('tbody');
+
+      rows.forEach(([, key, desc]) => {
+        const tr = document.createElement('tr');
+        const tdKey = document.createElement('td');
+        tdKey.className = 'shortcut';
+        tdKey.innerHTML = `<kbd>${highlight(key, q)}</kbd>`;
+        const tdDesc = document.createElement('td');
+        tdDesc.className = 'desc';
+        tdDesc.innerHTML = highlight(desc, q);
+        tr.appendChild(tdKey);
+        tr.appendChild(tdDesc);
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      wrap.appendChild(table);
+      resultsEl.appendChild(wrap);
+    });
+
+    emptyEl.classList.toggle('show', filtered.length === 0);
+    countEl.innerHTML = `<b>${filtered.length}</b> match${filtered.length===1?'':'es'}`;
+    statusCountEl.textContent = `${filtered.length}/${TOTAL}`;
+    statusLeftEl.textContent = q ? `/${q}` : 'vqm.csv';
+  }
+
+  searchEl.addEventListener('input', render);
+  document.addEventListener('keydown', (e) => {
+    // quick focus jump, like pressing "/" in vim
+    if(e.key === '/' && document.activeElement !== searchEl){
+      e.preventDefault();
+      searchEl.focus();
+    }
+    if(e.key === 'Escape'){
+      searchEl.value = '';
+      render();
+      searchEl.blur();
+    }
+  });
+
+  renderChips();
+  render();
+</script>
+</body>
+</html>

@@ -19,8 +19,6 @@
 <time datetime="2021-02-21T22:50:00Z">21 Feb 2021</time>
 <p><em>This site is powered by the work of extraordinary people. My thanks to Armin Ronacher for <a href="https://docs.rs/minijinja/latest/minijinja/">minijinja</a>, Asherah Connor for <a href="https://github.com/kivikakk/comrak">Comrak</a>, Emily Eisenberg and Sophie Alpert for <a href="https://katex.org/">KaTeX</a>, David Zhou for <a href="https://github.com/dz/chisel">Chisel</a>, Graydon Hoare for <a href="https://rust-lang.org/">Rust</a>, Guido van Rossum for <a href="http://www.python.org/">Python</a>, Ivan Sagalaev for <a href="https://highlightjs.org/">hl.js</a>, Linus Torvalds and Junio Hamano for <a href="http://git-scm.com/">git</a>, and Niko Matsakis for <a href="https://docs.rs/rayon/latest/rayon/">rayon</a>.</em></p>
 <hr />
-<p><em>2026: I used Claude to port <a href="/2026/chisel">Chisel to Rust</a>, and it’s gone supersonic.</em></p>
-<hr />
 <p>The publishing mechanism assembled to produce this website is a topic likely of little interest, nonetheless, I’d like to, if only as release notes. But first, some trivia.</p>
 <p>By 2010, I was fed-up with a popular open source web publishing software I’d been using since 2004. Its code base was changing so rapidly that I could not keep up. To quote <a href="https://tom.preston-werner.com/2008/11/17/blogging-like-a-hacker.html" title="Blogging Like a Hacker">Tom Preston-Werner</a> (2008):</p>
 <blockquote>
@@ -80,7 +78,7 @@
 <li>Run chisel</li>
 <li>Publish, when the note is ready</li>
 </ol>
-<p>I write in Neovim. Every time I save (<code>:w</code>) causes it to run a script in another terminal window that runs chisel, and syncs to a raspberry pi on my LAN that hosts my web site locally, which offers a live preview of what I’ve written. The script is a Makefile, which has the following menu:</p>
+<p>I write in Vim. Every time I save (<code>:w</code>) causes it to run a script in another terminal window that runs chisel, and syncs to a raspberry pi on my LAN that hosts my web site locally, which offers a live preview of what I’ve written. The script is a Makefile, which has the following menu:</p>
 <pre><code>ckunte@rd ~&gt; sp
 Usage: make --file=~/Sites/sp.make &lt;opt&gt;
 &lt;opt&gt; available:
@@ -114,7 +112,22 @@ git push -u origin master
 <p><img src="/img/pubflow.png" alt="My publishing workflow." /></p>
 <p>That’s my frictionless writing and publishing workflow.</p>
 <hr />
-<p>Build (2026): Sometime this year, GitHub Pages began requiring an Action workflow to get it to turn the wheels of publishing. This was not needed in the past. I realised this when push-after-pushes were not showing up as updates on the website, and builds were failing. Which was odd, because the site is pre-built (I build it offline, and Pages only needs to serve.) This following workflow now auto runs for every push (<code>.github/workflows/static.yml</code>):</p>
+<p>2026: I’ve been using <a href="https://github.com/dz/chisel">Chisel</a> for over 14 years now (2012–26). It’s predictable and reliable. I control the source; it has everything I want, and nothing I do not need. Also given the cadence here, I am unlikely to ever write a thousand notes. If I did, Chisel is capable of turning them into a bunch of neatly linked HTML pages in seconds. So I have no need for another publishing tool. But idle mind decided yesterday to port Chisel to <a href="https://rust-lang.org/">Rust</a> just to see if it could be done; and if successful, to see how fast.</p>
+<p>I dropped <em>chisel.py</em>, a bunch of templates + a brief on what I wanted Claude to do. My instructions were to:</p>
+<ul>
+<li>use existing jinja2 templates</li>
+<li>render markdown in templates within delimiters</li>
+<li>use <a href="https://docs.rs/minijinja/latest/minijinja/">minijinja</a> templating engine</li>
+<li>build some filters (<code>age</code>, <code>striptags</code>, <code>wordcount</code>, <code>tojson</code>)</li>
+<li>use borrow-checker — Rust’s memory safety feature</li>
+<li>use <a href="https://docs.rs/rayon/latest/rayon/">rayon</a> to enable multicore and parallel processing</li>
+</ul>
+<p>The first run was great; we missed the filters and picked up a few errors. By noon, code was successfully compiling. The result: a rocket ship — 8× faster than its python-based sibling. I’ve since re-compiled for the native CPU with:</p>
+<pre><code class="language-sh">RUSTFLAGS=&quot;-C target-cpu=native&quot; cargo build --release
+</code></pre>
+<p>I realise this is the only <a href="https://github.com/ckunte/chisel.rs">publishing tool</a> I’ll ever need, no matter how many thousand notes I may or may not write. (Chisel has been stress-tested for 100k synthetic notes; it takes 6s.) With this now flying, I will retire my trusty old friend. What a run it has been.</p>
+<hr />
+<p>Sometime this year, GitHub Pages began requiring an Action workflow to get it to turn the wheels of publishing. This was not needed in the past. I realised this when push-after-pushes were not showing up as updates on the website, and builds were failing. Which was odd, because the site is pre-built (I build it offline, and Pages only needs to serve.) This following workflow now auto runs for every push (<code>.github/workflows/static.yml</code>):</p>
 <pre><code class="language-yml"># Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 

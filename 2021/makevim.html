@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: Make Vim</title>
-<meta name="description" content="Compiling Vim from source with python3 interpreter enabled: #!/usr/bin/env bash if ! [ -d…">
+<meta name="description" content="Compiling Vim from source with python3 interpreter enabled: #!/usr/bin/env bash set -euo pipefail…">
 <script src="/inc/code-math.js" integrity="sha384-Clpj+vj9ss+NOxTEo2muVaYwLx1ayGc1t2O5P7pM1+2upkj+X2YDA4RGm+f3PvD7"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -19,17 +19,28 @@
 <time datetime="2021-12-26T20:43:00Z">26 Dec 2021</time>
 <p>Compiling Vim from source with python3 interpreter enabled:</p>
 <pre><code class="language-sh">#!/usr/bin/env bash
-if ! [ -d &quot;./vim&quot; ] ; then
-    git clone --depth=1 https://github.com/vim/vim.git
+set -euo pipefail
+
+VIM_DIR=&quot;./vim&quot;
+PREFIX=&quot;/usr/local&quot;
+
+if [[ ! -d &quot;$VIM_DIR/.git&quot; ]]; then
+    git clone --depth=1 https://github.com/vim/vim.git &quot;$VIM_DIR&quot;
+else
+    git -C &quot;$VIM_DIR&quot; pull --ff-only
 fi
-if [ -d &quot;./vim&quot; ] ; then
-    cd './vim/src' || return
-    git pull --ff-only
-    make distclean
-    ./configure --enable-python3interp
-    make
-    echo &quot;Run sudo make install in './vim/src' for a good compile.&quot;
-fi
+
+cd &quot;$VIM_DIR/src&quot;
+
+make distclean
+./configure \
+    --prefix=&quot;$PREFIX&quot; \
+    --enable-python3interp
+
+make -j&quot;$(nproc)&quot;
+sudo make install
+
+echo &quot;Vim installed successfully.&quot;
 </code></pre>
 
 </article>

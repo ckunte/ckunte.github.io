@@ -392,9 +392,9 @@ show regex(&quot;Location:[\w, ]+&quot;): it =&gt; {
 <h2>Local package</h2>
 <p>To avoid littering copies of <code>template.typ</code> across user’s folders, a local package can be created, see Typst’s documentation re: local <a href="https://github.com/typst/packages/blob/main/README.md">packages</a>. The local package, say, <code>note</code> in this example (with say <code>v0.1.0</code>), must contain at least two files: (a) <code>typst.toml</code>, and (b) <code>lib.typ</code>. They must be parked in a folder structure as below (shown for different OSes):</p>
 <ul>
-<li>Linux: <code>~/.local/share/typst/packages/note/0.1.0</code></li>
-<li>MacOS: <code>~/Library/Application Support/typst/packages/note/0.1.0</code></li>
-<li>Windows: <code>%APPDATA%\typst\packages\note\0.1.0</code></li>
+<li>Linux: <code>~/.local/share/typst/packages/local/note/0.1.0</code></li>
+<li>Mac: <code>~/Library/Application Support/typst/packages/local/note/0.1.0</code></li>
+<li>Windows: <code>%APPDATA%\typst\packages\local\note\0.1.0</code></li>
 </ul>
 <p>An example of the <code>typst.toml</code> file is as follows:</p>
 <pre><code class="language-toml">[package]
@@ -413,7 +413,7 @@ description = &quot;My custom local layout package.&quot;
   paper: &quot;a4&quot;,
 ) // content from here-on
 </code></pre>
-<p>A snippet, say, <code>note</code>,<sup class="footnote-ref"><a href="#fn-2" id="fnref-2" data-footnote-ref>2</a></sup> can be created (for the respective text editor, say, Sublime Text or Vim) to add the above block.</p>
+<p>A <a href="https://github.com/ckunte/typst-snippets-st/blob/master/note.sublime-snippet">snippet</a>, say, <code>note</code>,<sup class="footnote-ref"><a href="#fn-2" id="fnref-2" data-footnote-ref>2</a></sup> can be created (for the respective text editor, say, Sublime Text or Vim) to add the above block.</p>
 <section class="footnotes" data-footnotes>
 <ol>
 <li id="fn-1">

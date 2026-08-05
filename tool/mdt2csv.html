@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MD → CSV</title>
+<style>
+  :root{
+    --ink:#111;
+    --muted:#666;
+    --rule:#ddd;
+    --link:#1a4fa0;
+    --warn:#a8452f;
+    --mono: Menlo, Consolas, "Courier New", monospace;
+    --serif: Georgia, "Times New Roman", serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:#fff;
+    color:var(--ink);
+    font-family:var(--serif);
+    line-height:1.5;
+    width:100%;
+    margin:0;
+    padding:0 40px;
+  }
+
+  header{
+    padding: 40px 0 16px;
+    border-bottom: 1px solid var(--rule);
+  }
+  header .sub{
+    max-width:760px;
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin:0 0 6px;
+  }
+  h1{
+    margin:0;
+    font-size:26px;
+    font-weight:400;
+    font-family:var(--serif);
+  }
+  h1 .arrow{
+    display:inline-block;
+    color:var(--muted);
+    margin:0 6px;
+  }
+  .sub{
+    margin:10px 0 0;
+    font-size:15px;
+    color:#333;
+    max-width:640px;
+    line-height:1.55;
+  }
+
+  main{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:32px;
+    padding:28px 0 20px;
+  }
+  @media (max-width: 720px){
+    main{grid-template-columns:1fr;}
+  }
+
+  .pane{
+    position:relative;
+  }
+
+  .pane-label{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:8px;
+    font-family:var(--mono);
+  }
+  .pane-label span.tag{
+    font-size:11px;
+    letter-spacing:.04em;
+    color:var(--muted);
+  }
+  .count{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--muted);
+  }
+
+  textarea{
+    width:100%;
+    height:360px;
+    resize:vertical;
+    font-family:var(--mono);
+    font-size:13px;
+    line-height:1.6;
+    padding:10px;
+    border:1px solid var(--rule);
+    border-radius:0;
+    background:#fff;
+    color:var(--ink);
+    outline:none;
+    tab-size:2;
+  }
+  textarea:focus{
+    border-color:#999;
+  }
+  textarea::placeholder{ color:#aaa; }
+
+  .row-actions{
+    display:flex;
+    gap:14px;
+    margin-top:10px;
+    flex-wrap:wrap;
+    font-family:var(--mono);
+    font-size:12.5px;
+  }
+  button, .btn{
+    font-family:var(--mono);
+    font-size:12.5px;
+    padding:0;
+    border:none;
+    background:none;
+    color:var(--link);
+    cursor:pointer;
+    text-decoration:underline;
+  }
+  button:hover{ color:#0d3573; }
+  button:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+    text-decoration:none;
+  }
+
+  .opts{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-top:14px;
+    padding-top:12px;
+    border-top:1px solid var(--rule);
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--muted);
+    flex-wrap:wrap;
+  }
+  .opts label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    cursor:pointer;
+    user-select:none;
+  }
+  select{
+    font-family:var(--mono);
+    font-size:12px;
+    padding:2px 4px;
+    border:1px solid var(--rule);
+    background:#fff;
+    color:var(--ink);
+  }
+
+  .status{
+    margin-top:8px;
+    font-family:var(--mono);
+    font-size:12px;
+    min-height:16px;
+    color:var(--muted);
+  }
+  .status.warn{ color:var(--warn); }
+  .status.copied{ color:var(--ink); }
+
+  footer{
+    padding:16px 0 40px;
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--muted);
+    border-top:1px solid var(--rule);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Local, offline, no upload</p>
+  <h1>markdown<span class="arrow">&rarr;</span>csv</h1>
+  <p class="sub">Paste a markdown table on the left. Get clean CSV on the right. Handles multiple tables, escaped pipes, and alignment rows.</p>
+</header>
+
+<main>
+  <section class="pane">
+    <div class="pane-label">
+      <span class="tag">input · markdown</span>
+      <span class="count" id="inCount">0 rows detected</span>
+    </div>
+    <textarea id="mdIn" placeholder="| Name  | Role       | Team    |
+| ----- | ---------- | ------- |
+| Ada   | Engineer   | Infra   |
+| Grace | Researcher | Compilers |
+"></textarea>
+    <div class="row-actions">
+      <button class="ghost" id="sampleBtn">Load sample</button>
+      <button class="ghost" id="clearBtn">Clear</button>
+    </div>
+    <div class="opts">
+      <label><input type="checkbox" id="trimCells" checked> trim cell whitespace</label>
+      <label><input type="checkbox" id="firstAsHeader" checked> first row = header</label>
+    </div>
+  </section>
+
+  <section class="pane">
+    <div class="pane-label">
+      <span class="tag out">output · csv</span>
+      <span class="count" id="outCount">0 rows</span>
+    </div>
+    <textarea id="csvOut" readonly placeholder="CSV output appears here automatically."></textarea>
+    <div class="row-actions">
+      <button class="primary" id="copyBtn">Copy CSV</button>
+      <button id="downloadBtn">Download .csv</button>
+    </div>
+    <div class="opts">
+      <label>delimiter
+        <select id="delim">
+          <option value=",">comma ( , )</option>
+          <option value=";">semicolon ( ; )</option>
+          <option value="\t">tab</option>
+        </select>
+      </label>
+    </div>
+    <div class="status" id="status"></div>
+  </section>
+</main>
+
+<footer>runs entirely in your browser — nothing you paste is sent anywhere</footer>
+
+<script>
+(function(){
+  const mdIn = document.getElementById('mdIn');
+  const csvOut = document.getElementById('csvOut');
+  const inCount = document.getElementById('inCount');
+  const outCount = document.getElementById('outCount');
+  const statusEl = document.getElementById('status');
+  const trimCells = document.getElementById('trimCells');
+  const firstAsHeader = document.getElementById('firstAsHeader');
+  const delimSel = document.getElementById('delim');
+  const copyBtn = document.getElementById('copyBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const sampleBtn = document.getElementById('sampleBtn');
+  const clearBtn = document.getElementById('clearBtn');
+
+  const SAMPLE = `| Name  | Role       | Team      |
+| ----- | ---------- | --------- |
+| Ada   | Engineer   | Infra     |
+| Grace | Researcher | Compilers |
+| Alan  | Lead       | Theory    |
+`;
+
+  const ALIGN_ROW_RE = /^\s*\|?\s*:?-{1,}:?\s*(\|\s*:?-{1,}:?\s*)*\|?\s*$/;
+
+  function isTableRow(line){
+    const t = line.trim();
+    return t.startsWith('|') || (t.includes('|') && t.length > 0);
+  }
+
+  function splitRow(line){
+    let s = line.trim();
+    if (s.startsWith('|')) s = s.slice(1);
+    if (s.endsWith('|')) s = s.slice(0, -1);
+
+    const cells = [];
+    let cur = '';
+    for (let i = 0; i < s.length; i++){
+      const ch = s[i];
+      if (ch === '\\' && s[i+1] === '|'){
+        cur += '|';
+        i++;
+      } else if (ch === '|'){
+        cells.push(cur);
+        cur = '';
+      } else {
+        cur += ch;
+      }
+    }
+    cells.push(cur);
+    return cells.map(c => trimCells.checked ? c.trim() : c);
+  }
+
+  function extractTables(text){
+    const lines = text.split(/\r?\n/);
+    const tables = [];
+    let current = [];
+
+    for (let i = 0; i < lines.length; i++){
+      const line = lines[i];
+      if (isTableRow(line)){
+        current.push(line);
+      } else {
+        if (current.length) tables.push(current);
+        current = [];
+      }
+    }
+    if (current.length) tables.push(current);
+
+    // strip alignment rows (---|:---:|---:) from each table
+    return tables.map(rows => rows.filter(r => !ALIGN_ROW_RE.test(r)));
+  }
+
+  function csvEscape(field, delim){
+    const needsQuote = field.includes('"') || field.includes(delim) || field.includes('\n') || field.includes('\r');
+    let f = field.replace(/"/g, '""');
+    return needsQuote ? `"${f}"` : f;
+  }
+
+  function toCSV(rowsOfRows, delim){
+    const out = [];
+    let totalRows = 0;
+    rowsOfRows.forEach((rows, idx) => {
+      if (idx > 0) out.push(''); // blank line between multiple tables
+      rows.forEach(cells => {
+        out.push(cells.map(c => csvEscape(c, delim === '\t' ? '\t' : delim)).join(delim === '\t' ? '\t' : delim));
+        totalRows++;
+      });
+    });
+    return { csv: out.join('\n'), totalRows };
+  }
+
+  function render(){
+    const raw = mdIn.value;
+    const tables = extractTables(raw)
+      .map(rows => rows.map(splitRow))
+      .filter(rows => rows.length > 0);
+
+    const rowCount = tables.reduce((n, t) => n + t.length, 0);
+    inCount.textContent = rowCount === 0
+      ? 'no table detected'
+      : `${rowCount} row${rowCount === 1 ? '' : ''} · ${tables.length} table${tables.length === 1 ? '' : 's'}`;
+
+    if (rowCount === 0){
+      csvOut.value = '';
+      outCount.textContent = '0 rows';
+      statusEl.textContent = raw.trim() ? 'No pipe-delimited table found in input.' : '';
+      statusEl.className = 'status ' + (raw.trim() ? 'warn' : '');
+      return;
+    }
+
+    // normalize column counts per table to the widest row
+    tables.forEach(rows => {
+      const width = Math.max(...rows.map(r => r.length));
+      rows.forEach(r => { while (r.length < width) r.push(''); });
+    });
+
+    const delim = delimSel.value === '\\t' ? '\t' : delimSel.value;
+    const { csv, totalRows } = toCSV(tables, delim);
+    csvOut.value = csv;
+    outCount.textContent = `${totalRows} row${totalRows === 1 ? '' : 's'}`;
+    statusEl.textContent = '';
+    statusEl.className = 'status';
+  }
+
+  mdIn.addEventListener('input', render);
+  trimCells.addEventListener('change', render);
+  delimSel.addEventListener('change', render);
+  // firstAsHeader currently informational-only (CSV has no header concept distinct from row 1),
+  // reserved for consistent behavior if row-type detection is extended later.
+  firstAsHeader.addEventListener('change', render);
+
+  sampleBtn.addEventListener('click', () => { mdIn.value = SAMPLE; render(); mdIn.focus(); });
+  clearBtn.addEventListener('click', () => { mdIn.value = ''; render(); mdIn.focus(); });
+
+  copyBtn.addEventListener('click', async () => {
+    if (!csvOut.value){
+      statusEl.textContent = 'Nothing to copy yet.';
+      statusEl.className = 'status warn';
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(csvOut.value);
+      statusEl.textContent = 'Copied to clipboard.';
+      statusEl.className = 'status copied';
+    } catch (e){
+      csvOut.select();
+      document.execCommand('copy');
+      statusEl.textContent = 'Copied to clipboard.';
+      statusEl.className = 'status copied';
+    }
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    if (!csvOut.value){
+      statusEl.textContent = 'Nothing to download yet.';
+      statusEl.className = 'status warn';
+      return;
+    }
+    const blob = new Blob([csvOut.value], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'table.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
