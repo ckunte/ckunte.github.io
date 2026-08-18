@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REGEX expansion tool</title>
+<style>
+    :root {
+        color-scheme: light dark;
+        --bg: #f5f6f8;
+        --panel: #ffffff;
+        --border: #d7dbe2;
+        --text: #20242b;
+        --muted: #69717d;
+        --accent: #2563eb;
+        --danger: #dc2626;
+        --code-bg: #f0f2f5;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg: #111318;
+            --panel: #191c22;
+            --border: #303640;
+            --text: #e8eaed;
+            --muted: #9aa3af;
+            --accent: #60a5fa;
+            --danger: #f87171;
+            --code-bg: #242830;
+        }
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 24px;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+            Inter, system-ui, -apple-system, BlinkMacSystemFont,
+            "Segoe UI", sans-serif;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        margin: 0 0 6px;
+        font-size: 28px;
+    }
+
+    .subtitle {
+        margin: 0 0 22px;
+        color: var(--muted);
+    }
+
+    .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 260px;
+        resize: vertical;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 7px;
+        background: var(--code-bg);
+        color: var(--text);
+        font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        outline: none;
+    }
+
+    textarea:focus {
+        border-color: var(--accent);
+    }
+
+    .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+        align-items: center;
+    }
+
+    button {
+        border: 0;
+        border-radius: 7px;
+        padding: 9px 14px;
+        background: var(--accent);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    button.secondary {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border);
+    }
+
+    button:hover {
+        filter: brightness(1.08);
+    }
+
+    .stats {
+        margin-left: auto;
+        color: var(--muted);
+        font-size: 13px;
+    }
+
+    .result {
+        margin-bottom: 18px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .result-header {
+        padding: 10px 12px;
+        background: var(--code-bg);
+        border-bottom: 1px solid var(--border);
+        font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        word-break: break-all;
+    }
+
+    .result-header .count {
+        float: right;
+        color: var(--muted);
+        font-family: system-ui, sans-serif;
+    }
+
+    .items {
+        padding: 10px 12px;
+        columns: 3 260px;
+        column-gap: 24px;
+    }
+
+    .item {
+        break-inside: avoid;
+        padding: 2px 0;
+        font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .error {
+        color: var(--danger);
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .empty {
+        color: var(--muted);
+        text-align: center;
+        padding: 30px;
+    }
+
+    .help {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    code {
+        padding: 2px 5px;
+        border-radius: 4px;
+        background: var(--code-bg);
+    }
+
+    label {
+        font-size: 13px;
+        color: var(--muted);
+    }
+
+    input[type="number"] {
+        width: 90px;
+        padding: 7px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--panel);
+        color: var(--text);
+    }
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>Regex Expansion Tool</h1>
+    <p class="subtitle">
+        Enter one finite regex per line and expand its alternations into individual strings.
+    </p>
+
+    <div class="panel">
+        <textarea id="input" spellcheck="false">/(^|\.)(agent)?analytics$/
+/(^|\.)ad(|brite|form|safeprotected|dthis|dtoany|entifi|freestats|goto|im(age|g)|l(ink|vr)|nxs|ocean|s(erv(er|ice))|sonar|svr|track|ult(friendfinder|revenueservice)|vert|vp)$/</textarea>
+
+        <div class="toolbar">
+            <button id="expandBtn">Expand</button>
+            <button id="copyBtn" class="secondary">Copy Output</button>
+            <button id="downloadBtn" class="secondary">Download TXT</button>
+            <button id="clearBtn" class="secondary">Clear</button>
+
+            <span class="stats" id="stats"></span>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="help">
+            <strong>Supported:</strong>
+            <code>(a|b)</code>,
+            nested groups,
+            <code>?</code>,
+            empty alternatives,
+            <code>(?:...)</code>,
+            character classes such as <code>[abc]</code>,
+            escaped literals such as <code>\.</code>,
+            and bounded quantifiers such as <code>{2,4}</code>.
+            <br>
+            Regex anchors <code>^</code> and <code>$</code> are treated as zero-width
+            assertions and therefore aren't included in the output.
+            <br>
+            Unbounded <code>*</code>, <code>+</code>, and unrestricted
+            <code>{n,}</code> are rejected because they have infinitely many expansions.
+        </div>
+    </div>
+
+    <div id="output" class="panel">
+        <div class="empty">Results will appear here.</div>
+    </div>
+
+</div>
+
+<script>
+"use strict";
+
+/*
+ * Finite Regex Expander
+ *
+ * Grammar:
+ *
+ * expression := sequence ("|" sequence)*
+ * sequence   := term*
+ * term       := atom quantifier?
+ * atom       := group | character-class | escaped-char | literal | anchor
+ * group      := "(" expression ")" | "(?:" expression ")"
+ * quantifier := "?" | "{n}" | "{n,m}"
+ *
+ * This intentionally expands only finite regular expressions.
+ */
+
+class RegexExpander {
+    constructor(pattern, maxResults = 100000) {
+        this.pattern = pattern;
+        this.i = 0;
+        this.maxResults = maxResults;
+    }
+
+    expand() {
+        // Strip conventional /regex/ delimiters.
+        let p = this.pattern.trim();
+
+        if (p.length >= 2 && p[0] === "/") {
+            const lastSlash = p.lastIndexOf("/");
+
+            if (lastSlash > 0) {
+                const flags = p.slice(lastSlash + 1);
+
+                if (flags && !/^[imsu]*$/.test(flags)) {
+                    throw new Error("Unsupported regex flags: " + flags);
+                }
+
+                p = p.slice(1, lastSlash);
+            }
+        }
+
+        this.pattern = p;
+        this.i = 0;
+
+        const result = this.parseExpression();
+
+        if (this.i !== this.pattern.length) {
+            throw new Error(
+                `Unexpected character "${this.pattern[this.i]}" at position ${this.i}`
+            );
+        }
+
+        return this.dedupe(result);
+    }
+
+    parseExpression() {
+        let result = [];
+
+        result.push(...this.parseSequence());
+
+        while (this.peek() === "|") {
+            this.i++;
+            result.push(...this.parseSequence());
+        }
+
+        return this.dedupe(result);
+    }
+
+    parseSequence() {
+        let result = [""];
+
+        while (
+            this.i < this.pattern.length &&
+            this.peek() !== ")" &&
+            this.peek() !== "|"
+        ) {
+            const atom = this.parseTerm();
+
+            result = this.cartesianConcat(result, atom);
+        }
+
+        return result;
+    }
+
+    parseTerm() {
+        let values = this.parseAtom();
+
+        if (this.peek() === "?") {
+            this.i++;
+
+            // x? => x OR empty
+            values = this.dedupe([...values, ""]);
+
+        } else if (this.peek() === "*") {
+            throw new Error(
+                `Unbounded "*" at position ${this.i}. Infinite expansion is not supported.`
+            );
+
+        } else if (this.peek() === "+") {
+            throw new Error(
+                `Unbounded "+" at position ${this.i}. Infinite expansion is not supported.`
+            );
+
+        } else if (this.peek() === "{") {
+            const start = this.i;
+            this.i++;
+
+            const n = this.readNumber();
+
+            if (n === null) {
+                throw new Error(`Invalid quantifier at position ${start}`);
+            }
+
+            let min = n;
+            let max = n;
+
+            if (this.peek() === ",") {
+                this.i++;
+
+                const m = this.readNumber();
+
+                if (m === null) {
+                    throw new Error(
+                        `Unbounded quantifier at position ${start}. Use {n,m}.`
+                    );
+                }
+
+                max = m;
+            }
+
+            if (this.peek() !== "}") {
+                throw new Error(`Invalid quantifier at position ${start}`);
+            }
+
+            this.i++;
+
+            if (max < min) {
+                throw new Error(`Invalid quantifier {${min},${max}}`);
+            }
+
+            const expanded = [];
+
+            for (let count = min; count <= max; count++) {
+                let chunk = [""];
+
+                for (let j = 0; j < count; j++) {
+                    chunk = this.cartesianConcat(chunk, values);
+                }
+
+                expanded.push(...chunk);
+                this.checkLimit(expanded);
+            }
+
+            values = this.dedupe(expanded);
+        }
+
+        return values;
+    }
+
+    parseAtom() {
+        const ch = this.peek();
+
+        if (ch === undefined) {
+            return [""];
+        }
+
+        // Group
+        if (ch === "(") {
+            this.i++;
+
+            // Non-capturing group: (?:...)
+            if (this.pattern.startsWith("?:", this.i)) {
+                this.i += 2;
+            }
+
+            const values = this.parseExpression();
+
+            if (this.peek() !== ")") {
+                throw new Error(
+                    `Unclosed group starting before position ${this.i}`
+                );
+            }
+
+            this.i++;
+
+            return values;
+        }
+
+        // Closing group without opener
+        if (ch === ")") {
+            throw new Error(`Unexpected ")" at position ${this.i}`);
+        }
+
+        // Character class
+        if (ch === "[") {
+            return this.parseCharacterClass();
+        }
+
+        // Escape
+        if (ch === "\\") {
+            this.i++;
+
+            if (this.i >= this.pattern.length) {
+                throw new Error("Trailing backslash");
+            }
+
+            const escaped = this.pattern[this.i++];
+
+            switch (escaped) {
+                case "d":
+                    return ["0","1","2","3","4","5","6","7","8","9"];
+
+                case "w":
+                    return [
+                        ..."abcdefghijklmnopqrstuvwxyz",
+                        ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                        ..."0123456789",
+                        "_"
+                    ];
+
+                case "s":
+                    return [" "];
+
+                case "n":
+                    return ["\n"];
+
+                case "r":
+                    return ["\r"];
+
+                case "t":
+                    return ["\t"];
+
+                default:
+                    return [escaped];
+            }
+        }
+
+        // Regex anchors / assertions
+        if (ch === "^" || ch === "$") {
+            this.i++;
+            return [""];
+        }
+
+        // Dot means "any character" in normal regex. Since that would
+        // be infinite/unbounded, reject it unless escaped as \.
+        if (ch === ".") {
+            throw new Error(
+                `Unescaped "." at position ${this.i}. Use "\\." for a literal dot.`
+            );
+        }
+
+        // Regex metacharacters that aren't meaningful here.
+        if ("*+".includes(ch)) {
+            throw new Error(
+                `Unexpected "${ch}" at position ${this.i}`
+            );
+        }
+
+        // Literal
+        this.i++;
+        return [ch];
+    }
+
+    parseCharacterClass() {
+        const start = this.i;
+        this.i++; // [
+
+        let values = [];
+        let negated = false;
+
+        if (this.peek() === "^") {
+            negated = true;
+            this.i++;
+        }
+
+        while (this.i < this.pattern.length && this.peek() !== "]") {
+            let first = this.readClassChar();
+
+            if (
+                this.peek() === "-" &&
+                this.i + 1 < this.pattern.length &&
+                this.pattern[this.i + 1] !== "]"
+            ) {
+                this.i++;
+
+                const second = this.readClassChar();
+
+                if (first.length !== 1 || second.length !== 1) {
+                    throw new Error(
+                        `Invalid character range near position ${this.i}`
+                    );
+                }
+
+                const a = first.charCodeAt(0);
+                const b = second.charCodeAt(0);
+
+                if (b < a) {
+                    throw new Error(`Invalid character range ${first}-${second}`);
+                }
+
+                for (let c = a; c <= b; c++) {
+                    values.push(String.fromCharCode(c));
+                }
+            } else {
+                values.push(first);
+            }
+        }
+
+        if (this.peek() !== "]") {
+            throw new Error(
+                `Unclosed character class starting at position ${start}`
+            );
+        }
+
+        this.i++;
+
+        if (negated) {
+            throw new Error(
+                "Negated character classes such as [^a] are not supported " +
+                "because their expansion is effectively unbounded."
+            );
+        }
+
+        return this.dedupe(values);
+    }
+
+    readClassChar() {
+        if (this.peek() === "\\") {
+            this.i++;
+
+            if (this.i >= this.pattern.length) {
+                throw new Error("Trailing backslash in character class");
+            }
+
+            const c = this.pattern[this.i++];
+
+            if (c === "d") {
+                throw new Error("\\d ranges are not supported inside ranges");
+            }
+
+            return c;
+        }
+
+        return this.pattern[this.i++];
+    }
+
+    readNumber() {
+        const start = this.i;
+
+        while (
+            this.i < this.pattern.length &&
+            /[0-9]/.test(this.pattern[this.i])
+        ) {
+            this.i++;
+        }
+
+        if (this.i === start) {
+            return null;
+        }
+
+        return Number(this.pattern.slice(start, this.i));
+    }
+
+    peek() {
+        return this.pattern[this.i];
+    }
+
+    cartesianConcat(a, b) {
+        const result = [];
+
+        for (const x of a) {
+            for (const y of b) {
+                result.push(x + y);
+                this.checkLimit(result);
+            }
+        }
+
+        return this.dedupe(result);
+    }
+
+    dedupe(values) {
+        return [...new Set(values)];
+    }
+
+    checkLimit(values) {
+        if (values.length > this.maxResults) {
+            throw new Error(
+                `Expansion exceeds the ${this.maxResults.toLocaleString()} ` +
+                `result safety limit.`
+            );
+        }
+    }
+}
+
+
+// ------------------------------------------------------------
+// UI
+// ------------------------------------------------------------
+
+const input = document.getElementById("input");
+const output = document.getElementById("output");
+const stats = document.getElementById("stats");
+
+let latestOutput = "";
+
+function expandAll() {
+    const lines = input.value
+        .split(/\r?\n/)
+        .map(x => x.trim())
+        .filter(Boolean);
+
+    if (!lines.length) {
+        output.innerHTML = '<div class="empty">No regex items supplied.</div>';
+        stats.textContent = "";
+        latestOutput = "";
+        return;
+    }
+
+    let total = 0;
+    let html = "";
+    let plain = [];
+
+    lines.forEach((line, index) => {
+        try {
+            const expander = new RegexExpander(line, 100000);
+            const results = expander.expand();
+
+            total += results.length;
+
+            html += `
+                <div class="result">
+                    <div class="result-header">
+                        ${escapeHtml(line)}
+                        <span class="count">
+                            ${results.length.toLocaleString()}
+                        </span>
+                    </div>
+                    <div class="items">
+                        ${results.map(x =>
+                            `<div class="item">${escapeHtml(x)}</div>`
+                        ).join("")}
+                    </div>
+                </div>
+            `;
+
+            plain.push(
+                `# ${line}`,
+                ...results,
+                ""
+            );
+
+        } catch (err) {
+            html += `
+                <div class="result">
+                    <div class="result-header">
+                        ${escapeHtml(line)}
+                    </div>
+                    <div class="error">
+                        ${escapeHtml(err.message)}
+                    </div>
+                </div>
+            `;
+
+            plain.push(
+                `# ${line}`,
+                `ERROR: ${err.message}`,
+                ""
+            );
+        }
+    });
+
+    output.innerHTML = html;
+    stats.textContent =
+        `${lines.length.toLocaleString()} regex · ` +
+        `${total.toLocaleString()} expansions`;
+
+    latestOutput = plain.join("\n");
+}
+
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+document.getElementById("expandBtn").addEventListener("click", expandAll);
+
+document.getElementById("clearBtn").addEventListener("click", () => {
+    input.value = "";
+    output.innerHTML = '<div class="empty">Results will appear here.</div>';
+    stats.textContent = "";
+    latestOutput = "";
+    input.focus();
+});
+
+document.getElementById("copyBtn").addEventListener("click", async () => {
+    if (!latestOutput) {
+        expandAll();
+    }
+
+    try {
+        await navigator.clipboard.writeText(latestOutput);
+        const button = document.getElementById("copyBtn");
+        const old = button.textContent;
+        button.textContent = "Copied!";
+        setTimeout(() => button.textContent = old, 1200);
+    } catch {
+        alert("Unable to access the clipboard. Copy the output manually.");
+    }
+});
+
+document.getElementById("downloadBtn").addEventListener("click", () => {
+    if (!latestOutput) {
+        expandAll();
+    }
+
+    const blob = new Blob([latestOutput], {
+        type: "text/plain;charset=utf-8"
+    });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = "regex-expansions.txt";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    URL.revokeObjectURL(url);
+});
+
+// Expand automatically on load.
+expandAll();
+</script>
+</body>
+</html>
