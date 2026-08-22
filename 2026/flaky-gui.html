@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Flaky GUI</title>
+<meta name="description" content="Once or twice a year, Raspberry Pi OS Desktop refuses to go past the login screen. No issues via…">
+<script src="/inc/code-math.js" integrity="sha384-Njw9Of2BFljdNcVOUWYknI0zVDSvQEf6qxU/Bsrdnd3TiefurNv83VvrlFfPi88i"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>Flaky GUI</h1>
+<time datetime="2026-08-22T21:22:00Z">22 Aug 2026</time>
+<p>Once or twice a year, <a href="/2024/pi5">Raspberry Pi OS Desktop</a> refuses to go past the login screen. No issues via SSH or TTY. Raspberry Pi switched to <a href="https://www.raspberrypi.com/news/a-new-release-of-raspberry-pi-os/">labwc</a> in 2024, and while I like where they are going, it’s not battle-tested, and I am impatient — to have my Desktop stable, and it’s annoying that I have to nuke the entire desktop, and reinstall it. Before running the whole list below, try the last command first.</p>
+<pre><code class="language-sh"># Let Debian fix any broken installs
+sudo apt -o Dpkg::Options::=&quot;--force-overwrite&quot; --fix-broken install
+
+# Remove Raspberry Pi UI mods
+sudo apt purge -y raspberrypi-ui-mods lightdm
+sudo apt autoremove -y
+
+# Reinstall
+sudo apt update -y &amp;&amp; sudo apt full-upgrade -y
+sudo apt install -y rpd-wayland-all rpd-x-all lightdm
+sudo vi /etc/lightdm/lightdm.conf
+
+# Nuke LX Panel
+rm -rf ~/.config/wf-panel-pi/ ~/.config/lxpanel/
+
+# Restarts LightDM
+sudo systemctl restart lightdm
+sudo reboot
+
+# If you still get a blank screen, run this on TTY
+labwc-pi
+</code></pre>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="sudo with yubikey"
+       href="/2026/sudo">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="Home"
+       href="/">Home</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>

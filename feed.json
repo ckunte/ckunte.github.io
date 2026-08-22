@@ -14,6 +14,13 @@
   ],
   "items" : [
     {
+      "id" : "https://ckunte.net/2026/flaky-gui",
+      "title" : "Flaky GUI",
+      "url" : "https://ckunte.net/2026/flaky-gui",
+      "content_text" : "Once or twice a year, Raspberry Pi OS Desktop refuses to go past the login screen. No issues via SSH or TTY. Raspberry Pi switched to labwc in 2024, and while I like where they are going, it’s not battle-tested, and I am impatient — to have my Desktop…",
+      "date_published" : "2026-08-22T21:22:00Z"
+    },
+    {
       "id" : "https://ckunte.net/2026/sudo",
       "title" : "sudo with yubikey",
       "url" : "https://ckunte.net/2026/sudo",
@@ -26,13 +33,6 @@
       "url" : "https://ckunte.net/2026/web-yieldline",
       "content_text" : "Not long ago, a colleague asked me to assist in checking some calcs concerning a base plate yield line. To do this, I thought a readable script would be helpful. 1 The check was supposed to be specific about the plate thickness, its yield strength, and…",
       "date_published" : "2026-05-16T10:01:00Z"
-    },
-    {
-      "id" : "https://ckunte.net/2026/bom-diff",
-      "title" : "Bill of materials and git-diff",
-      "url" : "https://ckunte.net/2026/bom-diff",
-      "content_text" : "Last year, I was assigned to a dry-dock campaign, and tasked with developing structural remediation scopes in an FPSO. Early on in the process, I made a decision to keep work scope (SOW) content separate from its associated bill of materials (BOM),…",
-      "date_published" : "2026-03-31T06:29:00Z"
     }    
   ]
 }
