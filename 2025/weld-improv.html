@@ -19,6 +19,59 @@
 <time datetime="2025-11-16T12:10:00Z">16 Nov 2025</time>
 <p>DNV has published <em>RP-C203 Fatigue design of offshore steel structures (2025)</em>. It now covers bankable endurance<sup class="footnote-ref"><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup> from weld improvement techniques such as grinding, and hammer peening. I’ve taken a stab at comparing Tables 2-3 and F-15 (in RP-C203), see figure below.</p>
 <p><img src="/img/sncurves_t_rpc203-2025.svg" alt="S-N curves for tubular joints in seawater with cathodic protection without ([N]) and with weld improvements (grinding [G], hammer peening [P]) as per DNV RP-C203 (2025) standard." /></p>
+<p>To summarise:</p>
+<table>
+<thead>
+<tr>
+<th align="right">Cycles, N</th>
+<th align="right">[N] Baseline (MPa)</th>
+<th align="right">[G] Stress (MPa)</th>
+<th align="right">[G] Improv. (%)</th>
+<th align="right">[P] Stress (MPa)</th>
+<th align="right">[P] Improv. (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">10⁵</td>
+<td align="right">~255</td>
+<td align="right">~265</td>
+<td align="right">~4%</td>
+<td align="right">~275</td>
+<td align="right">~8%</td>
+</tr>
+<tr>
+<td align="right">10⁶</td>
+<td align="right">~120</td>
+<td align="right">~150</td>
+<td align="right">~25%</td>
+<td align="right">~165</td>
+<td align="right">~38%</td>
+</tr>
+<tr>
+<td align="right">10⁷</td>
+<td align="right">~65</td>
+<td align="right">~95</td>
+<td align="right">~46%</td>
+<td align="right">~115</td>
+<td align="right">~77%</td>
+</tr>
+<tr>
+<td align="right">10⁸</td>
+<td align="right">~42</td>
+<td align="right">~65</td>
+<td align="right">~55%</td>
+<td align="right">~85</td>
+<td align="right">~102%</td>
+</tr>
+</tbody>
+</table>
+<p>Using the <strong>[N] (red curve) as the baseline</strong>, the percentage improvement in allowable hotspot stress for [G] and [P] is approximately:</p>
+<ul>
+<li>[G] vs [N]: increases from approximately 4–55%</li>
+<li>[P] vs [N]: increases substantially from approximately 8–102%</li>
+<li>At 10⁸ cycles, hammer peening delivers roughly double the allowable</li>
+</ul>
 <p>Data and plot code for weld improvements:</p>
 <pre><code>curve,r_start,r_mid,r_end,a1,m1,a2,m2
 T (DNV 2025 [N]),1.00E+05,1.80E+06,1.00E+08,12.180,3.0,16.130,5.0
