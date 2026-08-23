@@ -268,6 +268,44 @@ git reset --hard origin/master
 <pre><code> alias fmt='fmt -s -w 80'
 </code></pre>
 </li>
+<li>
+<p>A fish function to fetch and hard-reset my local notes, template (bare), and site folders (home.lo):</p>
+<pre><code> function update_sites --description 'Fetch and hard-reset local sites'
+     set -l dirs ~/Sites/{bare,notes,home.lo}
+
+     for dir in $dirs
+         begin
+             cd $dir; or return
+             echo &quot;Updating $dir...&quot;
+             git fetch origin
+             and git reset --hard origin/master
+             and echo &quot;done: $dir&quot;
+         end &amp;
+     end
+
+     wait
+     echo &quot;All updates complete.&quot;
+ end
+</code></pre>
+<p>In bash, it would be:</p>
+<pre><code> update_sites() {
+     local dirs=(~/Sites/{bare,notes,home.lo})
+     local pids=()
+
+     for dir in &quot;${dirs[@]}&quot;; do
+         (
+             cd &quot;$dir&quot; || exit 1
+             echo &quot;Updating $dir...&quot;
+             git fetch origin &amp;&amp; git reset --hard origin/master &amp;&amp; echo &quot;done: $dir&quot;
+         ) &amp;
+         pids+=($!)
+     done
+
+     wait &quot;${pids[@]}&quot;
+     echo &quot;All updates complete.&quot;
+ }
+</code></pre>
+</li>
 </ol>
 <section class="footnotes" data-footnotes>
 <ol>
