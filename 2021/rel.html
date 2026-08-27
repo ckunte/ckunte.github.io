@@ -168,6 +168,21 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 </code></pre>
+<hr />
+<p>A fish function (<code>update_sites</code>) to keep the three independent repositories up to speed across computer(s) I use:</p>
+<pre><code>function update_sites
+    for dir in ~/Sites/{bare,notes,home.lo}
+        begin
+            echo &quot;Updating $dir...&quot;
+            and git -C $dir fetch origin
+            and git -C $dir reset --hard origin/master
+            and echo &quot;done: $dir&quot;
+        end &amp;
+    end
+    wait
+    echo &quot;All updates complete.&quot;
+end
+</code></pre>
 
 </article>
 
