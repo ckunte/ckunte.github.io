@@ -306,6 +306,14 @@ git reset --hard origin/master
  }
 </code></pre>
 </li>
+<li>
+<p>Fish function to clear scroll back buffer from Terminal:</p>
+<pre><code> function cls
+     clear
+     printf &quot;\033[3J&quot;
+ end
+</code></pre>
+</li>
 </ol>
 <section class="footnotes" data-footnotes>
 <ol>
