@@ -14,6 +14,13 @@
   ],
   "items" : [
     {
+      "id" : "https://ckunte.net/2026/omarchy",
+      "title" : "Kicking Omarchy&#x27;s tires",
+      "url" : "https://ckunte.net/2026/omarchy",
+      "content_text" : "I like what I see in Omarchy Quattro . I obviously and absolutely love the tiling window manager and TUI-like panes, as I am a fan and past user of the concept popularised by dwm . Key bindings clearly seem set by one hard-wired to a Mac keyboard. I…",
+      "date_published" : "2026-09-05T20:38:00Z"
+    },
+    {
       "id" : "https://ckunte.net/2026/flaky-gui",
       "title" : "Flaky GUI",
       "url" : "https://ckunte.net/2026/flaky-gui",
@@ -21,18 +28,11 @@
       "date_published" : "2026-08-22T21:22:00Z"
     },
     {
-      "id" : "https://ckunte.net/2026/sudo",
-      "title" : "sudo with yubikey",
-      "url" : "https://ckunte.net/2026/sudo",
-      "content_text" : "Yubikeys offer one of the strongest, enterprise-grade, practical account security tools to end-users without the cognitive overhead. Cost-effective, portable, and robust; I’ve been using them for over a decade now. 1 It’s handy to pair it with sudo 2 ;…",
-      "date_published" : "2026-05-16T13:28:00Z"
-    },
-    {
-      "id" : "https://ckunte.net/2026/web-yieldline",
-      "title" : "Web plate connection in direct tension",
-      "url" : "https://ckunte.net/2026/web-yieldline",
-      "content_text" : "Not long ago, a colleague asked me to assist in checking some calcs concerning a base plate yield line. To do this, I thought a readable script would be helpful. 1 The check was supposed to be specific about the plate thickness, its yield strength, and…",
-      "date_published" : "2026-05-16T10:01:00Z"
+      "id" : "https://ckunte.net/2026/bursts",
+      "title" : "Bursts",
+      "url" : "https://ckunte.net/2026/bursts",
+      "content_text" : "Excursions on my own into some of these in the past resulted in wasted weekends. No more. Armed with a month’s subscription, I directed Claude to: build md to typ page, refine AHK scripts , refine LaTeX snippets for Vim , refine Markdown snippets for…",
+      "date_published" : "2026-07-11T11:43:00Z"
     }    
   ]
 }
