@@ -9,8 +9,8 @@
   --link:      #0645AD;
   --link-visited: #551A8B;
   --muted:     lightslategray;
-  --cfont:     "JetBrains Mono", ui-monospace, Consolas, monospace;
-  --bfont:     system-ui, -apple-system, sans-serif;
+  --cfont:     ui-monospace, monospace;
+  --bfont:     system-ui, sans-serif;
 }
 
 html {
