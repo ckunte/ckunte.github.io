@@ -9,7 +9,7 @@
   --link:      #0645AD;
   --link-visited: #551A8B;
   --muted:     lightslategray;
-  --cfont:     ui-monospace, monospace;
+  --cfont:     "cascadia code", ui-monospace, monospace;
   --bfont:     system-ui, sans-serif;
 }
 
@@ -190,9 +190,9 @@ pre {
 }
 
 code {
-  font-size: 84%;
-  font-feature-settings: "ss01" 1;
+  font-size: 90%;
   margin: 0 1px;
+  /* font-feature-settings: "ss01" 1; */
 }
 
 :not(pre) > code {
