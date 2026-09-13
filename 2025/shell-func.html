@@ -314,6 +314,13 @@ git reset --hard origin/master
  end
 </code></pre>
 </li>
+<li>
+<p>Fish config (add the following to <code>config.fish</code>) to minimise typing ssh passphrase in a session:</p>
+<pre><code> if not set -q SSH_AUTH_SOCK
+     eval (ssh-agent -c) &gt; /dev/null
+ end
+</code></pre>
+</li>
 </ol>
 <section class="footnotes" data-footnotes>
 <ol>
