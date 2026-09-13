@@ -14,13 +14,6 @@
   ],
   "items" : [
     {
-      "id" : "https://ckunte.net/2026/dwm",
-      "title" : "dwm",
-      "url" : "https://ckunte.net/2026/dwm",
-      "content_text" : "Omarchy reminded me of how much I love dwm , and I had this sudden urge to scavenge for an old Pi 3B+ (from 2016), and load it up with Pi OS lite + dwm on it. For its frugality 1 , I have a proper desktop — including greeter, screen lock, and some nice…",
-      "date_published" : "2026-09-12T22:44:00Z"
-    },
-    {
       "id" : "https://ckunte.net/2026/omarchy",
       "title" : "Kicking Omarchy&#x27;s tires",
       "url" : "https://ckunte.net/2026/omarchy",
@@ -33,6 +26,13 @@
       "url" : "https://ckunte.net/2026/flaky-gui",
       "content_text" : "Once or twice a year, Raspberry Pi OS Desktop refuses to go past the login screen. No issues via SSH or TTY. Raspberry Pi switched to labwc in 2024, and while I like where they are going, it’s not battle-tested, and I am impatient — to have my Desktop…",
       "date_published" : "2026-08-22T21:22:00Z"
+    },
+    {
+      "id" : "https://ckunte.net/2026/bursts",
+      "title" : "Bursts",
+      "url" : "https://ckunte.net/2026/bursts",
+      "content_text" : "Excursions on my own into some of these in the past resulted in wasted weekends. No more. Armed with a month’s subscription, I directed Claude to: build md to typ page, refine AHK scripts , refine LaTeX snippets for Vim , refine Markdown snippets for…",
+      "date_published" : "2026-07-11T11:43:00Z"
     }    
   ]
 }

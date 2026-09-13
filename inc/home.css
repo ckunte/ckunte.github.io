@@ -4,12 +4,12 @@
 /* ── Custom properties ───────────────────────────────────────── */
 :root {
   --fsize:     1.13em;
-  --cwidth:    38em;
+  --cwidth:    42em;
   --link-dark: #00BFFF;
   --link:      #0645AD;
   --link-visited: #551A8B;
   --muted:     lightslategray;
-  --cfont:     "cascadia code", ui-monospace, monospace;
+  --cfont:     "jetbrains mono", ui-monospace, monospace;
   --bfont:     system-ui, sans-serif;
 }
 
@@ -192,7 +192,7 @@ pre {
 code {
   font-size: 90%;
   margin: 0 1px;
-  /* font-feature-settings: "ss01" 1; */
+  font-feature-settings: "ss01" 1;
 }
 
 :not(pre) > code {
