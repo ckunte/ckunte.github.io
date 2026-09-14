@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Manage keys</title>
+<meta name="description" content="Here’s how to manage GPG keys meant for pass . Howto change master password (GPG passphrase) Open…">
+<script src="/inc/code-math.js" integrity="sha384-Njw9Of2BFljdNcVOUWYknI0zVDSvQEf6qxU/Bsrdnd3TiefurNv83VvrlFfPi88i"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>Manage keys</h1>
+<time datetime="2026-09-14T23:11:00Z">14 Sep 2026</time>
+<p>Here’s how to manage GPG keys meant for <a href="https://www.passwordstore.org/">pass</a>.</p>
+<p><em>Howto change master password (GPG passphrase)</em></p>
+<ol>
+<li>
+<p>Open your terminal and list your keys to find your Key ID or email:</p>
+<pre><code> gpg --list-secret-keys --keyid-format LONG
+</code></pre>
+</li>
+<li>
+<p>Run the edit command (replace <code>user@example.com</code> with your email or Key ID):</p>
+<pre><code> gpg --edit-key user@example.com
+</code></pre>
+</li>
+<li>
+<p>At the <code>gpg&gt;</code> prompt, type:</p>
+<pre><code> passwd
+</code></pre>
+</li>
+<li>
+<p>GPG will prompt you to enter your current passphrase, followed by your new passphrase.</p>
+</li>
+<li>
+<p>Save and exit by typing:</p>
+<pre><code> save
+</code></pre>
+</li>
+</ol>
+<hr />
+<p><em>Howto change to a completely new GPG key</em></p>
+<p>If your old key is compromised, or you want to upgrade to a stronger encryption algorithm (like Ed25519/X25519), you can generate a new key and tell pass to re-encrypt everything.</p>
+<ol>
+<li>
+<p>Generate a new GPG key</p>
+<pre><code> gpg --full-generate-key
+</code></pre>
+<p>Follow the prompts to choose your encryption type, key size, expiration, and your new master passphrase.</p>
+</li>
+<li>
+<p>Get your new Key ID</p>
+<p>List your keys to find the 8, 16, or 40-character hex ID of your newly created key:</p>
+<pre><code> gpg --list-secret-keys --keyid-format LONG
+</code></pre>
+</li>
+<li>
+<p>Re-initialize pass with the new key</p>
+<p>Run the <code>pass init</code> command using your new Key ID. pass will automatically detect your existing password store, decrypt all your current passwords using your old key, and re-encrypt them using your new key:</p>
+<pre><code> pass init &lt;YOUR_NEW_GPG_KEY_ID&gt;
+</code></pre>
+</li>
+</ol>
+<hr />
+<p><em>Howto delete an old GPG key</em></p>
+<p>To delete an old GPG key from your system, you must delete both the private (secret) key and the public key. GPG will not allow you to delete a public key if the private key still exists.</p>
+<p>Before proceeding, ensure you have already re-encrypted your password store with your new key using <code>pass init &lt;NEW_KEY_ID&gt;</code>.</p>
+<ol>
+<li>
+<p>Find your old Key ID or Email</p>
+<p>List your keys to locate the unique identifier (the long hexadecimal string or email address) of the old key:</p>
+<pre><code> gpg --list-secret-keys --keyid-format LONG
+</code></pre>
+</li>
+<li>
+<p>Delete the private key first</p>
+<p>You must delete the secret part of the key first. Replace old_key_id with your actual Key ID or email:</p>
+<pre><code> gpg --delete-secret-keys old_key_id
+</code></pre>
+</li>
+<li>
+<p>Delete the public key</p>
+<p>Once the private key is gone, you can delete the remaining public key:</p>
+<pre><code> gpg --delete-keys old_key_id
+</code></pre>
+</li>
+<li>
+<p>Verify the key is gone</p>
+<p>Run the following list commands to make sure the old key no longer appears in your keyring:</p>
+<pre><code> gpg --list-keys
+ gpg --list-secret-keys
+</code></pre>
+</li>
+</ol>
+<hr />
+<p><em>Change passphrase of an existing SSH key</em></p>
+<p>Changing the passphrase only updates local encryption and will not alter the SSH key itself, i.e., <em>no need</em> to update the associated public key on remote servers.</p>
+<ol>
+<li>
+<p>Run the following command:</p>
+<pre><code> ssh-keygen -p -f ~/.ssh/&lt;KEY_FILE&gt;
+</code></pre>
+</li>
+<li>
+<p>Enter old passphrase when prompted.</p>
+</li>
+<li>
+<p>Enter new passphrase, then type it a second time to confirm.</p>
+</li>
+</ol>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="Kicking Omarchy's tires"
+       href="/2026/omarchy">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="Home"
+       href="/">Home</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>
