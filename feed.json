@@ -17,7 +17,7 @@
       "id" : "https://ckunte.net/2026/manage-keys",
       "title" : "Manage keys",
       "url" : "https://ckunte.net/2026/manage-keys",
-      "content_text" : "Here’s how to manage GPG keys meant for pass . Howto change master password (GPG passphrase) Open your terminal and list your keys to find your Key ID or email: gpg --list-secret-keys --keyid-format LONG Run the edit command (replace user@example.com…",
+      "content_text" : "Here’s how to manage GPG keys meant for pass . Howto change master password (GPG passphrase) Open terminal and list keys to find your Key ID or email: gpg --list-secret-keys --keyid-format LONG Run the edit command (replace user@example.com with your…",
       "date_published" : "2026-09-14T23:11:00Z"
     },
     {
