@@ -27,7 +27,7 @@
 </blockquote>
 <p>Tom came up with <a href="https://jekyllrb.com/">Jekyll</a> from that deliberation.</p>
 <p>Fatigued by bloat and vulnerabilities in the open source web publishing software stack, by 2011, Tom’s post had caught-on. It helped people realise that writing one was not some dark art that required an army of engineers and volunteers for it to be useful, thereby renewing interest in the development and use of fit-for-purpose <a href="https://jamstack.org/generators/">static site generators</a> (SSGs). With an SSG, one could also get rid of all the complexities of running and managing database instances, and keep them from corrupting over time — be they from upgrades or from encoding.</p>
-<p>These trends helped re-assess my needs too. For instance, questioning the need for traditional web service hosts, or the need for pre-requisites like <a href="https://en.wikipedia.org/wiki/LAMP_(software_bundle)" title="LAMP (software bundle) - Wikipedia">LAMP</a> stack to be able to a host simple website like this one. Having such software in the cloud and shared across users amplified attack vectors for the hapless publishers. And for what really? For the comfort of publishing on the road by accessing an archaic login system without multi-factor authentication? It is ridiculous in hindsight of course, but there was a time many of us thought that there really was no alternative.</p>
+<p>These trends helped re-assess my needs too. For instance, questioning the need for traditional web service hosts, or the need for pre-requisites like <a href="https://en.wikipedia.org/wiki/LAMP_(software_bundle)" title="LAMP (software bundle) - Wikipedia">LAMP</a> stack to be able to host a simple website like this one. Having such software in the cloud and shared across users amplified attack vectors for the hapless publishers. And for what really? For the comfort of publishing on the road by accessing an archaic login system without multi-factor authentication? It is ridiculous in hindsight of course, but there was a time many of us thought that there really was no alternative.</p>
 <p>In 2012, after years of grappling with software bloat, security gaffes, and latency of various web publishing services, I decided to take control of my publishing set-up. My objectives were:</p>
 <ul>
 <li>To write and present code, math, and prose effortlessly</li>
@@ -124,7 +124,7 @@ git push -u origin master
 <p>The first run was great; we missed the filters and picked up a few errors. By noon, code was successfully compiling. The result: a rocket ship — 8× faster than its python-based sibling. I’ve since re-compiled for the native CPU with:</p>
 <pre><code class="language-sh">RUSTFLAGS=&quot;-C target-cpu=native&quot; cargo build --release
 </code></pre>
-<p>For some comparison with other awesome static site generators, e.g., Zola (Rust) and Hugo (Go).</p>
+<p>For some comparison with other awesome static site generators, e.g., <a href="https://www.getzola.org">Zola</a> (in Rust) and <a href="https://gohugo.io">Hugo</a> (in Go).</p>
 <table>
 <thead>
 <tr>
@@ -136,7 +136,7 @@ git push -u origin master
 </thead>
 <tbody>
 <tr>
-<td>chisel.rs</td>
+<td>Chisel</td>
 <td>56</td>
 <td>751</td>
 <td>3,805</td>
@@ -155,7 +155,7 @@ git push -u origin master
 </tr>
 </tbody>
 </table>
-<p>In rending 100,000 (synthetic) posts, <em>chisel.rs</em> is about 3× and 18× faster than <em>Zola</em> and <em>Hugo</em> respectively (run based on 2 vCPUs).</p>
+<p>Chisel is about 3× and 18× faster than Zola and Hugo respectively in rendering 100,000 (synthetic) posts — run based on 2 vCPUs.</p>
 <p>I realise this is the only <a href="https://github.com/ckunte/chisel.rs">publishing tool</a> I’ll ever need, no matter how many thousand notes I may or may not write. With this now flying, I will retire my trusty old friend. What a run it has been.</p>
 <hr />
 <p>Sometime this year, GitHub Pages began requiring an Action workflow to get it to turn the wheels of publishing. This was not needed in the past. I realised this when push-after-pushes were not showing up as updates on the website, and builds were failing. Which was odd, because the site is pre-built (I build it offline, and Pages only needs to serve.) This following workflow now auto runs for every push (<code>.github/workflows/static.yml</code>):</p>

@@ -57,9 +57,9 @@ figure {
 }
 
 /* ── Section toggles ─────────────────────────────────────────── */
-#notes, #proj, #about          { display: none; }
-#notes:target, #proj:target,
-#about:target                  { display: inline; }
+#notes, #proj, #about, #papers, #hon { display: none; }
+#notes:target, #proj:target, #papers:target, 
+#about:target, #hon:target           { display: inline; }
 
 /* ── Typography ──────────────────────────────────────────────── */
 h1, h2, h3 {
@@ -244,7 +244,7 @@ pre > code {
 
   pre { filter: invert(0.9); }
 
-  p > code, li > code { background-color: #222; }
+  :not(pre) > code { background-color: #222; }
 
   mark {
     color: #FFD700;
