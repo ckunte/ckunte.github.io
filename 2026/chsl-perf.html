@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Chisel's perf</title>
+<meta name="description" content="While on a visit to Melbourne to be with my daughter, I finally got around to including a few…">
+<script src="/inc/code-math.js" integrity="sha384-Njw9Of2BFljdNcVOUWYknI0zVDSvQEf6qxU/Bsrdnd3TiefurNv83VvrlFfPi88i"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>Chisel&#x27;s perf</h1>
+<time datetime="2026-09-27T16:32:00Z">27 Sep 2026</time>
+<p>While on a visit to Melbourne to be with my daughter, I finally got around to including a few basic templates for <a href="https://github.com/ckunte/chisel.rs">Chisel</a>, and built releases for linux, macos, and windows. And I got Claude to tell me how Chisel fares against the other static site generators.</p>
+<p>Chisel is about 3× and 18× faster than <a href="https://www.getzola.org">Zola</a> and <a href="https://gohugo.io">Hugo</a> respectively in rendering 100,000 (synthetic) posts — run based on 2 vCPUs.</p>
+<table>
+<thead>
+<tr>
+<th>Generator</th>
+<th>1k posts (ms)</th>
+<th>5k posts (ms)</th>
+<th>100k posts (ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chisel (in Rust)</td>
+<td>56</td>
+<td>751</td>
+<td>3,805</td>
+</tr>
+<tr>
+<td>Zola (in Rust)</td>
+<td>104</td>
+<td>868</td>
+<td>11,533</td>
+</tr>
+<tr>
+<td>Hugo (in Go)</td>
+<td>762</td>
+<td>3,569</td>
+<td>69,827</td>
+</tr>
+</tbody>
+</table>
+<p>This is pure naval-gazing for me, as they are different beasts packed with features. Chisel is a consciously designed tool with general purpose machinery deliberately excluded from it. In this regard, <a href="/2021/rel">my needs</a> have never wavered since 2012, viz.,</p>
+<ul>
+<li>To write and present code, math, and notes effortlessly</li>
+<li>Enable login-less cryptographically-secure publishing</li>
+<li>Ensure portability of notes together with track changes</li>
+<li>Maintain bare bones, readable, safe, and low-dependency code base</li>
+<li>Use a decent template engine to be able to do more with less code</li>
+</ul>
+<p>Zola and Hugo probably pay performance penalties for the number of moving parts and features they offer.</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Chisel</th>
+<th>Zola</th>
+<th>Hugo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Content model</em></td>
+<td>Flat notes only: <code>Title / date / body</code> in one <code>.md</code> file, one content type, one collection</td>
+<td>Sections + pages, arbitrary nesting, taxonomies, multilingual</td>
+<td>Sections, page bundles, taxonomies, multilingual, content types</td>
+</tr>
+<tr>
+<td><em>Front matter</em></td>
+<td>None — first two lines of the file <em>are</em> the schema</td>
+<td>TOML/YAML front matter, arbitrary keys</td>
+<td>TOML/YAML/JSON front matter, arbitrary keys</td>
+</tr>
+<tr>
+<td><em>Templating</em></td>
+<td>minijinja (Jinja2-compatible), hand-rolled <code>{% markdown %}</code> preprocessing, 5 custom filters (<code>markdown</code>, <code>age</code>, <code>striptags</code>, <code>wordcount</code>, <code>truncate</code>)</td>
+<td>Tera (Jinja2-like), large built-in filter/function library</td>
+<td>Go templates + <code>text/template</code>, large built-in function library, shortcodes</td>
+</tr>
+<tr>
+<td><em>Markdown engine</em></td>
+<td>comrak (CommonMark) — tables, footnotes, strikethrough, smart punctuation; raw HTML stripped by design</td>
+<td>pulldown-cmark — similar extension set, syntax highlighting, shortcodes, internal links</td>
+<td>Goldmark — extensions, syntax highlighting, render hooks</td>
+</tr>
+<tr>
+<td><em>Taxonomies/tags</em></td>
+<td>None</td>
+<td>Full taxonomy system (categories, tags, custom)</td>
+<td>Full taxonomy system</td>
+</tr>
+<tr>
+<td><em>Pagination</em></td>
+<td>Built-in</td>
+<td>Built-in</td>
+<td>Built-in</td>
+</tr>
+<tr>
+<td><em>Multilingual/i18n</em></td>
+<td>None</td>
+<td>Built-in</td>
+<td>Built-in</td>
+</tr>
+<tr>
+<td><em>Asset pipeline</em></td>
+<td>None — CSS is a static file copied by hand</td>
+<td>Sass compilation, asset processing</td>
+<td>Sass/PostCSS, image processing, JS bundling (esbuild)</td>
+</tr>
+<tr>
+<td><em>Shortcodes/embeds</em></td>
+<td>None</td>
+<td>Built-in shortcodes</td>
+<td>Built-in shortcodes</td>
+</tr>
+<tr>
+<td><em>RSS/feeds</em></td>
+<td>One hand-written JSON feed template (last N posts)</td>
+<td>Built-in Atom/RSS</td>
+<td>Built-in RSS</td>
+</tr>
+<tr>
+<td><em>Live server / dev preview</em></td>
+<td>None — author’s workflow is a Makefile + <code>entr</code> watching <code>*.md</code> and rsyncing to a Raspberry Pi for live preview</td>
+<td>Built-in <code>zola serve</code> with live reload</td>
+<td>Built-in <code>hugo server</code> with live reload</td>
+</tr>
+<tr>
+<td><em>Config surface</em></td>
+<td>Five <code>const</code>s hardcoded in <code>main.rs</code> (paths, feed count, date formats) — no config file, edit-and-recompile</td>
+<td><code>config.toml</code>, extensive</td>
+<td><code>hugo.yaml/toml/json</code>, extensive</td>
+</tr>
+<tr>
+<td><em>Extensibility</em></td>
+<td>None — no plugin system; changing behavior means editing the Rust source</td>
+<td>Limited (Tera functions/filters in some setups)</td>
+<td>Modules, themes, extensive plugin-like ecosystem</td>
+</tr>
+<tr>
+<td><em>Parallelism</em></td>
+<td>rayon-parallel note parsing (explicit design goal)</td>
+<td>Mostly single-threaded per-page render</td>
+<td>Goroutine-parallel page builds</td>
+</tr>
+<tr>
+<td><em>Codebase size / dependency count</em></td>
+<td>~587 lines, 7 crates</td>
+<td>Large Rust codebase, many crates</td>
+<td>Large Go codebase, many modules</td>
+</tr>
+<tr>
+<td><em>Output</em></td>
+<td>HTML pages + one JSON feed</td>
+<td>Full static site (HTML, assets, sitemap, RSS, search index option)</td>
+<td>Full static site (HTML, assets, sitemap, RSS)</td>
+</tr>
+<tr>
+<td><em>Themes</em></td>
+<td>None (author’s own hand-written templates only)</td>
+<td>Theme ecosystem</td>
+<td>Large theme ecosystem</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="Manage keys"
+       href="/2026/manage-keys">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="Home"
+       href="/">Home</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>
