@@ -157,7 +157,9 @@ th {
 th, td {
   text-align: left;
   vertical-align: text-top;
-  padding: 0.5ch;
+  padding: 0.5ch 1ch;
+  font-size: 87%;
+  line-height: 1.4;
 }
 
 /* ── Footnotes ───────────────────────────────────────────────── */
