@@ -153,6 +153,10 @@ thead tr {
   border-bottom: 2px solid var(--muted);
 }
 
+tbody tr:last-child {
+  border-bottom: 2px solid var(--muted);
+}
+
 tbody tr:hover {
   background-color: color-mix(in srgb, var(--muted) 12%, transparent);
 }
