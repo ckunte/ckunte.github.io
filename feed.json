@@ -17,21 +17,21 @@
       "id" : "https://ckunte.net/2026/chsl-perf",
       "title" : "Chisel&#x27;s perf",
       "url" : "https://ckunte.net/2026/chsl-perf",
-      "content_text" : "While on a visit to Melbourne to be with my daughter, I finally got around to including a few basic templates for Chisel, and built releases for linux, and macos. And I got Claude to tell me how Chisel fares against the other static site generators.…",
+      "content_text" : "While on a visit to Melbourne to be with my daughter, I got around to including few basic templates for Chisel, and built releases for linux, and macos. And I got Claude to tell me how Chisel fares against the other static site generators. Chisel is...",
       "date_published" : "2026-09-27T16:32:00Z"
     },
     {
       "id" : "https://ckunte.net/2026/manage-keys",
       "title" : "Manage keys",
       "url" : "https://ckunte.net/2026/manage-keys",
-      "content_text" : "Here’s how to manage GPG keys meant for pass. Howto change master password (GPG passphrase) Open terminal and list keys to find your Key ID or email: gpg --list-secret-keys --keyid-format LONG Run the edit command (replace user@example.com with your…",
+      "content_text" : "Here’s how to manage GPG keys meant for pass. Howto change master password (GPG passphrase) Open terminal and list keys to find your Key ID or email: gpg --list-secret-keys --keyid-format LONG Run the edit command (replace user@example.com with your...",
       "date_published" : "2026-09-14T23:11:00Z"
     },
     {
       "id" : "https://ckunte.net/2026/omarchy",
       "title" : "Kicking Omarchy&#x27;s tires",
       "url" : "https://ckunte.net/2026/omarchy",
-      "content_text" : "I like what I see in Omarchy Quattro. I obviously and absolutely love the tiling window manager and TUI-like panes, as I am a fan and past user of the concept popularised by dwm. Key bindings clearly seem set by one hard-wired to a Mac keyboard. I like…",
+      "content_text" : "I like what I see in Omarchy Quattro. I obviously and absolutely love the tiling window manager and TUI-like panes, as I am a fan and past user of the concept popularised by dwm. Key bindings clearly seem set by one hard-wired to a Mac keyboard. I...",
       "date_published" : "2026-09-05T20:38:00Z"
     }    
   ]
