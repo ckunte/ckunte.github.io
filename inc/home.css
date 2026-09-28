@@ -145,8 +145,16 @@ table {
 }
 
 tr:nth-child(n) {
-  border-top: 1px solid var(--muted);
-  border-bottom: 1px solid var(--muted);
+  border-bottom: 1px solid color-mix(in srgb, var(--muted) 50%, transparent);
+}
+
+thead tr {
+  border-top: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+}
+
+tbody tr:hover {
+  background-color: color-mix(in srgb, var(--muted) 12%, transparent);
 }
 
 th {
