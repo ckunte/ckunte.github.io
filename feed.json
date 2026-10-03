@@ -1,11 +1,9 @@
 {
   "version" : "https://jsonfeed.org/version/1.1",
-  "user_comment" : "This feed lets you know when a new note is published. Copy the following URL -- https://ckunte.net/feed.json -- and add it to your feed reader.",
   "title" : "Chetan Kunté",
   "home_page_url" : "https://ckunte.net",
   "feed_url" : "https://ckunte.net/feed.json",
-  "favicon" : "https://ckunte.net/inc/favicon.svg",
-  "description" : "Offshore Structures Engineer, Chartered Naval Architect",
+  "description" : "offshore structures engineer, chartered naval architect",
   "authors" : [
     {
       "name" : "Chetan Kunté",
@@ -15,24 +13,24 @@
   "items" : [
     {
       "id" : "https://ckunte.net/2026/manage-keys",
-      "title" : "Manage keys",
       "url" : "https://ckunte.net/2026/manage-keys",
-      "content_text" : "Here’s how to manage GPG keys meant for pass. Howto change master password (GPG passphrase) Open terminal and list keys to find your Key ID or email: gpg --list-secret-keys --keyid-format LONG Run the edit command (replace user@example.com with your...",
+      "title" : "Manage keys",
+      "content_text" : "This covers: GPG keys, and SSH keys Here’s how to manage GPG keys meant for pass. Howto change master password (GPG passphrase) Open terminal and list keys to find your Key ID or email: gpg --list-secret-keys --keyid-format LONG Run the edit command...",
       "date_published" : "2026-09-14T23:11:00Z"
     },
     {
       "id" : "https://ckunte.net/2026/flaky-gui",
-      "title" : "Flaky GUI",
       "url" : "https://ckunte.net/2026/flaky-gui",
+      "title" : "Flaky GUI",
       "content_text" : "Once or twice a year, Raspberry Pi OS Desktop refuses to go past the login screen. No issues via SSH or TTY. Raspberry Pi switched to labwc in 2024, and while I like where they are going, it’s not battle-tested, and I am impatient — to have my Desktop...",
       "date_published" : "2026-08-22T21:22:00Z"
     },
     {
       "id" : "https://ckunte.net/2026/bursts",
-      "title" : "Bursts",
       "url" : "https://ckunte.net/2026/bursts",
+      "title" : "Bursts",
       "content_text" : "Excursions on my own into some of these in the past resulted in wasted weekends. No more. Armed with a month’s subscription, I directed Claude to: build md to typ page, refine AHK scripts, refine LaTeX snippets for Vim, refine Markdown snippets for...",
       "date_published" : "2026-07-11T11:43:00Z"
-    }    
+    }
   ]
 }
