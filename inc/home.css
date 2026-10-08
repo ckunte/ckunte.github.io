@@ -3,19 +3,27 @@
 
 /* ── Custom properties ───────────────────────────────────────── */
 :root {
-  --fsize:     1.13em;
-  --cwidth:    40em;
-  --link-dark: #00BFFF;
-  --link:      #0645AD;
+  color-scheme: light dark;
+
+  --fsize:        1.13em;
+  --cwidth:       40em;
+  --cfont:        "jetbrains mono", ui-monospace, monospace;
+  --bfont:        system-ui, sans-serif;
+
+  /* Light theme (all pairs ≥ 7:1 on --bg) */
+  --bg:           #fff;
+  --fg:           #000;
+  --muted:        #444;
+  --link:         #0645AD;
   --link-visited: #551A8B;
-  --muted:     lightslategray;
-  --cfont:     "jetbrains mono", ui-monospace, monospace;
-  --bfont:     system-ui, sans-serif;
+  --code-bg:      #f4f4f4;
+  --mark-bg:      #fffdaf;
+  --mark-fg:      inherit;
 }
 
 html {
   -webkit-text-size-adjust: 100%;
-  text-size-adjust:100%;
+  text-size-adjust: 100%;
 }
 
 /* ── Base ────────────────────────────────────────────────────── */
@@ -23,6 +31,8 @@ body {
   font: var(--fsize)/1.4 var(--bfont);
   padding: 2ch 0.5ch;
   scrollbar-gutter: stable;
+  background-color: var(--bg);
+  color: var(--fg);   /* everything else inherits */
 }
 
 footer, main {
@@ -58,7 +68,7 @@ figure {
 
 /* ── Section toggles ─────────────────────────────────────────── */
 #notes, #proj, #about, #papers, #hon { display: none; }
-#notes:target, #proj:target, #papers:target, 
+#notes:target, #proj:target, #papers:target,
 #about:target, #hon:target           { display: inline; }
 
 /* ── Typography ──────────────────────────────────────────────── */
@@ -90,7 +100,7 @@ time, span.desc { font-style: italic; }
 span.desc       { display: block; }
 small           { font-size: 72%; }
 sup             { vertical-align: text-top; font-size: 69%; }
-mark            { background-color: #fffdaf; }
+mark            { background-color: var(--mark-bg); color: var(--mark-fg); }
 
 a         { color: var(--link); }
 a:visited { color: var(--link-visited); }
@@ -186,7 +196,7 @@ section.footnotes hr  { display: none; }
 /* ── Code ────────────────────────────────────────────────────── */
 pre, code {
   font-family: var(--cfont);
-  background-color: #f4f4f4;
+  background-color: var(--code-bg);
 }
 
 pre {
@@ -213,6 +223,11 @@ pre > code {
   padding: 1ch 1.5ch;
 }
 
+/* highlight.js (xcode) tokens that fall below 4.5:1 on --code-bg */
+.hljs-selector-class,
+.hljs-selector-id { color: #7a5a30; }   /* was #9b703f, 3.99:1 */
+.xml .hljs-meta   { color: #666; }      /* was silver */
+
 /* ── KaTeX ───────────────────────────────────────────────────── */
 .katex-display > .katex {
   display: inline-block;
@@ -231,43 +246,90 @@ pre > code {
 }
 
 /* ── Dark mode ───────────────────────────────────────────────── */
-@media (prefers-color-scheme: dark) {
-
-  body, header, article, aside {
-    background-color: rgb(48, 56, 65);
+/* `screen and` keeps dark colours out of print preview / PDF export.
+   Colours are real values (no filter) so Lighthouse/axe measure them
+   correctly. Contrast on --bg: fg 6.2, muted 5.5, link 5.6, visited 5.7. */
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    --bg:           rgb(48, 56, 65);
+    --fg:           #bbb;
+    --muted:        #b0b0b0;
+    --link:         #00BFFF;
+    --link-visited: #FF85FF;
+    --code-bg:      #222;
+    --mark-bg:      #222;
+    --mark-fg:      #FFD700;
   }
 
-  h1, h2, h3, p, li, dl, th, td, math > * {
-    color: #bbb;
-    background-color: transparent;
+  /* images only; never put filter on text */
+  img.screen,
+  img.fig {
+    filter: invert(0.85) hue-rotate(180deg);
   }
 
-  /* hr/table have their own explicit colors above; images still benefit from invert */
-  warn, img.screen, img.fig {
-    filter: invert(0.85);
-  }
-
-  pre { filter: invert(0.9); }
-
-  :not(pre) > code { background-color: #222; }
-
-  mark {
-    color: #FFD700;
-    background-color: #222;
-  }
-
-  /* Tone down the footnote separator on dark backgrounds */
-  section.footnotes::before {
-    border-color: var(--muted);
-  }
-
-  hr, hr::after { color: var(--muted); }
-
-  a         { color: var(--link-dark); }
-  a:visited { color: #FF85FF; }
+  /* highlight.js tokens, all ≥ 6.5:1 on #222 */
+  .hljs                                         { color: var(--fg); }
+  .hljs-comment, .hljs-quote                    { color: #6fbf6f; }
+  .hljs-keyword, .hljs-attribute, .hljs-literal,
+  .hljs-name, .hljs-selector-tag, .hljs-tag     { color: #ff7ab2; }
+  .hljs-variable, .hljs-template-variable       { color: #7fc4cc; }
+  .hljs-string, .hljs-code,
+  .hljs-meta .hljs-string                       { color: #ff8170; }
+  .hljs-link, .hljs-regexp                      { color: #82a4ff; }
+  .hljs-number, .hljs-bullet, .hljs-symbol,
+  .hljs-title                                   { color: #a99dff; }
+  .hljs-meta, .hljs-section                     { color: #d9a066; }
+  .hljs-built_in, .hljs-type, .hljs-params,
+  .hljs-class .hljs-title, .hljs-title.class_   { color: #c3a2ff; }
+  .hljs-attr                                    { color: #d9bc70; }
+  .hljs-selector-class, .hljs-selector-id       { color: #d4a56a; }
+  .hljs-subst                                   { color: var(--fg); }
+  .xml .hljs-meta                               { color: #999; }
 }
 
-#msg {
-   text-align: center;
-   // font-style: italic;
+/* ── Print ───────────────────────────────────────────────────── */
+@media print {
+  @page {
+    size: auto;
+    margin: 1in;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    color: #000;
+  }
+
+  /* Hide the site footer */
+  footer { display: none !important; }
+
+  /* Let the article use the full printable width */
+  main, article {
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  time::before {
+    content: "by C Kunt\00E9\00A0on\00A0";
+    display: inline-block;
+    padding-left: 0.1em;
+  }
+
+  /* Message below the article, with a rule above it */
+  article::after {
+    content: "Printed from https://ckunte.net. Feedback is welcome at ckunte@gmail.com";
+    display: block;
+    margin-top: 2em;
+    padding: 0.75em 0.25em;
+    border-top: 1px solid var(--muted);
+    font-size: 0.78em;
+    font-style: italic;
+    line-height: 1.4;
+    break-inside: avoid;
+    page-break-inside: avoid; /* legacy fallback */
+  }
 }
