@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Vim run control</title>
+<meta name="description" content="Listing my Vim run control file here. It’s simple and effective for what I do everyday. I added...">
+<script src="/inc/code-math.js" integrity="sha384-Njw9Of2BFljdNcVOUWYknI0zVDSvQEf6qxU/Bsrdnd3TiefurNv83VvrlFfPi88i"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>Vim run control</h1>
+<time datetime="2026-10-08T22:45:00Z">8 Oct 2026</time>
+<p>Listing my Vim run control file here. It’s simple and effective for what I do everyday. I added persistent undo after an article pointed this out recently; it’s a remarkable feature I have not known for all my time learning and using Vim.</p>
+<pre><code class="language-vim">&quot; ckunte's .vimrc file
+set shell=/usr/bin/fish
+set nocompatible
+
+&quot; -- Autocommands (grouped to avoid duplication on reload) --
+augroup vimrc_autoreload
+  autocmd!
+  autocmd BufWritePost $MYVIMRC source $MYVIMRC
+augroup END
+
+augroup vimrc_cursorline
+  autocmd!
+  &quot; Highlight cursor line only in insert mode
+  autocmd InsertEnter * set cul
+  autocmd InsertLeave * set nocul
+augroup END
+
+augroup vimrc_filetype
+  autocmd!
+  autocmd BufRead,BufNewFile *.md setlocal spell spelllang=en_gb
+augroup END
+
+&quot; -- Cursor shape by mode --
+let &amp;t_SI .= &quot;\e[6 q&quot; &quot; SI = INSERT mode
+let &amp;t_SR .= &quot;\e[4 q&quot; &quot; SR = REPLACE mode
+let &amp;t_EI .= &quot;\e[2 q&quot; &quot; EI = NORMAL mode
+
+&quot; -- Copy / paste --
+set pastetoggle=&lt;F2&gt;
+set clipboard+=unnamedplus
+
+&quot; -- Indent selection with &lt; / &gt; without losing selection --
+vnoremap &lt; &lt;gv
+vnoremap &gt; &gt;gv
+
+&quot; -- Display --
+set number
+set ttyfast
+set laststatus=2
+set ruler
+set showmode
+set showcmd
+set title
+set scrolloff=3
+set wrap
+set linebreak
+
+&quot; -- Files --
+&quot; NOTE: `binary`+`noeol` disables autoindent/textwidth for ALL files, not
+&quot; just ones missing a trailing newline. Only uncomment if you really want
+&quot; that tradeoff globally; otherwise handle per-file.
+&quot; set binary noeol
+set modeline modelines=4
+
+&quot; -- Indentation --
+set autoindent
+set tabstop=4 softtabstop=4 shiftwidth=4 shiftround expandtab
+set backspace=indent,eol,start
+
+&quot; -- Search --
+set hlsearch
+set ignorecase
+set incsearch
+
+&quot; -- Editing behaviour --
+set mouse=a
+set nostartofline
+set spelllang=en_gb
+set complete+=kspell
+
+&quot; Correct misspelled word on the fly with Ctrl+L
+inoremap &lt;C-l&gt; &lt;c-g&gt;u&lt;Esc&gt;[s1z=`]a&lt;c-g&gt;u
+
+&quot; -- Persistent undo --
+set undofile
+set undodir=~/.vim/undo
+set undolevels=10000
+set undoreload=10000
+
+&quot; -- Abbreviations --
+abbr &lt;expr&gt; ds strftime('%Y-%m-%d %H:%M')
+abbr kr Kind regards,&lt;cr&gt;Chetan
+
+&quot; -- Plugins --
+call plug#begin('~/.vim/plugged')
+  Plug 'tpope/vim-sensible'
+  Plug 'tpope/vim-surround'
+  Plug 'jiangmiao/auto-pairs'
+  Plug 'itchyny/lightline.vim'
+  Plug 'kaarmu/typst.vim'
+  Plug 'ckunte/typst-snippets-vim'
+call plug#end()
+
+&quot; -- Colour scheme --
+&quot; Match the terminal (omarchy theme is dark) and use the real 24-bit palette
+&quot; instead of 256-colour approximations.
+set background=dark
+set termguicolors
+
+augroup vimrc_spell
+  autocmd!
+  autocmd ColorScheme * hi clear SpellBad | hi clear SpellCap
+        \ | hi clear SpellRare | hi clear SpellLocal
+        \ | hi SpellBad   cterm=underline gui=undercurl ctermfg=203 guifg=#f7768e
+        \ | hi SpellCap   cterm=underline gui=undercurl ctermfg=111 guifg=#7aa2f7
+        \ | hi SpellRare  cterm=underline gui=undercurl ctermfg=176 guifg=#bb9af7
+        \ | hi SpellLocal cterm=underline gui=undercurl ctermfg=115 guifg=#7dcfff
+  hi clear SpellBad
+  hi clear SpellCap
+  hi clear SpellRare
+  hi clear SpellLocal
+  hi SpellBad   cterm=underline gui=undercurl ctermfg=203 guifg=#f7768e
+  hi SpellCap   cterm=underline gui=undercurl ctermfg=111 guifg=#7aa2f7
+  hi SpellRare  cterm=underline gui=undercurl ctermfg=176 guifg=#bb9af7
+  hi SpellLocal cterm=underline gui=undercurl ctermfg=115 guifg=#7dcfff
+augroup END
+
+augroup vimrc_dim_ui
+  autocmd!
+  autocmd ColorScheme * hi clear LineNr | hi clear CursorLineNr
+        \ | hi clear NonText | hi clear EndOfBuffer | hi clear CursorLine
+        \ | hi LineNr      ctermfg=6 guifg=NONE
+        \ | hi CursorLineNr term=bold cterm=bold,underline ctermfg=6 gui=bold,underline guifg=NONE
+        \ | hi NonText     term=bold cterm=bold ctermfg=9 gui=bold guifg=NONE
+        \ | hi link EndOfBuffer NonText
+        \ | hi CursorLine  term=underline cterm=underline guibg=NONE
+  hi clear LineNr
+  hi clear CursorLineNr
+  hi clear NonText
+  hi clear EndOfBuffer
+  hi clear CursorLine
+  hi LineNr      ctermfg=6 guifg=NONE
+  hi CursorLineNr term=bold cterm=bold,underline ctermfg=6 gui=bold,underline guifg=NONE
+  hi NonText     term=bold cterm=bold ctermfg=9 gui=bold guifg=NONE
+  hi link EndOfBuffer NonText
+augroup END
+</code></pre>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="Manage keys"
+       href="/2026/manage-keys">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="Home"
+       href="/">Home</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>
