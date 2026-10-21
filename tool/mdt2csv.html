@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MD ⇄ CSV</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #666666;
+    --border: #dddddd;
+    --accent: #0060df;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161a;
+      --fg: #e8e8e8;
+      --muted: #9a9a9a;
+      --border: #33363c;
+      --accent: #4d9fff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    margin: 0;
+    padding: 0;
+  }
+  .wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 16px 64px;
+  }
+  h1 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+  p.sub {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin: 0 0 24px;
+    line-height: 1.5;
+  }
+  .status {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-family: var(--mono);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin-bottom: 12px;
+    min-height: 1.4em;
+  }
+  .status.active {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--muted);
+  }
+  textarea {
+    width: 100%;
+    min-height: 200px;
+    resize: vertical;
+    font-family: var(--mono);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--fg);
+  }
+  textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .row {
+    margin-bottom: 20px;
+  }
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  button {
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg);
+    cursor: pointer;
+  }
+  button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  button.primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  button.primary:hover {
+    opacity: 0.9;
+    color: #fff;
+  }
+  .swap {
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 6px 10px;
+  }
+  .error {
+    color: #c0392b;
+    font-size: 0.85rem;
+    margin-top: 6px;
+    min-height: 1.2em;
+  }
+  footer {
+    margin-top: 32px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>MD ⇄ CSV</h1>
+  <p class="sub">Paste a Markdown table or CSV below. The tool detects which one it is and converts it to the other, entirely in your browser — nothing is sent anywhere.</p>
+
+  <div class="row">
+    <label for="input">Input</label>
+    <span id="status" class="status">Waiting for input…</span>
+    <textarea id="input" placeholder="| Name | Age | City |
+| --- | --- | --- |
+| Alice | 30 | NYC |
+
+— or —
+
+Name,Age,City
+Alice,30,NYC"></textarea>
+    <div class="error" id="error"></div>
+  </div>
+
+  <div class="toolbar">
+    <button class="swap" id="swapBtn" title="Swap input and output">⇅ Swap</button>
+    <button id="clearBtn">Clear</button>
+    <button class="primary" id="copyBtn">Copy output</button>
+  </div>
+
+  <div class="row" style="margin-top:24px;">
+    <label for="output">Output</label>
+    <textarea id="output" readonly placeholder="Converted result appears here…"></textarea>
+  </div>
+
+  <footer>Auto-detects Markdown-table vs. CSV input. Handles quoted CSV fields (commas, quotes, newlines) and standard pipe-delimited Markdown tables with an optional header-separator row.</footer>
+</div>
+
+<script>
+(function () {
+  const input = document.getElementById('input');
+  const output = document.getElementById('output');
+  const status = document.getElementById('status');
+  const errorEl = document.getElementById('error');
+  const swapBtn = document.getElementById('swapBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const copyBtn = document.getElementById('copyBtn');
+
+  // ---------- CSV parsing (RFC4180-ish, handles quotes/commas/newlines) ----------
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let field = '';
+    let inQuotes = false;
+    let i = 0;
+    const len = text.length;
+
+    while (i < len) {
+      const ch = text[i];
+
+      if (inQuotes) {
+        if (ch === '"') {
+          if (text[i + 1] === '"') { field += '"'; i += 2; continue; }
+          inQuotes = false; i++; continue;
+        }
+        field += ch; i++; continue;
+      }
+
+      if (ch === '"') { inQuotes = true; i++; continue; }
+      if (ch === ',') { row.push(field); field = ''; i++; continue; }
+      if (ch === '\r') { i++; continue; }
+      if (ch === '\n') {
+        row.push(field); field = '';
+        rows.push(row); row = [];
+        i++; continue;
+      }
+      field += ch; i++;
+    }
+    // flush trailing field/row
+    if (field.length > 0 || row.length > 0) { row.push(field); rows.push(row); }
+
+    // drop fully-empty trailing rows
+    while (rows.length && rows[rows.length - 1].every(c => c === '')) rows.pop();
+
+    return rows;
+  }
+
+  function csvFieldNeedsQuote(f) {
+    return /[",\n\r]/.test(f);
+  }
+
+  function csvEscape(f) {
+    f = String(f);
+    if (csvFieldNeedsQuote(f)) return '"' + f.replace(/"/g, '""') + '"';
+    return f;
+  }
+
+  function rowsToCSV(rows) {
+    return rows.map(r => r.map(csvEscape).join(',')).join('\r\n');
+  }
+
+  // ---------- Markdown table parsing ----------
+  const mdSepRe = /^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$/;
+
+  function isMarkdownSeparatorRow(line) {
+    // e.g. | --- | :---: | ---: |   or without leading/trailing pipes
+    return mdSepRe.test(line) && /-/.test(line);
+  }
+
+  function splitMdRow(line) {
+    let l = line.trim();
+    if (l.startsWith('|')) l = l.slice(1);
+    if (l.endsWith('|')) l = l.slice(0, -1);
+    // split on unescaped pipes
+    const cells = [];
+    let cur = '';
+    for (let i = 0; i < l.length; i++) {
+      const ch = l[i];
+      if (ch === '\\' && l[i + 1] === '|') { cur += '|'; i++; continue; }
+      if (ch === '|') { cells.push(cur.trim()); cur = ''; continue; }
+      cur += ch;
+    }
+    cells.push(cur.trim());
+    return cells;
+  }
+
+  function parseMarkdownTable(text) {
+    const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+    const tableLines = lines.filter(l => l.trim().includes('|'));
+    if (tableLines.length < 1) return null;
+
+    const rows = tableLines.map(splitMdRow).filter(r => !isMarkdownSeparatorRow(tableLines[tableLines.indexOf.call(tableLines, r) >= 0 ? 0 : 0]));
+    // simpler: rebuild filtering separator lines directly
+    const dataRows = [];
+    for (const line of tableLines) {
+      if (isMarkdownSeparatorRow(line)) continue;
+      dataRows.push(splitMdRow(line));
+    }
+    if (dataRows.length === 0) return null;
+
+    // normalize column count to header length
+    const width = dataRows[0].length;
+    return dataRows.map(r => {
+      const rr = r.slice(0, width);
+      while (rr.length < width) rr.push('');
+      return rr;
+    });
+  }
+
+  function mdEscape(f) {
+    return String(f).replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
+  }
+
+  function rowsToMarkdown(rows) {
+    if (!rows.length) return '';
+    const width = Math.max(...rows.map(r => r.length));
+    const norm = rows.map(r => {
+      const rr = r.slice(0, width);
+      while (rr.length < width) rr.push('');
+      return rr;
+    });
+    const widths = new Array(width).fill(3);
+    norm.forEach(r => r.forEach((c, i) => { widths[i] = Math.max(widths[i], mdEscape(c).length); }));
+
+    const fmtRow = r => '| ' + r.map((c, i) => mdEscape(c).padEnd(widths[i], ' ')).join(' | ') + ' |';
+    const header = fmtRow(norm[0]);
+    const sep = '| ' + widths.map(w => '-'.repeat(w)).join(' | ') + ' |';
+    const body = norm.slice(1).map(fmtRow);
+    return [header, sep, ...body].join('\n');
+  }
+
+  // ---------- Detection ----------
+  function looksLikeMarkdownTable(text) {
+    const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+    if (lines.length < 1) return false;
+    const pipeLines = lines.filter(l => l.includes('|'));
+    if (pipeLines.length === 0) return false;
+    const hasSeparator = lines.some(isMarkdownSeparatorRow);
+    // Either has a proper separator row, or at least 2 lines with pipes and consistent cell counts
+    if (hasSeparator) return true;
+    return pipeLines.length >= 1 && pipeLines.every(l => l.includes('|'));
+  }
+
+  function looksLikeCSV(text) {
+    const trimmed = text.trim();
+    if (!trimmed) return false;
+    if (looksLikeMarkdownTable(text)) return false;
+    // has commas or is quoted, and doesn't look like prose
+    const firstLines = trimmed.split(/\r?\n/).slice(0, 5);
+    const commaLines = firstLines.filter(l => l.includes(',') || l.includes('"'));
+    return commaLines.length >= 1;
+  }
+
+  function detect(text) {
+    const t = text.trim();
+    if (!t) return null;
+    if (looksLikeMarkdownTable(t)) return 'md';
+    if (looksLikeCSV(t)) return 'csv';
+    return null;
+  }
+
+  // ---------- Main convert ----------
+  function convert() {
+    const text = input.value;
+    errorEl.textContent = '';
+    if (!text.trim()) {
+      output.value = '';
+      status.textContent = 'Waiting for input…';
+      status.classList.remove('active');
+      return;
+    }
+
+    const kind = detect(text);
+
+    if (kind === 'md') {
+      status.textContent = 'Detected: Markdown table → converting to CSV';
+      status.classList.add('active');
+      try {
+        const rows = parseMarkdownTable(text);
+        if (!rows) throw new Error('Could not parse any table rows.');
+        output.value = rowsToCSV(rows);
+      } catch (e) {
+        errorEl.textContent = 'Error parsing Markdown table: ' + e.message;
+        output.value = '';
+      }
+    } else if (kind === 'csv') {
+      status.textContent = 'Detected: CSV → converting to Markdown table';
+      status.classList.add('active');
+      try {
+        const rows = parseCSV(text);
+        if (!rows.length) throw new Error('No rows found.');
+        output.value = rowsToMarkdown(rows);
+      } catch (e) {
+        errorEl.textContent = 'Error parsing CSV: ' + e.message;
+        output.value = '';
+      }
+    } else {
+      status.textContent = "Couldn't detect Markdown table or CSV — paste one of those formats.";
+      status.classList.remove('active');
+      output.value = '';
+    }
+  }
+
+  input.addEventListener('input', convert);
+
+  swapBtn.addEventListener('click', function () {
+    const outVal = output.value;
+    if (!outVal.trim()) return;
+    input.value = outVal;
+    convert();
+  });
+
+  clearBtn.addEventListener('click', function () {
+    input.value = '';
+    output.value = '';
+    errorEl.textContent = '';
+    status.textContent = 'Waiting for input…';
+    status.classList.remove('active');
+    input.focus();
+  });
+
+  copyBtn.addEventListener('click', async function () {
+    if (!output.value) return;
+    try {
+      await navigator.clipboard.writeText(output.value);
+      const orig = copyBtn.textContent;
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => { copyBtn.textContent = orig; }, 1200);
+    } catch (e) {
+      // fallback
+      output.removeAttribute('readonly');
+      output.select();
+      document.execCommand('copy');
+      output.setAttribute('readonly', 'readonly');
+    }
+  });
+})();
+</script>
+</body>
+</html>

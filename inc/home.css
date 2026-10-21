@@ -1,0 +1,335 @@
+@charset "utf-8";
+@import url("/inc/xcode.min.css");
+
+/* ── Custom properties ───────────────────────────────────────── */
+:root {
+  color-scheme: light dark;
+
+  --fsize:        1.13em;
+  --cwidth:       40em;
+  --cfont:        "jetbrains mono", ui-monospace, monospace;
+  --bfont:        system-ui, sans-serif;
+
+  /* Light theme (all pairs ≥ 7:1 on --bg) */
+  --bg:           #fff;
+  --fg:           #000;
+  --muted:        #444;
+  --link:         #0645AD;
+  --link-visited: #551A8B;
+  --code-bg:      #f4f4f4;
+  --mark-bg:      #fffdaf;
+  --mark-fg:      inherit;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* ── Base ────────────────────────────────────────────────────── */
+body {
+  font: var(--fsize)/1.4 var(--bfont);
+  padding: 2ch 0.5ch;
+  scrollbar-gutter: stable;
+  background-color: var(--bg);
+  color: var(--fg);   /* everything else inherits */
+}
+
+footer, main {
+  margin: auto;
+  max-width: var(--cwidth);
+}
+
+/* ── Layout ──────────────────────────────────────────────────── */
+footer {
+  display: flex;
+  justify-content: space-between;
+  margin: 2ch auto;
+  font-style: italic;
+}
+
+aside, footer, footer > p, time, small, i, span.desc, #notes > p {
+  color: var(--muted);
+}
+
+.logo {
+  margin: 0.5ch;
+  height: calc(1.6 * var(--fsize));
+  width: auto;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+figure {
+  min-width: 100%;
+  max-width: var(--cwidth);
+  margin-left: 0;
+}
+
+/* ── Section toggles ─────────────────────────────────────────── */
+#notes, #proj, #about, #papers, #hon { display: none; }
+#notes:target, #proj:target, #papers:target,
+#about:target, #hon:target           { display: inline; }
+
+/* ── Typography ──────────────────────────────────────────────── */
+h1, h2, h3 {
+  font-family: var(--bfont);
+  line-height: 1.05;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+h1 { font-size: 136%; margin-top: 0; }
+h2 { font-size: 120%; }
+h3 { font-size: 113%; }
+
+li, p {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  hyphenate-limit-chars: 6 3 3;
+  hyphenate-limit-lines: 2;
+  hyphenate-limit-last: always;
+  hyphenate-limit-zone: 8%;
+}
+
+ul             { padding-left: 2.5ch; }
+ul > li        { margin-left: 0; }
+
+time, span.desc { font-style: italic; }
+span.desc       { display: block; }
+small           { font-size: 72%; }
+sup             { vertical-align: text-top; font-size: 69%; }
+mark            { background-color: var(--mark-bg); color: var(--mark-fg); }
+
+a         { color: var(--link); }
+a:visited { color: var(--link-visited); }
+
+/* ── Horizontal rule (ornamental) ───────────────────────────── */
+hr {
+  margin-top: 1lh;
+  border: none;
+  text-align: center;
+  color: var(--muted);
+}
+
+hr::after {
+  content: "* * *";
+  display: block;
+  text-align: center;
+}
+
+/* ── Blockquote ──────────────────────────────────────────────── */
+blockquote          { margin: 0; }
+blockquote p,
+blockquote li       { margin: 0 3ch; font-style: italic; }
+
+blockquote > p + p                   { text-indent: 2ch; }
+blockquote > p:first-of-type::before { content: open-quote; margin-left: -1ch; }
+blockquote > p:last-of-type::after   { content: close-quote; }
+
+/* ── Articles ────────────────────────────────────────────────── */
+article.frontpage         { margin: 0; }
+article.frontpage > p + p { text-indent: 2ch; margin-top: -1.5ch; }
+
+/* ── Media ───────────────────────────────────────────────────── */
+p > img, table {
+  width: 100%;
+  max-width: var(--cwidth);
+}
+
+p > img {
+  min-width: 100%;
+  margin: 0;
+  border-radius: .5ch;
+}
+
+img + img { margin-top: 0; }
+
+/* ── Tables ──────────────────────────────────────────────────── */
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  text-align: left;
+  margin: 2ch 0 !important;
+}
+
+tr:nth-child(n) {
+  border-bottom: 0.5px solid color-mix(in srgb, var(--muted) 50%, transparent);
+}
+
+tbody tr:hover {
+  background-color: color-mix(in srgb, var(--muted) 12%, transparent);
+}
+
+th {
+  font-style: italic;
+  font-weight: normal;
+}
+
+th, td {
+  text-align: left;
+  vertical-align: text-top;
+  padding: 0.5ch 1ch;
+  font-size: 87%;
+  line-height: 1.4;
+}
+
+/* ── Footnotes ───────────────────────────────────────────────── */
+/* ::before draws the separator line; the native <hr> is suppressed below */
+section.footnotes {
+  padding-top: 1rem;
+}
+
+section.footnotes::before {
+  content: "";
+  display: block;
+  width: 36%;
+  border-top: 1px solid var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+section.footnotes hr  { display: none; }
+.footnotes li         { font-size: 87%; }
+.footnotes li + li    { margin-top: -1ch; }
+
+/* ── Code ────────────────────────────────────────────────────── */
+pre, code {
+  font-family: var(--cfont);
+  background-color: var(--code-bg);
+}
+
+pre {
+  display: block;
+  border-radius: .4em;
+}
+
+code {
+  font-size: 87%;
+  margin: 0 1px;
+  font-feature-settings: "ss01" 1;
+}
+
+:not(pre) > code {
+  padding: 0 3px;
+  border-radius: 0.2ch;
+}
+
+pre > code {
+  display: block;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  border-radius: 1ch;
+  padding: 1ch 1.5ch;
+}
+
+/* highlight.js (xcode) tokens that fall below 4.5:1 on --code-bg */
+.hljs-selector-class,
+.hljs-selector-id { color: #7a5a30; }   /* was #9b703f, 3.99:1 */
+.xml .hljs-meta   { color: #666; }      /* was silver */
+
+/* ── KaTeX ───────────────────────────────────────────────────── */
+.katex-display > .katex {
+  display: inline-block;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: initial;
+}
+
+.katex {
+  font: normal 1.13rem KaTeX_Main, "Times New Roman", serif;
+  line-height: 1.4;
+  white-space: normal;
+  text-indent: 0;
+}
+
+/* ── Dark mode ───────────────────────────────────────────────── */
+/* `screen and` keeps dark colours out of print preview / PDF export.
+   Colours are real values (no filter) so Lighthouse/axe measure them
+   correctly. Contrast on --bg: fg 6.2, muted 5.5, link 5.6, visited 5.7. */
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    --bg:           rgb(48, 56, 65);
+    --fg:           #bbb;
+    --muted:        #b0b0b0;
+    --link:         #00BFFF;
+    --link-visited: #FF85FF;
+    --code-bg:      #222;
+    --mark-bg:      #222;
+    --mark-fg:      #FFD700;
+  }
+
+  /* images only; never put filter on text */
+  img.screen,
+  img.fig {
+    filter: invert(0.85) hue-rotate(180deg);
+  }
+
+  /* highlight.js tokens, all ≥ 6.5:1 on #222 */
+  .hljs                                         { color: var(--fg); }
+  .hljs-comment, .hljs-quote                    { color: #6fbf6f; }
+  .hljs-keyword, .hljs-attribute, .hljs-literal,
+  .hljs-name, .hljs-selector-tag, .hljs-tag     { color: #ff7ab2; }
+  .hljs-variable, .hljs-template-variable       { color: #7fc4cc; }
+  .hljs-string, .hljs-code,
+  .hljs-meta .hljs-string                       { color: #ff8170; }
+  .hljs-link, .hljs-regexp                      { color: #82a4ff; }
+  .hljs-number, .hljs-bullet, .hljs-symbol,
+  .hljs-title                                   { color: #a99dff; }
+  .hljs-meta, .hljs-section                     { color: #d9a066; }
+  .hljs-built_in, .hljs-type, .hljs-params,
+  .hljs-class .hljs-title, .hljs-title.class_   { color: #c3a2ff; }
+  .hljs-attr                                    { color: #d9bc70; }
+  .hljs-selector-class, .hljs-selector-id       { color: #d4a56a; }
+  .hljs-subst                                   { color: var(--fg); }
+  .xml .hljs-meta                               { color: #999; }
+}
+
+/* ── Print ───────────────────────────────────────────────────── */
+@media print {
+  @page {
+    size: auto;
+    margin: 1in;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    color: #000;
+  }
+
+  /* Hide the site footer */
+  footer { display: none !important; }
+
+  /* Let the article use the full printable width */
+  main, article {
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  time::before {
+    content: "by C Kunt\00E9\00A0on\00A0";
+    display: inline-block;
+    padding-left: 0.1em;
+  }
+
+  /* Message below the article, with a rule above it */
+  article::after {
+    content: "Printed from https://ckunte.net. Feedback is welcome at ckunte@gmail.com";
+    display: block;
+    margin-top: 2em;
+    padding: 0.75em 0.25em;
+    border-top: 1px solid var(--muted);
+    font-size: 0.78em;
+    font-style: italic;
+    line-height: 1.4;
+    break-inside: avoid;
+    page-break-inside: avoid; /* legacy fallback */
+  }
+}

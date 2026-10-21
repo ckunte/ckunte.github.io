@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Markdown Live Preview</title>
+<style>
+  :root {
+    --bg: #f5f5f4; --panel: #ffffff; --ink: #1c1917; --muted: #78716c;
+    --line: #e7e5e4; --accent: #2563eb; --accent-ink: #ffffff;
+    --code-bg: #f5f5f4; --quote: #d6d3d1; --mark: #fef08a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0c0a09; --panel: #1c1917; --ink: #e7e5e4; --muted: #a8a29e;
+      --line: #292524; --accent: #60a5fa; --accent-ink: #0c0a09;
+      --code-bg: #292524; --quote: #44403c; --mark: #713f12;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    display: flex; flex-direction: column;
+  }
+
+  /* ---------- toolbar ---------- */
+  .toolbar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line);
+  }
+  .brand { font-weight: 650; margin-right: auto; letter-spacing: -.01em; }
+  button, .btn {
+    font: inherit; color: var(--ink); background: var(--panel);
+    border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+  }
+  button:hover, .btn:hover { border-color: var(--muted); }
+  button:focus-visible, .btn:focus-within { outline: 2px solid var(--accent); outline-offset: 1px; }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  .seg { display: inline-flex; }
+  .seg button { border-radius: 0; margin-left: -1px; }
+  .seg button:first-child { border-radius: 8px 0 0 8px; margin-left: 0; }
+  .seg button:last-child { border-radius: 0 8px 8px 0; }
+  .seg button[aria-pressed="true"] { background: var(--code-bg); border-color: var(--muted); position: relative; font-weight: 600; }
+  input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+  /* ---------- panes ---------- */
+  main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; }
+  main[data-view="edit"] { grid-template-columns: 1fr; }
+  main[data-view="edit"] .preview-pane { display: none; }
+  main[data-view="preview"] { grid-template-columns: 1fr; }
+  main[data-view="preview"] .editor-pane { display: none; }
+  .editor-pane, .preview-pane { min-width: 0; min-height: 0; overflow: auto; background: var(--panel); }
+  .editor-pane { border-right: 1px solid var(--line); display: flex; }
+  main[data-view="edit"] .editor-pane, main[data-view="preview"] .editor-pane { border-right: 0; }
+  textarea {
+    flex: 1; width: 100%; border: 0; resize: none; padding: 20px 16px;
+    background: transparent; color: var(--ink); tab-size: 2;
+    font: 14px/1.6 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  }
+  textarea:focus { outline: none; }
+  .editor-pane.drag { outline: 2px dashed var(--accent); outline-offset: -6px; }
+
+  .status {
+    display: flex; gap: 16px; padding: 6px 16px; font-size: 12px; color: var(--muted);
+    background: var(--panel); border-top: 1px solid var(--line);
+  }
+  .status span:last-child { margin-left: auto; }
+
+  @media (max-width: 760px) {
+    main[data-view="split"] { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+    main[data-view="split"] .editor-pane { border-right: 0; border-bottom: 1px solid var(--line); }
+    .brand { flex-basis: 100%; }
+  }
+
+  /* ---------- rendered markdown ---------- */
+  .preview { max-width: 780px; margin: 0 auto; padding: 28px 24px 64px; overflow-wrap: anywhere; line-height: 1.65; }
+  .preview > :first-child { margin-top: 0; }
+  .preview h1, .preview h2, .preview h3, .preview h4, .preview h5, .preview h6 {
+    line-height: 1.25; margin: 1.6em 0 .5em; letter-spacing: -.01em;
+  }
+  .preview h1 { font-size: 2em; padding-bottom: .3em; border-bottom: 1px solid var(--line); }
+  .preview h2 { font-size: 1.5em; padding-bottom: .25em; border-bottom: 1px solid var(--line); }
+  .preview h3 { font-size: 1.25em; }
+  .preview h4 { font-size: 1.05em; }
+  .preview h5, .preview h6 { font-size: .95em; color: var(--muted); }
+  .preview p, .preview ul, .preview ol, .preview blockquote, .preview pre, .preview table { margin: 0 0 1em; }
+  .preview ul, .preview ol { padding-left: 1.6em; }
+  .preview li > ul, .preview li > ol { margin: .2em 0; }
+  .preview li.task { list-style: none; margin-left: -1.3em; }
+  .preview li.task input { margin-right: .5em; }
+  .preview a { color: var(--accent); }
+  .preview img { max-width: 100%; height: auto; }
+  .preview code {
+    font: .88em ui-monospace, SFMono-Regular, Consolas, monospace;
+    background: var(--code-bg); padding: .15em .35em; border-radius: 5px;
+  }
+  .preview pre { background: var(--code-bg); padding: 14px 16px; border-radius: 8px; overflow: auto; line-height: 1.5; }
+  .preview pre code { background: none; padding: 0; font-size: .85em; }
+  .preview blockquote { border-left: 4px solid var(--quote); margin-left: 0; padding: 0 1em; color: var(--muted); }
+  .preview blockquote > :last-child { margin-bottom: 0; }
+  .preview hr { border: 0; border-top: 1px solid var(--line); margin: 2em 0; }
+  .preview table { border-collapse: collapse; display: block; overflow-x: auto; max-width: 100%; }
+  .preview th, .preview td { border: 1px solid var(--line); padding: 6px 12px; }
+  .preview th { background: var(--code-bg); }
+  .preview del { color: var(--muted); }
+
+  /* ---------- print / PDF ---------- */
+  @page { margin: 18mm 16mm; }
+  @media print {
+    :root {
+      --bg: #fff; --panel: #fff; --ink: #111; --muted: #555; --line: #d4d4d4;
+      --accent: #1d4ed8; --code-bg: #f3f4f6; --quote: #bbb;
+    }
+    html, body { height: auto; background: #fff; display: block; font-size: 11pt; }
+    .toolbar, .editor-pane, .status { display: none !important; }
+    main { display: block !important; }
+    .preview-pane { display: block !important; overflow: visible; background: #fff; }
+    .preview { max-width: none; padding: 0; }
+    .preview a { text-decoration: underline; }
+    .preview h1, .preview h2, .preview h3, .preview h4 { break-after: avoid; }
+    .preview pre, .preview blockquote, .preview img, .preview tr { break-inside: avoid; }
+    .preview pre { white-space: pre-wrap; border: 1px solid var(--line); }
+    .preview table { display: table; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<header class="toolbar">
+  <span class="brand">Markdown Live Preview</span>
+  <div class="seg" role="group" aria-label="View">
+    <button type="button" data-view="edit" aria-pressed="false">Editor</button>
+    <button type="button" data-view="split" aria-pressed="true">Split</button>
+    <button type="button" data-view="preview" aria-pressed="false">Preview</button>
+  </div>
+  <label class="btn">Open…<input type="file" id="file" accept=".md,.markdown,.txt,text/markdown,text/plain"></label>
+  <button type="button" id="save">Save .md</button>
+  <button type="button" id="pdf" class="primary" title="Opens the print dialog — choose “Save as PDF”">Export PDF</button>
+</header>
+
+<main data-view="split">
+  <section class="editor-pane" id="editorPane">
+    <textarea id="src" spellcheck="false" aria-label="Markdown source" placeholder="Write Markdown here…"></textarea>
+  </section>
+  <section class="preview-pane" id="previewPane" aria-label="Preview">
+    <article class="preview" id="out"></article>
+  </section>
+</main>
+
+<footer class="status"><span id="words"></span><span id="saved">Drop a .md file onto the editor to open it</span></footer>
+
+<script>
+/* ===================== Markdown parser (no dependencies) ===================== */
+const Markdown = (() => {
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const safeUrl = u => /^\s*(javascript|vbscript|data(?!:image\/))\s*:/i.test(u.replace(/&amp;/g, '&')) ? '#' : u;
+  const PH = '\u0000';
+
+  // Inline formatting. `s` is already HTML-escaped; `stash` holds finished HTML fragments.
+  function fmt(s, stash) {
+    const keep = html => PH + (stash.push(html) - 1) + PH;
+    // images, then links
+    s = s.replace(/!\[([^\]]*)\]\(\s*([^)\s]+)(?:\s+&quot;(.*?)&quot;)?\s*\)/g,
+      (m, alt, url, title) => keep(`<img src="${safeUrl(url)}" alt="${alt}"${title ? ` title="${title}"` : ''}>`));
+    s = s.replace(/\[([^\]]+)\]\(\s*([^)\s]+)(?:\s+&quot;(.*?)&quot;)?\s*\)/g,
+      (m, text, url, title) => keep(`<a href="${safeUrl(url)}"${title ? ` title="${title}"` : ''}>${fmt(text, stash)}</a>`));
+    // autolinks
+    s = s.replace(/&lt;(https?:\/\/[^\s&]+)&gt;/g, (m, u) => keep(`<a href="${u}">${u}</a>`));
+    s = s.replace(/(^|[\s(])(https?:\/\/[^\s<)]+[^\s<).,;:!?])/g, (m, pre, u) => pre + keep(`<a href="${u}">${u}</a>`));
+    // emphasis
+    s = s.replace(/(\*\*|__)(?=\S)([\s\S]*?\S)\1/g, '<strong>$2</strong>');
+    s = s.replace(/\*(?=\S)([\s\S]*?\S)\*/g, '<em>$1</em>');
+    s = s.replace(/(^|\W)_(?=\S)([\s\S]*?\S)_(?!\w)/g, '$1<em>$2</em>');
+    s = s.replace(/~~(?=\S)([\s\S]*?\S)~~/g, '<del>$1</del>');
+    return s;
+  }
+
+  function inline(raw) {
+    const stash = [];
+    // code spans first, so their contents are never formatted
+    let s = raw.replace(/(`+)([\s\S]*?[^`])\1(?!`)/g, (m, a, c) => PH + (stash.push(`<code>${esc(c.trim())}</code>`) - 1) + PH);
+    s = esc(s);
+    s = s.replace(/\\([\\`*_{}\[\]()#+\-.!~|])/g, (m, c) => PH + (stash.push(c) - 1) + PH);
+    s = fmt(s, stash);
+    const re = new RegExp(PH + '(\\d+)' + PH, 'g');
+    while (re.test(s)) { re.lastIndex = 0; s = s.replace(re, (m, i) => stash[+i]); }
+    return s;
+  }
+
+  const reFence = /^ {0,3}(`{3,}|~{3,})\s*([\w+#.-]*)/;
+  const reHeading = /^ {0,3}(#{1,6})\s+(.*?)(?:\s+#+)?\s*$/;
+  const reHr = /^ {0,3}([-*_])( *\1){2,} *$/;
+  const reQuote = /^ {0,3}>/;
+  const reList = /^(\s*)([-*+]|\d{1,9}[.)])\s+/;
+  const reSep = /^\s*\|?\s*:?-{1,}:?\s*(\|\s*:?-{1,}:?\s*)*\|?\s*$/;
+  const indentOf = l => l.match(/^ */)[0].length;
+  const isBlank = l => !l.trim();
+  const startsBlock = l => reFence.test(l) || reHeading.test(l) || reHr.test(l) || reQuote.test(l) || reList.test(l);
+
+  const splitRow = line => {
+    let t = line.trim();
+    if (t.startsWith('|')) t = t.slice(1);
+    if (t.endsWith('|') && !t.endsWith('\\|')) t = t.slice(0, -1);
+    return t.split(/(?<!\\)\|/).map(c => c.trim().replace(/\\\|/g, '|'));
+  };
+
+  function blocks(lines, tight) {
+    const out = [];
+    let i = 0;
+    while (i < lines.length) {
+      const line = lines[i];
+      if (isBlank(line)) { i++; continue; }
+
+      let m;
+      if ((m = line.match(reFence))) {
+        const fence = m[1], lang = m[2], body = [];
+        i++;
+        while (i < lines.length && !new RegExp('^ {0,3}' + fence[0] + '{' + fence.length + ',}\\s*$').test(lines[i])) body.push(lines[i++]);
+        i++;
+        out.push(`<pre><code${lang ? ` class="language-${esc(lang)}"` : ''}>${esc(body.join('\n'))}</code></pre>`);
+        continue;
+      }
+      if ((m = line.match(reHeading))) {
+        const n = m[1].length;
+        out.push(`<h${n}>${inline(m[2])}</h${n}>`); i++; continue;
+      }
+      if (reHr.test(line)) { out.push('<hr>'); i++; continue; }
+
+      if (reQuote.test(line)) {
+        const q = [];
+        while (i < lines.length && !isBlank(lines[i]) && (reQuote.test(lines[i]) || (q.length && !startsBlock(lines[i])))) {
+          q.push(lines[i].replace(/^ {0,3}> ?/, '')); i++;
+        }
+        out.push(`<blockquote>${blocks(q)}</blockquote>`); continue;
+      }
+
+      if (line.includes('|') && i + 1 < lines.length && reSep.test(lines[i + 1]) && lines[i + 1].includes('-')) {
+        const head = splitRow(line);
+        const aligns = splitRow(lines[i + 1]).map(c => c.startsWith(':') ? (c.endsWith(':') ? 'center' : 'left') : c.endsWith(':') ? 'right' : '');
+        i += 2;
+        const rows = [];
+        while (i < lines.length && !isBlank(lines[i]) && lines[i].includes('|')) rows.push(splitRow(lines[i++]));
+        const cell = (tag, c, k) => `<${tag}${aligns[k] ? ` style="text-align:${aligns[k]}"` : ''}>${inline(c || '')}</${tag}>`;
+        out.push(`<table><thead><tr>${head.map((c, k) => cell('th', c, k)).join('')}</tr></thead>` +
+          `<tbody>${rows.map(r => `<tr>${head.map((_, k) => cell('td', r[k], k)).join('')}</tr>`).join('')}</tbody></table>`);
+        continue;
+      }
+
+      if ((m = line.match(reList))) {
+        const baseIndent = m[1].length;
+        const ordered = /\d/.test(m[2]);
+        const start = ordered ? parseInt(m[2], 10) : 1;
+        const items = [];
+        let loose = false;
+        while (i < lines.length) {
+          const lm = lines[i].match(reList);
+          if (!lm || lm[1].length > baseIndent + 1 || /\d/.test(lm[2]) !== ordered) break;
+          const w = lm[0].length;
+          const body = [lines[i].slice(w)];
+          i++;
+          while (i < lines.length) {
+            const l = lines[i];
+            if (isBlank(l)) {
+              let j = i; while (j < lines.length && isBlank(lines[j])) j++;
+              if (j < lines.length && indentOf(lines[j]) >= w) { body.push(''); loose = true; i++; continue; }
+              break;
+            }
+            if (indentOf(l) >= w) { body.push(l.slice(w)); i++; continue; }
+            if (!isBlank(body[body.length - 1]) && !startsBlock(l)) { body.push(l.trim()); i++; continue; }
+            break;
+          }
+          items.push(body);
+          let j = i; while (j < lines.length && isBlank(lines[j])) j++;
+          const nx = j < lines.length && lines[j].match(reList);
+          const sibling = nx && nx[1].length <= baseIndent + 1 && /\d/.test(nx[2]) === ordered;
+          if (sibling && j > i) { loose = true; i = j; }
+        }
+        const tag = ordered ? 'ol' : 'ul';
+        const html = items.map(body => {
+          let task = '';
+          const t = body[0].match(/^\[( |x|X)\]\s+/);
+          if (t) { body[0] = body[0].slice(t[0].length); task = `<input type="checkbox" disabled${t[1] !== ' ' ? ' checked' : ''}>`; }
+          return `<li${t ? ' class="task"' : ''}>${task}${blocks(body, !loose)}</li>`;
+        }).join('');
+        out.push(`<${tag}${ordered && start !== 1 ? ` start="${start}"` : ''}>${html}</${tag}>`);
+        continue;
+      }
+
+      // paragraph
+      const p = [line];
+      i++;
+      while (i < lines.length && !isBlank(lines[i]) && !startsBlock(lines[i]) &&
+             !(lines[i].includes('|') && i + 1 < lines.length && reSep.test(lines[i + 1]) && lines[i + 1].includes('-'))) p.push(lines[i++]);
+      const text = inline(p.map((l, k) => k < p.length - 1 ? l.replace(/ {2,}$/, '\u0001') : l.trimEnd()).join('\n'))
+        .replace(/\u0001\n/g, '<br>\n');
+      out.push(tight ? text : `<p>${text}</p>`);
+    }
+    return out.join(tight ? '\n' : '\n');
+  }
+
+  return { render: src => blocks(src.replace(/\r\n?/g, '\n').replace(/\t/g, '    ').split('\n')) };
+})();
+
+/* ===================== App ===================== */
+const $ = id => document.getElementById(id);
+const src = $('src'), out = $('out'), main = document.querySelector('main');
+const STORE = 'md-live-preview:v1';
+
+const SAMPLE = `# Markdown Live Preview
+
+Type on the left, see the result on the right. Press **Export PDF** and choose *Save as PDF* in the print dialog.
+
+## What's supported
+
+- **Bold**, *italic*, ~~strikethrough~~ and \`inline code\`
+- [Links](https://example.com) and autolinks like <https://example.com>
+  - Nested lists
+  - Work as expected
+- [x] Task lists
+- [ ] Unchecked items
+
+1. Ordered lists
+2. Keep their numbering
+
+> Blockquotes are for quoting people smarter than you.
+
+### Code
+
+\`\`\`js
+function greet(name) {
+  return \`Hello, \${name}!\`;
+}
+\`\`\`
+
+### Tables
+
+| Feature  | Status | Notes            |
+|----------|:------:|-----------------:|
+| Headings |   ✅   | levels 1–6       |
+| Tables   |   ✅   | with alignment   |
+| Images   |   ✅   | \`![alt](url)\`    |
+
+---
+
+Edits are saved in your browser automatically.
+`;
+
+let saved = null;
+try { saved = localStorage.getItem(STORE); } catch (e) {}
+src.value = saved !== null ? saved : SAMPLE;
+
+function render() {
+  out.innerHTML = Markdown.render(src.value);
+  const words = (src.value.trim().match(/\S+/g) || []).length;
+  $('words').textContent = `${words} word${words === 1 ? '' : 's'} · ${src.value.length} characters`;
+}
+let t;
+src.addEventListener('input', () => {
+  render();
+  clearTimeout(t);
+  t = setTimeout(() => { try { localStorage.setItem(STORE, src.value); } catch (e) {} }, 300);
+});
+render();
+
+// Tab inserts two spaces instead of leaving the editor
+src.addEventListener('keydown', e => {
+  if (e.key === 'Tab' && !e.shiftKey && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    e.preventDefault();
+    document.execCommand('insertText', false, '  ');
+  }
+});
+
+// Proportional scroll sync (editor → preview)
+const prev = $('previewPane');
+src.addEventListener('scroll', () => {
+  if (main.dataset.view !== 'split') return;
+  const r = src.scrollTop / Math.max(1, src.scrollHeight - src.clientHeight);
+  prev.scrollTop = r * (prev.scrollHeight - prev.clientHeight);
+});
+
+// View switcher
+document.querySelectorAll('[data-view]').forEach(b => {
+  if (b.tagName !== 'BUTTON') return;
+  b.addEventListener('click', () => {
+    main.dataset.view = b.dataset.view;
+    document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  });
+});
+
+// Open / save
+function loadText(text) { src.value = text; src.dispatchEvent(new Event('input')); }
+$('file').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (f) f.text().then(loadText);
+  e.target.value = '';
+});
+const pane = $('editorPane');
+['dragenter', 'dragover'].forEach(ev => pane.addEventListener(ev, e => { e.preventDefault(); pane.classList.add('drag'); }));
+['dragleave', 'drop'].forEach(ev => pane.addEventListener(ev, e => { e.preventDefault(); pane.classList.remove('drag'); }));
+pane.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f) f.text().then(loadText); });
+
+const docName = () => {
+  const h = src.value.match(/^\s*#{1,6}\s+(.+)$/m);
+  const base = (h ? h[1] : 'document').replace(/[`*_~\[\]()]/g, '').replace(/[\\/:*?"<>|]+/g, ' ').trim().slice(0, 80);
+  return base || 'document';
+};
+$('save').addEventListener('click', () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([src.value], { type: 'text/markdown' }));
+  a.download = docName() + '.md';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+
+// PDF export: the browser's print engine produces a real vector PDF with selectable text.
+// The document title becomes the suggested file name.
+let oldTitle = document.title;
+window.addEventListener('beforeprint', () => { oldTitle = document.title; document.title = docName(); });
+window.addEventListener('afterprint', () => { document.title = oldTitle; });
+$('pdf').addEventListener('click', () => {
+  if (main.dataset.view === 'edit') render();
+  window.print();
+});
+</script>
+</body>
+</html>

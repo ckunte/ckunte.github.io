@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Housekeeping</title>
+<meta name="description" content="2026: hk ( repo) is my CLI tool belt for fixing everyday annoyances. Since I last wrote about it...">
+<script src="/inc/code-math.js" integrity="sha384-Njw9Of2BFljdNcVOUWYknI0zVDSvQEf6qxU/Bsrdnd3TiefurNv83VvrlFfPi88i"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>Housekeeping</h1>
+<time datetime="2019-06-26T22:05:00Z">26 Jun 2019</time>
+<p>2026: <code>hk</code> (<a href="https://github.com/ckunte/hkp" title="GitHub - ckunte/hkp: A collection of hkp to manage files, folders, set permissions, prune empty folders, combine/compress pdf files, etc.">repo</a>) is my CLI tool belt for fixing everyday annoyances. Since I last wrote about it back in 2019, I had the opportunity to refactor it recently (from a bunch of shell scripts + Makefile) into a single binary. The tool is re-written in Rust, and it is <em>fast</em>, eliminating few options and dependencies I could get rid of. The repo. now has binary releases for a few OSes I use routinely.</p>
+<hr />
+<p>My current work involves a lot of reading, and I receive a ton of files from many sources — colleagues, contractors, vendors, document systems, et al. The fact that I have instead tried listening to them in dull monotone (via text to speech) must be a giveaway. Last Sunday, I sat down to list all the minor house-keeping annoyances that stop me in my tracks while working, so I could do something about them. Here are the top five:</p>
+<ol>
+<li>Split and scattered pdf files in a folder</li>
+<li>Empty folders</li>
+<li>File and folder permissions</li>
+<li>Scattered LaTeX compile files</li>
+<li>pdf file sizes</li>
+</ol>
+<p>I realised that I had solved these problems at one time or the other in the past, but hadn’t joined them up into a single tool belt that I could access with a simple command in one stroke. I realised I could create a <code>Makefile</code> that could make it all possible.</p>
+<p>My <a href="https://github.com/ckunte/hkp" title="GitHub - ckunte/hkp: A collection of hkp to manage files, folders, set permissions, prune empty folders, combine/compress pdf files, etc.">hkp</a> repository is a result of that. The tool-belt is now accessible from any folder at my finger tips. Here are the available tools:</p>
+<pre><code>$ hk
+usage: make --file=~/scripts/hkp/hkp.make &lt;cmd&gt;
+&lt;cmd&gt; available:
+ cmbi   combine all pdf files in the curr folder
+ cmbs   combine sub-folder-wise pdf files
+ cmpr   compress all pdf files in the curr folder
+ cr     delete and recreate master git repository
+ efd    purge empty folders
+ ffp    apply permissions: folders (755), files (644)
+ help   show this help
+ m2t    convert all markdown files to text in the folder
+ plcf   purge LaTeX compile files
+ sffn   sanitise folder and filenames
+</code></pre>
+<p>Among the above, combining files proved troublesome, especially with all kinds of poorly named files. For a while I tried <code>rename</code>, which proved to be dangerous. After a bit of research, I found <a href="https://github.com/dharple/detox" title="detox -- by Doug Harple">detox</a>, which does a great job of renaming bad names into sane, parsable ones that the script can handle. While it was easier to install on the Mac via Homebrew (<code>brew</code>) and via Advanced Package Tool (<code>apt</code>) on debian, a Cygwin version proved elusive. In the end, I compiled source (on Cygwin!) to get a working binary in <code>/usr/local/bin</code>. detox’s kung fu is a thing to admire. When you’re not writing regular expressions — to catch a bunch of poorly named files and failing often, it feels like magic.</p>
+<h2>New CLI tools</h2>
+<p>I’ve been discovering new tools, written by <a href="https://www.rust-lang.org/" title="Rust Programming Language">Rust</a> programmers, with dramatic improvements in utility and speed.</p>
+<ol>
+<li><a href="https://github.com/sharkdp/bat">bat</a>: A cat(1) clone with wings</li>
+<li><a href="https://github.com/ogham/exa">exa</a>: A modern version of <code>ls</code></li>
+<li><a href="https://github.com/sharkdp/fd">fd</a>: A simple, fast and user-friendly alternative to <code>find</code></li>
+<li><a href="https://github.com/junegunn/fzf">fzf</a>: A command-line fuzzy finder</li>
+<li><a href="https://github.com/BurntSushi/ripgrep">rg</a>: A fast alternative to grep</li>
+<li><a href="https://github.com/phiresky/ripgrep-all">rga</a>: Search in PDFs, E-Books, Office documents, zip, tar.gz, etc.</li>
+</ol>
+<p>The combination of ripgrep (rg)  with fzf in <a href="https://medium.com/@sidneyliebrand/how-fzf-and-ripgrep-improved-my-workflow-61c7ca212861" title="How FZF and ripgrep improved my workflow - Sidney Liebrand - Medium">live-searching</a> (<a href="https://simonwillison.net/2019/Jul/5/" title="Archive for Friday, 5th July 2019">via</a>) through my files cannot beat anything in Mac or Windows. Happy days!</p>
+<pre><code>rg --files | fzf
+</code></pre>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="Reliability"
+       href="/2018/reliability">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="VIV"
+       href="/2019/viv">Next</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>
