@@ -37,7 +37,7 @@
 #show: note.with(
   title: [On-bottom stability],
   author: &quot;C Kunte&quot;,
-  paper: &quot;a4&quot;, // defaults don't need to be defined; I added paper option because I often use &quot;a5&quot;
+  paper: &quot;a4&quot;,
 ) // report content from here-on
 </code></pre>
 <p><em>template.typ</em>: Basic preamble is as follows. Defaults will be used when things like margins are undefined in either of the two files.</p>
@@ -62,7 +62,7 @@
     #v(2em, weak: true)
     #text(1em, author)
     #v(1em, weak: true)
-    #datetime.today().display(&quot;[month repr:long] [day], [year]&quot;)
+    #datetime.today().display(&quot;[day] [month repr:short] [year]&quot;)
     #v(5em, weak: true)
   ] // title block
 
@@ -89,7 +89,7 @@
 </code></pre>
 <p>Typographical controls are covered too, e.g.,</p>
 <pre><code>set text(
-  font: &quot;Segoe UI&quot;, // e.g. &quot;STIX Two Text&quot; or &quot;erewhon&quot;,
+  font: &quot;Segoe UI&quot;,
   top-edge: &quot;cap-height&quot;, 
   bottom-edge: &quot;baseline&quot;,
   number-type: &quot;old-style&quot;,
@@ -219,7 +219,8 @@
   // ...
   // ... [skipping other bits of template code for brevity]
   // ...
-  // print title block (includes logo, title, subtitle, author, and date)
+  // print title block (includes logo, title, subtitle,
+  // author, and date)
   align(center)[
     #if logo == &quot;yes&quot; {
       image(&quot;logo.svg&quot;, height: 0.75in) // above the title
@@ -233,7 +234,7 @@
     #v(2em, weak: true)
     #text(1em, author)
     #v(1em, weak: true)
-    #datetime.today().display(&quot;[month repr:long] [day], [year]&quot;)
+    #datetime.today().display(&quot;[day] [month repr:short] [year]&quot;)
     #v(5em, weak: true)
   ]
 

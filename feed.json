@@ -12,6 +12,13 @@
   ],
   "items" : [
     {
+      "id" : "https://ckunte.net/2026/hk-redux",
+      "url" : "https://ckunte.net/2026/hk-redux",
+      "title" : "hk redux",
+      "content_text" : "Made up of a bunch of scripts and served from a single Makefile, hk has been my CLI tool belt for fixing everyday annoyances for over a decade. It has served me well. Recently, I refactored it (in Rust) to be a single binary app. And it’s fast. Along...",
+      "date_published" : "2026-10-26T21:44:00Z"
+    },
+    {
       "id" : "https://ckunte.net/2026/vimrc",
       "url" : "https://ckunte.net/2026/vimrc",
       "title" : "Vim run control",
@@ -24,13 +31,6 @@
       "title" : "Manage keys",
       "content_text" : "This covers: GPG keys, and SSH keys Here’s how to manage GPG keys meant for pass. Howto change master password (GPG passphrase) Open terminal and list keys to find your Key ID or email: gpg --list-secret-keys --keyid-format LONG Run the edit command...",
       "date_published" : "2026-09-14T23:11:00Z"
-    },
-    {
-      "id" : "https://ckunte.net/2026/omarchy",
-      "url" : "https://ckunte.net/2026/omarchy",
-      "title" : "Kicking Omarchy\u0027s tires",
-      "content_text" : "I like what I see in Omarchy Quattro. I obviously and absolutely love the tiling window manager and TUI-like panes, as I am a fan and past user of the concept popularised by dwm. Key bindings clearly seem set by one hard-wired to a Mac keyboard. I...",
-      "date_published" : "2026-09-05T20:38:00Z"
     }
   ]
 }
