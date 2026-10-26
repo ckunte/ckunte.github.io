@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: Housekeeping tools</title>
-<meta name="description" content="2026: hk ( repo) is my CLI tool belt for fixing everyday annoyances. Since I last wrote about it...">
+<meta name="description" content="2026: See hk redux for a newer version. My current work involves a lot of reading, and I receive...">
 <script src="/inc/code-math.js" integrity="sha384-Njw9Of2BFljdNcVOUWYknI0zVDSvQEf6qxU/Bsrdnd3TiefurNv83VvrlFfPi88i"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -17,26 +17,7 @@
 <article>
 <h1>Housekeeping tools</h1>
 <time datetime="2019-06-26T22:05:00Z">26 Jun 2019</time>
-<p>2026: <code>hk</code> (<a href="https://github.com/ckunte/hk">repo</a>) is my CLI tool belt for fixing everyday annoyances. Since I last wrote about it back in 2019, I had the opportunity to refactor it recently (from a bunch of shell scripts + Makefile) into a single binary. The tool is re-written in Rust, and it is <em>fast</em>, eliminating few options and dependencies I could get rid of. The repo. now has binary releases for a few OSes I use routinely. Here’s the updated set of options:</p>
-<pre><code>$ hk
-hk — housekeeping tools
-
-usage: hk &lt;command&gt; [argument]
-
-commands:
-  cmbi   combine all PDF files in the current folder
-  cmbs   combine PDF files per subfolder
-  crop   crop PDF header/footer (--top/--bott N inches, default 1.0)
-  fffp [--yes] [--all]
-         fix permissions: dirs 755, files 644 (keeps +x, skips private)
-  sffn   sanitise folder and file names
-  help   show this help
-</code></pre>
-<p>The <code>crop</code> command, which is new, came about from my two needs:</p>
-<ol>
-<li>To eliminate header / footer from being “Read Aloud” on every page, and</li>
-<li>To remove identifying information (typically found in headers / footers)</li>
-</ol>
+<p>2026: See <a href="/2026/hk-redux">hk redux</a> for a newer version.</p>
 <hr />
 <p>My current work involves a lot of reading, and I receive a ton of files from many sources — colleagues, contractors, vendors, document systems, et al. The fact that I have instead tried listening to them in dull monotone (via text to speech) must be a giveaway. Last Sunday, I sat down to list all the minor house-keeping annoyances that stop me in my tracks while working, so I could do something about them. Here are the top five:</p>
 <ol>

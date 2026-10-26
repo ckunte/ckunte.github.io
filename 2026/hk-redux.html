@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: hk redux</title>
+<meta name="description" content="Made up of a bunch of scripts and served from a single Makefile, hk has been my CLI tool belt...">
+<script src="/inc/code-math.js" integrity="sha384-Njw9Of2BFljdNcVOUWYknI0zVDSvQEf6qxU/Bsrdnd3TiefurNv83VvrlFfPi88i"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>hk redux</h1>
+<time datetime="2026-10-26T21:44:00Z">26 Oct 2026</time>
+<p>Made up of a bunch of scripts and served from a single Makefile, <a href="/2019/hk" title="Housekeeping tools">hk</a> has been my CLI tool belt for fixing everyday annoyances for over a decade. It has served me well. Recently, I refactored it (in Rust) to be a single binary app. And it’s fast. Along the way, I’ve dropped a few options and dependencies. <a href="https://github.com/ckunte/hk">The repository</a> now has binary releases for a few OSes I use routinely. Here’s the updated set of options:</p>
+<pre><code>$ hk
+hk — housekeeping tools
+
+usage: hk &lt;command&gt; [argument]
+
+commands:
+  cmbi   combine all PDF files in the current folder
+  cmbs   combine PDF files per subfolder
+  crop   crop PDF header/footer (--top/--bott N inches, default 1.0)
+  fffp [--yes] [--all]
+         fix permissions: dirs 755, files 644 (keeps +x, skips private)
+  sffn   sanitise folder and file names
+  help   show this help
+</code></pre>
+<p>The <code>cmbi</code> option continues to be useful as there is always a need to combine PDF files into a single file, like for example, assembling a report with many appendices, a folder full of drawings with each drawing a file, and it’s annoying to spend more time opening and closing files than reading them.</p>
+<p>Same for subfolder combine, <code>cmbs</code>, especially when combining asset-wise bunch of files each in their own respective folders.</p>
+<p>The <code>crop</code> is new; it emerged from my two needs:</p>
+<ul>
+<li>prevent “Read Aloud” from reading header and footer ad nausea</li>
+<li>remove identifying information</li>
+</ul>
+<p><code>sffn</code> continues to be useful to me in sanitising poorly named files.</p>
+<p>PDF options presume no harm to existing data. Combining options inherit parent folder name, and cropping file(s) will have a file name appended with <code>-cropped</code>.</p>
+<p>Even though both these following options have been tested on a large file and folder set, I’d generally avoid using <code>sffn</code> and <code>fffp</code>. Plus, be forewarned that there’s no warranty whatsoever! I always have a safe external backup before trying any of these commands / options.</p>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="Vim run control"
+       href="/2026/vimrc">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="Home"
+       href="/">Home</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>
