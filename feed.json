@@ -12,6 +12,13 @@
   ],
   "items" : [
     {
+      "id" : "https://ckunte.net/2026/mount-sata",
+      "url" : "https://ckunte.net/2026/mount-sata",
+      "title" : "Mount external drive on linux",
+      "content_text" : "Writing this down so I don’t have to remember. Find the drive lsblk -f Look for partition (usually sda1) with FSTYPE ext4, and note its UUID. Create a mount point sudo mkdir -p /mnt/sata Mount it manually to test sudo mount /dev/sda1 /mnt/sata ls...",
+      "date_published" : "2026-11-13T22:07:00Z"
+    },
+    {
       "id" : "https://ckunte.net/2026/hk-redux",
       "url" : "https://ckunte.net/2026/hk-redux",
       "title" : "hk redux",
@@ -24,13 +31,6 @@
       "title" : "Vim run control",
       "content_text" : "Listing my Vim run control file here. It’s simple and effective for what I do everyday. I added persistent undo after an article pointed this out recently (triggering HN to discuss); it’s a remarkable feature I have not known for all my time learning...",
       "date_published" : "2026-10-08T22:45:00Z"
-    },
-    {
-      "id" : "https://ckunte.net/2026/manage-keys",
-      "url" : "https://ckunte.net/2026/manage-keys",
-      "title" : "Manage keys",
-      "content_text" : "This covers: GPG keys, and SSH keys Here’s how to manage GPG keys meant for pass. Howto change master password (GPG passphrase) Open terminal and list keys to find your Key ID or email: gpg --list-secret-keys --keyid-format LONG Run the edit command...",
-      "date_published" : "2026-09-14T23:11:00Z"
     }
   ]
 }
