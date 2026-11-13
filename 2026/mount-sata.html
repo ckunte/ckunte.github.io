@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chetan Kunté: Mount external drive on linux</title>
+<meta name="description" content="Writing this down so I don’t have to remember. Find the drive lsblk -f Look for partition...">
+<script src="/inc/code-math.js" integrity="sha384-Njw9Of2BFljdNcVOUWYknI0zVDSvQEf6qxU/Bsrdnd3TiefurNv83VvrlFfPi88i"></script>
+<link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
+<link type="text/css" rel="stylesheet" href="/inc/home.css">
+</head>
+<body>
+<main>
+<header>
+  <a accesskey="/" title="Home" href="/"><img alt="Chetan Kunté" class="logo" src="/inc/favicon.svg"></a>
+</header>
+<article>
+<h1>Mount external drive on linux</h1>
+<time datetime="2026-11-13T22:07:00Z">13 Nov 2026</time>
+<p>Writing this down so I don’t have to remember.</p>
+<p><em>Find the drive</em></p>
+<pre><code class="language-bash">lsblk -f
+</code></pre>
+<p>Look for  partition (usually <code>sda1</code>) with FSTYPE <code>ext4</code>, and note its UUID.</p>
+<p><em>Create a mount point</em></p>
+<pre><code class="language-bash">sudo mkdir -p /mnt/sata
+</code></pre>
+<p><em>Mount it manually to test</em></p>
+<pre><code class="language-bash">sudo mount /dev/sda1 /mnt/sata
+ls /mnt/sata
+</code></pre>
+<p>The existing data should be listed. If met with an error about a bad superblock or “wrong fs type”, check <code>lsblk -f</code> again to make sure to use the right partition (not <code>sda</code> itself), and see <code>dmesg | tail -20</code> for details.</p>
+<p><em>Mount it automatically at boot</em></p>
+<p>Get the UUID:</p>
+<pre><code class="language-bash">sudo blkid /dev/sda1
+</code></pre>
+<p>Edit fstab:</p>
+<pre><code class="language-bash">sudo nano /etc/fstab
+</code></pre>
+<p>Add this line at the bottom, using own UUID:</p>
+<pre><code>UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  /mnt/sata  ext4  defaults,noatime,nofail  0  2
+</code></pre>
+<p>Save with <code>Ctrl+O</code>, <code>Enter</code>, then exit with <code>Ctrl+X</code>. The <code>nofail</code> option stops Raspberry Pi from dropping into emergency mode if the drive isn’t connected at boot.</p>
+<p><em>Test the fstab entry</em></p>
+<pre><code class="language-bash">sudo umount /mnt/sata
+sudo systemctl daemon-reload
+sudo mount -a
+df -h /mnt/sata
+</code></pre>
+<p>No errors and the drive listed implies it is working. Reboot once (<code>sudo reboot</code>) to confirm it mounts on its own.</p>
+<p><em>Check permissions</em></p>
+<p>Existing files keep the ownership they had on the drive’s original system. If  user can’t read or write them, check with <code>ls -l /mnt/sata</code>. The drive’s files may belong to a user ID that differs from Raspberry Pi user (check s with <code>id</code>). To take ownership of everything:</p>
+<pre><code class="language-bash">sudo chown -R $USER:$USER /mnt/sata
+</code></pre>
+<p>Only do this if you don’t need to preserve the original ownership (for example, if the drive came from another Linux machine with different users and you don’t plan to move it back).</p>
+<p><em>Safely removing the drive</em></p>
+<pre><code class="language-bash">sudo umount /mnt/sata
+</code></pre>
+<p>If the drive disconnects randomly or is slow, the likely causes are insufficient USB power (use a powered hub) or a UAS quirk with the adapter.</p>
+
+</article>
+
+<footer>
+  <span>
+    &lsaquo;
+    <a accesskey="j"
+       title="hk redux"
+       href="/2026/hk-redux">Prev</a>
+  </span>
+  <span>
+    <a accesskey="k"
+       title="Home"
+       href="/">Home</a>
+    &rsaquo;
+  </span>
+</footer>
+</main>
+</body>
+</html>

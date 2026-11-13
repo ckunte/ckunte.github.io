@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chetan Kunté: Essentials</title>
-<meta name="description" content="This is the 2024 edition (updated for 2025, 2026-). Here we go. Hardware HP 800 WFH mini PC (32...">
+<meta name="description" content="This is the 2024 edition (updated for 2025, 2026-). Here we go. Hardware Pi 5 (8 GB RAM, 256 GB...">
 <script src="/inc/code-math.js" integrity="sha384-Njw9Of2BFljdNcVOUWYknI0zVDSvQEf6qxU/Bsrdnd3TiefurNv83VvrlFfPi88i"></script>
 <link rel="icon" href="/inc/favicon.svg" type="image/svg+xml">
 <link type="text/css" rel="stylesheet" href="/inc/home.css">
@@ -20,24 +20,22 @@
 <p>This is the 2024 edition (updated for 2025, 2026-). Here we go.</p>
 <h2>Hardware</h2>
 <ul>
-<li>HP 800 WFH mini PC (32 G RAM, 512 G SSD, Win 11 + WSL)</li>
-<li>HP 840 notebook (16 G RAM, 512 G SSD, <a href="/2026/omarchy">Omarchy</a>)</li>
-<li><a href="/2024/pi5">Pi 5</a> (8 G, 256 GB, Raspberry Pi OS lite + dwm)</li>
+<li><a href="/2024/pi5">Pi 5</a> (8 GB RAM, 256 GB SSD, Raspberry Pi)</li>
 </ul>
 <h2>Software</h2>
 <ul>
 <li><a href="/2021/rel">chisel</a> – static site generator</li>
 <li><a href="https://github.com/dharple/detox">detox</a> – tames problematic filenames</li>
+<li><a href="https://dwm.suckless.org">dwm</a> – dynamic window manager</li>
 <li><a href="https://github.com/eradman/entr">entr</a> – to run arbitrary commands when files change</li>
 <li><a href="https://github.com/sharkdp/fd">fd</a> – a simple, fast, user-friendly alternative to find</li>
 <li><a href="https://fishshell.com">fish</a> – a smart and user-friendly command line shell</li>
-<li><a href="https://codeberg.org/dnkl/foot">foot</a> – a fast, and minimalistic terminal emulator</li>
 <li><a href="https://github.com/junegunn/fzf">fzf</a> – a command line fuzzy finder</li>
 <li><a href="https://www.gimp.org">gimp</a> – GNU image manipulation program</li>
 <li><a href="https://git-scm.com/">git</a> – distributed version control system</li>
 <li><a href="https://gnome.pages.gitlab.gnome.org/gnumeric-web/">gnumeric</a> – a free, open-source spreadsheet application</li>
 <li><a href="https://gnupg.org/">gpg</a> – GNU privacy guard</li>
-<li><a href="https://github.com/ckunte/hkp">hkp</a> – housekeeping tools</li>
+<li><a href="https://github.com/ckunte/hk">hk</a> – housekeeping tools</li>
 <li><a href="https://github.com/deadpixi/mtm">mtm</a> – micro terminal multiplexer</li>
 <li><a href="https://www.passwordstore.org/">pass</a> – the standard unix password manager</li>
 <li><a href="https://pngquant.org/">pngquant</a> – lossy PNG image compression</li>
@@ -50,7 +48,6 @@
 <li><a href="https://docs.astral.sh/uv/">uv</a> – python package and project manager</li>
 </ul>
 </li>
-<li><a href="https://github.com/ap/rename">rename</a> – perl rename script</li>
 <li><a href="https://github.com/BurntSushi/ripgrep">ripgrep</a> – recursive search tool</li>
 <li><a href="https://rsync.samba.org/">rsync</a> – utility for incremental file transfer</li>
 <li><a href="https://typst.app/">typst</a> – modern typesetting system</li>
@@ -70,7 +67,6 @@
 </ul>
 </li>
 <li><a href="https://www.videolan.org/vlc/">vlc</a> – a free and open source cross-platform multimedia player</li>
-<li><a href="https://zellij.dev/">zellij</a> – terminal workspace with batteries included</li>
 </ul>
 <h2>Backup</h2>
 <pre><code>rsync -auv --delete --exclude-from=$HOME/excl.txt $HOME/ /media/ckunte/pi5b/ckunte/
