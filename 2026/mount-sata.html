@@ -29,7 +29,7 @@
 <pre><code class="language-bash">sudo mount /dev/sda1 /mnt/sata
 ls /mnt/sata
 </code></pre>
-<p>existing data should be listed. If you get an error about a bad superblock or “wrong fs type”, check <code>lsblk -f</code> again to make sure you’re using the right partition (not <code>sda</code> itself), and see <code>dmesg | tail -20</code> for details.</p>
+<p>The existing data should be listed. If met with an error about a bad superblock or “wrong fs type”, check <code>lsblk -f</code> again to make sure to use the right partition (not <code>sda</code> itself), and see <code>dmesg | tail -20</code> for details.</p>
 <p><em>Mount it automatically at boot</em></p>
 <p>Get the UUID:</p>
 <pre><code class="language-bash">sudo blkid /dev/sda1
@@ -37,7 +37,7 @@ ls /mnt/sata
 <p>Edit fstab:</p>
 <pre><code class="language-bash">sudo nano /etc/fstab
 </code></pre>
-<p>Add this line at the bottom, using  own UUID:</p>
+<p>Add this line at the bottom, using own UUID:</p>
 <pre><code>UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  /mnt/sata  ext4  defaults,noatime,nofail  0  2
 </code></pre>
 <p>Save with <code>Ctrl+O</code>, <code>Enter</code>, then exit with <code>Ctrl+X</code>. The <code>nofail</code> option stops Raspberry Pi from dropping into emergency mode if the drive isn’t connected at boot.</p>
@@ -47,9 +47,9 @@ sudo systemctl daemon-reload
 sudo mount -a
 df -h /mnt/sata
 </code></pre>
-<p>No errors and the drive listed means it’s working. Reboot once (<code>sudo reboot</code>) to confirm it mounts on its own.</p>
+<p>No errors and the drive listed implies it is working. Reboot once (<code>sudo reboot</code>) to confirm it mounts on its own.</p>
 <p><em>Check permissions</em></p>
-<p>Existing files keep the ownership they had on the drive’s original system. If  user can’t read or write them, check with <code>ls -l /mnt/sata</code>. The drive’s files may belong to a user ID that differs from  Pi user (check s with <code>id</code>). To take ownership of everything:</p>
+<p>Existing files keep the ownership they had on the drive’s original system. If  user can’t read or write them, check with <code>ls -l /mnt/sata</code>. The drive’s files may belong to a user ID that differs from Raspberry Pi user (check s with <code>id</code>). To take ownership of everything:</p>
 <pre><code class="language-bash">sudo chown -R $USER:$USER /mnt/sata
 </code></pre>
 <p>Only do this if you don’t need to preserve the original ownership (for example, if the drive came from another Linux machine with different users and you don’t plan to move it back).</p>
