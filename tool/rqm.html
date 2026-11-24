@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>rename quick manual</title>
+<style>
+  :root {
+    --bg: #1d2021; --bg1: #282828; --bg2: #3c3836; --fg: #ebdbb2; --dim: #928374;
+    --red: #fb4934; --green: #b8bb26; --yellow: #fabd2f; --blue: #83a598;
+    --purple: #d3869b; --aqua: #8ec07c; --orange: #fe8019;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #fbf1c7; --bg1: #ebdbb2; --bg2: #d5c4a1; --fg: #3c3836; --dim: #7c6f64;
+      --red: #9d0006; --green: #79740e; --yellow: #b57614; --blue: #076678;
+      --purple: #8f3f71; --aqua: #427b58; --orange: #af3a03;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--fg); }
+  body {
+    font: 15px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    padding-bottom: 3rem;
+  }
+  .topbar {
+    background: var(--bg2); color: var(--dim); padding: .35rem 1rem; font-size: 13px;
+    display: flex; gap: 1rem; flex-wrap: wrap; position: sticky; top: 0; z-index: 2;
+  }
+  .topbar b { color: var(--yellow); font-weight: normal; }
+  main { max-width: 980px; margin: 0 auto; padding: 1.5rem 1rem; }
+  h1 { font-size: 1.3rem; margin: 0 0 .25rem; color: var(--orange); font-weight: bold; }
+  h1 span { color: var(--dim); font-weight: normal; }
+  .sub { color: var(--dim); margin: 0 0 1.25rem; }
+  a { color: var(--blue); }
+  .search { display: flex; align-items: center; gap: .5rem; border-bottom: 1px solid var(--bg2); padding-bottom: .5rem; }
+  .search label { color: var(--green); }
+  .search input {
+    flex: 1; background: transparent; border: 0; outline: 0; color: var(--fg);
+    font: inherit; caret-color: var(--yellow);
+  }
+  .count { color: var(--dim); white-space: nowrap; }
+  #err { color: var(--red); margin: .5rem 0 0; display: none; }
+  .hint { color: var(--dim); font-size: 13px; margin: .5rem 0 1.25rem; }
+  kbd { background: var(--bg2); padding: 0 .35rem; border-radius: 3px; }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    text-align: left; color: var(--dim); font-weight: normal; font-size: 13px;
+    border-bottom: 1px solid var(--bg2); padding: .3rem .5rem;
+  }
+  td { padding: .35rem .5rem; vertical-align: top; border-bottom: 1px dotted var(--bg2); }
+  td.cat { color: var(--purple); white-space: nowrap; width: 1%; }
+  td.cmd { color: var(--green); white-space: pre-wrap; word-break: break-word; cursor: pointer; }
+  td.cmd:hover { background: var(--bg1); }
+  td.cmd.copied::after { content: "  yanked"; color: var(--yellow); }
+  td.desc { color: var(--fg); }
+  mark { background: var(--yellow); color: var(--bg); padding: 0 1px; }
+  .status {
+    position: fixed; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between;
+    background: var(--bg2); font-size: 13px; z-index: 2;
+  }
+  .status .mode { background: var(--green); color: var(--bg); padding: .25rem .75rem; font-weight: bold; }
+  .status.insert .mode { background: var(--blue); }
+  .status .file { padding: .25rem .75rem; flex: 1; }
+  .status .pos { padding: .25rem .75rem; background: var(--bg1); }
+  @media (max-width: 640px) {
+    td.cat { display: none; } th:first-child { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar"><b>RQM</b><span>~/tool/rqm</span><span>·</span><span>filetype=csv</span><span>·</span><span>utf-8</span></div>
+<main>
+  <h1># rename quick manual <span>// rename.csv</span></h1>
+  <p class="sub">Cheat sheet for Aristotle Pagaltzis's Perl <a href="https://github.com/ap/rename">rename</a> (a.k.a. <code>prename</code> / <code>file-rename</code> on some distros). Click a command to copy it.</p>
+
+  <div class="search">
+    <label for="q">/</label>
+    <input id="q" type="text" autocomplete="off" spellcheck="false" placeholder="search commands, e.g. lowercase, extension, -n">
+    <span class="count" id="count"></span>
+  </div>
+  <div id="err">E486: Pattern not found</div>
+  <p class="hint">Press <kbd>/</kbd> to search, <kbd>Esc</kbd> to clear. Always preview with <kbd>-n</kbd> first.</p>
+
+  <table>
+    <thead><tr><th>group</th><th>command</th><th>what it does</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p id="empty" class="sub" style="display:none">No commands match your search.</p>
+</main>
+
+<div class="status" id="status">
+  <span class="mode" id="mode">NORMAL</span>
+  <span class="file">rename.csv</span>
+  <span class="pos" id="pos"></span>
+</div>
+
+<script>
+const DATA = [
+  // safety & switches
+  ["safety", "rename -n 's/a/b/' *", "Dry run: show what would happen, change nothing (also --just-print)"],
+  ["safety", "rename -nv 's/a/b/' *", "Dry run, verbose. A good default habit"],
+  ["safety", "rename -i 's/a/b/' *", "Ask before every rename"],
+  ["safety", "rename -f 's/a/b/' *", "Overwrite if the destination exists"],
+  ["safety", "rename -k 's/a/b/' *", "Process last-to-first (avoids collisions when shifting names)"],
+  ["safety", "rename -p 's/^/new\\//' *", "Create missing directories in the target path"],
+  ["safety", "rename -l 's/$/.lnk/' *", "Make symlinks under new names instead of renaming (-L for hardlinks)"],
+
+  // perl expressions
+  ["perl", "rename 's/\\.jpeg$/.jpg/' *.jpeg", "Regex substitution on the filename (-e is implied)"],
+  ["perl", "rename 's/^IMG_/holiday-/' *.jpg", "Change a prefix"],
+  ["perl", "rename 's/\\s+/_/g' *", "Whitespace to underscores"],
+  ["perl", "rename 'y/A-Z/a-z/' *", "Lowercase using tr"],
+  ["perl", "rename 's/(\\d+)/sprintf \"%03d\", $1/e' *", "Zero-pad the first number in each name"],
+  ["perl", "rename 's/(.*)/\\L$1/' *", "Lowercase using \\L in the replacement"],
+  ["perl", "rename -e '$_ = lc' *", "Explicit -e: any Perl code, $_ holds the name"],
+  ["perl", "rename 's/\\.bak\\z//' *", "Strip a trailing .bak from every file"],
+
+  // plain strings
+  ["strings", "rename -s .bak '' *.bak", "Substitute first occurrence of a literal string (no regex)"],
+  ["strings", "rename -S ' ' _ *", "Substitute every occurrence of a literal string"],
+  ["strings", "rename -s .tgz .tar.gz -s .tbz2 .tar.bz2 *.t?z*", "Several substitutions in one call, applied in order"],
+  ["strings", "rename -A 2026- *.pdf", "Prepend text to each name"],
+  ["strings", "rename -a -final *.txt", "Append text to the very end of the name (after the extension: a.txt-final)"],
+  ["strings", "rename -X -a -final *.txt", "Append a suffix BEFORE the extension (a-final.txt): -X saves the extension and reattaches it last"],
+  ["strings", "rename 's/(\\.[^.]*)?$/-final$1/' *", "Same, with plain Perl: insert a suffix before the last extension"],
+  ["strings", "rename -d draft_ *", "Delete the first occurrence of a string"],
+  ["strings", "rename -D draft_ *", "Delete every occurrence of a string"],
+  ["strings", "rename -x *.bak", "Remove the last extension"],
+
+  // case & cleanup
+  ["case", "rename -c *", "Lowercase names"],
+  ["case", "rename -C *", "Uppercase names"],
+  ["case", "rename --camelcase *", "Capitalise each word"],
+  ["cleanup", "rename -z *", "Sanitise: whitespace to _, control chars and shell metachars to _, trim"],
+  ["cleanup", "rename --nows *", "Collapse runs of whitespace into one underscore"],
+  ["cleanup", "rename --rews *", "Underscores back to spaces"],
+  ["cleanup", "rename --nometa *", "Replace shell metacharacters with underscores"],
+  ["cleanup", "rename --noctrl *", "Replace control characters with an underscore"],
+  ["cleanup", "rename --trim *", "Strip leading/trailing spaces and underscores"],
+  ["cleanup", "rename --urlesc *", "Decode URL escapes like %20 (e.g. wget downloads)"],
+
+  // extensions
+  ["ext", "rename -X -c --nows *", "Clean up names while keeping the extension untouched"],
+  ["ext", "rename -X -c --rews --camelcase --nows *", "CamelCase names, extension preserved"],
+  ["ext", "rename -p -c -z -X -e '$_ = \"$EXT/$_\" if @EXT' *", "Move each file into a directory named after its extension"],
+
+  // numbering
+  ["number", "rename -N ...001 -e '$_ = \"photo-$N.jpg\"' *.jpg", "Sequential numbering with $N, padding sized to the file count"],
+  ["number", "rename -N ...01 -X -e '$_ = \"File-$N\"' *", "File-01.ext, File-02.ext ... extension kept"],
+  ["number", "rename -t -N ...001 -X -e '$_ = \"trip-$N\"' *", "Number by modification time (-t sorts by mtime first)"],
+
+  // input
+  ["input", "find . -name '*.JPG' -print0 | rename -0 's/\\.JPG$/.jpg/'", "Recursive: read NUL-separated names from STDIN (note: full path is the target)"],
+  ["input", "printf '%s\\n' *.txt | rename 's/^/old_/'", "Read newline-separated names from STDIN"],
+  ["input", "shopt -s globstar; rename -n 's/foo/bar/' **/*.txt", "Recursive with a ** glob (bash; zsh has it by default)"],
+  ["input", "rename -g 's/a/b/' *.txt", "Expand wildcards yourself (useful in cmd.exe)"],
+
+  // modules & encodings
+  ["modules", "rename -T utf8 -MText::Unidecode '$_ = unidecode $_' *", "Latinise names: cafe.txt from café.txt"],
+  ["modules", "rename -MEncode '$_ = decode \"MIME-Header\", $_ if /^=/' *", "Decode MIME-encoded attachment names"],
+  ["modules", "rename -P 'tr a-z A-Z' *", "Pipe each name through an external command"],
+
+  // gotchas
+  ["gotcha", "rename -s foo bar -s bar baz *", "Transforms run in order: foo ends up as baz"],
+  ["gotcha", "rename --man", "Full manual page"],
+  ["gotcha", "rename -h", "Short synopsis"]
+];
+
+const rows = document.getElementById('rows');
+const q = document.getElementById('q');
+const count = document.getElementById('count');
+const err = document.getElementById('err');
+const empty = document.getElementById('empty');
+const pos = document.getElementById('pos');
+const status = document.getElementById('status');
+const mode = document.getElementById('mode');
+
+function esc(s) { return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function hl(s, term) {
+  const e = esc(s);
+  if (!term) return e;
+  const re = new RegExp('(' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/&/g,'&amp;') + ')', 'ig');
+  return e.replace(re, '<mark>$1</mark>');
+}
+
+function render() {
+  const term = q.value.trim();
+  const t = term.toLowerCase();
+  const hits = DATA.filter(r => !t || r.join(' ').toLowerCase().includes(t));
+  rows.innerHTML = hits.map(r =>
+    `<tr><td class="cat">${hl(r[0], term)}</td><td class="cmd" title="click to copy">${hl(r[1], term)}</td><td class="desc">${hl(r[2], term)}</td></tr>`
+  ).join('');
+  count.textContent = t ? `/ ${hits.length} matches` : `${DATA.length} entries`;
+  const none = t && hits.length === 0;
+  err.style.display = none ? 'block' : 'none';
+  empty.style.display = none ? 'block' : 'none';
+  pos.textContent = `${hits.length}/${DATA.length} ${hits.length === DATA.length ? 'All' : 'Top'}`;
+}
+
+rows.addEventListener('click', e => {
+  const td = e.target.closest('td.cmd');
+  if (!td) return;
+  const text = td.textContent.replace(/\s+yanked$/, '');
+  const done = () => { td.classList.add('copied'); setTimeout(() => td.classList.remove('copied'), 1200); };
+  if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, done); else done();
+});
+
+q.addEventListener('input', render);
+q.addEventListener('focus', () => { status.classList.add('insert'); mode.textContent = 'SEARCH'; });
+q.addEventListener('blur',  () => { status.classList.remove('insert'); mode.textContent = 'NORMAL'; });
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement !== q) { e.preventDefault(); q.focus(); q.select(); }
+  else if (e.key === 'Escape') { q.value = ''; render(); q.blur(); }
+});
+
+render();
+</script>
+</body>
+</html>
